@@ -1,0 +1,39 @@
+<section ng-controller="ChallengesController" ng-init="find()">
+  <div class="page-header">
+    <h1>Challenge</h1>
+  </div>
+  <!-- <div class="list-group">
+    <a ng-repeat="challenge in challenges" ui-sref="challenges.view({challengeId: challenge._id})" class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="challenge.created | date:'mediumDate'"></span>
+        by
+        <span ng-bind="challenge.user.displayName"></span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="challenge.title"></h4>
+      <p class="list-group-item-text" ng-bind="challenge.content"></p>
+    </a>
+  </div> -->
+</div>
+<table class="table table-striped">
+  <thead>
+       <tr>
+         <th>Id</th>
+         <th>Name</th>
+         <th>Category</th>
+         <th>Points</th>
+         <th>Solves</th>
+       </tr>
+     </thead>
+    <tr ng-repeat="challenge in challenges" ui-sref="challenges.view({challengeId: challenge._id})">
+      <td>{{challenge.created}} </td>
+      <td>{{challenge.name}} </td>
+      <td>{{challenge.category}}</td>
+      <td>{{challenge.points}}</td>
+      <td>{{challenge.solves}}</td>
+    </tr>
+  </table>
+    <div class="alert alert-warning text-center" ng-if="challenges.$resolved && !challenges.length">
+      No challenges yet, why don't you <a ui-sref="challenges.create">create one</a>?
+    </div>
+</section>
