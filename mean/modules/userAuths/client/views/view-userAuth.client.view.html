@@ -1,0 +1,23 @@
+<section ng-controller="UserAuthsController" ng-init="findOne()">
+  <div class="page-header">
+    <h1 ng-bind="userAuth.provider"></h1>
+    <h3 ng-bind="userAuth.authType"></h3>
+  </div>
+  <div class="pull-right">
+    <a class="btn btn-primary" ui-sref="userAuths.edit({userAuthId: userAuth._id})">
+      <i class="glyphicon glyphicon-edit"></i>
+    </a>
+    <a class="btn btn-primary" ng-click="remove();">
+      <i class="glyphicon glyphicon-trash"></i>
+    </a>
+  </div>
+  <p class="lead" ng-bind="userAuth.authURL"></p>
+  <p class="lead" ng-bind="userAuth.tokenURL"></p>
+  <p class="lead" ng-bind="userAuth.userInfoURL"></p>
+  <p class="lead" ng-bind="userAuth.clientId"></p>
+  <p class="lead" ng-bind="userAuth.clientSecret"></p>
+  <small>
+    <p class="lead" ng-bind="userAuth.updated"></p>
+    <p class="lead" ng-bind="userAuth.created"></p>
+  </small>
+</section>

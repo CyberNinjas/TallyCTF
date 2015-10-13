@@ -1,0 +1,73 @@
+<section ng-controller="UserAuthsController">
+  <div class="page-header">
+    <h1>New User Auth</h1>
+  </div>
+  <div class="col-md-12">
+    <form name="userAuthForm" class="form-horizontal" ng-submit="create(userAuthForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label for="provider">Provider</label>
+          <input name="provider" type="text" ng-model="provider" id="provider" class="form-control" placeholder="Provider" required>
+          <div ng-messages="userAuthForm.provider.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">User Auth provider is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label for="authType">User Auth Type</label>
+          <select name="authType" type="text" ng-model="authType" id="authType" class="form-control" required>
+            <option value="oauth2">OAuth v2.0</option>
+            <option value="openidconnect">OpenID Connect</option>
+          </select>
+        </div>
+        <div class="form-group" show-errors>
+          <label for="authURL">User Auth URL</label>
+          <input name="authURL" type="text" ng-model="authURL" id="authURL" class="form-control" placeholder="User Auth URL" required>
+          <div ng-messages="userAuthForm.authURL.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">User Auth URL is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label for="tokenURL">User Token URL</label>
+          <input name="tokenURL" type="text" ng-model="tokenURL" id="tokenURL" class="form-control" placeholder="User Token URL" required>
+          <div ng-messages="userAuthForm.tokenURL.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">User Token URL is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label for="userInfoURL">User Info URL</label>
+          <input name="userInfoURL" type="text" ng-model="userInfoURL" id="userInfoURL" class="form-control" placeholder="User Info URL" required>
+          <div ng-messages="userAuthForm.userInfoURL.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">User Info URL is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label for="clientId">User Auth Client ID</label>
+          <input name="clientId" type="text" ng-model="clientId" id="clientId" class="form-control" placeholder="User Auth Client ID" required>
+          <div ng-messages="userAuthForm.clientId.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">User Auth client ID is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label for="clientSecret">User Auth Client Secret</label>
+          <input name="clientSecret" type="text" ng-model="clientSecret" id="clientSecret" class="form-control" placeholder="User Auth Client Secret" required>
+          <div ng-messages="userAuthForm.clientSecret.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">User Auth Client Secret is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label for="providerImage">Provider Image</label>
+          <input name="providerImage" type="text" ng-model="providerImage" id="providerImage" class="form-control" placeholder="Provider Image" required>
+          <div ng-messages="userAuthForm.providerImage.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">User Auth provider image is required.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="submit" value="Create User Auth" class="btn btn-default">
+        </div>
+        <div ng-show="error" class="text-danger">
+          <strong ng-bind="error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>
