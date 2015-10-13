@@ -21,7 +21,7 @@ angular.module('challenges').run(['Menus',
     Menus.addSubMenuItem('topbar', 'challenges', {
       title: 'Create Challenges',
       state: 'challenges.create',
-      roles: ['user']
+      roles: ['admin']
     });
   }
 ]);
