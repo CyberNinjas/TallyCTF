@@ -14,20 +14,25 @@ var ChallengeboardSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  title: {
-    type: String,
-    default: '',
-    trim: true,
-    required: 'Title cannot be blank'
-  },
-  content: {
+  name: {
     type: String,
     default: '',
     trim: true
   },
-  user: {
-    type: Schema.ObjectId,
-    ref: 'User'
+  category: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  points: {
+    type: Number,
+    min: 0,
+    default: 0
+  },
+  solves: {
+    type: Number,
+    min: 0,
+    default: 0
   }
 });
 

@@ -1,8 +1,8 @@
 <section ng-controller="ChallengeboardsController" ng-init="find()">
   <div class="page-header">
-    <h1>Challengeboards</h1>
+    <h1>Challengeboard</h1>
   </div>
-  <div class="list-group">
+  <!-- <div class="list-group">
     <a ng-repeat="challengeboard in challengeboards" ui-sref="challengeboards.view({challengeboardId: challengeboard._id})" class="list-group-item">
       <small class="list-group-item-text">
         Posted on
@@ -13,8 +13,27 @@
       <h4 class="list-group-item-heading" ng-bind="challengeboard.title"></h4>
       <p class="list-group-item-text" ng-bind="challengeboard.content"></p>
     </a>
-  </div>
-  <div class="alert alert-warning text-center" ng-if="challengeboards.$resolved && !challengeboards.length">
-    No challengeboards yet, why don't you <a ui-sref="challengeboards.create">create one</a>?
-  </div>
+  </div> -->
+</div>
+<table class="table table-striped">
+  <thead>
+       <tr>
+         <th>Id</th>
+         <th>Name</th>
+         <th>Category</th>
+         <th>Points</th>
+         <th>Solves</th>
+       </tr>
+     </thead>
+    <tr ng-repeat="challengeboard in challengeboards" ui-sref="challengeboards.view({challengeboardId: challengeboard._id})">
+      <td>{{challengeboard.created}} </td>
+      <td>{{challengeboard.name}} </td>
+      <td>{{challengeboard.category}}</td>
+      <td>{{challengeboard.points}}</td>
+      <td>{{challengeboard.solves}}</td>
+    </tr>
+  </table>
+    <div class="alert alert-warning text-center" ng-if="challengeboards.$resolved && !challengeboards.length">
+      No challengeboards yet, why don't you <a ui-sref="challengeboards.create">create one</a>?
+    </div>
 </section>

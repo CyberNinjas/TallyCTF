@@ -17,8 +17,10 @@ angular.module('challengeboards').controller('ChallengeboardsController', ['$sco
 
       // Create new Challengeboard object
       var challengeboard = new Challengeboards({
-        title: this.title,
-        content: this.content
+        name: this.name,
+        solves: this.solves,
+        category: this.category,
+        points: this.points
       });
 
       // Redirect after save
