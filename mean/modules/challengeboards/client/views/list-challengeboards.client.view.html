@@ -1,0 +1,20 @@
+<section ng-controller="ChallengeboardsController" ng-init="find()">
+  <div class="page-header">
+    <h1>Challengeboards</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="challengeboard in challengeboards" ui-sref="challengeboards.view({challengeboardId: challengeboard._id})" class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="challengeboard.created | date:'mediumDate'"></span>
+        by
+        <span ng-bind="challengeboard.user.displayName"></span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="challengeboard.title"></h4>
+      <p class="list-group-item-text" ng-bind="challengeboard.content"></p>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="challengeboards.$resolved && !challengeboards.length">
+    No challengeboards yet, why don't you <a ui-sref="challengeboards.create">create one</a>?
+  </div>
+</section>
