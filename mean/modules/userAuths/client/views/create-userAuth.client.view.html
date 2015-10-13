@@ -55,6 +55,10 @@
           </div>
         </div>
         <div class="form-group" show-errors>
+          <label for="scope">Scope</label>
+          <input name="scope" type="text" ng-model="scope" id="scope" class="form-control" placeholder="Scope">
+        </div>
+        <div class="form-group" show-errors>
           <label for="providerImage">Provider Image</label>
           <input name="providerImage" type="text" ng-model="providerImage" id="providerImage" class="form-control" placeholder="Provider Image" required>
           <div ng-messages="userAuthForm.providerImage.$error" role="alert">

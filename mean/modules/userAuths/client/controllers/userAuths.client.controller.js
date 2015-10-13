@@ -25,7 +25,8 @@ angular.module('userAuths').controller('UserAuthsController', ['$scope', '$state
         tokenURL: this.tokenURL,
         clientId: this.clientId,
         clientSecret: this.clientSecret,
-        providerImage: this.providerImage || "test",
+        scope: this.scope,
+        providerImage: this.providerImage,
         updated: Date.now(),
         created: Date.now()
       });
@@ -42,6 +43,7 @@ angular.module('userAuths').controller('UserAuthsController', ['$scope', '$state
         $scope.tokenURL = '';
         $scope.clientId = '';
         $scope.clientSecret = '';
+        $scope.scope = '';
         $scope.providerImage = '';
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;

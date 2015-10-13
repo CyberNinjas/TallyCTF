@@ -46,6 +46,7 @@ exports.update = function (req, res) {
   userAuth.userInfoURL = req.body.userInfoURL;
   userAuth.clientId = req.body.clientId;
   userAuth.clientSecret = req.body.clientSecret;
+  userAuth.scope = req.body.scope;
   userAuth.providerImage = req.body.providerImage;
   userAuth.callbackURL = "/api/auth/userAuths/" + userAuth.provider.toLowerCase() + "/callback";
   userAuth.updated = Date.now();
@@ -136,6 +137,7 @@ exports.userAuthByProvider = function (req, res, next, provider) {
  * User OAuth call
  */
 exports.oauthCall = function (req, res, scope) {
+  console.log("AUTH CALL on: " + req.userAuth.authType);
   if (req.userAuth.authType === 'oauth2') {
     require(path.resolve('./modules/userAuths/server/config/strategy/oauth2.strategy.config.js'))(req.userAuth);
   } else {
@@ -149,6 +151,6 @@ exports.oauthCall = function (req, res, scope) {
  * User OAuth callback
  */
 exports.oauthCallback = function (req, res, next) {
-  console.log(req.userAuth.authType);
+  console.log("AUTH CALLBACK on: " + req.userAuth.authType);
   users.oauthCallback(req.userAuth.authType)(req, res, next);
 };

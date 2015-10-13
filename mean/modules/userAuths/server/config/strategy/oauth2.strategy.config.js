@@ -11,18 +11,19 @@ var passport = require('passport'),
 module.exports = function (userAuth) {
   console.log("RUNNING WITH: " + userAuth.provider);
   passport.use(new OAuthStrategy({
-      authorizationURL: userAuth.authURL || 'test',
-      tokenURL: userAuth.tokenURL || 'test',
-      clientID: userAuth.clientId || 'test',
-      clientSecret: userAuth.clientSecret || 'test',
-      callbackURL: userAuth.callbackURL || 'test',
-      scope: userAuth.scope || 'profile email user:email',
+      authorizationURL: userAuth.authURL || 'EMPTY',
+      tokenURL: userAuth.tokenURL || 'EMPTY',
+      userInfoURL: userAuth.userInfoURL || 'EMPTY',
+      clientID: userAuth.clientId || 'EMPTY',
+      clientSecret: userAuth.clientSecret || 'EMPTY',
+      callbackURL: userAuth.callbackURL || 'EMPTY',
+      scope: userAuth.scope || 'user email',
       passReqToCallback: true
     },
     function (req, accessToken, refreshToken, profile, done) {
       console.log(profile);
       // Set the provider data and include tokens
-      var providerData = profile._json || {};
+      var providerData = profile._json;
       providerData.accessToken = accessToken;
       providerData.refreshToken = refreshToken;
 
