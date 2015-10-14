@@ -14,6 +14,10 @@
           <div ng-messages="challengeForm.category.$error" role="alert">
             <p class="help-block error-text" ng-message="required">Challenge category is required.</p>
           </div>
+          <input name="description" type="text" ng-model="description" id="description" class="form-control" placeholder="Description" required>
+          <div ng-messages="challengeForm.description.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Challenge description is required.</p>
+          </div>
           <input name="points" type="number" ng-model="points" id="points" class="form-control" placeholder="Points" required>
           <div ng-messages="challengeForm.points.$error" role="alert">
             <p class="help-block error-text" ng-message="required">Challenge points is required.</p>
