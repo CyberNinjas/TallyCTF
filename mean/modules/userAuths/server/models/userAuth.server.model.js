@@ -19,8 +19,7 @@ var userAuthSchema = new Schema({
     required: 'An auth type is required'
   },
   authURL: {
-    type: String,
-    required: 'An authorization URL is required'
+    type: String
   },
   tokenURL: {
     type: String

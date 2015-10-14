@@ -9,10 +9,9 @@
   </div>
   <div class="list-group">
     <a ng-repeat="userAuth in userAuths" ui-sref="userAuths.view({userAuthId: userAuth._id})" class="list-group-item">
-      <h4 class="list-group-item-heading" ng-bind="userAuth.provider"></h4>
-      <p class="list-group-item-text" ng-bind="userAuth.authURL"></p>
+      <h4 class="list-group-item-heading text-uppercase" ng-bind="userAuth.provider"></h4>
       <small>
-        <p><em ng-bind="userAuth.authType"></em></p>
+        <p>Auth Type: <span ng-bind="userAuth.authType"></span></p>
       </small>
     </a>
   </div>

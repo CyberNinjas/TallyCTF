@@ -12,26 +12,11 @@
     </a>
   </div>
   <div>
-    <label>Auth URL</label>
-    <p ng-bind="userAuth.authURL"></p>
-
-    <label>Token URL</label>
-    <p ng-bind="userAuth.tokenURL"></p>
-
-    <label>User Info URL</label>
-    <p ng-bind="userAuth.userInfoURL"></p>
-
-    <label>Client ID</label>
-    <p ng-bind="userAuth.clientId"></p>
-
-    <label>Client Secret</label>
-    <p ng-bind="userAuth.clientSecret"></p>
-
-    <label>Scope</label>
-    <p ng-bind="userAuth.scope"></p>
-    <small>
-      <p ng-bind="userAuth.updated"></p>
-      <p ng-bind="userAuth.created"></p>
-    </small>
+    <div ng-repeat="(key, value) in userAuth">
+      <div ng-show="value">
+        <label>{{key}}</label>
+        <p ng-bind="value"></p>
+      </div>
+    </div>
   </div>
 </section>

@@ -4,6 +4,14 @@
 angular.module('userAuths').controller('UserAuthsController', ['$scope', '$stateParams', '$location', 'Authentication', 'UserAuths',
   function ($scope, $stateParams, $location, Authentication, UserAuths) {
     $scope.authentication = Authentication;
+    $scope.needed = {
+      'facebook': false,
+      'github': false,
+      'google': false,
+      'linkedin': false,
+      'oauth2': true,
+      'openidconnect': true
+    };
 
     // Create new User Auth
     $scope.create = function (isValid) {
