@@ -11,12 +11,12 @@ var passport = require('passport'),
 module.exports = function (userAuth) {
   console.log("RUNNING WITH: " + userAuth.provider);
   passport.use(new OAuthStrategy({
-      authorizationURL: userAuth.authURL || 'EMPTY',
-      tokenURL: userAuth.tokenURL || 'EMPTY',
-      userInfoURL: userAuth.userInfoURL || 'EMPTY',
-      clientID: userAuth.clientId || 'EMPTY',
-      clientSecret: userAuth.clientSecret || 'EMPTY',
-      callbackURL: userAuth.callbackURL || 'EMPTY',
+      authorizationURL: userAuth.authURL,
+      tokenURL: userAuth.tokenURL,
+      userInfoURL: userAuth.userInfoURL,
+      clientID: userAuth.clientId,
+      clientSecret: userAuth.clientSecret,
+      callbackURL: userAuth.callbackURL,
       scope: userAuth.scope || 'user email',
       passReqToCallback: true
     },
