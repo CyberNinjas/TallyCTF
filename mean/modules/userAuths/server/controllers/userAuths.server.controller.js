@@ -138,12 +138,10 @@ exports.userAuthByProvider = function (req, res, next, provider) {
  */
 exports.oauthCall = function (req, res, scope) {
   console.log("AUTH CALL on: " + req.userAuth.authType);
-  if (req.userAuth.authType === 'oauth2') {
-    require(path.resolve('./modules/userAuths/server/config/strategy/oauth2.strategy.config.js'))(req.userAuth);
-  } else {
-    require(path.resolve('./modules/userAuths/server/config/strategy/openidconnect.strategy.config.js'))(req.userAuth);
-  }
 
+  require(path.resolve('./modules/userAuths/server/config/strategy/' + 
+    req.userAuth.authType + '.strategy.config.js'))(req.userAuth);
+  
   users.oauthCall(req.userAuth.authType, scope)(req, res);
 };
 
