@@ -8,8 +8,14 @@
         <div class="form-group" show-errors>
           <label for="title">Team Name</label>
           <input name="title" type="text" ng-model="title" id="title" class="form-control" placeholder="Title" required>
+          <input name="teamCaptain" type="text" ng-model="teamCaptain" id="teamCaptain" class="form-control" placeholder="teamCaptain" required>
+          <input name="user1" type="text" ng-model="user1" id="user1" class="form-control" placeholder="user1" >
+          <input name="user2" type="text" ng-model="user2" id="user2" class="form-control" placeholder="user2" >
+          <input name="user3" type="text" ng-model="user3" id="user3" class="form-control" placeholder="user3" >
+
           <div ng-messages="teamForm.title.$error" role="alert">
             <p class="help-block error-text" ng-message="required">Team name is required.</p>
+            <p class="help-block error-text" ng-message="required">Team captain is required.</p>
           </div>
         </div>
 
