@@ -1,8 +1,8 @@
 'use strict';
 
 // User Auths controller
-angular.module('userAuths').controller('UserAuthsController', ['$scope', '$stateParams', '$location', 'Authentication', 'UserAuths',
-  function ($scope, $stateParams, $location, Authentication, UserAuths) {
+angular.module('userAuths').controller('UserAuthsController', ['$scope', '$stateParams', '$location', '$window', 'Authentication', 'UserAuths',
+  function ($scope, $stateParams, $location, $window, Authentication, UserAuths) {
     $scope.authentication = Authentication;
     $scope.needed = {
       'facebook': false,
@@ -104,6 +104,18 @@ angular.module('userAuths').controller('UserAuthsController', ['$scope', '$state
       $scope.userAuth = UserAuths.get({
         userAuthId: $stateParams.userAuthId
       });
+    };
+
+    // OAuth provider request
+    $scope.callOauthProvider = function (url) {
+      url = 'api/auth/userAuths/' + url;
+      
+      if ($stateParams.previous && $stateParams.previous.href) {
+        url += '?redirect_to=' + encodeURIComponent($stateParams.previous.href);
+      }
+
+      // Effectively call OAuth authentication route:
+      $window.location.href = url;
     };
   }
 ]);
