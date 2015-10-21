@@ -16,6 +16,10 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       }
 
       // Create new Team object
+      // attributes for team:
+      // user array
+      // team captain
+      // team picture
       var team = new Teams({
         title: this.title,
         content: this.content

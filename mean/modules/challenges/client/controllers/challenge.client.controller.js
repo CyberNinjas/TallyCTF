@@ -18,6 +18,7 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
       // Create new Challenge object
       var challenge = new Challenges({
         name: this.name,
+        description: this.description,
         solves: this.solves,
         category: this.category,
         points: this.points
@@ -25,11 +26,15 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
 
       // Redirect after save
       challenge.$save(function (response) {
-        $location.path('challenges/' + response._id);
+        $location.path('challenges/');
+        //$location.path('challenges/' + response._id);
 
         // Clear form fields
-        $scope.title = '';
-        $scope.content = '';
+        $scope.name= '';
+        $scope.description= '';
+        $scope.solves= '';
+        $scope.category= '';
+        $scope.points= '';
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
