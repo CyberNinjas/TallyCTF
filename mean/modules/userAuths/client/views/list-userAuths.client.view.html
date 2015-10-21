@@ -1,0 +1,21 @@
+<section ng-controller="UserAuthsController" ng-init="find()">
+  <div class="page-header">
+    <h1>
+      User Auths
+      <a class="btn btn-success pull-right" href="/admin/userAuths/create" target="_self">
+        <i class="glyphicon glyphicon-plus"></i>
+      </a>
+    </h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="userAuth in userAuths" ui-sref="userAuths.view({userAuthId: userAuth._id})" class="list-group-item">
+      <h4 class="list-group-item-heading text-uppercase" ng-bind="userAuth.provider"></h4>
+      <small>
+        <p>Auth Type: <span ng-bind="userAuth.authType"></span></p>
+      </small>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="userAuths.$resolved && !userAuths.length">
+    No User Auths yet, why don't you <a ui-sref="userAuths.create">create one</a>?
+  </div>
+</section>
