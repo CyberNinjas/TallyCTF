@@ -10,6 +10,10 @@ var mongoose = require('mongoose'),
  * Team Schema
  */
 var TeamSchema = new Schema({
+  type: {
+    type: String,
+    required: "team",
+  },
   teamName: {
     type: String,
     trim: false,
