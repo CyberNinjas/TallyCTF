@@ -2,8 +2,10 @@
 #challengeboard {width:85%;padding:1px 1px 1px 4px;height:2em;margin-left:1em; border-collapse:collapse; border: 1px solid lightgray;}
 th {background-color: #DDD;}
 td {text-align:center}
-th {height: 30px;}
+th {height: 30px; text-align:center;}
 tr {background: #FFF}
 tr:nth-child(2n-1) {height: 30px;}
 tr:nth-child(4n-1) {background: #EEE}
 tr:nth-child(4n) {background: #EEE}
+.form-control {width:50%; margin-left:4%;}
+.submitButton {background-color: #08B; color: #FFF; border:none; height: 50px; width: 100px; float:left; margin-left:4%;}

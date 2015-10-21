@@ -12,7 +12,7 @@
         var $target = $(event.target);
 
           // Open and close the appropriate thing
-        if ( $target.closest("td").attr("colspan") > 1 ) {
+        if ( $target.closest("td").attr("colspan") < 2 ) {
             $target.slideUp();
         } else {
             $target.closest("tr").next().find("p").slideToggle();
