@@ -4,20 +4,24 @@
  * Module dependencies.
  */
 var passport = require('passport'),
-  PayPalStrategy = require('passport-paypal-openidconnect').Strategy,
-  users = require('../../controllers/users.server.controller');
+  path = require('path'),
+  OAuthStrategy = require('passport-oauth2').Strategy,
+  users = require(path.resolve('./modules/users/server/controllers/users.server.controller'));
 
-module.exports = function (config) {
-  passport.use(new PayPalStrategy({
-      clientID: config.paypal.clientID,
-      clientSecret: config.paypal.clientSecret,
-      callbackURL: config.paypal.callbackURL,
-      scope: 'openid profile email',
-      sandbox: config.paypal.sandbox,
+module.exports = function (userAuth) {
+  console.log("RUNNING WITH: " + userAuth.provider);
+  passport.use(new OAuthStrategy({
+      authorizationURL: userAuth.authURL,
+      tokenURL: userAuth.tokenURL,
+      userInfoURL: userAuth.userInfoURL,
+      clientID: userAuth.clientId,
+      clientSecret: userAuth.clientSecret,
+      callbackURL: userAuth.callbackURL,
+      scope: userAuth.scope || 'user email',
       passReqToCallback: true
-
     },
     function (req, accessToken, refreshToken, profile, done) {
+      console.log(profile);
       // Set the provider data and include tokens
       var providerData = profile._json;
       providerData.accessToken = accessToken;
@@ -30,7 +34,7 @@ module.exports = function (config) {
         displayName: profile.displayName,
         email: profile._json.email,
         username: profile.username,
-        provider: 'paypal',
+        provider: userAuth.provider,
         providerIdentifierField: 'user_id',
         providerData: providerData
       };
