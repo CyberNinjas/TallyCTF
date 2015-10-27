@@ -1,0 +1,22 @@
+<section ng-controller="CtfEventsController" ng-init="findOne()">
+  <div class="page-header">
+    <h1 ng-bind="ctfEvent.title"></h1>
+  </div>
+  <div class="pull-right" ng-show="authentication.user._id == ctfEvent.user._id">
+    <a class="btn btn-primary" ui-sref="ctfEvents.edit({ctfEventId: ctfEvent._id})">
+      <i class="glyphicon glyphicon-edit"></i>
+    </a>
+    <a class="btn btn-primary" ng-click="remove();">
+      <i class="glyphicon glyphicon-trash"></i>
+    </a>
+  </div>
+  <small>
+    <em class="text-muted">
+      Posted on
+      <span ng-bind="ctfEvent.created | date:'mediumDate'"></span>
+      by
+      <span ng-bind="ctfEvent.user.displayName"></span>
+    </em>
+  </small>
+  <p class="lead" ng-bind="ctfEvent.content"></p>
+</section>
