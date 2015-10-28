@@ -1,6 +1,6 @@
 <section ng-controller="TeamsController" ng-init="findOne()">
   <div class="page-header">
-    <h1 ng-bind="team.title"></h1>
+    <h1 ng-bind="team.teamName"></h1>
   </div>
   <div class="pull-right" ng-show="authentication.user._id == team.user._id">
     <a class="btn btn-primary" ui-sref="teams.edit({teamId: team._id})">

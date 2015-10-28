@@ -21,8 +21,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       // team captain
       // team picture
       var team = new Teams({
-        title: this.title,
-        content: this.content
+        teamName: this.teamName
       });
 
       // Redirect after save
@@ -30,8 +29,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
         $location.path('teams/' + response._id);
 
         // Clear form fields
-        $scope.title = '';
-        $scope.content = '';
+        $scope.teamName = '';
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
