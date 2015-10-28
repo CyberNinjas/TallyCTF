@@ -78,7 +78,10 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
 
     // Find a list of Challenges
     $scope.find = function () {
+      //Challenges will not be visible to participants unless event has started AND not ended.
+      //if event has started AND not ended:
       $scope.challenges = Challenges.query();
+      //$scope.challenges =[];
     };
 
     // Find existing Challenge
