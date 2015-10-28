@@ -52,6 +52,11 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       }
     };
 
+    //populate team with users
+    $scope.teamRoster = function(){
+      $location.path('/teams')
+    }
+
     // Update existing Team
     $scope.update = function (isValid) {
       $scope.error = null;
@@ -61,6 +66,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
         return false;
       }
+
 
       var team = $scope.team;
 
