@@ -13,7 +13,6 @@ var path = require('path'),
  */
 exports.create = function (req, res) {
   var ctfEvent = new CtfEvent(req.body);
-  ctfEvent.user = req.user;
 
   ctfEvent.save(function (err) {
     if (err) {
@@ -40,7 +39,8 @@ exports.update = function (req, res) {
   var ctfEvent = req.ctfEvent;
 
   ctfEvent.title = req.body.title;
-  ctfEvent.content = req.body.content;
+  ctfEvent.start = req.body.start;
+  ctfEvent.end = req.body.end;
 
   ctfEvent.save(function (err) {
     if (err) {
@@ -74,7 +74,7 @@ exports.delete = function (req, res) {
  * List of CtfEvents
  */
 exports.list = function (req, res) {
-  CtfEvent.find().sort('-created').populate('user', 'displayName').exec(function (err, ctfEvents) {
+  CtfEvent.find().sort('-created').exec(function (err, ctfEvents) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -96,7 +96,7 @@ exports.ctfEventByID = function (req, res, next, id) {
     });
   }
 
-  CtfEvent.findById(id).populate('user', 'displayName').exec(function (err, ctfEvent) {
+  CtfEvent.findById(id).exec(function (err, ctfEvent) {
     if (err) {
       return next(err);
     } else if (!ctfEvent) {

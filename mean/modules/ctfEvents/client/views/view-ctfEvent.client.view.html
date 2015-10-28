@@ -2,7 +2,7 @@
   <div class="page-header">
     <h1 ng-bind="ctfEvent.title"></h1>
   </div>
-  <div class="pull-right" ng-show="authentication.user._id == ctfEvent.user._id">
+  <div class="pull-right">
     <a class="btn btn-primary" ui-sref="ctfEvents.edit({ctfEventId: ctfEvent._id})">
       <i class="glyphicon glyphicon-edit"></i>
     </a>
@@ -12,11 +12,8 @@
   </div>
   <small>
     <em class="text-muted">
-      Posted on
+      Created on 
       <span ng-bind="ctfEvent.created | date:'mediumDate'"></span>
-      by
-      <span ng-bind="ctfEvent.user.displayName"></span>
     </em>
   </small>
-  <p class="lead" ng-bind="ctfEvent.content"></p>
 </section>

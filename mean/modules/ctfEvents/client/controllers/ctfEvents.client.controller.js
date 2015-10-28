@@ -17,8 +17,15 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
 
       // Create new CtfEvent object
       var ctfEvent = new CtfEvents({
+        created: this.created,
         title: this.title,
-        content: this.content
+        start: this.start,
+        end: this.end
+        // Eventually add ability to import
+        //challenges: this.import.challenges,
+        //teams: this.import.teams,
+        //users: this.import.users,
+        //userAuths: this.import.userAuths
       });
 
       // Redirect after save
@@ -26,8 +33,11 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
         $location.path('ctfEvents/' + response._id);
 
         // Clear form fields
+        $scope.created = '';
         $scope.title = '';
-        $scope.content = '';
+        $scope.start = '';
+        $scope.end = '';
+        //$scope.import = '';
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
@@ -63,7 +73,7 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
       var ctfEvent = $scope.ctfEvent;
 
       ctfEvent.$update(function () {
-        $location.path('ctfEvents/' + ctfEvent._id);
+        $location.path('ctfEvents');
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
@@ -81,4 +91,16 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
       });
     };
   }
-]);
+]).directive('datetime', function () {
+  // Needed to tell JSHint about the external $ (jquery)
+  /* globals $ */
+  return {
+    link: function (scope, elem, attrs) {
+      $(function () {
+        $(elem).datetimepicker({
+          format: "YYYY-MM-DDTHH:mm:ss.SSS[Z]"
+        });
+      });
+    }
+  };
+});
