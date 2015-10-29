@@ -1,8 +1,8 @@
 'use strict';
 
 // CtfEvents controller
-angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$stateParams', '$location', 'Authentication', 'CtfEvents',
-  function ($scope, $stateParams, $location, Authentication, CtfEvents) {
+angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$stateParams', '$location', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'UserAuths',
+  function ($scope, $stateParams, $location, Authentication, CtfEvents, Challenges, Teams, UserAuths) {
     $scope.authentication = Authentication;
 
     // Create new CtfEvent
@@ -89,6 +89,11 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
       $scope.ctfEvent = CtfEvents.get({
         ctfEventId: $stateParams.ctfEventId
       });
+
+      // Load the extra data
+      $scope.challenges = Challenges.query();
+      $scope.teams = Teams.query();
+      $scope.userAuths = UserAuths.query();
     };
   }
 ]).directive('datetime', function () {
@@ -100,6 +105,17 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
         $(elem).datetimepicker({
           format: "YYYY-MM-DDTHH:mm:ss.SSS[Z]"
         });
+      });
+    }
+  };
+}).directive('collapse', function () {
+  return {
+    link: function (scope, elem, attrs) {
+      $(elem).on('click', function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        var $collapse = $this.closest('.collapse-group').find('.collapse');
+        $collapse.collapse('toggle');
       });
     }
   };

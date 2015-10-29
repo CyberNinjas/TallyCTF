@@ -6,6 +6,9 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   CtfEvent = mongoose.model('CtfEvent'),
+  Challenge = mongoose.model('Challenge'),
+  Team = mongoose.model('Team'),
+  UserAuth = mongoose.model('UserAuth'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 /**
