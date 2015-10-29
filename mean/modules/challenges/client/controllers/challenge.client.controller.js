@@ -26,7 +26,7 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
 
       // Redirect after save
       challenge.$save(function (response) {
-        $location.path('challenges/');
+        $location.path('challenges');
         //$location.path('challenges/' + response._id);
 
         // Clear form fields
