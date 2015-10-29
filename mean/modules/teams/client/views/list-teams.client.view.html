@@ -6,9 +6,9 @@
     <a ng-repeat="team in teams" ui-sref="teams.view({teamId: team._id})" class="list-group-item">
       <small class="list-group-item-text">
         Team Captain: <span ng-bind="team.user.displayName"></span>
+        Team Name: <span ng-bind="team.teamName"></span>
       </small>
       <h4 class="list-group-item-heading" ng-bind="team.teamName"></h4>
-
     </a>
   </div>
   <div class="alert alert-warning text-center" ng-if="teams.$resolved && !teams.length">
