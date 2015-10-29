@@ -3,15 +3,12 @@
     <h1>CtfEvents</h1>
   </div>
   <div class="list-group">
-    <a ng-repeat="ctfEvent in ctfEvents" ui-sref="ctfEvents.view({ctfEventId: ctfEvent._id})" class="list-group-item">
+    <a ng-repeat="ctfEvent in ctfEvents" ui-sref="ctfEvents.edit({ctfEventId: ctfEvent._id})" class="list-group-item">
       <small class="list-group-item-text">
-        Posted on
+        Created on
         <span ng-bind="ctfEvent.created | date:'mediumDate'"></span>
-        by
-        <span ng-bind="ctfEvent.user.displayName"></span>
       </small>
       <h4 class="list-group-item-heading" ng-bind="ctfEvent.title"></h4>
-      <p class="list-group-item-text" ng-bind="ctfEvent.content"></p>
     </a>
   </div>
   <div class="alert alert-warning text-center" ng-if="ctfEvents.$resolved && !ctfEvents.length">

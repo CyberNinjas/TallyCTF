@@ -21,24 +21,6 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/ctfEvents/:ctfEventId',
       permissions: '*'
     }]
-  }, {
-    roles: ['user'],
-    allows: [{
-      resources: '/api/ctfEvents',
-      permissions: ['get', 'post']
-    }, {
-      resources: '/api/ctfEvents/:ctfEventId',
-      permissions: ['get']
-    }]
-  }, {
-    roles: ['guest'],
-    allows: [{
-      resources: '/api/ctfEvents',
-      permissions: ['get']
-    }, {
-      resources: '/api/ctfEvents/:ctfEventId',
-      permissions: ['get']
-    }]
   }]);
 };
 
@@ -47,11 +29,6 @@ exports.invokeRolesPolicies = function () {
  */
 exports.isAllowed = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
-
-  // If an ctfEvent is being processed and the current user created it then allow any manipulation
-  if (req.ctfEvent && req.user && req.ctfEvent.user.id === req.user.id) {
-    return next();
-  }
 
   // Check for user roles
   acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(), function (err, isAllowed) {

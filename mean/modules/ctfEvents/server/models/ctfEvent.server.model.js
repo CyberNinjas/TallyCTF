@@ -18,16 +18,30 @@ var CtfEventSchema = new Schema({
     type: String,
     default: '',
     trim: true,
-    required: 'Title cannot be blank'
+    required: 'Event Title cannot be blank'
   },
-  content: {
-    type: String,
-    default: '',
-    trim: true
+  start: {
+    type: Date,
+    default: Date.now
   },
-  user: {
-    type: Schema.ObjectId,
-    ref: 'User'
+  end: {
+    type: Date
+  },
+  challenges: {
+    type: Array,
+    default: []
+  },
+  teams: {
+    type: Array,
+    default: []
+  },
+  users: {
+    type: Array,
+    default: []
+  },
+  userAuths: {
+    type: Array,
+    default: []
   }
 });
 

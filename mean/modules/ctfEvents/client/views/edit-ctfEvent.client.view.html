@@ -1,23 +1,62 @@
 <section ng-controller="CtfEventsController" ng-init="findOne()">
   <div class="page-header">
-    <h1>Edit CtfEvent</h1>
+    <h1 ng-bind="ctfEvent.title"></h1>
+    <h1 ng-bind="ctfEvent.start"></h1>
   </div>
   <div class="col-md-12">
     <form name="ctfEventForm" class="form-horizontal" ng-submit="update(ctfEventForm.$valid)" novalidate>
       <fieldset>
-        <div class="form-group" show-errors>
-          <label for="title">Title</label>
-          <input name="title" type="text" ng-model="ctfEvent.title" id="title" class="form-control" placeholder="Title" required>
-          <div ng-messages="ctfEventForm.title.$error" role="alert">
-            <p class="help-block error-text" ng-message="required">CtfEvent title is required.</p>
+        <div class="form-group collapse-group">
+          <h2 style="cursor: pointer;" collapse>Basic Info</h2>
+            <div class="collapse">
+              <div class="well well-lg">
+                <div class="form-group">
+                  <label for="title">Event Title</label>
+                  <input name="title" type="text" ng-model="ctfEvent.title" id="title" class="form-control" placeholder="Event Title" required>
+                </div>
+                <div class="form-group">
+                  <label for="start">Start Time</label>
+                  <input name="start" type="datetime" ng-model="ctfEvent.start" id="start" class="form-control" datetime>
+                </div>
+                <div class="form-group">
+                  <label for="start">End Time</label>
+                  <input name="end" type="datetime" ng-model="ctfEvent.end" id="end" class="form-control" datetime>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="form-group collapse-group">
+          <h2 style="cursor: pointer;" collapse>Challenges</h2>
+          <div class="collapse">
+            <div class="well list-group">
+              <a ng-repeat="challenge in challenges" ui-sref="challenges.edit({challengeId: challenge._id})" class="list-group-item">
+                <h4 ng-bind="challenge.name" class="list-group-item-header"></h4>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="form-group collapse-group">
+          <h2 style="cursor: pointer;" collapse>Teams / Users</h2>
+          <div class="collapse">
+            <div class="well well-lg list-group">
+              <a ng-repeat="team in teams" ui-sref="team.edit({teamId: team._id})" class="list-group-item">
+                <h4 ng-bind="team.name" class="list-group-item-header"></h4>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="form-group collapse-group">
+          <h2 style="cursor: pointer;" collapse>User Auths</h2>
+          <div class="collapse">
+            <div class="well well-lg list-group">
+              <a ng-repeat="userAuth in userAuths" ui-sref="userAuths.edit({userAuthId: userAuth._id})" class="list-group-item">
+                <h4 ng-bind="userAuth.provider" class="list-group-item-header"></h4>
+              </a>
+            </div>
           </div>
         </div>
         <div class="form-group">
-          <label for="content">Content</label>
-          <textarea name="content" ng-model="ctfEvent.content" id="content" class="form-control" cols="30" rows="10" placeholder="Content"></textarea>
-        </div>
-        <div class="form-group">
-          <input type="submit" value="Update" class="btn btn-default">
+          <input type="submit" value="Save" class="btn btn-default">
         </div>
         <div ng-show="error" class="text-danger">
           <strong ng-bind="error"></strong>
