@@ -25,15 +25,24 @@
          <th>Solves</th>
        </tr>
      </thead>
-    <tr ng-repeat="challenge in challenges" ui-sref="challenges.view({challengeId: challenge._id})">
-      <td>{{challenge.created}} </td>
+    <tr ng-repeat-start="challenge in challenges" ng-click="active = !active">
+	<!--ui-sref="challenges.view({challengeId: challenge._id})"-->
+	  <td>{{challenge.created}} </td>
       <td>{{challenge.name}} </td>
       <td>{{challenge.category}}</td>
-      <td>{{challenge.description}}</td>
       <td>{{challenge.points}}</td>
       <td>{{challenge.solves}}</td>
+	  <tr ng-show = "active" ng-repeat-end><td colspan="5"><p>
+	  {{challenge.description}}
+	  <br><br>
+	  <input type="text" class="form-control" ng-model="$parent.challenge.created" placeholder="Flag Value">
+	  <br>
+      <input type="submit" class="submitButton" ng-click="submitItem(challenge.created)">
+	  <br><br><br></p>
+	  </td></tr>
     </tr>
   </table>
+  <p id="demo"></p>
     <div class="alert alert-warning text-center" ng-if="challenges.$resolved && !challenges.length">
       No challenges yet, why don't you <a ui-sref="challenges.create">create one</a>?
     </div>
