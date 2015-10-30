@@ -60,6 +60,14 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
       }
     };
 
+    // Set Current CTFEvent
+    $scope.setCurrentCtf = function(ctfEvent){
+      if (ctfEvent){
+
+      }
+
+    };
+
     // Update existing CtfEvent
     $scope.update = function (isValid) {
       $scope.error = null;

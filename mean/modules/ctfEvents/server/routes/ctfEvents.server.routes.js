@@ -18,6 +18,12 @@ module.exports = function (app) {
     .put(ctfEvents.update)
     .delete(ctfEvents.delete);
 
+  app.route('/api/ctfEvents/currentEvent').all(ctfEventsPolicy.isAllowed)
+      .get(ctfEvents.getCurrent);
+
+  app.route('/api/ctfEvents/currentEvent/:ctfEventId').all(ctfEventsPolicy.isAllowed)
+      .put(ctfEvents.setCurrent);
+
   // Finish by binding the ctfEvent middleware
   app.param('ctfEventId', ctfEvents.ctfEventByID);
 };

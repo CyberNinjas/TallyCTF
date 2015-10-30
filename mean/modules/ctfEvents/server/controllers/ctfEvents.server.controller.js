@@ -11,6 +11,8 @@ var path = require('path'),
   UserAuth = mongoose.model('UserAuth'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
+var currentCtfEvent = null;
+
 /**
  * Create a ctfEvent
  */
@@ -26,6 +28,20 @@ exports.create = function (req, res) {
       res.json(ctfEvent);
     }
   });
+};
+
+/**
+ * Set the ctfEvent as the Current event
+ */
+exports.setCurrent = function (req, res) {
+  this.currentCtfEvent = req.ctfEvent;
+};
+
+/**
+ * Get the current ctfEvent
+ */
+exports.getCurrent = function (req, res) {
+  res.json(this.currentCtfEvent);
 };
 
 /**
