@@ -12,7 +12,7 @@ angular.module('teams').config(['$stateProvider',
       })
       .state('teams.list', {
         url: '',
-        templateUrl: 'modules/teams/client/views/test.html'
+        templateUrl: 'modules/teams/client/views/list-teams.client.view.html'
       })
 
       .state('teams.add',{
