@@ -6,6 +6,7 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   Team = mongoose.model('Team'),
+    User =mongoose.model('User'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 /**
@@ -39,8 +40,8 @@ exports.read = function (req, res) {
 exports.update = function (req, res) {
   var team = req.team;
 
-  team.title = req.body.title;
-  team.content = req.body.content;
+  team.teamName = req.body.teamName;
+  //team.content = req.body.content;
 
   team.save(function (err) {
     if (err) {

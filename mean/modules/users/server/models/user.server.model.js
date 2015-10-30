@@ -27,6 +27,10 @@ var validateLocalStrategyEmail = function (email) {
  * User Schema
  */
 var UserSchema = new Schema({
+  type: {
+    type: String,
+    default: "user"
+  },
   firstName: {
     type: String,
     trim: true,
@@ -96,6 +100,18 @@ var UserSchema = new Schema({
   },
   resetPasswordExpires: {
     type: Date
+  },
+  team: {
+    type: String,
+    default: ""
+  },
+  country: {
+    type: String,
+    default: ""
+  },
+  score: {
+    type: Number,
+    default: 0
   }
 });
 

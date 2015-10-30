@@ -10,25 +10,12 @@ var mongoose = require('mongoose'),
  * Team Schema
  */
 var TeamSchema = new Schema({
-  created: {
-    type: Date,
-    default: Date.now
-  },
-  title: {
+  teamName: {
     type: String,
+    trim: false,
     default: '',
-    trim: true,
-    required: 'Title cannot be blank'
   },
-  content: {
-    type: String,
-    default: '',
-    trim: true
-  },
-  user: {
-    type: Schema.ObjectId,
-    ref: 'User'
-  }
+
 });
 
 mongoose.model('Team', TeamSchema);

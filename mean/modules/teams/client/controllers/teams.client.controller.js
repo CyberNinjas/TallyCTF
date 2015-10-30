@@ -1,10 +1,10 @@
 'use strict';
 
 // Teams controller
-angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Teams',
-  function ($scope, $stateParams, $location, Authentication, Teams) {
-    $scope.authentication = Authentication;
-
+angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', '$location','Teams','Authentication','Users',
+  function ($scope, $stateParams, $location, Teams, Authentication, Users) {
+    $scope.authentication = Authentication.user;
+    $scope.users = Users;
     // Create new Team
     $scope.create = function (isValid) {
       $scope.error = null;
@@ -16,22 +16,34 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       }
 
       // Create new Team object
+      // attributes for team:
+      // user array
+      // team captain
+      // team picture
       var team = new Teams({
-        title: this.title,
-        content: this.content
+        teamName: this.teamName
       });
-
+    Authentication.user.team= this.teamName;
       // Redirect after save
       team.$save(function (response) {
-        $location.path('teams/' + response._id);
+        $location.path('teams');
 
         // Clear form fields
-        $scope.title = '';
-        $scope.content = '';
+        $scope.teamName = '';
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
-    };
+      var user = new Users($scope.authentication);
+
+      user.$update(function (response) {
+        $scope.$broadcast('show-errors-reset', 'userForm');
+
+        $scope.success = true;
+        Authentication.user = response;
+      }, function (response) {
+        $scope.error = response.data.message;
+      });
+  };
 
     // Remove existing Team
     $scope.remove = function (team) {
@@ -50,6 +62,11 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       }
     };
 
+    //populate team with users
+    $scope.teamRoster = function(){
+      $location.path('/teams');
+    };
+
     // Update existing Team
     $scope.update = function (isValid) {
       $scope.error = null;
@@ -59,6 +76,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
         return false;
       }
+
 
       var team = $scope.team;
 

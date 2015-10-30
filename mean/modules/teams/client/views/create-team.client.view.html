@@ -2,22 +2,20 @@
   <div class="page-header">
     <h1>New Team</h1>
   </div>
-  <div class="col-md-12">
+  <div class="col-md-4">
     <form name="teamForm" class="form-horizontal" ng-submit="create(teamForm.$valid)" novalidate>
       <fieldset>
         <div class="form-group" show-errors>
-          <label for="title">Title</label>
-          <input name="title" type="text" ng-model="title" id="title" class="form-control" placeholder="Title" required>
-          <div ng-messages="teamForm.title.$error" role="alert">
-            <p class="help-block error-text" ng-message="required">Team title is required.</p>
+          <label for="title">Team Name</label>
+          <input name="teamName" type="text" ng-model="teamName" id="teamName" class="form-control" placeholder="teamName" required>
+          <div ng-messages="teamForm.teamName.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Team name is required.</p>
+            <p class="help-block error-text" ng-message="required">Team captain is required.</p>
           </div>
         </div>
+
         <div class="form-group">
-          <label for="content">Content</label>
-          <textarea name="content" ng-model="content" id="content" class="form-control" cols="30" rows="10" placeholder="Content"></textarea>
-        </div>
-        <div class="form-group">
-          <input type="submit" class="btn btn-default">
+          <button ng-click=create()>test</button>
         </div>
         <div ng-show="error" class="text-danger">
           <strong ng-bind="error"></strong>
