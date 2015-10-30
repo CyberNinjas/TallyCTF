@@ -25,9 +25,9 @@
          <th>Solves</th>
        </tr>
      </thead>
-    <tr ng-repeat="challenge in challenges" ui-sref="challenges.view({challengeId: challenge._id})">
-      <td>{{challenge.created}} </td>
-      <td>{{challenge.name}} </td>
+    <tr ng-repeat="challenge in challenges">
+      <td>{{challenge.created}}</td>
+      <td>{{challenge.name}}</td>
       <td>{{challenge.category}}</td>
       <td>{{challenge.description}}</td>
       <td>{{challenge.points}}</td>
