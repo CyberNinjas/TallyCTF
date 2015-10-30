@@ -1,10 +1,10 @@
 'use strict';
 
 // Teams controller
-angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Teams',
-  function ($scope, $stateParams, $location, Authentication, Teams) {
-    $scope.authentication = Authentication;
-
+angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', '$location','Teams','Authentication','Users',
+  function ($scope, $stateParams, $location, Teams, Authentication, Users) {
+    $scope.authentication = Authentication.user;
+    $scope.users = Users;
     // Create new Team
     $scope.create = function (isValid) {
       $scope.error = null;
@@ -23,7 +23,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       var team = new Teams({
         teamName: this.teamName
       });
-
+    Authentication.user.team= this.teamName;
       // Redirect after save
       team.$save(function (response) {
         $location.path('teams/' + response._id);
@@ -33,7 +33,17 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
-    };
+      var user = new Users($scope.authentication);
+
+      user.$update(function (response) {
+        $scope.$broadcast('show-errors-reset', 'userForm');
+
+        $scope.success = true;
+        Authentication.user = response;
+      }, function (response) {
+        $scope.error = response.data.message;
+      });
+  };
 
     // Remove existing Team
     $scope.remove = function (team) {
