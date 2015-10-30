@@ -11,7 +11,7 @@ module.exports = function (app) {
   app.route('/api/teams').all(teamsPolicy.isAllowed)
     .get(teams.list)
     .post(teams.create);
-
+    
   // Single team routes
   app.route('/api/teams/:teamId').all(teamsPolicy.isAllowed)
     .get(teams.read)

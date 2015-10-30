@@ -14,7 +14,6 @@ var TeamSchema = new Schema({
     type: String,
     trim: false,
     default: '',
-    required: 'Needs team name',
   },
 
 });
