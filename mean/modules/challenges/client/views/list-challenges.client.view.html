@@ -15,6 +15,13 @@
     </a>
   </div> -->
 </div>
+<div>Category Filter:
+                <select id="cat-filter" class="filter" ng-model="filter" ng-options="challenge as challenge.category for challenge in challenges | unique: 'category' | orderBy: 'category'">
+                            <option value="">All</option>
+				</select>
+					<br>
+					<br>
+				</div>
 <table class="table table-striped">
   <thead>
        <tr>
@@ -25,13 +32,20 @@
          <th>Solves</th>
        </tr>
      </thead>
-    <tr ng-repeat="challenge in challenges">
-      <td>{{challenge.created}}</td>
+    <tr ng-repeat-start="challenge in challenges | filter:{category: filter.category}" ng-click="active = !active">
+	  <td>{{challenge.created}}</td>
       <td>{{challenge.name}}</td>
       <td>{{challenge.category}}</td>
-      <td>{{challenge.description}}</td>
       <td>{{challenge.points}}</td>
       <td>{{challenge.solves}}</td>
+	  <tr ng-show = "active" ng-repeat-end><td colspan="5"><p>
+	  {{challenge.description}}
+	  <br><br>
+	  <input type="text" class="form-control" ng-model="$parent.challenge.created" placeholder="Flag Value">
+	  <br>
+      <input type="submit" class="submitButton" ng-click="submitItem(challenge.created)">
+	  <br><br><br></p>
+	  </td></tr>
     </tr>
   </table>
     <div class="alert alert-warning text-center" ng-if="challenges.$resolved && !challenges.length">
