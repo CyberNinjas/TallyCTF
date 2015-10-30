@@ -16,7 +16,7 @@
   </div> -->
 </div>
 <div>Category Filter:
-                <select id="cat-filter" class="filter" ng-model="filter" ng-options="challenge as challenge.category for challenge in challenges | unique: 'category'">
+                <select id="cat-filter" class="filter" ng-model="filter" ng-options="challenge as challenge.category for challenge in challenges | unique: 'category' | orderBy: 'category'">
                             <option value="">All</option>
 				</select>
 					<br>
