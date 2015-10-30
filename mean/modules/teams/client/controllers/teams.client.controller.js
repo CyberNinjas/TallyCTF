@@ -26,7 +26,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
     Authentication.user.team= this.teamName;
       // Redirect after save
       team.$save(function (response) {
-        $location.path('teams/' + response._id);
+        $location.path('teams');
 
         // Clear form fields
         $scope.teamName = '';
@@ -64,8 +64,8 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
     //populate team with users
     $scope.teamRoster = function(){
-      $location.path('/teams')
-    }
+      $location.path('/teams');
+    };
 
     // Update existing Team
     $scope.update = function (isValid) {

@@ -14,6 +14,12 @@ angular.module('teams').config(['$stateProvider',
         url: '',
         templateUrl: 'modules/teams/client/views/list-teams.client.view.html'
       })
+
+      .state('teams.add',{
+        url:'/christest',
+        templateUrl: 'modules/teams/client/views/test.html'
+      })
+
       .state('teams.create', {
         url: '/create',
         templateUrl: 'modules/teams/client/views/create-team.client.view.html',
