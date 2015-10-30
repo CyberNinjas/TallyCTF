@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://code.angularjs.org/1.4.3/angular.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
+  </head>
+
+  <body ng-app="app">
+    <h1 class="text-center">My little to do app!</h1>
+
+    <div id="todo" class="col-xs-6 col-xs-offset-3" ng-controller="TeamsController">
+
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Item to add to todo list" ng-model="newItem" ng-keypress="addItem($event)">
+        </div><!-- /input-group -->
+
+
+      <ul class="list-group" id='todo-list'>
+        <!-- http://www.w3schools.com/css/css_float.asp -->
+        <li class="list-group-item clearfix" ng-repeat="do in todos | filter: query as results">
+
+
+
+        </li>
+      </ul>
+	  <button type="button" class= "label label-success" style="font-size:20px" ng-click="deleteComplete()">Clear Completed Items</button>
+    </div>
+  </body>
+</html>

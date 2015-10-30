@@ -5,6 +5,73 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
   function ($scope, $stateParams, $location, Authentication, Teams) {
     $scope.authentication = Authentication;
 
+  $scope.todos = ["Learn Angular", "Learn node"];
+  $scope.newItem = "";
+  $scope.visible = true;
+  $scope.inEditMode = false;
+  $scope.editItem = "";
+  $scope.priority = 2;
+  priorityArr = ["High","Medium","Low"];
+
+  // Returns true IFF the keycode is equal to specified keycode
+  $scope.validateKey = function (event, keycode) {
+    var key = event.charCode ? event.charCode : event.keyCode ? event.keyCode : 0
+    return key === keycode;
+  }
+
+  $scope.addItem = function(event){
+    if (event && !$scope.validateKey(event, 13))
+      return;
+    console.log("in add");
+	console.log($scope.todos.indexOf($scope.newItem));
+    if ($scope.newItem !== "" && $scope.todos.indexOf(priorityArr[$scope.priority] + " Priority:  " + $scope.newItem) === -1){
+      if($scope.priority == 0){
+        $scope.todos.push(priorityArr[$scope.priority] + " Priority:  "  + $scope.newItem);
+
+       $scope.newItem = "";
+       $scope.priority = 2;
+      }
+      else if($scope.priority == 1){
+        $scope.todos.push(priorityArr[$scope.priority] + " Priority:  "  + $scope.newItem);
+        $scope.newItem = "";
+        $scope.priority = 2;
+      }
+      else if($scope.priority == 2){
+         $scope.todos.push(priorityArr[$scope.priority] + " Priority:  " + $scope.newItem);
+
+        $scope.newItem = "";
+        $scope.priority = 2;
+      }
+      else{
+        alert("Enter something, damn it");
+      }
+    }
+  }
+
+
+
+    $scope.addItem = function(event){
+      if (event && !$scope.validateKey(event, 13)){
+        return;
+      }
+      $scope.users.push($scope.user);
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // Create new Team
     $scope.create = function (isValid) {
       $scope.error = null;
@@ -26,7 +93,8 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
       // Redirect after save
       team.$save(function (response) {
-        $location.path('teams');
+        $location.path('teams/addusers');
+
 
         // Clear form fields
         $scope.teamName = '';
