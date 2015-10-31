@@ -1,75 +1,28 @@
 'use strict';
 
 // Teams controller
-angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Teams',
-  function ($scope, $stateParams, $location, Authentication, Teams) {
+angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', 'Users', '$location', 'Authentication', 'Teams',
+  function ($scope, $stateParams,Users, $location, Authentication, Teams) {
     $scope.authentication = Authentication;
 
-  $scope.todos = ["Learn Angular", "Learn node"];
-  $scope.newItem = "";
-  $scope.visible = true;
-  $scope.inEditMode = false;
-  $scope.editItem = "";
-  $scope.priority = 2;
-  priorityArr = ["High","Medium","Low"];
+  $scope.team = ["Learn node"];
+
 
   // Returns true IFF the keycode is equal to specified keycode
-  $scope.validateKey = function (event, keycode) {
-    var key = event.charCode ? event.charCode : event.keyCode ? event.keyCode : 0
-    return key === keycode;
-  }
+    $scope.validateKey = function (event, keycode) {
+      var key = event.charCode ? event.charCode : event.keyCode ? event.keyCode : 0
+      return key === keycode;
+    };
 
-  $scope.addItem = function(event){
-    if (event && !$scope.validateKey(event, 13))
-      return;
-    console.log("in add");
-	console.log($scope.todos.indexOf($scope.newItem));
-    if ($scope.newItem !== "" && $scope.todos.indexOf(priorityArr[$scope.priority] + " Priority:  " + $scope.newItem) === -1){
-      if($scope.priority == 0){
-        $scope.todos.push(priorityArr[$scope.priority] + " Priority:  "  + $scope.newItem);
-
-       $scope.newItem = "";
-       $scope.priority = 2;
-      }
-      else if($scope.priority == 1){
-        $scope.todos.push(priorityArr[$scope.priority] + " Priority:  "  + $scope.newItem);
-        $scope.newItem = "";
-        $scope.priority = 2;
-      }
-      else if($scope.priority == 2){
-         $scope.todos.push(priorityArr[$scope.priority] + " Priority:  " + $scope.newItem);
-
-        $scope.newItem = "";
-        $scope.priority = 2;
-      }
-      else{
-        alert("Enter something, damn it");
-      }
-    }
-  }
-
-
-
-    $scope.addItem = function(event){
+    //adds users to the team array
+    //need to figure out how to push that to the database.
+    $scope.addUsers = function(event){
       if (event && !$scope.validateKey(event, 13)){
         return;
       }
-      $scope.users.push($scope.user);
+      $scope.team.push($scope.teammates);
+      $scope.teammates = "";
     };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     // Create new Team
@@ -81,12 +34,6 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
         return false;
       }
-
-      // Create new Team object
-      // attributes for team:
-      // user array
-      // team captain
-      // team picture
       var team = new Teams({
         teamName: this.teamName
       });
