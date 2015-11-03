@@ -16,7 +16,7 @@
   </div> -->
 </div>
 <div>Category Filter:
-                <select id="cat-filter" class="filter" ng-model="filter" ng-options="challenge as challenge.category for challenge in challenges | unique: 'category' | orderBy: 'category'">
+                <select id="cat-filter" class="filter" ng-model="challengeFilter" ng-options="challenge as challenge.category for challenge in challenges | unique: 'category' | orderBy: 'category'">
                             <option value="">All</option>
 				</select>
 					<br>
@@ -25,14 +25,14 @@
 <table class="table table-striped">
   <thead>
        <tr>
-         <th>Id</th>
-         <th>Name</th>
-         <th>Category</th>
-         <th>Points</th>
-         <th>Solves</th>
+         <th ng-click="sortType = 'created'; reverseSort = !reverseSort">Id</th>
+         <th ng-click="sortType = 'name'; reverseSort = !reverseSort">Name</th>
+         <th ng-click="sortType = 'category'; reverseSort = !reverseSort">Category</th>
+         <th ng-click="sortType = 'points'; reverseSort = !reverseSort">Points</th>
+         <th ng-click="sortType = 'solves'; reverseSort = !reverseSort">Solves</th>
        </tr>
      </thead>
-    <tr ng-repeat-start="challenge in challenges | filter:{category: filter.category}" ng-click="active = !active">
+    <tr ng-repeat-start="challenge in challenges | filter:{category: challengeFilter.category} | orderBy:sortType:!reverseSort" ng-click="active = !active">
 	  <td>{{challenge.created}}</td>
       <td>{{challenge.name}}</td>
       <td>{{challenge.category}}</td>
