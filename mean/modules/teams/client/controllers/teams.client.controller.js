@@ -1,30 +1,12 @@
 'use strict';
 
 // Teams controller
-angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', 'Users', '$location', 'Authentication', 'Teams',
-  function ($scope, $stateParams,Users, $location, Authentication, Teams) {
-    $scope.authentication = Authentication;
-
-  $scope.team = ["Learn node"];
-
-
-  // Returns true IFF the keycode is equal to specified keycode
-    $scope.validateKey = function (event, keycode) {
-      var key = event.charCode ? event.charCode : event.keyCode ? event.keyCode : 0
-      return key === keycode;
-    };
-
-    //adds users to the team array
-    //need to figure out how to push that to the database.
-    $scope.addUsers = function(event){
-      if (event && !$scope.validateKey(event, 13)){
-        return;
-      }
-      $scope.team.push($scope.teammates);
-      $scope.teammates = "";
-    };
-
-
+angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', '$location','Teams','Authentication','Users',
+  function ($scope, $stateParams, $location, Teams, Authentication, Users) {
+    $scope.authentication = Authentication.user;
+    $scope.users = Users;
+    $scope.tasks = [];
+    
     // Create new Team
     $scope.create = function (isValid) {
       $scope.error = null;
@@ -34,21 +16,50 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
         return false;
       }
+
+      // Create new Team object
+      // attributes for team:
+      // user array
+      // team captain
+      // team picture
       var team = new Teams({
         teamName: this.teamName
       });
 
-      // Redirect after save
+    Authentication.user.team= this.teamName;
+
+    // Redirect after save
       team.$save(function (response) {
-        $location.path('teams/addusers');
-
-
         // Clear form fields
         $scope.teamName = '';
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
-    };
+      var user = new Users($scope.authentication);
+
+      //Update user function
+      user.$update(function (response) {
+        $scope.$broadcast('show-errors-reset', 'userForm');
+
+        $scope.success = true;
+        Authentication.user = response;
+      }, function (response) {
+        $scope.error = response.data.message;
+      });
+  };
+
+
+  //Redirect the createTeam to adding users
+  $scope.teamRoster = function(){
+    $location.path('/teams/addusers');
+  };
+
+  $scope.add = function() {
+        $scope.tasks.push($scope.title);
+    }
+  $scope.delete = function() {
+      $scope.tasks.splice(this.$index, 1);
+  };
 
     // Remove existing Team
     $scope.remove = function (team) {
@@ -67,10 +78,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       }
     };
 
-    //populate team with users
-    $scope.teamRoster = function(){
-      $location.path('/teams');
-    };
+
 
     // Update existing Team
     $scope.update = function (isValid) {

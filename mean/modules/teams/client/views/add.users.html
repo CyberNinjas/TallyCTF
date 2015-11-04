@@ -1,18 +1,8 @@
-
-    <div id="todo" class="col-xs-6 col-xs-offset-3" ng-controller="TeamsController">
-
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Add teammates" ng-model="teammates" ng-keypress="addUsers($event)">
-        </div><!-- /input-group -->
-
-
-      <ul class="list-group">
-        <!-- http://www.w3schools.com/css/css_float.asp -->
-        <li ng-repeat="teammates in team">
-          {{teammates}}
-
-
-        </li>
-      </ul>
-
-    </div>
+<div ng-controller="TeamsController">
+  <form ng-submit="add()">
+  <input ng-model="title"><button>Add</button>
+  </form>
+    <ul>
+        <li ng-repeat="t in tasks track by $index">{{ t }} <button ng-click="delete()">x</button></li>
+    </ul>
+</div>
