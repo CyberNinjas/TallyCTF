@@ -21,8 +21,10 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       // team captain
       // team picture
       var team = new Teams({
-        teamName: this.teamName
+        teamName: this.teamName,
+        members: (Authentication.user.username)
       });
+     // team.members.push(Authentication.user);
     Authentication.user.team= this.teamName;
       // Redirect after save
       team.$save(function (response) {
@@ -90,13 +92,32 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
     // Find a list of Teams
     $scope.find = function () {
       $scope.teams = Teams.query();
+     // console.log($scope.teams);
     };
 
     // Find existing Team
     $scope.findOne = function () {
-      $scope.team = Teams.get({
-        teamId: $stateParams.teamId
+      $scope.team = Teams.query({
+        teamName: $stateParams.teamName
       });
+      console.log($scope.team);
+    };
+
+    // Find existing Team
+    $scope.findTeam = function () {
+     $scope.current;
+      $scope.members
+     $scope.teams = Teams.query(function (response) {
+       angular.forEach(response, function (item) {
+         if (item.teamName == Authentication.user.team) {
+           $scope.current = item;
+            $scope.members = item.members;
+           console.log($scope.members);
+
+         }
+       });
+     });
+
     };
   }
 ]);

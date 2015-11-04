@@ -13,9 +13,13 @@ var TeamSchema = new Schema({
   teamName: {
     type: String,
     trim: false,
+    unique: 'Team Name already exists',
     default: '',
   },
-
+  members: {
+    type: Array,
+    default: []
+  }
 });
 
 mongoose.model('Team', TeamSchema);
