@@ -1,8 +1,8 @@
 'use strict';
 
 // Configuring the Teams module
-angular.module('teams').run(['Menus',
-  function (Menus) {
+angular.module('teams').run(['Menus','Authentication',
+  function (Menus, Authentication) {
     // Add the teams dropdown item
     Menus.addMenuItem('topbar', {
       title: 'Teams',
@@ -18,10 +18,12 @@ angular.module('teams').run(['Menus',
     });
 
     // Add the dropdown create item
-    Menus.addSubMenuItem('topbar', 'teams', {
-      title: 'Create Teams',
-      state: 'teams.create',
-      roles: ['user']
-    });
+    if(Authentication.user.team==="") {
+      Menus.addSubMenuItem('topbar', 'teams', {
+        title: 'Create Teams',
+        state: 'teams.create',
+        roles: ['user']
+      });
+    }
   }
 ]);

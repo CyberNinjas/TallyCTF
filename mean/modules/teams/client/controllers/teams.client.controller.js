@@ -5,6 +5,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
   function ($scope, $stateParams, $location, Teams, Authentication, Users) {
     $scope.authentication = Authentication.user;
     $scope.users = Users;
+
     $scope.tasks = [];
 
     // Create new Team
@@ -17,17 +18,13 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
         return false;
       }
 
-      // Create new Team object
-      // attributes for team:
-      // user array
-      // team captain
-      // team picture
+    
       var team = new Teams({
-        teamName: this.teamName
+        teamName: this.teamName,
+        members: (Authentication.user.username)
       });
 
-    Authentication.user.team= this.teamName;
-
+      Authentication.user.team = this.teamName;
     // Redirect after save
       team.$save(function (response) {
         // Clear form fields
@@ -37,7 +34,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       });
       var user = new Users($scope.authentication);
 
-      //Update user function
+
       user.$update(function (response) {
         $scope.$broadcast('show-errors-reset', 'userForm');
 
@@ -57,7 +54,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
   //Adds the users to the team
   $scope.add = function() {
         $scope.tasks.push($scope.user);
-    }
+    };
 
 
 
@@ -66,6 +63,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
   $scope.delete = function() {
       $scope.tasks.splice(this.$index, 1);
   };
+
 
     // Remove existing Team
     $scope.remove = function (team) {
@@ -109,13 +107,31 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
     // Find a list of Teams
     $scope.find = function () {
       $scope.teams = Teams.query();
+     // console.log($scope.teams);
     };
 
     // Find existing Team
     $scope.findOne = function () {
-      $scope.team = Teams.get({
-        teamId: $stateParams.teamId
+      $scope.team = Teams.query({
+        teamName: $stateParams.teamName
       });
+      console.log($scope.team);
+    };
+
+    // Find existing Team
+    $scope.findTeam = function () {
+
+     $scope.teams = Teams.query(function (response) {
+       angular.forEach(response, function (item) {
+         if (item.teamName === Authentication.user.team) {
+           $scope.current = item;
+            $scope.members = item.members;
+           console.log($scope.members);
+
+         }
+       });
+     });
+
     };
   }
 ]);
