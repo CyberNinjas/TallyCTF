@@ -6,7 +6,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
     $scope.authentication = Authentication.user;
     $scope.users = Users;
     $scope.tasks = [];
-    
+
     // Create new Team
     $scope.create = function (isValid) {
       $scope.error = null;
@@ -54,9 +54,15 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
     $location.path('/teams/addusers');
   };
 
+  //Adds the users to the team
   $scope.add = function() {
-        $scope.tasks.push($scope.title);
+        $scope.tasks.push($scope.user);
     }
+
+
+
+
+  //Deletes users from the team SHOULD ONLY BE FOR ADMIN DO NOT ATTEMP THIS.
   $scope.delete = function() {
       $scope.tasks.splice(this.$index, 1);
   };
