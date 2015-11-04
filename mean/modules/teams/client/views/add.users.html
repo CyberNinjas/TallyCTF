@@ -1,0 +1,8 @@
+<div ng-controller="TeamsController">
+  <form ng-submit="add()">
+  <input ng-model="user"><button>Add</button>
+  </form>
+    <ul>
+        <li ng-repeat="t in tasks track by $index">{{ t }} <button ng-click="delete()">x</button></li>
+    </ul>
+</div>

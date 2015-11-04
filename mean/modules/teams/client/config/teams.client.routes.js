@@ -10,6 +10,7 @@ angular.module('teams').config(['$stateProvider',
         url: '/teams',
         template: '<ui-view/>'
       })
+
       .state('teams.list', {
         url: '',
         templateUrl: 'modules/teams/client/views/list-teams.client.view.html'
@@ -19,8 +20,8 @@ angular.module('teams').config(['$stateProvider',
           templateUrl: 'modules/teams/client/views/list-current.client.view.html'
         })
       .state('teams.add',{
-        url:'/christest',
-        templateUrl: 'modules/teams/client/views/test.html'
+        url:'/addusers',
+        templateUrl: 'modules/teams/client/views/add.users.html'
       })
 
       .state('teams.create', {
