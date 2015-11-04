@@ -1,0 +1,15 @@
+<section ng-controller="TeamsController" ng-init="findTeam()">
+  <div class="page-header">
+<h1>
+  <span ng-bind="current.teamName"></span>
+</h1>
+    <div class="list-group">
+      <a ng-repeat="member in members" class="list-group-item">
+        <small class="list-group-item-text">
+          <span ng-bind=member></span>
+        </small>
+       <!-- <h4 class="list-group-item-heading" ng-bind="current.teamName"></h4> -->
+      </a>
+    </div>
+  </div>
+</section>
