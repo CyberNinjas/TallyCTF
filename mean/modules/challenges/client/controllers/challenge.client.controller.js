@@ -87,5 +87,22 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
         challengeId: $stateParams.challengeId
       });
     };
+	
+	$scope.sortType = "name";
+    $scope.reverseSort = false;    
+    $scope.sort = function(p) {
+     if ($scope.sortType === p) {
+         $scope.reverseSort = !$scope.reverseSort;
+     } 
+	 else {
+         $scope.sortType = p;
+         if ($scope.sortType === "points"){
+           $scope.reverseSort = true;
+         }
+         else{		 
+           $scope.reverseSort = false;
+		 }
+     }
+ };
   }
 ]);

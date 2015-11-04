@@ -27,24 +27,24 @@
 <table class="table table-striped">
   <thead>
        <tr>
-         <th ng-click="sortType = 'created'; reverseSort = !reverseSort">Id
-		 <span ng-show="sortType == 'created' && !reverseSort" class="fa fa-caret-down"></span>
-        <span ng-show="sortType == 'created' && reverseSort" class="fa fa-caret-up"></span></th>
-         <th ng-click="sortType = 'name'; reverseSort = !reverseSort">Name
-		 <span ng-show="sortType == 'name' && !reverseSort" class="fa fa-caret-down"></span>
-        <span ng-show="sortType == 'name' && reverseSort" class="fa fa-caret-up"></span></th>
-         <th ng-click="sortType = 'category'; reverseSort = !reverseSort">Category
-		 <span ng-show="sortType == 'category' && !reverseSort" class="fa fa-caret-down"></span>
-        <span ng-show="sortType == 'category' && reverseSort" class="fa fa-caret-up"></span></th>
-         <th ng-click="sortType = 'points'; reverseSort = !reverseSort">Points
-		 <span ng-show="sortType == 'points' && reverseSort" class="fa fa-caret-down"></span>
-        <span ng-show="sortType == 'points' && !reverseSort" class="fa fa-caret-up"></span></th>
-         <th ng-click="sortType = 'solves'; reverseSort = !reverseSort">Solves
-		 <span ng-show="sortType == 'solves' && !reverseSort" class="fa fa-caret-down"></span>
-        <span ng-show="sortType == 'solves' && reverseSort" class="fa fa-caret-up"></span></th>
+         <th ng-click="sort('created')">Id
+		 <span ng-show="sortType == 'created' && reverseSort" class="fa fa-caret-down"></span>
+        <span ng-show="sortType == 'created' && !reverseSort" class="fa fa-caret-up"></span></th>
+         <th ng-click="sort('name')">Name
+		 <span ng-show="sortType == 'name' && reverseSort" class="fa fa-caret-down"></span>
+        <span ng-show="sortType == 'name' && !reverseSort" class="fa fa-caret-up"></span></th>
+         <th ng-click="sort('category')">Category
+		 <span ng-show="sortType == 'category' && reverseSort" class="fa fa-caret-down"></span>
+        <span ng-show="sortType == 'category' && !reverseSort" class="fa fa-caret-up"></span></th>
+         <th ng-click="sort('points')">Points
+		 <span ng-show="sortType == 'points' && !reverseSort" class="fa fa-caret-down"></span>
+        <span ng-show="sortType == 'points' && reverseSort" class="fa fa-caret-up"></span></th>
+         <th ng-click="sort('solves')">Solves
+		 <span ng-show="sortType == 'solves' && reverseSort" class="fa fa-caret-down"></span>
+        <span ng-show="sortType == 'solves' && !reverseSort" class="fa fa-caret-up"></span></th>
        </tr>
      </thead>
-    <tr ng-repeat-start="challenge in challenges | filter:{category: challengeFilter.category} | orderBy:sortType:!reverseSort" ng-click="active = !active">
+    <tr ng-repeat-start="challenge in challenges | filter:{category: challengeFilter.category} | orderBy:sortType:reverseSort" ng-click="active = !active">
 	  <td>{{challenge.created}}</td>
       <td>{{challenge.name}}</td>
       <td>{{challenge.category}}</td>
