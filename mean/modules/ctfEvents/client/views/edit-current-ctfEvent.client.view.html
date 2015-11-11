@@ -1,12 +1,11 @@
-<section ng-controller="CtfEventsController" ng-init="findOne()">
+<section ng-controller="CtfEventsController" ng-init="findCurrent()">
   <div class="page-header">
     <div class="btn-group pull-right">
       <btn type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Options <span class="caret">
       </btn>
       <ul class="dropdown-menu">
-        <li><a style="cursor: pointer" ng-click="setCurrent()">Set as current event</a></li>
-        <li><a style="cursor: pointer" ng-click="remove()">Delete Event</a></li>
+        <li><a style="cursor: pointer" ng-click="removeCurrent()">Delete Event</a></li>
       </ul>
     </div>
     <h1 ng-bind="ctfEvent.title"></h1>
@@ -37,7 +36,7 @@
           <h2 bcollapse>Challenges</h2>
           <div class="collapse">
             <div class="well list-group">
-              <a ng-repeat="challenge in ctfEvent.challenges" ui-sref="challenges.edit({challengeId: challenge._id})" class="list-group-item">
+              <a ng-repeat="challenge in challenges" ui-sref="challenges.edit({challengeId: challenge._id})" class="list-group-item">
                 <h4 ng-bind="challenge.name" class="list-group-item-header"></h4>
               </a>
               <div class="list-group-item" ng-if="ctfEvent.challenges.$resolved && !ctfEvent.challenges.length">
@@ -50,7 +49,7 @@
           <h2 bcollapse>Teams / Users</h2>
           <div class="collapse">
             <div class="well well-lg list-group">
-              <a ng-repeat="team in ctfEvent.teams" ui-sref="team.edit({teamId: team._id})" class="list-group-item">
+              <a ng-repeat="team in teams" ui-sref="team.edit({teamId: team._id})" class="list-group-item">
                 <h4 ng-bind="team.teamName" class="list-group-item-header"></h4>
               </a>
             </div>

@@ -12,17 +12,22 @@ module.exports = function (app) {
     .get(ctfEvents.list)
     .post(ctfEvents.create);
 
+  // Current ctfEvent routes
+  app.route('/api/ctfEvents/current').all(ctfEventsPolicy.isAllowed)
+    .get(ctfEvents.readCurrent)
+    .put(ctfEvents.setCurrent)
+    .post(ctfEvents.setCurrent)
+    .delete(ctfEvents.clear);
+
+  // Event loading routes
+  app.route('/api/ctfEvents/current/eventLoad').all(ctfEventsPolicy.isAllowed)
+    .put(ctfEvents.eventLoad);
+
   // Single ctfEvent routes
   app.route('/api/ctfEvents/:ctfEventId').all(ctfEventsPolicy.isAllowed)
     .get(ctfEvents.read)
     .put(ctfEvents.update)
     .delete(ctfEvents.delete);
-
-  app.route('/api/ctfEvents/currentEvent').all(ctfEventsPolicy.isAllowed)
-      .get(ctfEvents.getCurrent);
-
-  app.route('/api/ctfEvents/currentEvent/:ctfEventId').all(ctfEventsPolicy.isAllowed)
-      .put(ctfEvents.setCurrent);
 
   // Finish by binding the ctfEvent middleware
   app.param('ctfEventId', ctfEvents.ctfEventByID);

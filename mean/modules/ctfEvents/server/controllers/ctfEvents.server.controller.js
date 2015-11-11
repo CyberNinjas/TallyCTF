@@ -6,12 +6,11 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   CtfEvent = mongoose.model('CtfEvent'),
+  CurrentCtfEvent = mongoose.model('CurrentCtfEvent'),
   Challenge = mongoose.model('Challenge'),
   Team = mongoose.model('Team'),
-  UserAuth = mongoose.model('UserAuth'),
+  User = mongoose.model('User'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
-
-var currentCtfEvent = null;
 
 /**
  * Create a ctfEvent
@@ -31,21 +30,7 @@ exports.create = function (req, res) {
 };
 
 /**
- * Set the ctfEvent as the Current event
- */
-exports.setCurrent = function (req, res) {
-  this.currentCtfEvent = req.ctfEvent;
-};
-
-/**
- * Get the current ctfEvent
- */
-exports.getCurrent = function (req, res) {
-  res.json(this.currentCtfEvent);
-};
-
-/**
- * Show the current ctfEvent
+ * Show a ctfEvent
  */
 exports.read = function (req, res) {
   res.json(req.ctfEvent);
@@ -72,7 +57,167 @@ exports.update = function (req, res) {
   });
 };
 
+/*
+* Current Ctf Event Stuff
+*/
+
 /**
+ * Create a currentCtfEvent
+ */
+exports.createCurrent = function (req, res) {
+  var currentCtfEvent = new CurrentCtfEvent(req.body);
+
+  currentCtfEvent.save(function (err) {
+    if (err) {
+      console.log(err);
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json(currentCtfEvent);
+    }
+  });
+};
+
+/*
+ * Clear the working set
+ */
+exports.clear = function (req, res) {
+  Challenge.remove({}, function (err, thing) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    }
+  });
+  Team.remove({}, function (err, thing) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    }
+  });
+//   TODO: Commented out until saving is implemented
+  // User.remove({}, function (err, thing) {
+  //   if (err) {
+  //     return res.status(400).send({
+  //       message: errorHandler.getErrorMessage(err)
+  //     });
+  //   }
+  // });
+
+  res.status(200).send();
+};
+
+/*
+ * Event loading stuff
+ */
+exports.eventLoad = function (req, res) {
+  Challenge.collection.insertMany(req.body.Challenges, function (err, r) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    }
+  });
+  Team.collection.insertMany(req.body.Teams, function (err, r) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    }
+  });
+//   TODO: Commented out until saving is implemented
+  // User.collection.insertMany(req.body.Users, function (err, r) {
+  //   if (err) {
+  //     return res.status(400).send({
+  //       message: errorHandler.getErrorMessage(err)
+  //     });
+  //   }
+  // });
+
+  return res.status(200).send();
+};
+
+/*
+* Get the Current CTF event
+*/
+exports.readCurrent = function (req, res) {
+  CurrentCtfEvent.find({}, 'title start end', function (err, currentEvent) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      // FIXME: This is bad practice. Find a better way of addressing the first element
+      res.json(currentEvent[0]);
+    }
+  });
+};
+
+/*
+* Set the current CTF event
+*/
+exports.setCurrent = function (req, res) {
+  CurrentCtfEvent.find({}, 'current', function (err, currentEvent) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      // If there isn't a current event, 
+      if (currentEvent.length < 1) {
+        exports.createCurrent(req, res);
+      } else {
+        req.currentCtfEvent = currentEvent[0];
+        exports.updateCurrent(req, res);
+      }
+    }
+  });
+};
+
+/*
+* Update the currentCtfEvent
+*/
+exports.updateCurrent = function (req, res) {
+  var currentCtfEvent = req.currentCtfEvent;
+
+  currentCtfEvent.title = req.body.title;
+  currentCtfEvent.start = req.body.start;
+  currentCtfEvent.end   = req.body.end;
+
+  if (currentCtfEvent.current === 0)
+    exports.deleteCurrent(req, res);
+
+  currentCtfEvent.save(function (err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json(currentCtfEvent);
+    }
+  });
+};
+
+/*
+ * Delete the current CTF event
+ */
+exports.deleteCurrent = function (req, res) {
+  var currentEvent = req.currentCtfEvent;
+
+  currentEvent.remove(function (err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json(currentEvent);
+    }
+  });
+};
+
+/*
  * Delete an ctfEvent
  */
 exports.delete = function (req, res) {

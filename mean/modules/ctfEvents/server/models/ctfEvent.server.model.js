@@ -38,11 +38,20 @@ var CtfEventSchema = new Schema({
   users: {
     type: Array,
     default: []
+  }
+});
+
+var CurrentCtfEventSchema = new Schema({
+  title: {
+    type: String
   },
-  userAuths: {
-    type: Array,
-    default: []
+  start: {
+    type: Date
+  },
+  end: {
+    type: Date
   }
 });
 
 mongoose.model('CtfEvent', CtfEventSchema);
+mongoose.model('CurrentCtfEvent', CurrentCtfEventSchema);

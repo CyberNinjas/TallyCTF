@@ -6,6 +6,11 @@
       </h1>
   </div>
   <div class="list-group">
+    <a ui-sref="ctfEvents.current()" class="list-group-item list-group-item-success">
+      <h4 class="list-group-item-heading">Current Event</h4>
+    </a>
+  </div>
+  <div class="list-group">
     <a ng-repeat="ctfEvent in ctfEvents" ui-sref="ctfEvents.edit({ctfEventId: ctfEvent._id})" class="list-group-item">
       <small class="list-group-item-text">
         Created on
@@ -13,8 +18,5 @@
       </small>
       <h4 class="list-group-item-heading" ng-bind="ctfEvent.title"></h4>
     </a>
-  </div>
-  <div class="alert alert-warning text-center" ng-if="ctfEvents.$resolved && !ctfEvents.length">
-    No ctfEvents yet, why don't you <a ui-sref="ctfEvents.create">create one</a>?
   </div>
 </section>

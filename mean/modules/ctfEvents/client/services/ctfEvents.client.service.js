@@ -11,4 +11,23 @@ angular.module('ctfEvents').factory('CtfEvents', ['$resource',
       }
     });
   }
+]).factory('CurrentCtfEvents', ['$resource',
+  function ($resource) {
+    return $resource('api/ctfEvents/current', {}, {
+      update: {
+        method: 'PUT'
+      },
+      clear: {
+        method: 'DELETE'
+      }
+    });
+  }
+]).factory('EventLoad', ['$resource', 
+  function ($resource) {
+    return $resource('api/ctfEvents/current/eventLoad', {}, {
+      update: {
+        method: 'PUT'
+      }
+    });
+  }
 ]);

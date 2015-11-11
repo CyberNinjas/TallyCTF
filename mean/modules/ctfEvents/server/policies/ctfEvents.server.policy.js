@@ -18,6 +18,12 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/ctfEvents',
       permissions: '*'
     }, {
+      resources: '/api/ctfEvents/current',
+      permissions: '*'
+    }, {
+      resources: '/api/ctfEvents/current/eventLoad',
+      permissions: '*'
+    }, {
       resources: '/api/ctfEvents/:ctfEventId',
       permissions: '*'
     }]
