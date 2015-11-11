@@ -26,7 +26,7 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
 
       // Redirect after save
       challenge.$save(function (response) {
-        $location.path('challenges/');
+        $location.path('challenges');
         //$location.path('challenges/' + response._id);
 
         // Clear form fields
@@ -78,7 +78,10 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
 
     // Find a list of Challenges
     $scope.find = function () {
+      //Challenges will not be visible to participants unless event has started AND not ended.
+      //if event has started AND not ended:
       $scope.challenges = Challenges.query();
+      //$scope.challenges =[];
     };
 
     // Find existing Challenge
@@ -87,5 +90,22 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
         challengeId: $stateParams.challengeId
       });
     };
+	
+	$scope.sortType = "name";
+    $scope.reverseSort = false;    
+    $scope.sort = function(p) {
+     if ($scope.sortType === p) {
+         $scope.reverseSort = !$scope.reverseSort;
+     } 
+	 else {
+         $scope.sortType = p;
+         if ($scope.sortType === "points"){
+           $scope.reverseSort = true;
+         }
+         else{		 
+           $scope.reverseSort = false;
+		 }
+     }
+ };
   }
 ]);

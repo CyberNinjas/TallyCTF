@@ -19,5 +19,9 @@ angular.module('core').controller('HeaderController', ['$scope', '$state', 'Auth
     $scope.$on('$stateChangeSuccess', function () {
       $scope.isCollapsed = false;
     });
+
+    $scope.signout = function () {
+      window.location="/api/auth/signout";
+    };
   }
 ]);

@@ -120,7 +120,6 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
     // Find existing Team
     $scope.findTeam = function () {
-
      $scope.teams = Teams.query(function (response) {
        angular.forEach(response, function (item) {
          if (item.teamName === Authentication.user.team) {
