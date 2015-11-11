@@ -10,8 +10,8 @@ module.exports = function (app) {
   // Teams collection routes
   app.route('/api/teams').all(teamsPolicy.isAllowed)
     .get(teams.list)
-    .post(teams.create);
-    
+    .post(teams.create)
+    .delete(teams.clear);
   // Single team routes
   app.route('/api/teams/:teamId').all(teamsPolicy.isAllowed)
     .get(teams.read)

@@ -54,6 +54,16 @@ exports.update = function (req, res) {
   });
 };
 
+exports.clear = function(req,res){
+  Team.remove({}, function(err,thing) {
+    if (err){
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+  }
+  });
+  res.status(200).send();
+};
 /**
  * Delete an team
  */
