@@ -17,6 +17,13 @@ angular.module('challenges').run(['Menus',
       state: 'challenges.list'
     });
 
+    // Add the dropdown list item
+    Menus.addSubMenuItem('topbar', 'teamCaptainMenu', {
+      title: 'teamCaptaineering',
+      state: 'challenges.list',
+      roles: ['teamCaptain']
+    });
+
     // Add the dropdown create item
     Menus.addSubMenuItem('topbar', 'challenges', {
       title: 'Create Challenges',

@@ -18,7 +18,7 @@ angular.module('challenges').config(['$stateProvider',
         url: '/create',
         templateUrl: 'modules/challenges/client/views/create-challenges.client.view.html',
         data: {
-          roles: ['user', 'admin']
+          roles: ['admin']
         }
       })
       .state('challenges.view', {
