@@ -8,7 +8,13 @@
         <!--Team Captain: <span ng-bind="team.user.displayName"></span> -->
         <!--Team Name: <span ng-bind="team.teamName"></span>-->
       </small>
+      <div class="pull-right">
+        <button ng-click =requestToJoin()>Join</button>
+
+      </div>
       <h4 class="list-group-item-heading" ng-bind="team.teamName"></h4>
+
+
     </a>
   </div>
   <div class="alert alert-warning text-center" ng-if="teams.$resolved && !teams.length">

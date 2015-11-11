@@ -14,9 +14,17 @@ var TeamSchema = new Schema({
     type: String,
     trim: false,
     unique: 'Team Name already exists',
-    default: '',
+    default: ''
   },
   members: {
+    type: Array,
+    default: []
+  },
+  requestToJoin: {
+    type:Array,
+    default: []
+  },
+  askToJoin:{
     type: Array,
     default: []
   }
