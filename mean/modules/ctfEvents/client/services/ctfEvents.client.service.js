@@ -22,10 +22,10 @@ angular.module('ctfEvents').factory('CtfEvents', ['$resource',
       }
     });
   }
-]).factory('EventLoad', ['$resource', 
+]).factory('EventCtl', ['$resource', 
   function ($resource) {
-    return $resource('api/ctfEvents/current/eventLoad', {}, {
-      update: {
+    return $resource('api/ctfEvents/current/eventCtl', {}, {
+      load: {
         method: 'PUT'
       }
     });

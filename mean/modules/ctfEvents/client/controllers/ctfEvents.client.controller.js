@@ -1,8 +1,8 @@
 'use strict';
 
 // CtfEvents controller
-angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$stateParams', '$location', 'Authentication', 'CtfEvents', 'CurrentCtfEvents', 'Challenges', 'Teams', 'Users', 'EventLoad',
-  function ($scope, $stateParams, $location, Authentication, CtfEvents, CurrentCtfEvents, Challenges, Teams, Users, EventLoad) {
+angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$stateParams', '$location', 'Authentication', 'CtfEvents', 'CurrentCtfEvents', 'Challenges', 'Teams', 'Users', 'EventCtl',
+  function ($scope, $stateParams, $location, Authentication, CtfEvents, CurrentCtfEvents, Challenges, Teams, Users, EventCtl) {
     $scope.authentication = Authentication;
 
     // Create new CtfEvent
@@ -59,6 +59,32 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
       }
     };
 
+    // Save the Current Event to the db
+    $scope.saveCurrent = function () {
+      // Create new CtfEvent object
+      var ctfEvent = new CtfEvents({
+        created: Date.now(),
+        title: $scope.ctfEvent.title,
+        start: $scope.ctfEvent.start,
+        end: $scope.ctfEvent.end,
+        challenges: $scope.challenges,
+        teams: $scope.teams,
+        users: $scope.users
+      });
+
+      // Redirect after save
+      ctfEvent.$save(function (response) {
+        $location.path('ctfEvents/' + response._id);
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
+    };
+
+    // Clear the current event
+    $scope.removeCurrent = function () {
+      CurrentCtfEvents.clear();
+    };
+
     // Load an event's data into the current working set
     $scope.loadIntoCurrent = function (ctfEvent) {
       var _ctfEvent = (ctfEvent ? ctfEvent : $scope.ctfEvent);
@@ -68,7 +94,7 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
         'Users': _ctfEvent.users
       };
 
-      EventLoad.update(data);
+      EventCtl.load(data);
     };
 
     // Set Current CTFEvent
@@ -89,7 +115,7 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
       // FIXME: Add a way to prompt the user to save the current working set if
       // FIXME: there are things in it (challenges, users, etc.)
       // Clear the working set
-      CurrentCtfEvents.clear();
+      $scope.removeCurrent();
 
       // Load the event's data into the working set
       $scope.loadIntoCurrent();
@@ -127,6 +153,7 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
       $scope.ctfEvent = CtfEvents.get({
         ctfEventId: $stateParams.ctfEventId
       });
+      $scope.currentCtfEvent = CurrentCtfEvents.get();
     };
 
     // Find existing current CtfEvent

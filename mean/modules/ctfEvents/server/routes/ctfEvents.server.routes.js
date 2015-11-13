@@ -20,7 +20,7 @@ module.exports = function (app) {
     .delete(ctfEvents.clear);
 
   // Event loading routes
-  app.route('/api/ctfEvents/current/eventLoad').all(ctfEventsPolicy.isAllowed)
+  app.route('/api/ctfEvents/current/eventCtl').all(ctfEventsPolicy.isAllowed)
     .put(ctfEvents.eventLoad);
 
   // Single ctfEvent routes
