@@ -106,33 +106,16 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
 
     $scope.requestsToJoin = function(team){
-      console.log(Authentication.user.username || Authentication.user.userName);
+      console.log(Authentication.user.username);
      // console.log(team.teamName);
-      console.log();
+      var lteam = new Teams(team);
+      console.log(lteam);
 
-      var lteam = team;
-
-      lteam.requestToJoin.push(Authentication.user.username);
-      console.log(lteam.requestToJoin);
-   /*   lteam.$save(function (response) {
-        // Clear form fields
-        $scope.teamName = '';
+      lteam.$update(function () {
+        $location.path('teams/' + team._id);
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
-      //var user = new Users($scope.authentication);
-
-
-      lteam.$update(function (response) {
-        $scope.$broadcast('show-errors-reset', 'teamForm');
-
-        $scope.success = true;
-        lteam.requestToJoin.push(Authentication.user.username);
-      }, function (response) {
-        $scope.error = response.data.message;
-      });
-     // mteam.save();*/
-      Teams.update({_id: team._id},{'$push': {'requestToJoin': Authentication.user.username}},{safe: true, upsert: true, new : true},function(err, data){ console.log(err);});
     };
 
     // Find a list of Teams

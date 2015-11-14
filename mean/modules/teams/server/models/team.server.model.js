@@ -16,6 +16,11 @@ var TeamSchema = new Schema({
     unique: 'Team Name already exists',
     default: ''
   },
+  teamCaptain: {
+    type: String,
+    unique: 'You cannot be captain of 2 teams',
+    default: ''
+  },
   members: {
     type: Array,
     default: []

@@ -25,10 +25,10 @@ exports.invokeRolesPolicies = function () {
     roles: ['user'],
     allows: [{
       resources: '/api/teams',
-      permissions: ['get', 'post']
+      permissions: ['get', 'post','put']
     }, {
       resources: '/api/teams/:teamId',
-      permissions: ['get']
+      permissions: ['get','put']
     }]
   }, {
     roles: ['guest'],
@@ -47,9 +47,8 @@ exports.invokeRolesPolicies = function () {
  */
 exports.isAllowed = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
-
   // If an team is being processed and the current user created it then allow any manipulation
-  if (req.team && req.user && req.team.user.id === req.user.id) {
+  if (req.team && req.user && req.user.team==='') {
     return next();
   }
 

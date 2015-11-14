@@ -41,7 +41,6 @@ exports.update = function (req, res) {
   var team = req.team;
 
   team.teamName = req.body.teamName;
-  team.requestToJoin.push(req.user);
   //team.content = req.body.content;
 
   team.save(function (err) {
@@ -55,6 +54,25 @@ exports.update = function (req, res) {
   });
 };
 
+exports.requestsToJoin = function(req, res){
+  console.log('I am in requests above team5');
+  var team = req.team;
+  console.log(team);
+  //team.teamName = req.body.teamName;
+  //team.teamCaptain = req.user.username;
+  team.requestToJoin.push(req.user.username);
+  //team.content = req.body.content;
+  console.log('I am in below server');
+  team.save(function (err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json(team);
+    }
+  });
+};
 exports.clear = function(req,res){
   Team.remove({}, function(err,thing) {
     if (err){
