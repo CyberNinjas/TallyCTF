@@ -38,6 +38,11 @@ var ChallengeSchema = new Schema({
     type: Number,
     min: 0,
     default: 0
+  },
+  val: {
+    type: String,
+    default: '',
+	trim: true
   }
 });
 

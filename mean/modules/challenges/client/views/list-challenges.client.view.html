@@ -50,13 +50,15 @@
       <td>{{challenge.category}}</td>
       <td>{{challenge.points}}</td>
       <td>{{challenge.solves}}</td>
-	  <tr ng-show = "active" ng-repeat-end><td colspan="5"><p>
+	  <tr ng-show = "active" ng-repeat-end><td colspan="5"><div>
 	  {{challenge.description}}
 	  <br><br>
-	  <input type="text" class="form-control" ng-model="$parent.challenge.created" placeholder="Flag Value">
+	  <form name="form">
+	  <input type="text" class="form-control" ng-model="challenge.val" placeholder="Flag Value">
 	  <br>
-      <input type="submit" class="submitButton" ng-click="submitItem(challenge.created)">
-	  <br><br><br></p>
+      <input type="submit" class="submitButton" ng-click="submitItem(challenge)">
+	  </form>
+	  <br><br><br></div>
 	  </td></tr>
     </tr>
   </table>
