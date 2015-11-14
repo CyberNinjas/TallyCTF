@@ -5,7 +5,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
   function ($scope, $stateParams, $location, Teams, Authentication, Users) {
     $scope.authentication = Authentication.user;
     $scope.users = Users;
-
+    $scope.mteam = Teams;
     $scope.tasks = [];
 
     // Create new Team
@@ -22,6 +22,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       var team = new Teams({
         teamName: this.teamName,
         members: (Authentication.user.username)
+
       });
 
      // team.members.push(Authentication.user);
@@ -56,7 +57,6 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
   $scope.add = function() {
         $scope.tasks.push($scope.user);
     };
-
 
 
   //Deletes users from the team SHOULD ONLY BE FOR ADMIN DO NOT ATTEMP THIS.
@@ -102,6 +102,37 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
+    };
+
+
+    $scope.requestsToJoin = function(team){
+      console.log(Authentication.user.username || Authentication.user.userName);
+     // console.log(team.teamName);
+      console.log();
+
+      var lteam = team;
+
+      lteam.requestToJoin.push(Authentication.user.username);
+      console.log(lteam.requestToJoin);
+   /*   lteam.$save(function (response) {
+        // Clear form fields
+        $scope.teamName = '';
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
+      //var user = new Users($scope.authentication);
+
+
+      lteam.$update(function (response) {
+        $scope.$broadcast('show-errors-reset', 'teamForm');
+
+        $scope.success = true;
+        lteam.requestToJoin.push(Authentication.user.username);
+      }, function (response) {
+        $scope.error = response.data.message;
+      });
+     // mteam.save();*/
+      Teams.update({_id: team._id},{'$push': {'requestToJoin': Authentication.user.username}},{safe: true, upsert: true, new : true},function(err, data){ console.log(err);});
     };
 
     // Find a list of Teams

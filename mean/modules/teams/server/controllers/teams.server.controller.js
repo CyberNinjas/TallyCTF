@@ -41,6 +41,7 @@ exports.update = function (req, res) {
   var team = req.team;
 
   team.teamName = req.body.teamName;
+  team.requestToJoin.push(req.user);
   //team.content = req.body.content;
 
   team.save(function (err) {

@@ -12,12 +12,12 @@ module.exports = function (app) {
     .get(teams.list)
     .post(teams.create)
     .delete(teams.clear);
+
   // Single team routes
   app.route('/api/teams/:teamId').all(teamsPolicy.isAllowed)
     .get(teams.read)
     .put(teams.update)
     .delete(teams.delete);
-
   // Finish by binding the team middleware
   app.param('teamId', teams.teamByID);
 };
