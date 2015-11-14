@@ -104,5 +104,13 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
 		 }
      }
  };
+ //$scope.item = {};
+ $scope.submitItem = function(challenge){
+    console.log(challenge.val);
+    //if ($scope.val !== ""){
+      //$scope.todos.push($scope.flagValue);
+	  //console.log($scope.challenge.created);
+    //}
+  };
   }
 ]);
