@@ -13,10 +13,25 @@
       </a>
     </div>
     <div ng-if="shouldRender('user')" class="list-group">
-      <h3>Pending members</h3>
+      <h3>Pending teams</h3>
       <a ng-repeat="request in requests" class="list-group-item">
         <small class="list-group-item-text">
           <span ng-bind=member></span>
+        </small>
+        <!-- <h4 class="list-group-item-heading" ng-bind="current.teamName"></h4> -->
+      </a>
+    </div>
+    <div ng-if="shouldRender('teamCaptain')" class="list-group">
+      <h3>Pending invites</h3>
+      <a ng-repeat="request in requests" class="list-group-item">
+        <small class="list-group-item-text">
+          <div class="pull-right">
+            <button ng-click=''>Decline</button>
+          </div>
+          <div class="pull-right">
+            <button ng-click=''>Accept</button>
+          </div>
+          <span ng-bind=request></span>
         </small>
         <!-- <h4 class="list-group-item-heading" ng-bind="current.teamName"></h4> -->
       </a>

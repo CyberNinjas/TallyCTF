@@ -27,7 +27,6 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
      // team.members.push(Authentication.user);
     Authentication.user.team= this.teamName;
       // Redirect after save
-
       team.$save(function (response) {
         // Clear form fields
         $scope.teamName = '';
@@ -183,13 +182,20 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
         }
       }
       if(role ==='teamCaptain'){
-        return TM&&TC&&US;
+        console.log("teamCaptain: ");
+        console.log(TM&&TC&&US);
+
+        return (TM&&TC&&US);
       }
       else if(role==='teamMember'){
-        return TM&&US&&!TC;
+        console.log("teamMember: ");
+        console.log(TM&&!TC&&US);
+        return (TM&&US&&!TC);
       }
       else if(role==='user'){
-        return !TM&&US&&!TC;
+        console.log("user: ");
+        console.log(!TM&&!TC&&US);
+        return (!TM&&US&&!TC);
       }
       else
         return false;

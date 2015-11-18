@@ -13,9 +13,28 @@ var path = require('path'),
  * Create a team
  */
 exports.create = function (req, res) {
+  console.log('create team before user');
   var team = new Team(req.body);
   team.user = req.user;
-
+  var user = req.user;
+  user.roles.push('teamCaptain');
+  user.roles.push('teamMember');
+  console.log(user);
+  user.save(function (err) {
+    if (err) {
+      console.log('got an error');
+      console.log(err);
+    } else {
+      req.login(user, function (err) {
+        if (err) {
+          res.status(400).send(err);
+        } else {
+          console.log("saved user");
+        }
+      });
+    }
+  });
+  console.log('made it after user save');
   team.save(function (err) {
     if (err) {
       return res.status(400).send({
@@ -25,6 +44,7 @@ exports.create = function (req, res) {
       res.json(team);
     }
   });
+console.log('made it after team save');
 };
 
 /**

@@ -8,9 +8,8 @@
         <!--Team Captain: <span ng-bind="team.user.displayName"></span> -->
         <!--Team Name: <span ng-bind="team.teamName"></span>-->
       </small>
-      <div class="pull-right">
+      <div class="pull-right" ng-if="shouldRender('user')">
         <button ng-click='requestsToJoin(team)'>Join</button>
-
       </div>
       <h4 class="list-group-item-heading" ng-bind="team.teamName"></h4>
 
