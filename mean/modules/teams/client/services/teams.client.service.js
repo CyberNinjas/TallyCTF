@@ -12,6 +12,13 @@ angular.module('teams')
          }
     });
   }
+])
+.factory('Teams1', ['$resource',
+  function ($resource) {
+   return $resource('api/teams/join', {}, {
+     update: {
+        method: 'PUT'
+     }
+});
+}
 ]);
-
-

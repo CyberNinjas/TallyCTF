@@ -18,6 +18,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/teams',
       permissions: '*'
     }, {
+      resources: '/api/teams/join',
+      permissions: '*'
+    }, {
       resources: '/api/teams/:teamId',
       permissions: '*'
     }]
@@ -28,7 +31,7 @@ exports.invokeRolesPolicies = function () {
       permissions: ['get', 'post','put']
     }, {
       resources: '/api/teams/:teamId',
-      permissions: ['get','put']
+      permissions: ['get','put', 'post']
     }]
   }, {
     roles: ['guest'],

@@ -35,8 +35,10 @@ exports.create = function (req, res) {
     }
   });
   console.log('made it after user save');
+
   team.save(function (err) {
     if (err) {
+      console.log(err);
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -91,6 +93,13 @@ exports.requestsToJoin = function(req, res){
     }
   });
 };
+
+
+exports.addMembers = function(req,res){
+  var lteam = 
+  console.log("heyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+};
+
 exports.clear = function(req,res){
   Team.remove({}, function(err,thing) {
     if (err){
