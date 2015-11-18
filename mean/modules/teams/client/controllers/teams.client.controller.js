@@ -1,11 +1,11 @@
 'use strict';
 
 // Teams controller
-angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', '$location','Teams','Authentication','Users',
-  function ($scope, $stateParams, $location, Teams, Authentication, Users) {
+angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', '$location','Teams','Authentication','Users', 'Teams1',
+  function ($scope, $stateParams, $location, Teams, Authentication, Users, Teams1) {
     $scope.authentication = Authentication.user;
     $scope.users = Users;
-    $scope.tasks = [];
+
 
     // Create new Team
     $scope.create = function (isValid) {
@@ -17,7 +17,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
         return false;
       }
 
-    
+
       var team = new Teams({
         teamName: this.teamName,
         members: Authentication.user.username,
@@ -51,11 +51,6 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
   $scope.teamRoster = function(){
     $location.path('/teams/addusers');
   };
-
-  //Adds the users to the team
-  $scope.add = function() {
-        $scope.tasks.push($scope.user);
-    };
 
 
   //Deletes users from the team SHOULD ONLY BE FOR ADMIN DO NOT ATTEMP THIS.
@@ -146,15 +141,26 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
           $scope.error = response.data.message;
         });
       }
-
-
-
     };
+
+    //Adds the users to the team
+    $scope.add = function() {
+
+          //pulls all the Users from the database
+          var users = Users.query();
+          console.log("*******");
+          console.log(users);
+          Teams1.update();
+      };
 
     // Find a list of Teams
     $scope.find = function () {
       $scope.teams = Teams.query();
      // console.log($scope.teams);
+    };
+
+    $scope.findUsers = function(){
+      $scope.users = Users.query();
     };
 
     // Find existing Team

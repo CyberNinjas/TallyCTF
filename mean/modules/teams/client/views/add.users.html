@@ -1,8 +1,8 @@
-<div ng-controller="TeamsController">
+<div ng-controller="TeamsController" ng-init=findUsers()>
   <form ng-submit="add()">
   <input ng-model="user"><button>Add</button>
   </form>
-    <ul>
-        <li ng-repeat="t in tasks track by $index">{{ t }} <button ng-click="delete()">x</button></li>
-    </ul>
+
+<a ng-repeat="user in users" class="list-group-item">
+
 </div>
