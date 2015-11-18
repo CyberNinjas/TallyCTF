@@ -44,7 +44,7 @@
         <span ng-show="sortType == 'solves' && !reverseSort" class="fa fa-caret-up"></span></th>
        </tr>
      </thead>
-    <tr ng-repeat-start="challenge in challenges | filter:{category: challengeFilter.category} | orderBy:sortType:reverseSort" ng-click="active = !active">
+    <tr ng-repeat-start="challenge in challenges | filter:{category: challengeFilter.category}:true | orderBy:sortType:reverseSort" ng-click="active = !active">
 	  <td>{{challenge.created}}</td>
       <td>{{challenge.name}}</td>
       <td>{{challenge.category}}</td>
