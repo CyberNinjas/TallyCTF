@@ -17,9 +17,9 @@ var TeamSchema = new Schema({
     default: ''
   },
   teamCaptain: {
-    type: String,
+    type: Schema.Types.Object,
     unique: 'You cannot be captain of 2 teams',
-    default: ''
+    required: "You must have a team captain"
   },
   members: {
     type: Array,

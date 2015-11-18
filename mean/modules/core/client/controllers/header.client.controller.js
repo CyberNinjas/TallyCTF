@@ -23,5 +23,6 @@ angular.module('core').controller('HeaderController', ['$scope', '$state', 'Auth
     $scope.signout = function () {
       window.location="/api/auth/signout";
     };
+
   }
 ]);

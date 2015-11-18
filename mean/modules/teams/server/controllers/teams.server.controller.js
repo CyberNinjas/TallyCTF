@@ -55,13 +55,11 @@ exports.update = function (req, res) {
 };
 
 exports.requestsToJoin = function(req, res){
-  console.log('I am in requests above team5');
   var team = req.team;
   console.log(team);
-  //team.teamName = req.body.teamName;
-  //team.teamCaptain = req.user.username;
+
   team.requestToJoin.push(req.user.username);
-  //team.content = req.body.content;
+
   console.log('I am in below server');
   team.save(function (err) {
     if (err) {

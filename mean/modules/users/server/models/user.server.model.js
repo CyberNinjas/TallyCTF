@@ -112,6 +112,10 @@ var UserSchema = new Schema({
   score: {
     type: Number,
     default: 0
+  },
+  notifications: {
+    type: Number,
+    default: 0
   }
 });
 
