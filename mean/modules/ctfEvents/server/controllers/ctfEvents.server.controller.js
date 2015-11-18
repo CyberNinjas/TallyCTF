@@ -112,7 +112,7 @@ exports.clear = function (req, res) {
 /*
  * Event loading stuff
  */
-exports.eventLoad = function (req, res) {
+exports.loadCurrent = function (req, res) {
   Challenge.collection.insertMany(req.body.Challenges, function (err, r) {
     if (err) {
       return res.status(400).send({

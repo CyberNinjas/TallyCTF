@@ -15,13 +15,9 @@ module.exports = function (app) {
   // Current ctfEvent routes
   app.route('/api/ctfEvents/current').all(ctfEventsPolicy.isAllowed)
     .get(ctfEvents.readCurrent)
-    .put(ctfEvents.setCurrent)
+    .put(ctfEvents.loadCurrent)
     .post(ctfEvents.setCurrent)
     .delete(ctfEvents.clear);
-
-  // Event loading routes
-  app.route('/api/ctfEvents/current/eventCtl').all(ctfEventsPolicy.isAllowed)
-    .put(ctfEvents.eventLoad);
 
   // Single ctfEvent routes
   app.route('/api/ctfEvents/:ctfEventId').all(ctfEventsPolicy.isAllowed)

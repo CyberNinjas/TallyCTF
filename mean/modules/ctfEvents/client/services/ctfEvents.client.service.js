@@ -15,18 +15,13 @@ angular.module('ctfEvents').factory('CtfEvents', ['$resource',
   function ($resource) {
     return $resource('api/ctfEvents/current', {}, {
       update: {
+        method: 'POST'
+      },
+      load: {
         method: 'PUT'
       },
       clear: {
         method: 'DELETE'
-      }
-    });
-  }
-]).factory('EventCtl', ['$resource', 
-  function ($resource) {
-    return $resource('api/ctfEvents/current/eventCtl', {}, {
-      load: {
-        method: 'PUT'
       }
     });
   }

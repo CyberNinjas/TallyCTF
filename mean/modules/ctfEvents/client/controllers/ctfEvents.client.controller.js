@@ -1,8 +1,8 @@
 'use strict';
 
 // CtfEvents controller
-angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$stateParams', '$location', 'Authentication', 'CtfEvents', 'CurrentCtfEvents', 'Challenges', 'Teams', 'Users', 'EventCtl',
-  function ($scope, $stateParams, $location, Authentication, CtfEvents, CurrentCtfEvents, Challenges, Teams, Users, EventCtl) {
+angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$stateParams', '$location', 'Authentication', 'CtfEvents', 'CurrentCtfEvents', 'Challenges', 'Teams', 'Users',
+  function ($scope, $stateParams, $location, Authentication, CtfEvents, CurrentCtfEvents, Challenges, Teams, Users) {
     $scope.authentication = Authentication;
 
     // Create new CtfEvent
@@ -94,7 +94,7 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
         'Users': _ctfEvent.users
       };
 
-      EventCtl.load(data);
+      CurrentCtfEvents.load(data);
     };
 
     // Set Current CTFEvent
