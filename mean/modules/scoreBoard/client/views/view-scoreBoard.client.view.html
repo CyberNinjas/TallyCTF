@@ -1,9 +1,9 @@
-<section ng-controller="ScoreBoardsController" ng-init="findOne()">
+<section ng-controller="ScoreBoardController" ng-init="findOne()">
   <div class="page-header">
     <h1 ng-bind="scoreBoard.title"></h1>
   </div>
   <div class="pull-right" ng-show="authentication.user._id == scoreBoard.user._id">
-    <a class="btn btn-primary" ui-sref="scoreBoards.edit({scoreBoardId: scoreBoard._id})">
+    <a class="btn btn-primary" ui-sref="scoreBoard.edit({scoreBoardId: scoreBoard._id})">
       <i class="glyphicon glyphicon-edit"></i>
     </a>
     <a class="btn btn-primary" ng-click="remove();">

@@ -69,7 +69,7 @@ describe('ScoreBoard CRUD tests', function () {
         var userId = user.id;
 
         // Save a new scoreBoard
-        agent.post('/api/scoreBoards')
+        agent.post('/api/scoreBoard')
           .send(scoreBoard)
           .expect(200)
           .end(function (scoreBoardSaveErr, scoreBoardSaveRes) {
@@ -78,20 +78,20 @@ describe('ScoreBoard CRUD tests', function () {
               return done(scoreBoardSaveErr);
             }
 
-            // Get a list of scoreBoards
-            agent.get('/api/scoreBoards')
-              .end(function (scoreBoardsGetErr, scoreBoardsGetRes) {
+            // Get a list of scoreBoard
+            agent.get('/api/scoreBoard')
+              .end(function (scoreBoardGetErr, scoreBoardGetRes) {
                 // Handle scoreBoard save error
-                if (scoreBoardsGetErr) {
-                  return done(scoreBoardsGetErr);
+                if (scoreBoardGetErr) {
+                  return done(scoreBoardGetErr);
                 }
 
-                // Get scoreBoards list
-                var scoreBoards = scoreBoardsGetRes.body;
+                // Get scoreBoard list
+                var scoreBoard = scoreBoardGetRes.body;
 
                 // Set assertions
-                (scoreBoards[0].user._id).should.equal(userId);
-                (scoreBoards[0].title).should.match('ScoreBoard Title');
+                (scoreBoard[0].user._id).should.equal(userId);
+                (scoreBoard[0].title).should.match('ScoreBoard Title');
 
                 // Call the assertion callback
                 done();
@@ -101,7 +101,7 @@ describe('ScoreBoard CRUD tests', function () {
   });
 
   it('should not be able to save an scoreBoard if not logged in', function (done) {
-    agent.post('/api/scoreBoards')
+    agent.post('/api/scoreBoard')
       .send(scoreBoard)
       .expect(403)
       .end(function (scoreBoardSaveErr, scoreBoardSaveRes) {
@@ -127,7 +127,7 @@ describe('ScoreBoard CRUD tests', function () {
         var userId = user.id;
 
         // Save a new scoreBoard
-        agent.post('/api/scoreBoards')
+        agent.post('/api/scoreBoard')
           .send(scoreBoard)
           .expect(400)
           .end(function (scoreBoardSaveErr, scoreBoardSaveRes) {
@@ -154,7 +154,7 @@ describe('ScoreBoard CRUD tests', function () {
         var userId = user.id;
 
         // Save a new scoreBoard
-        agent.post('/api/scoreBoards')
+        agent.post('/api/scoreBoard')
           .send(scoreBoard)
           .expect(200)
           .end(function (scoreBoardSaveErr, scoreBoardSaveRes) {
@@ -167,7 +167,7 @@ describe('ScoreBoard CRUD tests', function () {
             scoreBoard.title = 'WHY YOU GOTTA BE SO MEAN?';
 
             // Update an existing scoreBoard
-            agent.put('/api/scoreBoards/' + scoreBoardSaveRes.body._id)
+            agent.put('/api/scoreBoard/' + scoreBoardSaveRes.body._id)
               .send(scoreBoard)
               .expect(200)
               .end(function (scoreBoardUpdateErr, scoreBoardUpdateRes) {
@@ -187,14 +187,14 @@ describe('ScoreBoard CRUD tests', function () {
       });
   });
 
-  it('should be able to get a list of scoreBoards if not signed in', function (done) {
+  it('should be able to get a list of scoreBoard if not signed in', function (done) {
     // Create new scoreBoard model instance
     var scoreBoardObj = new ScoreBoard(scoreBoard);
 
     // Save the scoreBoard
     scoreBoardObj.save(function () {
-      // Request scoreBoards
-      request(app).get('/api/scoreBoards')
+      // Request scoreBoard
+      request(app).get('/api/scoreBoard')
         .end(function (req, res) {
           // Set assertion
           res.body.should.be.instanceof(Array).and.have.lengthOf(1);
@@ -212,7 +212,7 @@ describe('ScoreBoard CRUD tests', function () {
 
     // Save the scoreBoard
     scoreBoardObj.save(function () {
-      request(app).get('/api/scoreBoards/' + scoreBoardObj._id)
+      request(app).get('/api/scoreBoard/' + scoreBoardObj._id)
         .end(function (req, res) {
           // Set assertion
           res.body.should.be.instanceof(Object).and.have.property('title', scoreBoard.title);
@@ -225,7 +225,7 @@ describe('ScoreBoard CRUD tests', function () {
 
   it('should return proper error for single scoreBoard with an invalid Id, if not signed in', function (done) {
     // test is not a valid mongoose Id
-    request(app).get('/api/scoreBoards/test')
+    request(app).get('/api/scoreBoard/test')
       .end(function (req, res) {
         // Set assertion
         res.body.should.be.instanceof(Object).and.have.property('message', 'ScoreBoard is invalid');
@@ -237,7 +237,7 @@ describe('ScoreBoard CRUD tests', function () {
 
   it('should return proper error for single scoreBoard which doesnt exist, if not signed in', function (done) {
     // This is a valid mongoose Id but a non-existent scoreBoard
-    request(app).get('/api/scoreBoards/559e9cd815f80b4c256a8f41')
+    request(app).get('/api/scoreBoard/559e9cd815f80b4c256a8f41')
       .end(function (req, res) {
         // Set assertion
         res.body.should.be.instanceof(Object).and.have.property('message', 'No scoreBoard with that identifier has been found');
@@ -261,7 +261,7 @@ describe('ScoreBoard CRUD tests', function () {
         var userId = user.id;
 
         // Save a new scoreBoard
-        agent.post('/api/scoreBoards')
+        agent.post('/api/scoreBoard')
           .send(scoreBoard)
           .expect(200)
           .end(function (scoreBoardSaveErr, scoreBoardSaveRes) {
@@ -271,7 +271,7 @@ describe('ScoreBoard CRUD tests', function () {
             }
 
             // Delete an existing scoreBoard
-            agent.delete('/api/scoreBoards/' + scoreBoardSaveRes.body._id)
+            agent.delete('/api/scoreBoard/' + scoreBoardSaveRes.body._id)
               .send(scoreBoard)
               .expect(200)
               .end(function (scoreBoardDeleteErr, scoreBoardDeleteRes) {
@@ -300,7 +300,7 @@ describe('ScoreBoard CRUD tests', function () {
     // Save the scoreBoard
     scoreBoardObj.save(function () {
       // Try deleting scoreBoard
-      request(app).delete('/api/scoreBoards/' + scoreBoardObj._id)
+      request(app).delete('/api/scoreBoard/' + scoreBoardObj._id)
         .expect(403)
         .end(function (scoreBoardDeleteErr, scoreBoardDeleteRes) {
           // Set message assertion

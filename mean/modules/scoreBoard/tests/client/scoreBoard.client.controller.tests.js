@@ -1,16 +1,16 @@
 'use strict';
 
 (function () {
-  // ScoreBoards Controller Spec
-  describe('ScoreBoards Controller Tests', function () {
+  // ScoreBoard Controller Spec
+  describe('ScoreBoard Controller Tests', function () {
     // Initialize global variables
-    var ScoreBoardsController,
+    var ScoreBoardController,
       scope,
       $httpBackend,
       $stateParams,
       $location,
       Authentication,
-      ScoreBoards,
+      ScoreBoard,
       mockScoreBoard;
 
     // The $resource service augments the response object with methods for updating and deleting the resource.
@@ -38,7 +38,7 @@
     // The injector ignores leading and trailing underscores here (i.e. _$httpBackend_).
     // This allows us to inject a service but then attach it to a variable
     // with the same name as the service.
-    beforeEach(inject(function ($controller, $rootScope, _$location_, _$stateParams_, _$httpBackend_, _Authentication_, _ScoreBoards_) {
+    beforeEach(inject(function ($controller, $rootScope, _$location_, _$stateParams_, _$httpBackend_, _Authentication_, _ScoreBoard_) {
       // Set a new global scope
       scope = $rootScope.$new();
 
@@ -47,10 +47,10 @@
       $httpBackend = _$httpBackend_;
       $location = _$location_;
       Authentication = _Authentication_;
-      ScoreBoards = _ScoreBoards_;
+      ScoreBoard = _ScoreBoard_;
 
       // create mock scoreBoard
-      mockScoreBoard = new ScoreBoards({
+      mockScoreBoard = new ScoreBoard({
         _id: '525a8422f6d0f87f0e407a33',
         title: 'An ScoreBoard about MEAN',
         content: 'MEAN rocks!'
@@ -61,33 +61,33 @@
         roles: ['user']
       };
 
-      // Initialize the ScoreBoards controller.
-      ScoreBoardsController = $controller('ScoreBoardsController', {
+      // Initialize the ScoreBoard controller.
+      ScoreBoardController = $controller('ScoreBoardController', {
         $scope: scope
       });
     }));
 
-    it('$scope.find() should create an array with at least one scoreBoard object fetched from XHR', inject(function (ScoreBoards) {
-      // Create a sample scoreBoards array that includes the new scoreBoard
-      var sampleScoreBoards = [mockScoreBoard];
+    it('$scope.find() should create an array with at least one scoreBoard object fetched from XHR', inject(function (ScoreBoard) {
+      // Create a sample scoreBoard array that includes the new scoreBoard
+      var sampleScoreBoard = [mockScoreBoard];
 
       // Set GET response
-      $httpBackend.expectGET('api/scoreBoards').respond(sampleScoreBoards);
+      $httpBackend.expectGET('api/scoreBoard').respond(sampleScoreBoard);
 
       // Run controller functionality
       scope.find();
       $httpBackend.flush();
 
       // Test scope value
-      expect(scope.scoreBoards).toEqualData(sampleScoreBoards);
+      expect(scope.scoreBoard).toEqualData(sampleScoreBoard);
     }));
 
-    it('$scope.findOne() should create an array with one scoreBoard object fetched from XHR using a scoreBoardId URL parameter', inject(function (ScoreBoards) {
+    it('$scope.findOne() should create an array with one scoreBoard object fetched from XHR using a scoreBoardId URL parameter', inject(function (ScoreBoard) {
       // Set the URL parameter
       $stateParams.scoreBoardId = mockScoreBoard._id;
 
       // Set GET response
-      $httpBackend.expectGET(/api\/scoreBoards\/([0-9a-fA-F]{24})$/).respond(mockScoreBoard);
+      $httpBackend.expectGET(/api\/scoreBoard\/([0-9a-fA-F]{24})$/).respond(mockScoreBoard);
 
       // Run controller functionality
       scope.findOne();
@@ -102,7 +102,7 @@
 
       beforeEach(function () {
         // Create a sample scoreBoard object
-        sampleScoreBoardPostData = new ScoreBoards({
+        sampleScoreBoardPostData = new ScoreBoard({
           title: 'An ScoreBoard about MEAN',
           content: 'MEAN rocks!'
         });
@@ -114,9 +114,9 @@
         spyOn($location, 'path');
       });
 
-      it('should send a POST request with the form input values and then locate to new object URL', inject(function (ScoreBoards) {
+      it('should send a POST request with the form input values and then locate to new object URL', inject(function (ScoreBoard) {
         // Set POST response
-        $httpBackend.expectPOST('api/scoreBoards', sampleScoreBoardPostData).respond(mockScoreBoard);
+        $httpBackend.expectPOST('api/scoreBoard', sampleScoreBoardPostData).respond(mockScoreBoard);
 
         // Run controller functionality
         scope.create(true);
@@ -127,12 +127,12 @@
         expect(scope.content).toEqual('');
 
         // Test URL redirection after the scoreBoard was created
-        expect($location.path.calls.mostRecent().args[0]).toBe('scoreBoards/' + mockScoreBoard._id);
+        expect($location.path.calls.mostRecent().args[0]).toBe('scoreBoard/' + mockScoreBoard._id);
       }));
 
       it('should set scope.error if save error', function () {
         var errorMessage = 'this is an error message';
-        $httpBackend.expectPOST('api/scoreBoards', sampleScoreBoardPostData).respond(400, {
+        $httpBackend.expectPOST('api/scoreBoard', sampleScoreBoardPostData).respond(400, {
           message: errorMessage
         });
 
@@ -149,21 +149,21 @@
         scope.scoreBoard = mockScoreBoard;
       });
 
-      it('should update a valid scoreBoard', inject(function (ScoreBoards) {
+      it('should update a valid scoreBoard', inject(function (ScoreBoard) {
         // Set PUT response
-        $httpBackend.expectPUT(/api\/scoreBoards\/([0-9a-fA-F]{24})$/).respond();
+        $httpBackend.expectPUT(/api\/scoreBoard\/([0-9a-fA-F]{24})$/).respond();
 
         // Run controller functionality
         scope.update(true);
         $httpBackend.flush();
 
         // Test URL location to new object
-        expect($location.path()).toBe('/scoreBoards/' + mockScoreBoard._id);
+        expect($location.path()).toBe('/scoreBoard/' + mockScoreBoard._id);
       }));
 
-      it('should set scope.error to error response message', inject(function (ScoreBoards) {
+      it('should set scope.error to error response message', inject(function (ScoreBoard) {
         var errorMessage = 'error';
-        $httpBackend.expectPUT(/api\/scoreBoards\/([0-9a-fA-F]{24})$/).respond(400, {
+        $httpBackend.expectPUT(/api\/scoreBoard\/([0-9a-fA-F]{24})$/).respond(400, {
           message: errorMessage
         });
 
@@ -176,18 +176,18 @@
 
     describe('$scope.remove(scoreBoard)', function () {
       beforeEach(function () {
-        // Create new scoreBoards array and include the scoreBoard
-        scope.scoreBoards = [mockScoreBoard, {}];
+        // Create new scoreBoard array and include the scoreBoard
+        scope.scoreBoard = [mockScoreBoard, {}];
 
         // Set expected DELETE response
-        $httpBackend.expectDELETE(/api\/scoreBoards\/([0-9a-fA-F]{24})$/).respond(204);
+        $httpBackend.expectDELETE(/api\/scoreBoard\/([0-9a-fA-F]{24})$/).respond(204);
 
         // Run controller functionality
         scope.remove(mockScoreBoard);
       });
 
-      it('should send a DELETE request with a valid scoreBoardId and remove the scoreBoard from the scope', inject(function (ScoreBoards) {
-        expect(scope.scoreBoards.length).toBe(1);
+      it('should send a DELETE request with a valid scoreBoardId and remove the scoreBoard from the scope', inject(function (ScoreBoard) {
+        expect(scope.scoreBoard.length).toBe(1);
       }));
     });
 
@@ -196,14 +196,14 @@
         spyOn($location, 'path');
         scope.scoreBoard = mockScoreBoard;
 
-        $httpBackend.expectDELETE(/api\/scoreBoards\/([0-9a-fA-F]{24})$/).respond(204);
+        $httpBackend.expectDELETE(/api\/scoreBoard\/([0-9a-fA-F]{24})$/).respond(204);
 
         scope.remove();
         $httpBackend.flush();
       });
 
-      it('should redirect to scoreBoards', function () {
-        expect($location.path).toHaveBeenCalledWith('scoreBoards');
+      it('should redirect to scoreBoard', function () {
+        expect($location.path).toHaveBeenCalledWith('scoreBoard');
       });
     });
   });

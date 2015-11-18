@@ -71,16 +71,16 @@ exports.delete = function (req, res) {
 };
 
 /**
- * List of ScoreBoards
+ * List of ScoreBoard
  */
 exports.list = function (req, res) {
-  ScoreBoard.find().sort('-created').populate('user', 'displayName').exec(function (err, scoreBoards) {
+  ScoreBoard.find().sort('-created').populate('user', 'displayName').exec(function (err, scoreBoard) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(scoreBoards);
+      res.json(scoreBoard);
     }
   });
 };

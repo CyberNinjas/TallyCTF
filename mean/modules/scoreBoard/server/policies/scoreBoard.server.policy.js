@@ -9,41 +9,41 @@ var acl = require('acl');
 acl = new acl(new acl.memoryBackend());
 
 /**
- * Invoke ScoreBoards Permissions
+ * Invoke ScoreBoard Permissions
  */
 exports.invokeRolesPolicies = function () {
   acl.allow([{
     roles: ['admin'],
     allows: [{
-      resources: '/api/scoreBoards',
+      resources: '/api/scoreBoard',
       permissions: '*'
     }, {
-      resources: '/api/scoreBoards/:scoreBoardId',
+      resources: '/api/scoreBoard/:scoreBoardId',
       permissions: '*'
     }]
   }, {
     roles: ['user'],
     allows: [{
-      resources: '/api/scoreBoards',
+      resources: '/api/scoreBoard',
       permissions: ['get', 'post']
     }, {
-      resources: '/api/scoreBoards/:scoreBoardId',
+      resources: '/api/scoreBoard/:scoreBoardId',
       permissions: ['get']
     }]
   }, {
     roles: ['guest'],
     allows: [{
-      resources: '/api/scoreBoards',
+      resources: '/api/scoreBoard',
       permissions: ['get']
     }, {
-      resources: '/api/scoreBoards/:scoreBoardId',
+      resources: '/api/scoreBoard/:scoreBoardId',
       permissions: ['get']
     }]
   }]);
 };
 
 /**
- * Check If ScoreBoards Policy Allows
+ * Check If ScoreBoard Policy Allows
  */
 exports.isAllowed = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];

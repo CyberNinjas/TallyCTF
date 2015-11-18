@@ -1,9 +1,9 @@
-<section ng-controller="ScoreBoardsController" ng-init="find()">
+<section ng-controller="ScoreBoardController" ng-init="find()">
   <div class="page-header">
-    <h1>ScoreBoards</h1>
+    <h1>ScoreBoard</h1>
   </div>
   <div class="list-group">
-    <a ng-repeat="scoreBoard in scoreBoards" ui-sref="scoreBoards.view({scoreBoardId: scoreBoard._id})" class="list-group-item">
+    <a ng-repeat="scoreBoard in scoreBoard" ui-sref="scoreBoard.view({scoreBoardId: scoreBoard._id})" class="list-group-item">
       <small class="list-group-item-text">
         Posted on
         <span ng-bind="scoreBoard.created | date:'mediumDate'"></span>
@@ -14,7 +14,7 @@
       <p class="list-group-item-text" ng-bind="scoreBoard.content"></p>
     </a>
   </div>
-  <div class="alert alert-warning text-center" ng-if="scoreBoards.$resolved && !scoreBoards.length">
-    No scoreBoards yet, why don't you <a ui-sref="scoreBoards.create">create one</a>?
+  <div class="alert alert-warning text-center" ng-if="scoreBoard.$resolved && !scoreBoard.length">
+    No scoreBoard yet, why don't you <a ui-sref="scoreBoard.create">create one</a>?
   </div>
 </section>

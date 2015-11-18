@@ -1,8 +1,8 @@
 'use strict';
 
-// ScoreBoards controller
-angular.module('scoreBoards').controller('ScoreBoardsController', ['$scope', '$stateParams', '$location', 'Authentication', 'ScoreBoards',
-  function ($scope, $stateParams, $location, Authentication, ScoreBoards) {
+// ScoreBoard controller
+angular.module('scoreBoard').controller('ScoreBoardController', ['$scope', '$stateParams', '$location', 'Authentication', 'ScoreBoard',
+  function ($scope, $stateParams, $location, Authentication, ScoreBoard) {
     $scope.authentication = Authentication;
 
     // Create new ScoreBoard
@@ -16,14 +16,14 @@ angular.module('scoreBoards').controller('ScoreBoardsController', ['$scope', '$s
       }
 
       // Create new ScoreBoard object
-      var scoreBoard = new ScoreBoards({
+      var scoreBoard = new ScoreBoard({
         title: this.title,
         content: this.content
       });
 
       // Redirect after save
       scoreBoard.$save(function (response) {
-        $location.path('scoreBoards/' + response._id);
+        $location.path('scoreBoard/' + response._id);
 
         // Clear form fields
         $scope.title = '';
@@ -38,14 +38,14 @@ angular.module('scoreBoards').controller('ScoreBoardsController', ['$scope', '$s
       if (scoreBoard) {
         scoreBoard.$remove();
 
-        for (var i in $scope.scoreBoards) {
-          if ($scope.scoreBoards[i] === scoreBoard) {
-            $scope.scoreBoards.splice(i, 1);
+        for (var i in $scope.scoreBoard) {
+          if ($scope.scoreBoard[i] === scoreBoard) {
+            $scope.scoreBoard.splice(i, 1);
           }
         }
       } else {
         $scope.scoreBoard.$remove(function () {
-          $location.path('scoreBoards');
+          $location.path('scoreBoard');
         });
       }
     };
@@ -63,20 +63,20 @@ angular.module('scoreBoards').controller('ScoreBoardsController', ['$scope', '$s
       var scoreBoard = $scope.scoreBoard;
 
       scoreBoard.$update(function () {
-        $location.path('scoreBoards/' + scoreBoard._id);
+        $location.path('scoreBoard/' + scoreBoard._id);
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
     };
 
-    // Find a list of ScoreBoards
+    // Find a list of ScoreBoard
     $scope.find = function () {
-      $scope.scoreBoards = ScoreBoards.query();
+      $scope.scoreBoard = ScoreBoard.query();
     };
 
     // Find existing ScoreBoard
     $scope.findOne = function () {
-      $scope.scoreBoard = ScoreBoards.get({
+      $scope.scoreBoard = ScoreBoard.get({
         scoreBoardId: $stateParams.scoreBoardId
       });
     };
