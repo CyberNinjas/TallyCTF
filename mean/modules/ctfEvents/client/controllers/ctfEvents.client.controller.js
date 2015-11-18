@@ -121,7 +121,7 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
       $scope.loadIntoCurrent();
 
       // Redirect back to the ctfEvents page
-      $location.path('/ctfEvents/current');
+      $location.path('/ctfEvents');
     };
 
     // Update existing CtfEvent
