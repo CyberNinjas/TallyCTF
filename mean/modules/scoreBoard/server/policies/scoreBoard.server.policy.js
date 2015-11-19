@@ -18,7 +18,7 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/scoreBoard',
       permissions: '*'
     }, {
-      resources: '/api/scoreBoard/:scoreBoardId',
+      resources: '/api/scoreBoard/:scoreBoardTeamId',
       permissions: '*'
     }]
   }, {
@@ -27,7 +27,7 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/scoreBoard',
       permissions: ['get']
     }, {
-      resources: '/api/scoreBoard/:scoreBoardId',
+      resources: '/api/scoreBoard/:scoreBoardTeamId',
       permissions: ['get']
     }]
   }, {
@@ -36,7 +36,7 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/scoreBoard',
       permissions: ['get']
     }, {
-      resources: '/api/scoreBoard/:scoreBoardId',
+      resources: '/api/scoreBoard/:scoreBoardTeamId',
       permissions: ['get']
     }]
   }]);
@@ -47,11 +47,6 @@ exports.invokeRolesPolicies = function () {
  */
 exports.isAllowed = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
-
-  // If an scoreBoard is being processed and the current user created it then allow any manipulation
-  if (req.scoreBoard && req.user && req.scoreBoard.user.id === req.user.id) {
-    return next();
-  }
 
   // Check for user roles
   acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(), function (err, isAllowed) {

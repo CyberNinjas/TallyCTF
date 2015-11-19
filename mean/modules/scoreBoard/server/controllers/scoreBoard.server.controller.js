@@ -123,7 +123,7 @@ exports.scoreBoardByTeamID = function (req, res, next, id) {
     });
   }
 
-  ScoreBoard.find({teamId: id})
+  ScoreBoard.find({team: id})
   .populate('team', 'teamName')
   .populate('solved')
   .exec(function (err, scoreBoard) {
