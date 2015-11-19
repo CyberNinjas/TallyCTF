@@ -84,11 +84,22 @@ exports.update = function (req, res) {
 
 exports.accept = function(req,res){
   console.log("in accept");
-
+  var team = req.body;
+  console.log(req);
+  team.save(function (err) {
+    if (err) {
+      console.log(err);
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json(team);
+    }
+  });
 };
 
 exports.decline = function(req,res){
-console.log(req);
+console.log(req.team);
 
   var team = req.team;
   team.save(function (err) {
@@ -179,8 +190,8 @@ exports.teamByID = function (req, res, next, id) {
   }
 
   Team.findById(id)
-      .populate('members', 'username')
-      .populate('requestToJoin', 'username')
+      .populate('members', 'username','team','roles')
+      .populate('requestToJoin', 'username','team','roles')
       .populate('askToJoin', 'username')
       .populate('teamCaptain','username')
       .exec(function (err, team) {
