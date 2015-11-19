@@ -10,14 +10,16 @@ var mongoose = require('mongoose'),
  * ScoreBoard Schema
  */
 var ScoreBoardSchema = new Schema({
-  teamId: {
-    type: String,
+  team: {
+    type: Schema.Types.ObjectId,
+    ref: 'Team',
     require: 'Non-sensical otherwise.'
   },
   // 'challengeId': '{'users': {'userId': 'contrib'}, 'date': ISODate}'
-  solved: {
-    type: JSON
-  },
+  solved: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Challenge'
+  }],
   score: {
     type: Number
   }

@@ -7,14 +7,6 @@ angular.module('scoreBoard').controller('ScoreBoardController', ['$scope', '$sta
 
     // Create new ScoreBoard
     $scope.create = function (isValid) {
-      $scope.error = null;
-
-      if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'scoreBoardForm');
-
-        return false;
-      }
-
       // Create new ScoreBoard object
       var scoreBoard = new ScoreBoard({
         title: this.title,
@@ -35,22 +27,16 @@ angular.module('scoreBoard').controller('ScoreBoardController', ['$scope', '$sta
 
     // Remove existing ScoreBoard
     $scope.remove = function (scoreBoard) {
-      if (scoreBoard) {
-        scoreBoard.$remove();
+      scoreBoard.$remove();
 
-        for (var i in $scope.scoreBoard) {
-          if ($scope.scoreBoard[i] === scoreBoard) {
-            $scope.scoreBoard.splice(i, 1);
-          }
+      for (var i in $scope.scoreBoard) {
+        if ($scope.scoreBoard[i] === scoreBoard) {
+          $scope.scoreBoard.splice(i, 1);
         }
-      } else {
-        $scope.scoreBoard.$remove(function () {
-          $location.path('scoreBoard');
-        });
       }
     };
 
-    // Update existing ScoreBoard
+    // Update existing Score Board
     $scope.update = function (isValid) {
       $scope.error = null;
 

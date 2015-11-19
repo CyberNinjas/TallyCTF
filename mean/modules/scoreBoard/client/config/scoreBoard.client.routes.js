@@ -15,8 +15,15 @@ angular.module('scoreBoard').config(['$stateProvider',
         templateUrl: 'modules/scoreBoard/client/views/list-scoreBoard.client.view.html'
       })
       .state('scoreBoard.view', {
-        url: '/:scoreBoardId',
+        url: '/:scoreBoardTeamId',
         templateUrl: 'modules/scoreBoard/client/views/view-scoreBoard.client.view.html'
+      })
+      .state('scoreBoard.edit', {
+        url: '/:scoreBoardTeamId/edit',
+        templateUrl: 'modules/scoreBoard/client/views/edit-scoreBoard.client.view.html',
+        data: {
+          roles: ['admin']
+        }
       });
   }
 ]);

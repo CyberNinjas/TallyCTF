@@ -13,11 +13,11 @@ module.exports = function (app) {
     .post(scoreBoard.create);
 
   // Single scoreBoard routes
-  app.route('/api/scoreBoard/:scoreBoardId').all(scoreBoardPolicy.isAllowed)
+  app.route('/api/scoreBoard/:scoreBoardTeamId').all(scoreBoardPolicy.isAllowed)
     .get(scoreBoard.read)
     .put(scoreBoard.update)
     .delete(scoreBoard.delete);
 
   // Finish by binding the scoreBoard middleware
-  app.param('scoreBoardId', scoreBoard.scoreBoardByID);
+  app.param('scoreBoardTeamId', scoreBoard.scoreBoardByTeamID);
 };

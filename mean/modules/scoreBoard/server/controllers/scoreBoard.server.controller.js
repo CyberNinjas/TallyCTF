@@ -9,11 +9,10 @@ var path = require('path'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 /**
- * Create a scoreBoard
+ * Create a score board entry
  */
 exports.create = function (req, res) {
   var scoreBoard = new ScoreBoard(req.body);
-  scoreBoard.user = req.user;
 
   scoreBoard.save(function (err) {
     if (err) {
@@ -27,20 +26,25 @@ exports.create = function (req, res) {
 };
 
 /**
- * Show the current scoreBoard
+ * Show the current score board entry
  */
 exports.read = function (req, res) {
   res.json(req.scoreBoard);
 };
 
-/**
- * Update a scoreBoard
+/*
+ * Append data to a score board
  */
-exports.update = function (req, res) {
-  var scoreBoard = req.scoreBoard;
+exports.append = function (req, res) {
+  var scoreBoard = req.body.scoreBoard;
 
-  scoreBoard.title = req.body.title;
-  scoreBoard.content = req.body.content;
+  scoreBoard.solved[req.body.teamId] = 
+  {
+    'users': req.body.users,
+    'date' : Date.now() 
+  };
+
+  scoreBoard.score += req.body.score;
 
   scoreBoard.save(function (err) {
     if (err) {
@@ -54,7 +58,27 @@ exports.update = function (req, res) {
 };
 
 /**
- * Delete an scoreBoard
+ * Update a score board
+ */
+exports.update = function (req, res) {
+  var scoreBoard = req.scoreBoard;
+
+  scoreBoard.solved = req.body.solved;
+  scoreBoard.score = req.body.score;
+
+  scoreBoard.save(function (err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json(scoreBoard);
+    }
+  });
+};
+
+/**
+ * Delete a score board
  */
 exports.delete = function (req, res) {
   var scoreBoard = req.scoreBoard;
@@ -74,7 +98,10 @@ exports.delete = function (req, res) {
  * List of ScoreBoard
  */
 exports.list = function (req, res) {
-  ScoreBoard.find().sort('-created').populate('user', 'displayName').exec(function (err, scoreBoard) {
+  ScoreBoard.find().sort('-score')
+  .populate('team', 'teamName')
+  .populate('solved')
+  .exec(function (err, scoreBoard) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -88,7 +115,7 @@ exports.list = function (req, res) {
 /**
  * ScoreBoard middleware
  */
-exports.scoreBoardByID = function (req, res, next, id) {
+exports.scoreBoardByTeamID = function (req, res, next, id) {
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
@@ -96,12 +123,15 @@ exports.scoreBoardByID = function (req, res, next, id) {
     });
   }
 
-  ScoreBoard.findById(id).populate('user', 'displayName').exec(function (err, scoreBoard) {
+  ScoreBoard.find({teamId: id})
+  .populate('team', 'teamName')
+  .populate('solved')
+  .exec(function (err, scoreBoard) {
     if (err) {
       return next(err);
     } else if (!scoreBoard) {
       return res.status(404).send({
-        message: 'No scoreBoard with that identifier has been found'
+        message: 'No score board with that team identifier has been found'
       });
     }
     req.scoreBoard = scoreBoard;

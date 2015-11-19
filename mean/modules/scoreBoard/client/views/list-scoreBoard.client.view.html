@@ -1,20 +1,14 @@
 <section ng-controller="ScoreBoardController" ng-init="find()">
   <div class="page-header">
-    <h1>ScoreBoard</h1>
+    <h1>Score Board</h1>
   </div>
   <div class="list-group">
-    <a ng-repeat="scoreBoard in scoreBoard" ui-sref="scoreBoard.view({scoreBoardId: scoreBoard._id})" class="list-group-item">
-      <small class="list-group-item-text">
-        Posted on
-        <span ng-bind="scoreBoard.created | date:'mediumDate'"></span>
-        by
-        <span ng-bind="scoreBoard.user.displayName"></span>
-      </small>
-      <h4 class="list-group-item-heading" ng-bind="scoreBoard.title"></h4>
-      <p class="list-group-item-text" ng-bind="scoreBoard.content"></p>
+    <a ng-repeat="scoreBoard in scoreBoard" ui-sref="scoreBoard.view({scoreBoardTeamId: scoreBoard.team._id})" class="list-group-item">
+      <p class="pull-right" ng-bind="scoreBoard.score"></p>
+      <h4 class="list-group-item-heading" ng-bind="scoreBoard.team.teamName"></h4>
     </a>
   </div>
   <div class="alert alert-warning text-center" ng-if="scoreBoard.$resolved && !scoreBoard.length">
-    No scoreBoard yet, why don't you <a ui-sref="scoreBoard.create">create one</a>?
+    No scores yet...
   </div>
 </section>

@@ -25,7 +25,7 @@ exports.invokeRolesPolicies = function () {
     roles: ['user'],
     allows: [{
       resources: '/api/scoreBoard',
-      permissions: ['get', 'post']
+      permissions: ['get']
     }, {
       resources: '/api/scoreBoard/:scoreBoardId',
       permissions: ['get']
