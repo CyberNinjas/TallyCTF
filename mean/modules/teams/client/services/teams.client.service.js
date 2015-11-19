@@ -14,19 +14,13 @@ angular.module('teams')
     });
   }
 ])
-    .factory('TeamsAccept', ['$resource',
+    .factory('TeamsCtl', ['$resource',
         function ($resource) {
-            return $resource('api/teams/accept', {}, {
-                update: {
-                    method: 'PUT'
-                }
-            });
-        }
-    ])
-    .factory('TeamsDecline', ['$resource',
-        function ($resource) {
-            return $resource('api/teams/decline', {}, {
-                update: {
+            return $resource('api/teams/ctl', {}, {
+                accept: {
+                    method: 'POST'
+                },
+                decline: {
                     method: 'PUT'
                 }
             });

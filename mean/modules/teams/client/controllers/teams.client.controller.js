@@ -1,8 +1,8 @@
 'use strict';
 
 // Teams controller
-angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', '$location','Teams','Authentication','Users', 'Teams1','TeamsAccept','TeamsDecline',
-  function ($scope, $stateParams, $location, Teams, Authentication, Users, Teams1,TeamsAccept, TeamsDecline) {
+angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', '$location','Teams','Authentication','Users', 'Teams1','TeamsCtl',
+  function ($scope, $stateParams, $location, Teams, Authentication, Users, Teams1,TeamsCtl) {
     $scope.authentication = Authentication.user;
     $scope.users = Users;
 
@@ -129,6 +129,8 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
         console.log("user");
         console.log(user);
         user.notifications+=1;
+        team.requestsToJoin.push(Authentication.user._id);
+
         team.$update(function () {
           $location.path('teams/' + team._id);
         }, function (errorResponse) {
@@ -160,12 +162,12 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
     $scope.accept = function(name) {
 
       console.log("clicked accept");
-      TeamsAccept.update();
+      TeamsCtl.accept();
     };
-    $scope.decline = function(name) {
+    $scope.decline = function(index) {
+      $scope.mteam.requestToJoin.splice(index, 1);
 
-
-      TeamsDecline.update();
+      $scope.mteam.$update();
     };
     // Find a list of Teams
     $scope.find = function () {

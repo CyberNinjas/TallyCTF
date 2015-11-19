@@ -65,10 +65,14 @@ exports.update = function (req, res) {
   var team = req.team;
 
   team.teamName = req.body.teamName;
-  //team.content = req.body.content;
+
+  team.requestToJoin = req.body.requestToJoin;
+  team.members = req.body.members;
+  team.askToJoin = req.body.askToJoin;
 
   team.save(function (err) {
     if (err) {
+      console.log(err);
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -84,17 +88,12 @@ exports.accept = function(req,res){
 };
 
 exports.decline = function(req,res){
-  console.log("in decline");
-};
-exports.requestsToJoin = function(req, res){
+console.log(req);
+
   var team = req.team;
-  console.log(team);
-
-  team.requestToJoin.push(req.user._id);
-
-  console.log('I am in below server');
   team.save(function (err) {
     if (err) {
+      console.log(err);
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -103,7 +102,6 @@ exports.requestsToJoin = function(req, res){
     }
   });
 };
-
 
 exports.addMembers = function(req,res){
   var lteam = 

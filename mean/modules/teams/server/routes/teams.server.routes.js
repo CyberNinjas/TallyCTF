@@ -11,20 +11,19 @@ module.exports = function (app) {
   app.route('/api/teams').all(teamsPolicy.isAllowed)
     .get(teams.list)
     .post(teams.create)
-    .delete(teams.clear)
-    .put(teams.requestsToJoin);
+    .delete(teams.clear);
 
     app.route('/api/teams/join').all(teamsPolicy.isAllowed)
       .put(teams.addMembers);
 
-  app.route('/api/teams/accept').all(teamsPolicy.isAllowed)
-      .put(teams.accept);
-  app.route('/api/teams/decline').all(teamsPolicy.isAllowed)
-      .put(teams.decline);
+  app.route('/api/teams/ctl').all(teamsPolicy.isAllowed)
+      .put(teams.decline)
+      .post(teams.accept);
+
   // Single team routes
   app.route('/api/teams/:teamId').all(teamsPolicy.isAllowed)
     .get(teams.read)
-    .put(teams.requestsToJoin)
+    .put(teams.update)
     .delete(teams.delete);
 
 
