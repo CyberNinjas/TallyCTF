@@ -102,8 +102,8 @@ var UserSchema = new Schema({
     type: Date
   },
   team: {
-    type: String,
-    default: ""
+    type: Schema.Types.ObjectId,
+    ref: "Team"
   },
   country: {
     type: String,

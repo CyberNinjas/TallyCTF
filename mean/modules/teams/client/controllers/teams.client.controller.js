@@ -1,8 +1,8 @@
 'use strict';
 
 // Teams controller
-angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', '$location','Teams','Authentication','Users', 'Teams1',
-  function ($scope, $stateParams, $location, Teams, Authentication, Users, Teams1) {
+angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', '$location','Teams','Authentication','Users', 'Teams1','TeamsAccept','TeamsDecline',
+  function ($scope, $stateParams, $location, Teams, Authentication, Users, Teams1,TeamsAccept, TeamsDecline) {
     $scope.authentication = Authentication.user;
     $scope.users = Users;
 
@@ -20,8 +20,8 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
       var team = new Teams({
         teamName: this.teamName,
-        members: Authentication.user.username,
-        teamCaptain: Authentication.user
+        members: Authentication.user._id,
+        teamCaptain: Authentication.user._id
       });
 
      // team.members.push(Authentication.user);
@@ -151,7 +151,16 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
           console.log(users);
           Teams1.update();
       };
+    $scope.accept = function(name) {
 
+      console.log("clicked accept");
+      TeamsAccept.update();
+    };
+    $scope.decline = function(name) {
+
+
+      TeamsDecline.update();
+    };
     // Find a list of Teams
     $scope.find = function () {
       $scope.teams = Teams.query();
@@ -188,19 +197,15 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
         }
       }
       if(role ==='teamCaptain'){
-        console.log("teamCaptain: ");
-        console.log(TM&&TC&&US);
 
         return (TM&&TC&&US);
       }
       else if(role==='teamMember'){
-        console.log("teamMember: ");
-        console.log(TM&&!TC&&US);
+
         return (TM&&US&&!TC);
       }
       else if(role==='user'){
-        console.log("user: ");
-        console.log(!TM&&!TC&&US);
+
         return (!TM&&US&&!TC);
       }
       else
@@ -208,8 +213,9 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
     };
     // Find existing Team
     $scope.findTeam = function () {
-     $scope.teams = Teams.query(function (response) {
-       angular.forEach(response, function (item) {
+     $scope.mteam = Teams.query({_id: Authentication.user.team});
+      console.log($scope.mteam);
+     /*  angular.forEach(response, function (item) {
          if (item.teamName === Authentication.user.team) {
            $scope.current = item;
             $scope.members = item.members;
@@ -219,7 +225,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
          }
        });
      });
-
+*/
     };
 
   }

@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('core').controller('HeaderController', ['$scope', '$state', 'Authentication', 'Menus','Users',
-  function ($scope, $state, Authentication, Menus) {
+  function ($scope, $state, Authentication, Menus, Users) {
     // Expose view variables
     $scope.$state = $state;
     $scope.authentication = Authentication;
-
+    $scope.user = Users;
     // Get the topbar menu
     $scope.menu = Menus.getMenu('topbar');
 
@@ -24,7 +24,8 @@ angular.module('core').controller('HeaderController', ['$scope', '$state', 'Auth
       window.location="/api/auth/signout";
     };
     $scope.removeNotifications = function() {
-      var user =  Authentication.user;
+      var user = new Users($scope.authentication);
+
       user.notifications = 0;
       user.$update(function (response) {
         $scope.$broadcast('show-errors-reset', 'userForm');
@@ -34,6 +35,6 @@ angular.module('core').controller('HeaderController', ['$scope', '$state', 'Auth
       }, function (response) {
         $scope.error = response.data.message;
       });
-    }
+    };
   }
 ]);

@@ -76,6 +76,14 @@ exports.update = function (req, res) {
   });
 };
 
+exports.accept = function(req,res){
+  console.log("in accept");
+  console.log(req);
+};
+
+exports.decline = function(req,res){
+  console.log("in decline");
+};
 exports.requestsToJoin = function(req, res){
   var team = req.team;
   console.log(team);
@@ -131,7 +139,12 @@ exports.delete = function (req, res) {
  * List of Teams
  */
 exports.list = function (req, res) {
-  Team.find().sort('-created').populate('user', 'displayName').exec(function (err, teams) {
+  Team.find().sort('-created')
+      .populate('members', 'username')
+      .populate('requestToJoin', 'username')
+      .populate('askToJoin', 'username')
+      .populate('teamCaptain','username')
+      .exec(function (err, teams) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)

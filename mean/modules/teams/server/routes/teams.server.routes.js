@@ -17,6 +17,10 @@ module.exports = function (app) {
     app.route('/api/teams/join').all(teamsPolicy.isAllowed)
       .put(teams.addMembers);
 
+  app.route('/api/teams/accept').all(teamsPolicy.isAllowed)
+      .put(teams.accept);
+  app.route('/api/teams/decline').all(teamsPolicy.isAllowed)
+      .put(teams.decline);
   // Single team routes
   app.route('/api/teams/:teamId').all(teamsPolicy.isAllowed)
     .get(teams.read)

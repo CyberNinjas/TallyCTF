@@ -10,9 +10,28 @@ angular.module('teams')
          update: {
             method: 'PUT'
          }
+
     });
   }
 ])
+    .factory('TeamsAccept', ['$resource',
+        function ($resource) {
+            return $resource('api/teams/accept', {}, {
+                update: {
+                    method: 'PUT'
+                }
+            });
+        }
+    ])
+    .factory('TeamsDecline', ['$resource',
+        function ($resource) {
+            return $resource('api/teams/decline', {}, {
+                update: {
+                    method: 'PUT'
+                }
+            });
+        }
+    ])
 .factory('Teams1', ['$resource',
   function ($resource) {
    return $resource('api/teams/join', {}, {
