@@ -3,8 +3,8 @@
 //ScoreBoard service used for communicating with the scoreBoard REST endpoints
 angular.module('scoreBoard').factory('ScoreBoard', ['$resource',
   function ($resource) {
-    return $resource('api/scoreBoard/:scoreBoardId', {
-      scoreBoardId: '@_id'
+    return $resource('api/scoreBoard/:scoreBoardTeamId', {
+      scoreBoardTeamId: '@team'
     }, {
       update: {
         method: 'PUT'

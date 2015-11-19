@@ -125,7 +125,7 @@ exports.scoreBoardByTeamID = function (req, res, next, id) {
 
   ScoreBoard.find({team: id})
   .populate('team', 'teamName')
-  .populate('solved')
+  .populate('solved', 'name points')
   .exec(function (err, scoreBoard) {
     if (err) {
       return next(err);
@@ -134,7 +134,9 @@ exports.scoreBoardByTeamID = function (req, res, next, id) {
         message: 'No score board with that team identifier has been found'
       });
     }
-    req.scoreBoard = scoreBoard;
+    
+    req.scoreBoard = (scoreBoard.length > 1 ? scoreBoard : scoreBoard[0]);
+
     next();
   });
 };
