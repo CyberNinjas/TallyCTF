@@ -146,8 +146,10 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
     //Adds the users to the team
     $scope.add = function() {
 
-          //what they type in
-          console.log("adding");
+      var user = $scope.search.username;
+      console.log($scope.search.username);
+
+
 
           //var user = Users.query();
 
