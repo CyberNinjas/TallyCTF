@@ -3,10 +3,8 @@
 
 <button ng-click="add()"> Add </button>
 
-
-    <ul>
-        <li ng-repeat="user in users | filter:search">
+        <p ng-repeat="user in users | filter:search">
             {{user.username }}
-        </li>
-    </ul>
+        </p>
+
 </div>

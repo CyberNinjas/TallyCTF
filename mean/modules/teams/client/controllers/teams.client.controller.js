@@ -149,16 +149,15 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
     //Adds the users to the team
     $scope.add = function() {
-
+      var team = new Teams(Authentication.user.team);
       var user = $scope.search.username;
-      console.log($scope.search.username);
 
+      console.log(Authentication.user.team);
+      console.log(user);
 
+      Teams1.update();
+    };
 
-          //var user = Users.query();
-
-          //match it to the users query
-      };
     $scope.accept = function(name) {
 
       console.log("clicked accept");

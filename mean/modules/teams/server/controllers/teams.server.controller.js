@@ -104,8 +104,20 @@ console.log(req);
 };
 
 exports.addMembers = function(req,res){
-  var lteam = 
+  var team = req.user.team;
+  console.log(team);
+  //console.log(team.members);
+  team.askToJoin.push();
   console.log("heyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+  /*team.save(function (err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json(team);
+    }
+  });*/
 };
 
 exports.clear = function(req,res){
