@@ -53,6 +53,8 @@ console.log('made it after team save');
  * Show the current team
  */
 exports.read = function (req, res) {
+  console.log("in read");
+
   res.json(req.team);
 };
 
@@ -78,7 +80,7 @@ exports.update = function (req, res) {
 
 exports.accept = function(req,res){
   console.log("in accept");
-  console.log(req);
+
 };
 
 exports.decline = function(req,res){
@@ -88,7 +90,7 @@ exports.requestsToJoin = function(req, res){
   var team = req.team;
   console.log(team);
 
-  team.requestToJoin.push(req.user.username);
+  team.requestToJoin.push(req.user._id);
 
   console.log('I am in below server');
   team.save(function (err) {
@@ -166,7 +168,12 @@ exports.teamByID = function (req, res, next, id) {
     });
   }
 
-  Team.findById(id).populate('user', 'displayName').exec(function (err, team) {
+  Team.findById(id)
+      .populate('members', 'username')
+      .populate('requestToJoin', 'username')
+      .populate('askToJoin', 'username')
+      .populate('teamCaptain','username')
+      .exec(function (err, team) {
     if (err) {
       return next(err);
     } else if (!team) {

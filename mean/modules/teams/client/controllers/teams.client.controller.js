@@ -25,25 +25,28 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       });
 
      // team.members.push(Authentication.user);
-    Authentication.user.team= this.teamName;
+
       // Redirect after save
       team.$save(function (response) {
-        // Clear form fields
+
+        Authentication.user.team = response._id;
+        var user = new Users($scope.authentication);
+
+        //user.team= team._id;
+
+        user.$update(function (response) {
+          $scope.$broadcast('show-errors-reset', 'userForm');
+
+          $scope.success = true;
+          Authentication.user = response;
+        }, function (response) {
+          $scope.error = response.data.message;
+        });
         $scope.teamName = '';
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
-      var user = new Users($scope.authentication);
 
-
-      user.$update(function (response) {
-        $scope.$broadcast('show-errors-reset', 'userForm');
-
-        $scope.success = true;
-        Authentication.user = response;
-      }, function (response) {
-        $scope.error = response.data.message;
-      });
   };
 
   //Redirect the createTeam to adding users
@@ -99,25 +102,25 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
 
     $scope.requestsToJoin = function(team){
-      var lteam = new Teams(team);
-      console.log("captain: ");
+
+      console.log(JSON.stringify(team));
 
 
-      console.log(lteam.teamCaptain.username);
-      var user = new Users(team.teamCaptain);
-      console.log(Authentication.user.username);
+
+      var user = new Users(Authentication.user);
+
      // console.log(team.teamName);
 
      // team.$apply();
 
       var flag = true;
-      var requests = lteam.requestToJoin;
+      var requests = team.requestToJoin;
       //check if user already asks to join
       var i;
       for(i=0;i<requests.length;i++){
-        if(requests[i]===Authentication.user.username){
+        if(requests[i]._id===Authentication.user._id){
           flag = false;
-          console.log('flag was set false');
+
         }
       }
 
@@ -180,7 +183,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       $scope.team = Teams.query({
         teamName: $stateParams.teamName
       });
-      console.log($scope.team);
+
     };
 
 
@@ -220,18 +223,10 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
     // Find existing Team
     $scope.findTeam = function () {
-     $scope.mteam = Teams.query({_id: Authentication.user.team});
-      console.log($scope.mteam);
-     /*  angular.forEach(response, function (item) {
-         if (item.teamName === Authentication.user.team) {
-           $scope.current = item;
-            $scope.members = item.members;
-           $scope.requests = item.requestToJoin;
-           console.log($scope.members);
-         }
-       });
-     });
-*/
+     $scope.mteam = Teams.get({teamId: Authentication.user.team});
+
+
+
     };
 
   }
