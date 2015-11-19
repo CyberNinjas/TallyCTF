@@ -66,5 +66,7 @@ angular.module('scoreBoard').controller('ScoreBoardController', ['$scope', '$sta
         scoreBoardId: $stateParams.scoreBoardId
       });
     };
+	
+		
   }
 ]);
