@@ -104,6 +104,8 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
     $scope.requestsToJoin = function(team){
 
       console.log(JSON.stringify(team));
+      console.log(team);
+
       var user = new Users(Authentication.user);
 
       var flag = true;
@@ -121,7 +123,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
         console.log("user");
         console.log(user);
         user.notifications+=1;
-        team.requestsToJoin.push(Authentication.user._id);
+        team.requestToJoin.push(Authentication.user._id);
 
         team.$update(function () {
           $location.path('teams/' + team._id);
@@ -148,9 +150,15 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       $scope.mteam.$update(user);
     };
 
-    $scope.accept = function(name) {
+
+    $scope.accept = function(index) {
+      $scope.mteam.requestToJoin.splice(index, 1);
+      $scope.mteam.members.push(index);
+      console.log(index.team);
+      index.roles.push('teamMember');
+      index.team = $scope.mteam.teamName;
       console.log("clicked accept");
-      TeamsCtl.accept();
+      $scope.mteam.$update();
     };
 
     $scope.decline = function(index) {
