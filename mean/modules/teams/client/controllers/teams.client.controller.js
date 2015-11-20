@@ -153,10 +153,10 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
     $scope.accept = function(index) {
       $scope.mteam.requestToJoin.splice(index, 1);
-      $scope.mteam.members.push(index);
+     // $scope.mteam.members.push(index);
       console.log(index.team);
-      index.roles.push('teamMember');
-      index.team = $scope.mteam.teamName;
+      //index.roles.push('teamMember');
+     // index.team = $scope.mteam.teamName;
       console.log("clicked accept");
       $scope.mteam.$update();
     };

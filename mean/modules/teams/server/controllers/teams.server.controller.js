@@ -192,8 +192,8 @@ exports.teamByID = function (req, res, next, id) {
   }
 
   Team.findById(id)
-      .populate('members', 'username','team','roles')
-      .populate('requestToJoin', 'username','team','roles')
+      .populate('members', 'username team roles')
+      .populate('requestToJoin', 'username team roles')
       .populate('askToJoin', 'username')
       .populate('teamCaptain','username')
       .exec(function (err, team) {
