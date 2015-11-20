@@ -29,9 +29,14 @@
         <a ui-sref="authentication.signin">Sign In</a>
       </li>
     </ul>
+
+    <a ui-sref="teams.current"><span class="badge pull-right" ng-bind="authentication.user.notifications" ng-show="authentication.user.notifications>0" ng-click="removeNotifications()"></span> </a>
+
     <ul class="nav navbar-nav navbar-right" ng-show="authentication.user">
       <li class="dropdown" dropdown>
         <a class="dropdown-toggle user-header-dropdown-toggle" dropdown-toggle role="button">
+
+
           <img ng-src="{{authentication.user.profileImageURL}}" alt="{{authentication.user.username}}" class="header-profile-image" />
           <span ng-bind="authentication.user.username"></span> <b class="caret"></b>
         </a>

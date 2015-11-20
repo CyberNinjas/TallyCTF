@@ -102,14 +102,18 @@ var UserSchema = new Schema({
     type: Date
   },
   team: {
-    type: String,
-    default: ""
+    type: Schema.Types.ObjectId,
+    ref: "Team"
   },
   country: {
     type: String,
     default: ""
   },
   score: {
+    type: Number,
+    default: 0
+  },
+  notifications: {
     type: Number,
     default: 0
   }

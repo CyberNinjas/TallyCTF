@@ -1,15 +1,39 @@
 <section ng-controller="TeamsController" ng-init="findTeam()">
   <div class="page-header">
 <h1>
-  <span ng-bind="current.teamName"></span>
+  <span ng-bind="mteam.teamName"></span>
 </h1>
-    <div class="list-group">
+    <div ng-if="shouldRender('teamCaptain')||shouldRender('teamMember')" class="list-group">
       <h3>Roster</h3>
-      <a ng-repeat="member in members" class="list-group-item">
+      <a ng-repeat="member in mteam.members" class="list-group-item">
         <small class="list-group-item-text">
-          <span ng-bind=member></span>
+          <span ng-bind=member.username></span>
         </small>
        <!-- <h4 class="list-group-item-heading" ng-bind="current.teamName"></h4> -->
+      </a>
+    </div>
+    <div ng-if="shouldRender('user')" class="list-group">
+      <h3>Pending teams</h3>
+      <a ng-repeat="request in mteam.requestToJoin" class="list-group-item">
+        <small class="list-group-item-text">
+          <span ng-bind=member.username></span>
+        </small>
+        <!-- <h4 class="list-group-item-heading" ng-bind="current.teamName"></h4> -->
+      </a>
+    </div>
+    <div ng-if="shouldRender('teamCaptain')" class="list-group">
+      <h3>Pending invites</h3>
+      <a ng-repeat="request in mteam.requestToJoin" class="list-group-item">
+        <small class="list-group-item-text">
+          <div class="pull-right">
+            <button ng-click='decline($index)'>Decline</button>
+          </div>
+          <div class="pull-right">
+            <button ng-click='accept(request)'>Accept</button>
+          </div>
+          <span ng-bind=request.username></span>
+        </small>
+        <!-- <h4 class="list-group-item-heading" ng-bind="current.teamName"></h4> -->
       </a>
     </div>
   </div>

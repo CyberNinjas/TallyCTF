@@ -16,18 +16,24 @@ var TeamSchema = new Schema({
     unique: 'Team Name already exists',
     default: ''
   },
-  members: {
-    type: Array,
-    default: []
+  teamCaptain: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    unique: 'You cannot be captain of 2 teams',
+    required: "You must have a team captain"
   },
-  requestToJoin: {
-    type:Array,
-    default: []
-  },
-  askToJoin:{
-    type: Array,
-    default: []
-  }
+  members: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  requestToJoin: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  askToJoin:[{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }]
 });
 
 mongoose.model('Team', TeamSchema);

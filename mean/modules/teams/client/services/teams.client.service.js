@@ -10,27 +10,28 @@ angular.module('teams')
          update: {
             method: 'PUT'
          }
+
     });
   }
-]);
-
-/*.factory('Teams', ['$rootScope', function ($rootScope) {
-    var notify = {};
-
-      notify.sendMsg = function(msg, data){
-        data = data || {};
-        $rootScope.$emit(msg,data);
-        console.log('message sent');
-
-      };
-
-      notify.getMsg = function(msg,func,scope) {
-
-        var unbind = $rootScope.$on(msg,func);
-        if(scope){
-          scope.$on('destroy',unbind)
+])
+    .factory('TeamsCtl', ['$resource',
+        function ($resource) {
+            return $resource('api/teams/ctl', {}, {
+                accept: {
+                    method: 'POST'
+                },
+                decline: {
+                    method: 'PUT'
+                }
+            });
         }
-      };
-  }
+    ])
+.factory('Teams1', ['$resource',
+  function ($resource) {
+   return $resource('api/teams/join', {}, {
+     update: {
+        method: 'PUT'
+     }
+});
+}
 ]);
-*/

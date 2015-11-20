@@ -18,6 +18,12 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/teams',
       permissions: '*'
     }, {
+      resources: '/api/teams/ctl',
+      permissions: '*'
+    }, {
+      resources: '/api/teams/join',
+      permissions: '*'
+    }, { 
       resources: '/api/teams/:teamId',
       permissions: '*'
     }]
@@ -25,12 +31,20 @@ exports.invokeRolesPolicies = function () {
     roles: ['user'],
     allows: [{
       resources: '/api/teams',
-      permissions: ['get', 'post']
+      permissions: ['get', 'post','put']
     }, {
       resources: '/api/teams/:teamId',
-      permissions: ['get']
+      permissions: ['get','put', 'post']
     }]
   }, {
+    roles: ['teamCaptain'],
+    allows: [
+      {
+        resources: '/api/teams/ctl',
+        permissions: '*'
+      }
+    ]
+  },{
     roles: ['guest'],
     allows: [{
       resources: '/api/teams',
@@ -47,9 +61,34 @@ exports.invokeRolesPolicies = function () {
  */
 exports.isAllowed = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
+  // If a team is being processed and the current user created it then allow any manipulation
+  if (req.team && req.user && req.user.team==='') {
+    return next();
+  }
 
-  // If an team is being processed and the current user created it then allow any manipulation
-  if (req.team && req.user && req.team.user.id === req.user.id) {
+  // Check for user roles
+  acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(), function (err, isAllowed) {
+    if (err) {
+      // An authorization error occurred.
+      return res.status(500).send('Unexpected authorization error');
+    } else {
+      if (isAllowed) {
+        // Access granted! Invoke next middleware
+        return next();
+      } else {
+        return res.status(403).json({
+          message: 'User is not authorized'
+        });
+      }
+    }
+  });
+};
+
+exports.isAllowedToAccept = function (req, res, next) {
+  var roles = (req.user) ? req.user.roles : ['guest'];
+  // If a team is being processed and the current user created it then allow any manipulation
+  console.log(req.body.team);
+  if (req.user ===req.body.team.teamCaptain) {
     return next();
   }
 
