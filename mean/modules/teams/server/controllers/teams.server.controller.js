@@ -63,7 +63,6 @@ exports.read = function (req, res) {
  */
 exports.update = function (req, res) {
   var team = req.team;
-
   team.teamName = req.body.teamName;
   team.requestToJoin = req.body.requestToJoin;
   team.members = req.body.members;
@@ -86,18 +85,18 @@ exports.update = function (req, res) {
 
 exports.accept = function(req,res){
   console.log("in accept");
-  var team = req.body;
-  console.log(req);
-  team.save(function (err) {
-    if (err) {
-      console.log(err);
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.json(team);
-    }
-  });
+    //var team = req.body;
+    //console.log(req);
+    //team.save(function (err) {
+    //  if (err) {
+    //    console.log(err);
+    //    return res.status(400).send({
+    //      message: errorHandler.getErrorMessage(err)
+    //    });
+    //  } else {
+    //    res.json(team);
+    //  }
+    //});
 };
 
 exports.decline = function(req,res){

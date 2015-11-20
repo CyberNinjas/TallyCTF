@@ -1,8 +1,8 @@
 'use strict';
 
 // Teams controller
-angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', '$location','Teams','Authentication','Users', 'Teams1','TeamsCtl',
-  function ($scope, $stateParams, $location, Teams, Authentication, Users, Teams1,TeamsCtl) {
+angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', '$location','Teams','$http','Authentication','Users', 'Teams1','TeamsCtl',
+  function ($scope, $stateParams, $location, Teams,$http, Authentication, Users, Teams1,TeamsCtl) {
     $scope.authentication = Authentication.user;
     $scope.users = Users;
 
@@ -153,12 +153,24 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
     $scope.accept = function(index) {
       $scope.mteam.requestToJoin.splice(index, 1);
-     // $scope.mteam.members.push(index);
+      $scope.mteam.members.push(index._id);
       console.log(index.team);
-      //index.roles.push('teamMember');
-     // index.team = $scope.mteam.teamName;
+
+      index.roles.push('teamMember');
+      index.team = $scope.mteam._id;
+      console.log($scope.mteam);
+      var team = index.team;
       console.log("clicked accept");
-      $scope.mteam.$update();
+      //$scope.mteam.$update();
+      $http.post('/api/teams/ctl', {team: $scope.mteam._id, index: index}).success(function (response) {
+
+        $scope.success = response.message;
+        console.log("Success" + response.message);
+      }).error(function (response){
+
+        $scope.error = response.message;
+        console.log("Error: " + response.message);
+      });
     };
 
     $scope.decline = function(index) {
