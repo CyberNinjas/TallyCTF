@@ -105,11 +105,15 @@ exports.submit = function(req, res) {
     console.log(challenge);
     if (attempt === challenge.flag){
       console.log("Correct Answer!");
-      res.json({success: true});
+      return res.status(200).send({
+        message: 'Correct'
+      });
     }
     else{
       console.log("Incorrect Answer!");
-      res.json({success: false});
+      return res.status(200).send({
+        message: 'Incorrect'
+      });
     }
   });
 };

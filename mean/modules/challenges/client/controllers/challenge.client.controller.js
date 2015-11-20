@@ -118,11 +118,11 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
    $http.post('/api/challenges/submit', {challenge: challenge, flag: flag}).success(function (response) {
      challenge.solve = null;
      $scope.success = response.message;
-     console.log("Success" + response);
+     console.log("Success" + response.message);
    }).error(function (response){
      challenge.solve = null;
      $scope.error = response.message;
-     console.log("Error" + response);
+     console.log("Error" + response.message);
    });
 
     //if (challenge.val === challenge.name){
