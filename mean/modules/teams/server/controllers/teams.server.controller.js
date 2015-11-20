@@ -65,12 +65,13 @@ exports.update = function (req, res) {
   var team = req.team;
 
   team.teamName = req.body.teamName;
-
   team.requestToJoin = req.body.requestToJoin;
   team.members = req.body.members;
   team.askToJoin = req.body.askToJoin;
-
+  
+  console.log("I'm not in the save function");
   team.save(function (err) {
+    console.log("I'm inside the save function");
     if (err) {
       console.log(err);
       return res.status(400).send({
@@ -80,6 +81,7 @@ exports.update = function (req, res) {
       res.json(team);
     }
   });
+
 };
 
 exports.accept = function(req,res){
@@ -104,20 +106,20 @@ console.log(req);
 };
 
 exports.addMembers = function(req,res){
-  var team = req.user.team;
-  console.log(team);
-  //console.log(team.members);
-  team.askToJoin.push();
-  console.log("heyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
-  /*team.save(function (err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.json(team);
-    }
-  });*/
+  var user = req.body;
+  var teamID = req.user.team;
+  var team1;
+
+  /*var search = Team.findOne({_id: teamID},
+    function(err,obj) {
+      if(err){
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      }else{
+        team1 = obj;
+      }
+    });*/
 };
 
 exports.clear = function(req,res){

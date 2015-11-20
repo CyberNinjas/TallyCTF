@@ -104,14 +104,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
     $scope.requestsToJoin = function(team){
 
       console.log(JSON.stringify(team));
-
-
-
       var user = new Users(Authentication.user);
-
-     // console.log(team.teamName);
-
-     // team.$apply();
 
       var flag = true;
       var requests = team.requestToJoin;
@@ -120,7 +113,6 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       for(i=0;i<requests.length;i++){
         if(requests[i]._id===Authentication.user._id){
           flag = false;
-
         }
       }
 
@@ -149,25 +141,23 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
     //Adds the users to the team
     $scope.add = function() {
-      var team = new Teams(Authentication.user.team);
       var user = $scope.search.username;
-
+      $scope.mteam.askToJoin.push(user);
       console.log(Authentication.user.team);
-      console.log(user);
-
-      Teams1.update();
+      console.log($scope.mteam);
+      $scope.mteam.$update(user);
     };
 
     $scope.accept = function(name) {
-
       console.log("clicked accept");
       TeamsCtl.accept();
     };
+
     $scope.decline = function(index) {
       $scope.mteam.requestToJoin.splice(index, 1);
-
       $scope.mteam.$update();
     };
+
     // Find a list of Teams
     $scope.find = function () {
       $scope.teams = Teams.query();
@@ -176,6 +166,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
     $scope.findUsers = function(){
        $scope.users = Users.query("username");
+       $scope.mteam = Teams.get({teamId: Authentication.user.team});
     };
 
 
