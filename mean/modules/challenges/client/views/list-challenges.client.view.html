@@ -26,10 +26,7 @@
 				</div>
 <table class="table table-striped">
   <thead>
-       <tr>
-         <th ng-click="sort('created')">Id
-		 <span ng-show="sortType == 'created' && reverseSort" class="fa fa-caret-down"></span>
-        <span ng-show="sortType == 'created' && !reverseSort" class="fa fa-caret-up"></span></th>
+     <tr>
          <th ng-click="sort('name')">Name
 		 <span ng-show="sortType == 'name' && reverseSort" class="fa fa-caret-down"></span>
         <span ng-show="sortType == 'name' && !reverseSort" class="fa fa-caret-up"></span></th>
@@ -42,19 +39,22 @@
          <th ng-click="sort('solves')">Solves
 		 <span ng-show="sortType == 'solves' && reverseSort" class="fa fa-caret-down"></span>
         <span ng-show="sortType == 'solves' && !reverseSort" class="fa fa-caret-up"></span></th>
+       <th ng-click="sort('created')">Id
+         <span ng-show="sortType == 'created' && reverseSort" class="fa fa-caret-down"></span>
+         <span ng-show="sortType == 'created' && !reverseSort" class="fa fa-caret-up"></span></th>
        </tr>
      </thead>
     <tr ng-repeat-start="challenge in challenges | filter:{category: challengeFilter.category}:true | orderBy:sortType:reverseSort" ng-click="active = !active">
-	  <td>{{challenge.created}}</td>
       <td>{{challenge.name}}</td>
       <td>{{challenge.category}}</td>
       <td>{{challenge.points}}</td>
       <td>{{challenge.solves}}</td>
+      <td>{{challenge.created}}</td>
 	  <tr ng-show = "active" ng-repeat-end><td colspan="5"><div>
 	  {{challenge.description}}
 	  <br><br>
 	  <form name="form">
-	  <input type="text" class="form-control" ng-if="authentication.user" ng-model="challenge.val" placeholder="Flag Value">
+	  <input type="text" class="form-control" ng-if="authentication.user" ng-model="challenge.solve" placeholder="Flag Value">
 	  <br>
       <input type="submit" class="submitButton" ng-if="authentication.user" ng-click="submitItem(challenge)">
 	  </form>

@@ -27,6 +27,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/challenges',
       permissions: ['get']
     }, {
+      resources: '/api/challenges/submit/challengeId',
+      permissions: ['post']
+    }, {
       resources: '/api/challenges/:challengeId',
       permissions: ['get']
     }]
@@ -45,6 +48,31 @@ exports.invokeRolesPolicies = function () {
 /**
  * Check If Challenges Policy Allows
  */
+
+exports.isAllowedSubmit = function (req, res, next){
+  var roles = (req.user) ? req.user.roles : ['guest'];
+
+  if (req.body.challenge && req.user && req.user.roles.indexOf("user") > -1){
+    return next();
+  }
+
+  acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(), function (err, isAllowed) {
+    if (err) {
+      // An authorization error occurred.
+      return res.status(500).send('Unexpected authorization error');
+    } else {
+      if (isAllowed) {
+        // Access granted! Invoke next middleware
+        return next();
+      } else {
+        return res.status(403).json({
+          message: 'User is not authorized'
+        });
+      }
+    }
+  });
+
+};
 exports.isAllowed = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
 

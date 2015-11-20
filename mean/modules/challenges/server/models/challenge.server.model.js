@@ -16,33 +16,33 @@ var ChallengeSchema = new Schema({
   },
   name: {
     type: String,
-    default: '',
+    required: 'Challenge must have a name',
     trim: true
   },
   description: {
     type: String,
-    default: '',
+    required: 'Challenge must have a description',
     trim: true
   },
   category: {
     type: String,
-    default: '',
+    required: 'Challenge must belong to a category',
     trim: true
   },
   points: {
     type: Number,
     min: 0,
-    default: 0
+    required: 'Challenge points must be set'
   },
   solves: {
     type: Number,
     min: 0,
     default: 0
   },
-  val: {
+  flag: {
     type: String,
-    default: '',
-	trim: true
+    required: 'Challenge must have a flag set',
+    trim: true
   }
 });
 

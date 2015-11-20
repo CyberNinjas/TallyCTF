@@ -12,6 +12,9 @@ module.exports = function (app) {
     .get(challenges.list)
     .post(challenges.create);
 
+  app.route('/api/challenges/submit').all(challengesPolicy.isAllowedSubmit)
+      .post(challenges.submit);
+
   // Single challenges routes
   app.route('/api/challenges/:challengeId').all(challengesPolicy.isAllowed)
     .get(challenges.read)

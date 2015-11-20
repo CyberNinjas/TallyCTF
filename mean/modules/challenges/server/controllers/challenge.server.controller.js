@@ -80,7 +80,36 @@ exports.list = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
+      challenges.forEach(function (challenge) {
+        delete challenge.flag;
+      });
       res.json(challenges);
+    }
+  });
+};
+
+exports.submit = function(req, res) {
+  var attempt = req.body.flag;
+  Challenge.findById(req.body.challenge._id).exec(function (err, challenge){
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    }
+    else if (!challenge) {
+      return res.status(404).send({
+        message: 'No challenges with that identifier has been found'
+      });
+    }
+    console.log(attempt);
+    console.log(challenge);
+    if (attempt === challenge.flag){
+      console.log("Correct Answer!");
+      res.json({success: true});
+    }
+    else{
+      console.log("Incorrect Answer!");
+      res.json({success: false});
     }
   });
 };

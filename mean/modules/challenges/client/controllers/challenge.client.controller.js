@@ -1,8 +1,8 @@
 'use strict';
 
 // Challenges controller
-angular.module('challenges').controller('ChallengesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Challenges',
-  function ($scope, $stateParams, $location, Authentication, Challenges) {
+angular.module('challenges').controller('ChallengesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Challenges', '$http',
+  function ($scope, $stateParams, $location, Authentication, Challenges, $http) {
     $scope.authentication = Authentication;
 
     // Create new Challenge
@@ -19,9 +19,10 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
       var challenge = new Challenges({
         name: this.name,
         description: this.description,
-        solves: this.solves,
+        solves: 0,
         category: this.category,
-        points: this.points
+        points: this.points,
+        flag: this.flag
       });
 
       // Redirect after save
@@ -35,6 +36,7 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
         $scope.solves= '';
         $scope.category= '';
         $scope.points= '';
+        $scope.flag = '';
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
@@ -109,12 +111,26 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
  };
  //$scope.item = {};
  $scope.submitItem = function(challenge){
-    if (challenge.val === challenge.name){
-    console.log("yes");
-	}
-	else{
-	console.log("no");
-	}
+   var flag = challenge.solve;
+   console.log(flag);
+   console.log(challenge);
+
+   $http.post('/api/challenges/submit', {challenge: challenge, flag: flag}).success(function (response) {
+     challenge.solve = null;
+     $scope.success = response.message;
+     console.log("Success" + response);
+   }).error(function (response){
+     challenge.solve = null;
+     $scope.error = response.message;
+     console.log("Error" + response);
+   });
+
+    //if (challenge.val === challenge.name){
+    //console.log("yes");
+	//}
+	//else{
+	//console.log("no");
+	//}
   };
   }
 ]);
