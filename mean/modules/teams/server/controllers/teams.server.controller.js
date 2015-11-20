@@ -62,6 +62,7 @@ exports.read = function (req, res) {
  * Update a team
  */
 exports.update = function (req, res) {
+  console.log(req);
   var team = req.team;
   team.teamName = req.body.teamName;
   team.requestToJoin = req.body.requestToJoin;
@@ -84,35 +85,81 @@ exports.update = function (req, res) {
 };
 
 exports.accept = function(req,res){
+  var user = req.body.index;
   console.log("in accept");
-    //var team = req.body;
-    //console.log(req);
-    //team.save(function (err) {
-    //  if (err) {
-    //    console.log(err);
-    //    return res.status(400).send({
-    //      message: errorHandler.getErrorMessage(err)
-    //    });
-    //  } else {
-    //    res.json(team);
-    //  }
-    //});
+//  console.log(req);
+  Team.findById(req.body.team).exec(function (err, team){
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    }
+    else if (!team) {
+      return res.status(404).send({
+        message: 'No challenges with that identifier has been found'
+      });
+    }
+    console.log(team);
+    console.log(user);
+    team.requestToJoin.splice(user, 1);
+    team.members.push(user._id);
+    //user.roles.push('teamMember');
+    team.save(function (err) {
+      console.log("I'm inside the save function");
+      if (err) {
+        console.log(err);
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        res.json(team);
+      }
+    });
+    User.findById(user._id).exec(function (err, member) {
+      if (err) {
+        console.log(err);
+      }
+      else if (!member) {
+        console.log("error");
+      }
+      console.log(member);
+      //  console.log(user);
+      //  team.requestToJoin.splice(user, 1);
+      // team.members.push(user._id);
+      member.team = team._id;
+          member.roles.push('teamMember');
+      member.save(function (err) {
+        console.log("I'm inside the user save function!!!!!!!!!!!!!!");
+        if (err) {
+          console.log(err);
+
+        } else {
+          console.log('No error saving user in accept');
+        }
+      });
+    });
+  });
+
 };
 
 exports.decline = function(req,res){
 console.log(req.team);
 
   var team = req.team;
-  team.save(function (err) {
-    if (err) {
-      console.log(err);
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.json(team);
-    }
-  });
+  //user.save(function (err) {
+  //  if (err) {
+  //    console.log('got an error');
+  //    console.log(err);
+  //  } else {
+  //    req.login(user, function (err) {
+  //      if (err) {
+  //        res.status(400).send(err);
+  //      } else {
+  //        console.log("saved user");
+  //      }
+  //    });
+  //  }
+  //});
 };
 
 exports.addMembers = function(req,res){
