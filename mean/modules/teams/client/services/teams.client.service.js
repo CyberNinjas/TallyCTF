@@ -7,16 +7,18 @@ angular.module('teams')
        return $resource('api/teams/:teamId', {
           teamId: '@_id'
         }, {
-         update: {
-            method: 'PUT'
-         }
-
+        update: {
+          method: 'PUT'
+        },
     });
   }
 ])
     .factory('TeamsCtl', ['$resource',
         function ($resource) {
-            return $resource('api/teams/ctl', {}, {
+            return $resource('api/teams/:teamId.:userId/ctl', {
+              teamId: '@_id',
+              userId: '@temp'
+            }, {
                 accept: {
                     method: 'POST'
                 },

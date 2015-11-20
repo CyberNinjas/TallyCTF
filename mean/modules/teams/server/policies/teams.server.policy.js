@@ -18,13 +18,13 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/teams',
       permissions: '*'
     }, {
-      resources: '/api/teams/ctl',
-      permissions: '*'
-    }, {
       resources: '/api/teams/join',
       permissions: '*'
     }, { 
       resources: '/api/teams/:teamId',
+      permissions: '*'
+    }, {
+      resources: '/api/teams/:teamId.:userId/ctl',
       permissions: '*'
     }]
   }, {
@@ -40,7 +40,7 @@ exports.invokeRolesPolicies = function () {
     roles: ['teamCaptain'],
     allows: [
       {
-        resources: '/api/teams/ctl',
+        resources: '/api/teams/:teamId.:userId/ctl',
         permissions: '*'
       }
     ]
@@ -85,7 +85,7 @@ exports.isAllowedToAccept = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
   // If a team is being processed and the current user created it then allow any manipulation
   console.log(req.body.team);
-  if (req.user ===req.body.team.teamCaptain) {
+  if (req.body.team && req.user === req.body.team.teamCaptain) {
     return next();
   }
 

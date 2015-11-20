@@ -102,18 +102,15 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
 
     $scope.requestsToJoin = function(team){
-
-      console.log(JSON.stringify(team));
-      console.log(team);
-
+      // FIXME: Bad taste. Find a better way of getting access to the
+      // FIXME: user's methods besides creating a new one.
       var user = new Users(Authentication.user);
 
       var flag = true;
       var requests = team.requestToJoin;
       //check if user already asks to join
-      var i;
-      for(i=0;i<requests.length;i++){
-        if(requests[i]._id===Authentication.user._id){
+      for(var i = 0; i < requests.length; ++i){
+        if(requests[i]._id === user._id) {
           flag = false;
         }
       }
@@ -123,7 +120,8 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
         console.log("user");
         console.log(user);
         user.notifications+=1;
-        team.requestToJoin.push(Authentication.user);
+        team.requestToJoin.push(user);
+        user.requestToJoin.push(team._id);
 
         team.$update(function () {
           $location.path('teams/' + team._id);
@@ -131,10 +129,8 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
           $scope.error = errorResponse.data.message;
         });
         user.$update(function (response) {
-          $scope.$broadcast('show-errors-reset', 'userForm');
-
-          $scope.success = true;
-          user = response;
+          console.log(response);
+          Authentication.user = response;
         }, function (response) {
           $scope.error = response.data.message;
         });
@@ -151,36 +147,24 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
     };
 
 
-    $scope.accept = function(index) {
-      $scope.mteam.requestToJoin.splice(index, 1);
-      $scope.mteam.members.push(index);
-      console.log(index.team);
-      console.log($scope.mteam);
-      var team = index.team;
-      console.log("clicked accept");
-      $http.post('/api/teams/ctl', {team: $scope.mteam._id, index: index}).success(function (response) {
-
-        $scope.success = response.message;
-        console.log("Success" + response.message);
-      }).error(function (response){
-
-        $scope.error = response.message;
-        console.log("Error: " + response.message);
-      });
-
+    $scope.accept = function(user) {
+      $scope.mteam.temp = user._id;
+      TeamsCtl.accept($scope.mteam);
     };
 
-    $scope.decline = function(index) {
-      $scope.mteam.requestToJoin.splice(index, 1);
-      $http.put('/api/teams/ctl', {team: $scope.mteam._id, index: index}).success(function (response) {
+    $scope.decline = function(user) {
+      $scope.mteam.temp = user._id;
+      TeamsCtl.decline($scope.mteam);
+      // $scope.mteam.requestToJoin.splice(index, 1);
+      // $http.put('/api/teams/ctl', {team: $scope.mteam._id, index: index}).success(function (response) {
 
-        $scope.success = response.message;
-        console.log("Success" + response.message);
-      }).error(function (response){
+      //   $scope.success = response.message;
+      //   console.log("Success" + response.message);
+      // }).error(function (response){
 
-        $scope.error = response.message;
-        console.log("Error: " + response.message);
-      });
+      //   $scope.error = response.message;
+      //   console.log("Error: " + response.message);
+      // });
     };
 
     // Find a list of Teams
