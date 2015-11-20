@@ -91,6 +91,7 @@ exports.list = function (req, res) {
 
 exports.submit = function(req, res) {
   console.log(req.user);
+  var teamId = req.user.team;
   var attempt = req.body.flag;
   Challenge.findById(req.body.challenge._id).exec(function (err, challenge){
     if (err) {

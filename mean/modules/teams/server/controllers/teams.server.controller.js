@@ -7,6 +7,7 @@ var path = require('path'),
   mongoose = require('mongoose'),
   Team = mongoose.model('Team'),
     User =mongoose.model('User'),
+    ScoreBoard = mongoose.model('ScoreBoard'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 /**
@@ -19,6 +20,9 @@ exports.create = function (req, res) {
   var user = req.user;
   user.roles.push('teamCaptain');
   user.roles.push('teamMember');
+  var scoreBoard = new ScoreBoard();
+  scoreBoard.team = team._id;
+  team.scoreBoard = scoreBoard._id;
   console.log(user);
   user.save(function (err) {
     if (err) {
@@ -35,6 +39,15 @@ exports.create = function (req, res) {
     }
   });
   console.log('made it after user save');
+
+  scoreBoard.save(function (err) {
+    if (err) {
+      console.log(err);
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    }
+  });
 
   team.save(function (err) {
     if (err) {
