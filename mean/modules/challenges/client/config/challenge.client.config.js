@@ -1,13 +1,12 @@
 'use strict';
 
-// Configuring the Challenges module
+// Configuring the ScoreBoard module
 angular.module('challenges').run(['Menus',
   function (Menus) {
-    // Add the challenges dropdown item
+    // Add the scoreBoard dropdown item
     Menus.addMenuItem('topbar', {
       title: 'Challenges',
-      state: 'challenges',
-      type: 'dropdown',
+      state: 'challenges.list',
       roles: ['*']
     });
 

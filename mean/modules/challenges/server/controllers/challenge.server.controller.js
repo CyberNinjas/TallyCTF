@@ -6,6 +6,7 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   Challenge = mongoose.model('Challenge'),
+  scoreboard = require(path.resolve('./modules/scoreBoard/server/controllers/scoreBoard.server.controller.js')),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 /**
@@ -89,6 +90,7 @@ exports.list = function (req, res) {
 };
 
 exports.submit = function(req, res) {
+  console.log(req.user);
   var attempt = req.body.flag;
   Challenge.findById(req.body.challenge._id).exec(function (err, challenge){
     if (err) {

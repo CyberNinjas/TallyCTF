@@ -1,0 +1,28 @@
+<section ng-controller="ScoreBoardController" ng-init="findOne()">
+  <div class="page-header">
+    <h1>Edit ScoreBoard</h1>
+  </div>
+  <div class="col-md-12">
+    <form name="scoreBoardForm" class="form-horizontal" ng-submit="update(scoreBoardForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label for="title">Title</label>
+          <input name="title" type="text" ng-model="scoreBoard.title" id="title" class="form-control" placeholder="Title" required>
+          <div ng-messages="scoreBoardForm.title.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">ScoreBoard title is required.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="content">Content</label>
+          <textarea name="content" ng-model="scoreBoard.content" id="content" class="form-control" cols="30" rows="10" placeholder="Content"></textarea>
+        </div>
+        <div class="form-group">
+          <input type="submit" value="Update" class="btn btn-default">
+        </div>
+        <div ng-show="error" class="text-danger">
+          <strong ng-bind="error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>
