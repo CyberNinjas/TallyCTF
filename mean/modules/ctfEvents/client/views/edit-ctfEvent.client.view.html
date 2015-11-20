@@ -60,7 +60,7 @@
           <h2 bcollapse>Users</h2>
           <div class="collapse">
             <div class="well well-lg list-group">
-              <a ng-repeat="user in users" ui-sref="admin.user({userId: user._id})" class="list-group-item">
+              <a ng-repeat="user in ctfEvent.users" ui-sref="admin.user({userId: user._id})" class="list-group-item">
                 <h4 ng-bind="user.username" class="list-group-item-header"></h4>
               </a>
             </div>

@@ -112,21 +112,28 @@ exports.clear = function (req, res) {
 /*
  * Event loading stuff
  */
-exports.eventLoad = function (req, res) {
-  Challenge.collection.insertMany(req.body.Challenges, function (err, r) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    }
-  });
-  Team.collection.insertMany(req.body.Teams, function (err, r) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    }
-  });
+exports.loadCurrent = function (req, res) {
+  if (req.body.Challenges.length > 0)
+  {
+    Challenge.collection.insertMany(req.body.Challenges, function (err, r) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      }
+    });
+  }
+
+  if (req.body.Teams > 0)
+  {
+    Team.collection.insertMany(req.body.Teams, function (err, r) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      }
+    });
+  }
 //   TODO: Commented out until saving is implemented
   // User.collection.insertMany(req.body.Users, function (err, r) {
   //   if (err) {
