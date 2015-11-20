@@ -5,7 +5,9 @@
  */
 var path = require('path'),
   mongoose = require('mongoose'),
+  Team = mongoose.model('Team'),
   Challenge = mongoose.model('Challenge'),
+    ScoreBoard = mongoose.model('ScoreBoard'),
   scoreboard = require(path.resolve('./modules/scoreBoard/server/controllers/scoreBoard.server.controller.js')),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
@@ -108,6 +110,44 @@ exports.submit = function(req, res) {
     console.log(challenge);
     if (attempt === challenge.flag){
       console.log("Correct Answer!");
+      Team.findById(teamId).exec(function (err, team) {
+        if (err) {
+          return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+          });
+        }
+        else if (!team) {
+          return res.status(404).send({
+            message: 'No challenges with that identifier has been found'
+          });
+        }
+        //get the scoreboard
+        ScoreBoard.findById(team.scoreBoard).exec( function (err, scoreBoard) {
+          if(err){
+            return res.status(400).send({
+              message: errorHandler.getErrorMessage(err)
+            });
+          }
+          else if (!team){
+            return res.status(404).send({
+              message: 'No scoreboard with that ID found'
+            });
+          }
+          //challenge, name, points, date
+          console.log("Before Push:");
+          console.log(challenge._id);
+          console.log(req.user._id);
+          scoreBoard.solved.push({challengeId: challenge._id, userId: req.user._id, date: Date.now(), points: challenge.points});
+          scoreBoard.save(function (err) {
+            if (err) {
+              console.log(err);
+              return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+              });
+            }
+          });
+        });
+      });
       return res.status(200).send({
         message: 'Correct'
       });
