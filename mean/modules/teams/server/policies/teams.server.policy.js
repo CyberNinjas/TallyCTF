@@ -18,9 +18,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/teams',
       permissions: '*'
     }, {
-      resources: '/api/teams/join',
+      resources: '/api/teams/:teamId.:userId/join',
       permissions: '*'
-    }, { 
+    }, {
       resources: '/api/teams/:teamId',
       permissions: '*'
     }, {
@@ -40,6 +40,10 @@ exports.invokeRolesPolicies = function () {
     roles: ['teamCaptain'],
     allows: [
       {
+        resources: '/api/teams/:teamId.:userId/join',
+        permissions: '*'
+      },
+      {
         resources: '/api/teams/:teamId.:userId/ctl',
         permissions: '*'
       }
@@ -50,6 +54,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/teams',
       permissions: ['get']
     }, {
+      resources: '/api/teams/:teamId.:userId/join',
+      permissions: '*'
+    },{
       resources: '/api/teams/:teamId',
       permissions: ['get']
     }]
@@ -85,9 +92,9 @@ exports.isAllowedToAccept = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
   // If a team is being processed and the current user created it then allow any manipulation
   console.log(req.body.team);
-  if (req.body.team && req.user === req.body.team.teamCaptain) {
-    return next();
-  }
+  //if (req.body.team && req.user === req.body.team.teamCaptain) {
+    //return next();
+  //}
 
   // Check for user roles
   acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(), function (err, isAllowed) {

@@ -13,8 +13,9 @@ module.exports = function (app) {
     .post(teams.create)
     .delete(teams.clear);
 
-    app.route('/api/teams/join').all(teamsPolicy.isAllowed)
+  /*  app.route('/api/teams/join').all(teamsPolicy.isAllowed)
       .put(teams.addMembers);
+  */
 
   // Single team routes
   app.route('/api/teams/:teamId').all(teamsPolicy.isAllowed)
@@ -22,9 +23,13 @@ module.exports = function (app) {
     .put(teams.update)
     .delete(teams.delete);
 
+  app.route('/api/teams/:teamId.:userId/join').all(teamsPolicy.isAllowed)
+        .put(teams.addMembers);
+
   app.route('/api/teams/:teamId.:userId/ctl').all(teamsPolicy.isAllowedToAccept)
       .put(teams.decline)
       .post(teams.accept);
+
 
   // Finish by binding the team middleware
   app.param('teamId', teams.teamByID);

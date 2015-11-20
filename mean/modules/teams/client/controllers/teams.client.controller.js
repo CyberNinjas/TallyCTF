@@ -139,11 +139,21 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
     //Adds the users to the team
     $scope.add = function() {
-      var user = $scope.search.username;
-      $scope.mteam.askToJoin.push(user);
-      console.log(Authentication.user.team);
-      console.log($scope.mteam);
-      $scope.mteam.$update(user);
+      var user1 = $scope.search.username;
+      var teamID = $scope.mteam._id;
+
+      console.log(user1);
+      console.log(teamID);
+
+      for(var i=0;i<$scope.users.length;i++){
+        if(user1 === $scope.users[i].username){
+
+          $scope.mteam.temp = $scope.users[i]._id;
+          console.log($scope.mteam.temp);
+        }
+      }
+
+      Teams1.update($scope.mteam);
     };
 
 

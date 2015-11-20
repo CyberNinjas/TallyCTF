@@ -13,6 +13,19 @@ angular.module('teams')
     });
   }
 ])
+
+.factory('Teams1', ['$resource',
+    function ($resource) {
+        return $resource('api/teams/:teamId.:userId/join', {
+          teamId: '@_id',
+          userId: '@temp'
+        }, {
+            update: {
+                method: 'PUT'
+            },
+        });
+    }
+])
     .factory('TeamsCtl', ['$resource',
         function ($resource) {
             return $resource('api/teams/:teamId.:userId/ctl', {
@@ -27,13 +40,4 @@ angular.module('teams')
                 }
             });
         }
-    ])
-.factory('Teams1', ['$resource',
-  function ($resource) {
-   return $resource('api/teams/join', {}, {
-     update: {
-        method: 'PUT'
-     }
-});
-}
-]);
+    ]);

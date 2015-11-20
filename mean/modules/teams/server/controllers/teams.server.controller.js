@@ -80,7 +80,7 @@ exports.update = function (req, res) {
   team.requestToJoin = req.body.requestToJoin;
   team.members = req.body.members;
   team.askToJoin = req.body.askToJoin;
-  
+
   console.log("I'm not in the save function");
   team.save(function (err) {
     console.log("I'm inside the save function");
@@ -99,7 +99,7 @@ exports.update = function (req, res) {
 exports.accept = function(req, res) {
   var team = req.team;
   var user = req.model;
-  
+
   for (var i = 0; i < team.requestToJoin.length; ++i) {
     if (team.requestToJoin[i]._id.index === user._id.index) {
       team.requestToJoin.splice(i, 1);
@@ -119,7 +119,7 @@ exports.accept = function(req, res) {
     return res.status(400).send({
       message: "User is already a member of a team!"
     });
-  
+
   team.save(function (err) {
     console.log("I'm inside the save function");
     if (err) {
@@ -174,21 +174,39 @@ exports.decline = function(req, res) {
 };
 
 exports.addMembers = function(req,res){
-  var user = req.body;
-  var teamID = req.user.team;
-  var team1;
+  var team = req.team;
+  var user = req.model;
 
-  /*var search = Team.findOne({_id: teamID},
-    function(err,obj) {
-      if(err){
-        return res.status(400).send({
-          message: errorHandler.getErrorMessage(err)
-        });
-      }else{
-        team1 = obj;
-      }
-    });*/
+  team.askToJoin.push(user._id);
+  user.askToJoin.push(team._id);
+
+  console.log("**************************");
+  console.log(team);
+  console.log(user);
+  console.log("**************************");
+
+  team.save(function (err) {
+    console.log("I'm inside the save function");
+    if (err) {
+      console.log(err);
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json(team);
+      console.log("asdfasdfasdf");
+    }
+  });
+  
+  user.save(function (err) {
+    if (err)
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+  });
+
 };
+
 
 /**
  * Update a user's roles / team
