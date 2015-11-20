@@ -156,23 +156,38 @@ exports.accept = function(req,res){
 };
 
 exports.decline = function(req,res){
-console.log(req.team);
+  var user = req.body.index;
+  console.log("in decline");
+//  console.log(req);
+  Team.findById(req.body.team).exec(function (err, team){
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    }
+    else if (!team) {
+      return res.status(404).send({
+        message: 'No challenges with that identifier has been found'
+      });
+    }
+    console.log(team);
+    console.log(user);
+    team.requestToJoin.splice(user, 1);
 
-  var team = req.team;
-  //user.save(function (err) {
-  //  if (err) {
-  //    console.log('got an error');
-  //    console.log(err);
-  //  } else {
-  //    req.login(user, function (err) {
-  //      if (err) {
-  //        res.status(400).send(err);
-  //      } else {
-  //        console.log("saved user");
-  //      }
-  //    });
-  //  }
-  //});
+    //user.roles.push('teamMember');
+    team.save(function (err) {
+      console.log("I'm inside the save function");
+      if (err) {
+        console.log(err);
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        res.json(team);
+      }
+    });
+
+  });
 };
 
 exports.addMembers = function(req,res){

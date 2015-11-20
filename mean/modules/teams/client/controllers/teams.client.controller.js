@@ -123,7 +123,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
         console.log("user");
         console.log(user);
         user.notifications+=1;
-        team.requestToJoin.push(Authentication.user._id);
+        team.requestToJoin.push(Authentication.user);
 
         team.$update(function () {
           $location.path('teams/' + team._id);
@@ -153,15 +153,11 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
     $scope.accept = function(index) {
       $scope.mteam.requestToJoin.splice(index, 1);
-      $scope.mteam.members.push(index._id);
+      $scope.mteam.members.push(index);
       console.log(index.team);
-
-      index.roles.push('teamMember');
-      index.team = $scope.mteam._id;
       console.log($scope.mteam);
       var team = index.team;
       console.log("clicked accept");
-      //$scope.mteam.$update();
       $http.post('/api/teams/ctl', {team: $scope.mteam._id, index: index}).success(function (response) {
 
         $scope.success = response.message;
@@ -171,11 +167,20 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
         $scope.error = response.message;
         console.log("Error: " + response.message);
       });
+
     };
 
     $scope.decline = function(index) {
       $scope.mteam.requestToJoin.splice(index, 1);
-      $scope.mteam.$update();
+      $http.put('/api/teams/ctl', {team: $scope.mteam._id, index: index}).success(function (response) {
+
+        $scope.success = response.message;
+        console.log("Success" + response.message);
+      }).error(function (response){
+
+        $scope.error = response.message;
+        console.log("Error: " + response.message);
+      });
     };
 
     // Find a list of Teams
