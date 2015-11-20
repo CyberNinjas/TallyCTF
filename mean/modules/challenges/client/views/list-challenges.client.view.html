@@ -59,9 +59,9 @@
 	  {{challenge.description}}
 	  <br><br>
 	  <form name="form">
-	  <input type="text" class="form-control" ng-if="authentication.user" ng-model="challenge.solve" placeholder="Flag Value">
+	  <input type="text" class="form-control" ng-if="displaySubmit()" ng-model="challenge.solve" placeholder="Flag Value">
 	  <br>
-      <input type="submit" class="submitButton" ng-if="authentication.user" ng-click="submitItem(challenge)">
+      <input type="submit" class="submitButton" ng-if="displaySubmit()" ng-click="submitItem(challenge)">
 
       <!--
 	  <div ng-if="challenge.category=='1'">

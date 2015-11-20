@@ -59,6 +59,18 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
       }
     };
 
+    $scope.displaySubmit = function(){
+      var mroles = Authentication.user.roles;
+      if (mroles.indexOf('admin') > -1){
+        return false;
+      }
+      else if(mroles.indexOf('guest') > -1){
+        return false;
+      }
+      else return true;
+    };
+
+
     // Update existing Challenge
     $scope.update = function (isValid) {
       $scope.error = null;
@@ -118,6 +130,7 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
    $http.post('/api/challenges/submit', {challenge: challenge, flag: flag}).success(function (response) {
      challenge.solve = null;
      $scope.success = response.message;
+     challenge.solves = response.solves;
      alert(response.message + '!');
      console.log("Success" + response.message);
    }).error(function (response){
