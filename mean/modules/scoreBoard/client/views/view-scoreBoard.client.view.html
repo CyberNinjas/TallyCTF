@@ -1,22 +1,27 @@
 <section ng-controller="ScoreBoardController" ng-init="findOne()">
   <div class="page-header">
-    <h1 ng-bind="scoreBoard.title"></h1>
+    <div class="pull-right" ng-if="authentication.user.roles.indexOf('admin') !== -1">
+      <a class="btn btn-primary" ui-sref="scoreBoard.edit({scoreBoardId: scoreBoard._id})">
+        <i class="glyphicon glyphicon-edit"></i>
+      </a>
+      <a class="btn btn-primary" ng-click="remove();">
+        <i class="glyphicon glyphicon-trash"></i>
+      </a>
   </div>
-  <div class="pull-right" ng-show="authentication.user._id == scoreBoard.user._id">
-    <a class="btn btn-primary" ui-sref="scoreBoard.edit({scoreBoardId: scoreBoard._id})">
-      <i class="glyphicon glyphicon-edit"></i>
-    </a>
-    <a class="btn btn-primary" ng-click="remove();">
-      <i class="glyphicon glyphicon-trash"></i>
-    </a>
+    <h1 ng-bind="scoreBoard.team.teamName"></h1>
   </div>
-  <small>
-    <em class="text-muted">
-      Posted on
-      <span ng-bind="scoreBoard.created | date:'mediumDate'"></span>
-      by
-      <span ng-bind="scoreBoard.user.displayName"></span>
-    </em>
-  </small>
-  <p class="lead" ng-bind="scoreBoard.content"></p>
+  <div class="form-group collapse-group">
+    <h2 bcollapse>Solved Challenges</h2>
+    <div class="collapse">
+      <div class="well list-group">
+        <a ng-repeat="challenge in scoreBoard.solved" ui-sref="challenges.view({challengeId: challenge._id})" class="list-group-item">
+          <p class="pull-right" ng-bind="challenge.points"></p>
+          <h4 ng-bind="challenge.name" class="list-group-item-heading"></h4>
+        </a>
+        <div ng-if="scoreBoard.$resolved && !scoreBoard.solved.length">
+          No challenges solved
+        </div>
+      </div>
+    </div>
+  </div>
 </section>

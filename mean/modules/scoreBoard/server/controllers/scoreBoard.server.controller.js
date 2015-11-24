@@ -36,18 +36,16 @@ exports.read = function (req, res) {
  * Append data to a score board
  */
 exports.append = function (req, res) {
-  var scoreBoard = req.body.scoreBoard;
+  var scoreBoard = req.scoreBoard;
+  //FIXME: Change this when a validate function is made
+  var challenge = JSON.parse(req.query.challenge);
 
-  scoreBoard.solved[req.body.teamId] = 
-  {
-    'users': req.body.users,
-    'date' : Date.now() 
-  };
-
-  scoreBoard.score += req.body.score;
+  scoreBoard.solved.push(challenge._id);
+  scoreBoard.score += challenge.points;
 
   scoreBoard.save(function (err) {
     if (err) {
+      console.log(err);
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });

@@ -63,10 +63,9 @@ angular.module('scoreBoard').controller('ScoreBoardController', ['$scope', '$sta
     // Find existing ScoreBoard
     $scope.findOne = function () {
       $scope.scoreBoard = ScoreBoard.get({
-        scoreBoardId: $stateParams.scoreBoardId
+        scoreBoardTeamId: $stateParams.scoreBoardTeamId
       });
     };
-	
 		
   }
 ]);
