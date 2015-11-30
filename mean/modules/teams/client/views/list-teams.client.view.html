@@ -4,10 +4,6 @@
   </div>
   <div class="list-group">
     <a ng-repeat="team in teams" ui-sref="teams.view({teamId: team._id})" class="list-group-item">
-      <small class="list-group-item-text">
-        <!--Team Captain: <span ng-bind="team.user.displayName"></span> -->
-        <!--Team Name: <span ng-bind="team.teamName"></span>-->
-      </small>
       <div class="pull-right" ng-if="shouldRender('user')">
         <button ng-click='requestsToJoin(team)'>Join</button>
       </div>

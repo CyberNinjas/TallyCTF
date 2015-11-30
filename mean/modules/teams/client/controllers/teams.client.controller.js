@@ -46,19 +46,18 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
+    };
 
-  };
-
-  //Redirect the createTeam to adding users
-  $scope.teamRoster = function(){
-    $location.path('/teams/addusers');
-  };
+    //Redirect the createTeam to adding users
+    $scope.teamRoster = function(){
+      $location.path('/teams/addusers');
+    };
 
 
-  //Deletes users from the team SHOULD ONLY BE FOR ADMIN DO NOT ATTEMP THIS.
-  $scope.delete = function() {
-      $scope.tasks.splice(this.$index, 1);
-  };
+    // Deletes users from the team SHOULD ONLY BE FOR ADMIN DO NOT ATTEMP THIS.
+    $scope.delete = function() {
+        $scope.tasks.splice(this.$index, 1);
+    };
 
 
     // Remove existing Team
@@ -165,24 +164,16 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
     $scope.decline = function(user) {
       $scope.mteam.temp = user._id;
       TeamsCtl.decline($scope.mteam);
-      // $scope.mteam.requestToJoin.splice(index, 1);
-      // $http.put('/api/teams/ctl', {team: $scope.mteam._id, index: index}).success(function (response) {
-
-      //   $scope.success = response.message;
-      //   console.log("Success" + response.message);
-      // }).error(function (response){
-
-      //   $scope.error = response.message;
-      //   console.log("Error: " + response.message);
-      // });
     };
 
     // Find a list of Teams
     $scope.find = function () {
       $scope.teams = Teams.query();
-     // console.log($scope.teams);
     };
 
+    // FIXME: This only works if the user is an admin. Need to either come up /
+    // FIXME: with a new route for querying for only usernames or add policy /
+    // FIXME: rules to the users module
     $scope.findUsers = function(){
        $scope.users = Users.query("username");
        $scope.mteam = Teams.get({teamId: Authentication.user.team});
@@ -191,13 +182,13 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
     // Find existing Team
     $scope.findOne = function () {
-      $scope.team = Teams.query({
-        teamName: $stateParams.teamName
+      $scope.team = Teams.get({
+        teamId: $stateParams.teamId
       });
-
     };
 
-
+    // FIXME: This should be added to the policies for the team module /
+    // FIXME: as it deals explicitly with permissions
     $scope.shouldRender=function(role){
       var TC = false;
       var TM = false;
@@ -234,10 +225,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
     // Find existing Team
     $scope.findTeam = function () {
-     $scope.mteam = Teams.get({teamId: Authentication.user.team});
-
-
-
+      $scope.mteam = Teams.get({teamId: Authentication.user.team});
     };
 
   }

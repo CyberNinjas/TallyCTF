@@ -1,22 +1,24 @@
 <section ng-controller="TeamsController" ng-init="findOne()">
   <div class="page-header">
+    <div class="pull-right" ng-if="authentication.user.roles.indexOf('admin') !== -1">
+      <a class="btn btn-primary" ui-sref="teams.edit({teamId: team._id})">
+        <i class="glyphicon glyphicon-edit"></i>
+      </a>
+      <a class="btn btn-primary" ng-click="remove();">
+        <i class="glyphicon glyphicon-trash"></i>
+      </a>
+    </div>
     <h1 ng-bind="team.teamName"></h1>
   </div>
-  <div class="pull-right" ng-show="authentication.user._id == team.user._id">
-    <a class="btn btn-primary" ui-sref="teams.edit({teamId: team._id})">
-      <i class="glyphicon glyphicon-edit"></i>
-    </a>
-    <a class="btn btn-primary" ng-click="remove();">
-      <i class="glyphicon glyphicon-trash"></i>
-    </a>
+  <h2>Team Members</h2>
+  <div class="list-group">
+    <div class="list-group-item" ng-repeat="member in team.members">
+      <div ng-show="member.roles.indexOf('teamCaptain') !== -1" class="pull-right">
+        <small>
+          <p>Team Captain</p>
+        </small>
+      </div>
+      <span ng-bind="member.username"></span>
+    </div>
   </div>
-  <small>
-    <em class="text-muted">
-      Posted on
-      <span ng-bind="team.created | date:'mediumDate'"></span>
-      by
-      <span ng-bind="team.user.displayName"></span>
-    </em>
-  </small>
-  <p class="lead" ng-bind="team.content"></p>
 </section>

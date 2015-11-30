@@ -14,19 +14,23 @@ var path = require('path'),
  * Create a team
  */
 exports.create = function (req, res) {
-  console.log('create team before user');
   var team = new Team(req.body);
-  team.user = req.user;
   var user = req.user;
+
+  // Make the requesting user the team captain
   user.roles.push('teamCaptain');
+
   var scoreBoard = new ScoreBoard();
   scoreBoard.team = team._id;
   team.scoreBoard = scoreBoard._id;
-  console.log(user);
+
+  // Save the user
   user.save(function (err) {
     if (err) {
-      console.log('got an error');
       console.log(err);
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
     } else {
       req.login(user, function (err) {
         if (err) {
@@ -37,7 +41,6 @@ exports.create = function (req, res) {
       });
     }
   });
-  console.log('made it after user save');
 
   scoreBoard.save(function (err) {
     if (err) {
@@ -58,15 +61,12 @@ exports.create = function (req, res) {
       res.json(team);
     }
   });
-console.log('made it after team save');
 };
 
 /**
  * Show the current team
  */
 exports.read = function (req, res) {
-  console.log("in read");
-
   res.json(req.team);
 };
 
@@ -81,9 +81,7 @@ exports.update = function (req, res) {
   team.members = req.body.members;
   team.askToJoin = req.body.askToJoin;
 
-  console.log("I'm not in the save function");
   team.save(function (err) {
-    console.log("I'm inside the save function");
     if (err) {
       console.log(err);
       return res.status(400).send({
@@ -236,6 +234,7 @@ exports.addTeamToUser = function (user, team) {
       var index = teams[i].requestToJoin.indexOf(user._id);
       if (index !== -1) {
         teams[i].requestToJoin.splice(index, 1);
+        // FIXME: Have a way to handle this failing
         teams[i].save();
       }
     }
@@ -250,6 +249,7 @@ exports.addTeamToUser = function (user, team) {
       var index = teams[i].requestToJoin.indexOf(user._id);
       if (index !== -1) {
         teams[i].requestToJoin.splice(index, 1);
+        // FIXME: Have a way to handle this failing
         teams[i].save();
       }
     }
@@ -272,16 +272,57 @@ exports.clear = function(req,res){
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
-  }
+    }
   });
+
   res.status(200).send();
 };
+
 /**
  * Delete an team
  */
 exports.delete = function (req, res) {
   var team = req.team;
 
+  // Update all members / requestees / requesters of team deletion
+  var members = User.find({
+    "_id": { $in: team.members }
+  }, function (err, users) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      for (var i = 0; i < users.length; ++i)
+      {
+        // Update the User's roles (Remove teamMember / teamCaptain role)
+        var captain = users[i].roles.indexOf('teamCaptain');
+        if (captain > -1)
+          users[i].roles.splice(captain, 1);
+
+        var member  = users[i].roles.indexOf('teamMember');
+        if (member > -1)
+          users[i].roles.splice(member, 1);
+
+        // Remove the team from the user (MongoDB strips away all tags that are undefined)
+        users[i].team = undefined;
+
+        // FIXME: Have a way to handle this failing
+        users[i].save();
+      }
+    }
+  });
+
+  // Delete the scoreBoard associated with the team being deleted
+  ScoreBoard.remove({team: team._id}, function (err, scoreBoard) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    }
+  });
+
+  // Delete the team
   team.remove(function (err) {
     if (err) {
       return res.status(400).send({

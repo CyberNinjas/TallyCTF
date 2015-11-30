@@ -1,13 +1,13 @@
 <section ng-controller="TeamsController" ng-init="findTeam()">
   <div class="page-header">
-<h1>
-  <span ng-bind="mteam.teamName"></span>
-</h1>
+  <h1>
+    <span ng-bind="mteam.teamName"></span>
+  </h1>
     <div ng-if="shouldRender('teamCaptain')||shouldRender('teamMember')" class="list-group">
       <h3>Roster</h3>
       <a ng-repeat="member in mteam.members" class="list-group-item">
         <small class="list-group-item-text">
-          <span ng-bind=member.username></span>
+          <span ng-bind="member.username"></span>
         </small>
        <!-- <h4 class="list-group-item-heading" ng-bind="current.teamName"></h4> -->
       </a>
@@ -16,7 +16,7 @@
       <h3>Pending teams</h3>
       <a ng-repeat="request in mteam.requestToJoin" class="list-group-item">
         <small class="list-group-item-text">
-          <span ng-bind=member.username></span>
+          <span ng-bind="member.username"></span>
         </small>
         <!-- <h4 class="list-group-item-heading" ng-bind="current.teamName"></h4> -->
       </a>
@@ -31,7 +31,7 @@
           <div class="pull-right">
             <button ng-click='accept(request)'>Accept</button>
           </div>
-          <span ng-bind=request.username></span>
+          <span ng-bind="request.username"></span>
         </small>
         <!-- <h4 class="list-group-item-heading" ng-bind="current.teamName"></h4> -->
       </a>
