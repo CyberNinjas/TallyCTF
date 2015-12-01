@@ -29,7 +29,6 @@ angular.module('teams').config(['$stateProvider',
           roles: ['teamCaptain', 'admin']
         }
       })
-
       .state('teams.create', {
         url: '/create',
         templateUrl: 'modules/teams/client/views/create-team.client.view.html',

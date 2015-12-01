@@ -22,7 +22,6 @@ exports.create = function (req, res) {
 
   var scoreBoard = new ScoreBoard();
   scoreBoard.team = team._id;
-  team.scoreBoard = scoreBoard._id;
 
   // Save the user
   user.save(function (err) {
