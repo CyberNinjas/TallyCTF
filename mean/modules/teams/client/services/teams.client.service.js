@@ -33,10 +33,13 @@ angular.module('teams')
               userId: '@temp'
             }, {
                 accept: {
-                    method: 'POST'
+                  method: 'POST'
                 },
                 decline: {
-                    method: 'PUT'
+                  method: 'PUT'
+                },
+                remove: {
+                  method: 'PATCH'
                 }
             });
         }

@@ -18,7 +18,9 @@ angular.module('teams').run(['Menus','Authentication',
     });
 
     // Add the dropdown create item
-    if(!Authentication.user || Authentication.user.roles.indexOf('teamMember') > -1) {
+    if (Authentication.user && 
+      Authentication.user.roles.indexOf('teamMember') === -1 &&
+      Authentication.user.roles.indexOf('teamCaptain') === -1) {
       Menus.addSubMenuItem('topbar', 'teams', {
         title: 'Create Teams',
         state: 'teams.create',

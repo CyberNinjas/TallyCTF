@@ -17,8 +17,8 @@
           <label for="members">Team Members</label>
           <div class="list-group">
             <div class="list-group-item" ng-repeat="member in team.members">
-              <div ng-show="member.roles.indexOf('teamCaptain') !== -1" class="pull-right">
-                <btn class="btn btn-danger" ng-click="removeMember(member)">
+              <div ng-show="member.roles.indexOf('teamCaptain') === -1" class="pull-right">
+                <btn class="btn btn-danger" ng-click="removeMember(member, $index)">
                   <span class="glyphicon glyphicon-remove"></span>
                 </btn>
               </div>

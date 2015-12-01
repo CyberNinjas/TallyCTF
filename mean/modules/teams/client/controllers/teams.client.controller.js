@@ -156,19 +156,25 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       Teams1.update($scope.mteam);
     };
 
+    // Remove a user from the team when editing the team
+    $scope.removeMember = function (user, index) {
+      $scope.team.members.splice(index, 1);
+      $scope.team.temp = user._id;
+      console.log($scope.team);
+      TeamsCtl.remove($scope.team);
+    };
 
-    $scope.accept = function(user,index) {
-      $scope.mteam.requestToJoin.splice(index, 1);
-      // $scope.mteam.members.push(index);
-      $scope.mteam.members.push(index._id);
+
+    $scope.accept = function(user, index) {
+      var add = $scope.mteam.requestToJoin.splice(index, 1);
+      console.log(add);
+      $scope.mteam.members.push(add[0]);
       $scope.mteam.temp = user._id;
       TeamsCtl.accept($scope.mteam);
     };
 
 
-    $scope.decline = function(user,index) {
-
-
+    $scope.decline = function(user, index) {
       $scope.mteam.temp = user._id;
       TeamsCtl.decline($scope.mteam);
       $scope.mteam.requestToJoin.splice(index, 1);
@@ -179,6 +185,20 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       $scope.teams = Teams.query();
     };
 
+    // Find existing Team
+    $scope.findOne = function () {
+      $scope.team = Teams.get({
+        teamId: $stateParams.teamId
+      });
+    };
+
+    // Find existing Team
+    $scope.findTeam = function () {
+      $scope.mteam = Teams.get({
+        teamId: Authentication.user.team
+      });
+    };
+
     // FIXME: This only works if the user is an admin. Need to either come up /
     // FIXME: with a new route for querying for only usernames or add policy /
     // FIXME: rules to the users module
@@ -186,60 +206,19 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
        $scope.users = Users.query("username");
        $scope.mteam = Teams.get({teamId: Authentication.user.team});
     };
-
-
-    // Find existing Team
-    $scope.findOne = function () {
-      $scope.team = Teams.get({
-        teamId: $stateParams.teamId
-      });
-    };
     
     // FIXME: This should be added to the policies for the team module /
     // FIXME: as it deals explicitly with permissions
 
     //teamMember and teamCaptain are mutually exclusive
-    $scope.shouldRender=function(role){
-      var TC = false;
-      var TM = false;
-      var US= false;
-
-      var mroles = Authentication.user.roles;
-
-      for(var i=0;i<mroles.length;i++){
-        if(mroles[i]==='teamCaptain'){
-          TC=true;
-        }
-        if(mroles[i]==='teamMember'){
-          TM = true;
-        }
-        if(mroles[i]==='user'){
-          US = true;
-        }
+    $scope.shouldRender = function (role) {
+      if (role === 'user') {
+        return (Authentication.user && 
+          (Authentication.user.roles.indexOf('teamCaptain') === -1 ) &&
+          (Authentication.user.roles.indexOf('teamMember') === -1));
       }
-      if(role ==='teamCaptain'){
 
-        return (!TM&&TC&&US);
-      }
-      else if(role==='teamMember'){
-
-        return (TM&&US&&!TC);
-      }
-      else if(role==='user'){
-
-        return (!TM&&US&&!TC);
-      }
-      else
-        return false;
+      return (Authentication.user && Authentication.user.roles.indexOf(role) !== -1);
     };
-
-
-    // Find existing Team
-    $scope.findTeam = function () {
-      $scope.mteam = Teams.get({teamId: Authentication.user.team});
-    };
-
-
-
   }
 ]);

@@ -1,6 +1,6 @@
 <section ng-controller="TeamsController" ng-init="findOne()">
   <div class="page-header">
-    <div class="pull-right" ng-if="authentication.user.roles.indexOf('admin') !== -1">
+    <div class="pull-right" ng-if="shouldRender('admin')">
       <a class="btn btn-primary" ui-sref="teams.edit({teamId: team._id})">
         <i class="glyphicon glyphicon-edit"></i>
       </a>
