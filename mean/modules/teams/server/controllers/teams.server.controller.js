@@ -14,6 +14,7 @@ var path = require('path'),
  * Create a team
  */
 exports.create = function (req, res) {
+  console.log(req.body);
   var team = new Team(req.body);
   var user = req.user;
 
@@ -33,7 +34,9 @@ exports.create = function (req, res) {
     } else {
       req.login(user, function (err) {
         if (err) {
-          res.status(400).send(err);
+          res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+          });
         } else {
           console.log("saved user");
         }
@@ -43,6 +46,7 @@ exports.create = function (req, res) {
 
   scoreBoard.save(function (err) {
     if (err) {
+      console.log("SCOREBOARD SAVE");
       console.log(err);
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -52,6 +56,7 @@ exports.create = function (req, res) {
 
   team.save(function (err) {
     if (err) {
+      console.log("TEAM SAVE");
       console.log(err);
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
