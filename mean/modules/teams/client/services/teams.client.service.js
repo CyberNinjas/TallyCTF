@@ -13,7 +13,6 @@ angular.module('teams')
     });
   }
 ])
-
 .factory('Teams1', ['$resource',
     function ($resource) {
         return $resource('api/teams/:teamId.:userId/join', {
@@ -26,21 +25,30 @@ angular.module('teams')
         });
     }
 ])
-    .factory('TeamsCtl', ['$resource',
-        function ($resource) {
-            return $resource('api/teams/:teamId.:userId/ctl', {
-              teamId: '@_id',
-              userId: '@temp'
-            }, {
-                accept: {
-                  method: 'POST'
-                },
-                decline: {
-                  method: 'PUT'
-                },
-                remove: {
-                  method: 'PATCH'
-                }
-            });
-        }
-    ]);
+.factory('TeamsCtl', ['$resource',
+    function ($resource) {
+        return $resource('api/teams/:teamId.:userId/ctl', {
+          teamId: '@_id',
+          userId: '@temp'
+        }, {
+            accept: {
+              method: 'POST'
+            },
+            decline: {
+              method: 'PUT'
+            },
+            remove: {
+              method: 'PATCH'
+            }
+        });
+    }
+])
+.factory('Utils', ['$resource', 
+  function ($resource) {
+    return $resource('api/teams/utils', {}, {
+      listUsers: {
+        method: 'GET', 
+        isArray: true
+      }
+    });
+}]);

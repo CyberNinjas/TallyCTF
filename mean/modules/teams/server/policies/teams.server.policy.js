@@ -18,6 +18,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/teams',
       permissions: '*'
     }, {
+      resources: '/api/teams/utils',
+      permissions: ['get']
+    }, {
       resources: '/api/teams/:teamId.:userId/join',
       permissions: '*'
     }, {
@@ -33,25 +36,32 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/teams',
       permissions: ['get', 'post','put']
     }, {
+      resources: '/api/teams/utils',
+      permissions: ['get']
+    }, {
       resources: '/api/teams/:teamId',
       permissions: ['get','put', 'post']
     }]
   }, {
     roles: ['teamCaptain'],
     allows: [
-      {
-        resources: '/api/teams/:teamId.:userId/join',
-        permissions: '*'
-      },
-      {
-        resources: '/api/teams/:teamId.:userId/ctl',
-        permissions: '*'
-      }
-    ]
-  },{
+    {
+      resources: '/api/teams/:teamId.:userId/join',
+      permissions: '*'
+    }, {
+      resources: '/api/teams/utils',
+      permissions: ['get']
+    }, {
+      resources: '/api/teams/:teamId.:userId/ctl',
+      permissions: '*'
+    }]
+  }, {
     roles: ['guest'],
     allows: [{
       resources: '/api/teams',
+      permissions: ['get']
+    }, {
+      resources: '/api/teams/utils',
       permissions: ['get']
     }, {
       resources: '/api/teams/:teamId.:userId/join',

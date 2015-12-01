@@ -1,8 +1,8 @@
 'use strict';
 
 // Teams controller
-angular.module('teams').controller('TeamsController', ['$scope','$stateParams', '$location','Teams','$http','Authentication','Users', 'Teams1','TeamsCtl',
-  function ($scope, $stateParams, $location, Teams,$http, Authentication, Users, Teams1,TeamsCtl) {
+angular.module('teams').controller('TeamsController', ['$scope','$stateParams', '$location','Teams','$http','Authentication','Users', 'Teams1','TeamsCtl', 'Utils',
+  function ($scope, $stateParams, $location, Teams,$http, Authentication, Users, Teams1, TeamsCtl, Utils) {
     $scope.authentication = Authentication.user;
     $scope.users = Users;
 
@@ -203,7 +203,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
     // FIXME: with a new route for querying for only usernames or add policy /
     // FIXME: rules to the users module
     $scope.findUsers = function(){
-       $scope.users = Users.query("username");
+       $scope.users = Utils.listUsers();
        $scope.mteam = Teams.get({teamId: Authentication.user.team});
     };
     

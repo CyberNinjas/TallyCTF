@@ -14,7 +14,6 @@ var path = require('path'),
  * Create a team
  */
 exports.create = function (req, res) {
-  console.log(req.body);
   var team = new Team(req.body);
   var user = req.user;
 
@@ -410,6 +409,21 @@ exports.list = function (req, res) {
       });
     } else {
       res.json(teams);
+    }
+  });
+};
+
+/**
+ * List all user names
+ */
+exports.listUsers = function (req, res) {
+  User.find({}, 'username').exec(function (err, users) {
+    if (err) {
+      return res.status(400).send({
+      message: 'Team is invalid'
+    });
+    } else {
+      res.json(users);
     }
   });
 };
