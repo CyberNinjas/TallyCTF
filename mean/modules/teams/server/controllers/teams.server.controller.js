@@ -80,7 +80,12 @@ exports.update = function (req, res) {
   team.requestToJoin = req.body.requestToJoin;
   team.members = req.body.members;
   team.askToJoin = req.body.askToJoin;
-
+  var capt = req.team.teamCaptain;
+  capt.notifications+=1;
+  capt.save(function (err) {
+    if (err)
+      console.log('error updating captain');
+  });
   team.save(function (err) {
     if (err) {
       console.log(err);
@@ -97,6 +102,9 @@ exports.update = function (req, res) {
 exports.accept = function(req, res) {
   var team = req.team;
   var user = req.model;
+  console.log("NOTIFICATIONS");
+  console.log(user.notifications);
+  user.notifications+=1;
 
   for (var i = 0; i < team.requestToJoin.length; ++i) {
     if (team.requestToJoin[i]._id.index === user._id.index) {
@@ -118,6 +126,7 @@ exports.accept = function(req, res) {
       message: "User is already a member of a team!"
     });
 
+
   team.save(function (err) {
     console.log("I'm inside the save function");
     if (err) {
@@ -129,11 +138,14 @@ exports.accept = function(req, res) {
       res.json(team);
     }
   });
+
 };
 
 exports.decline = function(req, res) {
   var team = req.team;
   var user = req.model;
+
+  user.notifications+=1;
 
   // Remove user from list of requests
   for (var i = 0; i < team.requestToJoin.length; ++i) {
@@ -366,10 +378,10 @@ exports.teamByID = function (req, res, next, id) {
   }
 
   Team.findById(id)
-      .populate('members', 'username roles')
+      .populate('members', 'username roles notifications')
       .populate('requestToJoin', 'username roles')
       .populate('askToJoin', 'username')
-      .populate('teamCaptain','username')
+      .populate('teamCaptain','username notifications')
       .exec(function (err, team) {
     if (err) {
       return next(err);

@@ -1,7 +1,7 @@
 'use strict';
 
 // Teams controller
-angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', '$location','Teams','$http','Authentication','Users', 'Teams1','TeamsCtl',
+angular.module('teams').controller('TeamsController', ['$scope','$stateParams', '$location','Teams','$http','Authentication','Users', 'Teams1','TeamsCtl',
   function ($scope, $stateParams, $location, Teams,$http, Authentication, Users, Teams1,TeamsCtl) {
     $scope.authentication = Authentication.user;
     $scope.users = Users;
@@ -118,7 +118,8 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       if(flag) {
         console.log("user");
         console.log(user);
-        user.notifications+=1;
+        //user.notifications+=1;
+        team.teamCaptain.notifications+=1;
         team.requestToJoin.push(user);
         user.requestToJoin.push(team._id);
 
@@ -156,14 +157,21 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
     };
 
 
-    $scope.accept = function(user) {
+    $scope.accept = function(user,index) {
+      $scope.mteam.requestToJoin.splice(index, 1);
+      // $scope.mteam.members.push(index);
+      $scope.mteam.members.push(index._id);
       $scope.mteam.temp = user._id;
       TeamsCtl.accept($scope.mteam);
     };
 
-    $scope.decline = function(user) {
+
+    $scope.decline = function(user,index) {
+
+
       $scope.mteam.temp = user._id;
       TeamsCtl.decline($scope.mteam);
+      $scope.mteam.requestToJoin.splice(index, 1);
     };
 
     // Find a list of Teams
@@ -186,15 +194,18 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
         teamId: $stateParams.teamId
       });
     };
-
+    
     // FIXME: This should be added to the policies for the team module /
     // FIXME: as it deals explicitly with permissions
+
+    //teamMember and teamCaptain are mutually exclusive
     $scope.shouldRender=function(role){
       var TC = false;
       var TM = false;
       var US= false;
 
       var mroles = Authentication.user.roles;
+
       for(var i=0;i<mroles.length;i++){
         if(mroles[i]==='teamCaptain'){
           TC=true;
@@ -208,7 +219,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
       }
       if(role ==='teamCaptain'){
 
-        return (TM&&TC&&US);
+        return (!TM&&TC&&US);
       }
       else if(role==='teamMember'){
 
@@ -227,6 +238,8 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
     $scope.findTeam = function () {
       $scope.mteam = Teams.get({teamId: Authentication.user.team});
     };
+
+
 
   }
 ]);
