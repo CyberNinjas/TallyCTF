@@ -19,12 +19,15 @@ angular.module('teams').config(['$stateProvider',
         url: '/current',
         templateUrl: 'modules/teams/client/views/list-current.client.view.html',
         data: {
-          roles: ['teamMember', 'teamCaptain']
+          roles: ['user']
         }
       })
       .state('teams.add',{
         url:'/addusers',
-        templateUrl: 'modules/teams/client/views/add.users.html'
+        templateUrl: 'modules/teams/client/views/add.users.html',
+        data: {
+          roles: ['teamCaptain', 'admin']
+        }
       })
 
       .state('teams.create', {
