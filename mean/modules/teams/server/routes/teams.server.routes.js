@@ -18,6 +18,9 @@ module.exports = function (app) {
   */
 
   // Single team routes
+  app.route('/api/teams/utils').all(teamsPolicy.isAllowed)
+    .get(teams.listUsers);
+    
   app.route('/api/teams/:teamId').all(teamsPolicy.isAllowed)
     .get(teams.read)
     .put(teams.update)
@@ -28,7 +31,8 @@ module.exports = function (app) {
 
   app.route('/api/teams/:teamId.:userId/ctl').all(teamsPolicy.isAllowedToAccept)
       .put(teams.decline)
-      .post(teams.accept);
+      .post(teams.accept)
+      .patch(teams.removeMember);
 
 
   // Finish by binding the team middleware

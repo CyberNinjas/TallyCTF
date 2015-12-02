@@ -1,10 +1,7 @@
-<div ng-controller="TeamsController" ng-init=findUsers()>
+<div ng-controller="TeamsController" ng-init="findUsers()">
     <input type="search" ng-model="search.username" placeholder="Search...">
-
-<button ng-click="add()"> Add </button>
-
-        <p ng-repeat="user in users | filter:search">
-            {{user.username }}
-        </p>
-
+	<button ng-click="add()"> Add </button>
+    <p ng-repeat="user in users | filter:search">
+        {{ user.username }}
+    </p>
 </div>
