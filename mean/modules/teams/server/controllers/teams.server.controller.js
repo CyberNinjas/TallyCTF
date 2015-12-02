@@ -429,7 +429,7 @@ exports.list = function (req, res) {
  * List all user names
  */
 exports.listUsers = function (req, res) {
-  User.find({}, 'username').exec(function (err, users) {
+  User.find({}, 'username team').exec(function (err, users) {
     if (err) {
       return res.status(400).send({
       message: 'Team is invalid'

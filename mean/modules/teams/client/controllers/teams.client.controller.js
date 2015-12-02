@@ -1,11 +1,10 @@
 'use strict';
 
 // Teams controller
-angular.module('teams').controller('TeamsController', ['$scope','$stateParams', '$location','Teams','$http','Authentication','Users', 'Teams1','TeamsCtl', 'Utils',
-  function ($scope, $stateParams, $location, Teams,$http, Authentication, Users, Teams1, TeamsCtl, Utils) {
+angular.module('teams').controller('TeamsController', ['$scope','$stateParams', '$location', '$state', 'Teams','Authentication','Users', 'Teams1','TeamsCtl', 'Utils',
+  function ($scope, $stateParams, $location, $state, Teams, Authentication, Users, Teams1, TeamsCtl, Utils) {
     $scope.authentication = Authentication.user;
     $scope.users = Users;
-
 
     // Create new Team
     $scope.create = function (isValid) {
@@ -17,14 +16,11 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
         return false;
       }
 
-
       var team = new Teams({
         teamName: this.teamName,
         members: Authentication.user._id,
         teamCaptain: Authentication.user._id
       });
-
-     // team.members.push(Authentication.user);
 
       // Redirect after save
       team.$save(function (response) {
@@ -32,27 +28,19 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
         Authentication.user.team = response._id;
         var user = new Users($scope.authentication);
 
-        //user.team= team._id;
-
         user.$update(function (response) {
-          $scope.$broadcast('show-errors-reset', 'userForm');
-
           $scope.success = true;
           Authentication.user = response;
+          $state.go('teams.add');
         }, function (response) {
           $scope.error = response.data.message;
         });
+
         $scope.teamName = '';
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
     };
-
-    //Redirect the createTeam to adding users
-    $scope.teamRoster = function(){
-      $location.path('/teams/addusers');
-    };
-
 
     // Deletes users from the team SHOULD ONLY BE FOR ADMIN DO NOT ATTEMP THIS.
     $scope.delete = function() {
@@ -138,18 +126,21 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
     };
 
     //Adds the users to the team
-    $scope.add = function() {
-      var user1 = $scope.search.username;
+    $scope.addUser = function (user) {
       var teamID = $scope.mteam._id;
 
-      console.log(user1);
-      console.log(teamID);
-
-      for(var i=0;i<$scope.users.length;i++){
-        if(user1 === $scope.users[i].username){
-
+      // Find the user and add it
+      for (var i = 0; i < $scope.users.length; i++) {
+        if (user.username === $scope.users[i].username) {
           $scope.mteam.temp = $scope.users[i]._id;
-          console.log($scope.mteam.temp);
+          break;
+        }
+
+        // Double check that the requested user was found
+        if (i === $scope.users.length - 1)
+        {
+          $scope.error = "That user does not exist!";
+          return 1;
         }
       }
 
