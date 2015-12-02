@@ -109,15 +109,25 @@ exports.accept = function(req, res) {
   console.log(user.notifications);
   user.notifications+=1;
 
-  for (var i = 0; i < team.requestToJoin.length; ++i) {
-    if (team.requestToJoin[i]._id.toString() === user._id.toString()) {
+  var reqLen = team.requestToJoin.length;
+  var askLen = team.askToJoin.length;
+  var max = ((reqLen > askLen) ? reqLen : askLen);
+
+  for (var i = 0; i < max; ++i) {
+    if (i < reqLen && team.requestToJoin[i]._id.toString() === user._id.toString()) {
       team.requestToJoin.splice(i, 1);
       team.members.push(user._id);
       break;
     }
 
+    if (i < askLen && team.askToJoin[i]._id.toString() === user._id.toString()) {
+      team.askToJoin.splice(i, 1);
+      team.members.push(user._id);
+      break;
+    }
+
     // If it didn't find a user, fail
-    if (i === team.requestToJoin.length - 1)
+    if (i === max - 1)
       return res.status(400).send({
         message: "Invalid User to add"
       });
@@ -150,6 +160,8 @@ exports.decline = function(req, res) {
 
   user.notifications+=1;
 
+  // FIXME: This will fail if user both is requested to join a team and requests to join
+  // FIXME: a team. Consider using a hash for the user requests. (Or a JSON. Whatever)
   // Remove user from list of requests
   for (var i = 0; i < team.requestToJoin.length; ++i) {
     if (team.requestToJoin[i]._id.toString()=== user._id.toString()) {
