@@ -7,18 +7,22 @@ Capture-The-Flag Scoreboard & CTF Event Running Software.
 - CR
 - Basic checking of answers
 - Basic scoring
+
 ### Events
 - CRUD
 - Saving / Loading past events (of the current instance)
+
 ### Score Board
 - CRUD
 - Display the current scores of all teams
 - Display solved challenges of all teams
+
 ### Teams
 - CRUD
 - Team - User request system
 - Displaying members
 - Dynamic user addition / deletion
+
 ### User Authentication
 - CRUD
 - Dynamic generation of custom user authentications (OAuth2.0 & OpenIDConnect)
