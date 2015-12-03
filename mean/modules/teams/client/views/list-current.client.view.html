@@ -39,20 +39,5 @@
         </div>
       </div>
     </div>
-    <div ng-if="shouldRender('teamCaptain')" class="list-group">
-      <h3>Pending requests</h3>
-      <a ng-repeat="request in mteam.requestToJoin" class="list-group-item">
-        <small class="list-group-item-text">
-          <div class="pull-right">
-            <button ng-click='decline(request, $index)'>Decline</button>
-          </div>
-          <div class="pull-right">
-            <button ng-click='accept(request, $index)'>Accept</button>
-          </div>
-        </small>
-        <h4 ng-bind="request.username" class="list-group-item-heading"></h4>
-        <p class="alert alert-warning text-center" ng-if="!requestTeams.length">No pending requests!</p>
-      </a>
-    </div>
   </div>
 </section>

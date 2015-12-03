@@ -176,9 +176,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
     // Find existing Team
     $scope.findTeam = function () {
       if(Authentication.user.team){
-        $scope.mteam = Teams.get({
-          teamId: Authentication.user.team
-        });
+        $state.go('teams.view', {teamId: Authentication.user.team});
       } else{
         $scope.teams = Teams.findRequests(function () {
           var len = $scope.teams.pop();
