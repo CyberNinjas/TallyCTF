@@ -18,13 +18,29 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/teams',
       permissions: '*'
     }, {
-      resources: '/api/teams/utils',
-      permissions: ['get']
-    }, {
       resources: '/api/teams/:teamId.:userId/join',
       permissions: '*'
     }, {
       resources: '/api/teams/:teamId',
+      permissions: '*'
+    }, {
+      resources: '/api/teams/:teamIdRaw/raw',
+      permissions: '*'
+    }, {
+      resources: '/api/teams/:teamId.:userId/ctl',
+      permissions: '*'
+    }]
+  }, {
+    roles: ['teamCaptain'],
+    allows: [
+    {
+      resources: '/api/teams/:teamId',
+      permissions: ['delete']
+    }, {
+      resources: '/api/teams/:teamIdRaw/raw',
+      permissions: ['get']
+    }, {
+      resources: '/api/teams/:teamId.:userId/join',
       permissions: '*'
     }, {
       resources: '/api/teams/:teamId.:userId/ctl',
@@ -34,40 +50,30 @@ exports.invokeRolesPolicies = function () {
     roles: ['user'],
     allows: [{
       resources: '/api/teams',
-      permissions: ['get', 'post','put']
+      permissions: ['get', 'post']
     }, {
-      resources: '/api/teams/utils',
+      resources: '/api/teams/requests',
       permissions: ['get']
     }, {
       resources: '/api/teams/:teamId',
-      permissions: ['get','put', 'post']
-    }]
-  }, {
-    roles: ['teamCaptain'],
-    allows: [
-    {
-      resources: '/api/teams/:teamId.:userId/join',
-      permissions: '*'
+      permissions: ['get', 'put']
     }, {
-      resources: '/api/teams/utils',
-      permissions: ['get']
+      resources: '/api/teams/:teamId.:userId/join',
+      permissions: ['patch']
     }, {
       resources: '/api/teams/:teamId.:userId/ctl',
-      permissions: '*'
+      permissions: ['put', 'post']
     }]
   }, {
     roles: ['guest'],
     allows: [{
       resources: '/api/teams',
       permissions: ['get']
-    }, {
-      resources: '/api/teams/utils',
-      permissions: ['get']
-    }, {
-      resources: '/api/teams/:teamId.:userId/join',
-      permissions: '*'
     },{
       resources: '/api/teams/:teamId',
+      permissions: ['get']
+    }, {
+      resources: '/api/teams/:teamIdRaw/raw',
       permissions: ['get']
     }]
   }]);

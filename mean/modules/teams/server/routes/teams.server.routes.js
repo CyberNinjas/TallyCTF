@@ -13,21 +13,22 @@ module.exports = function (app) {
     .post(teams.create)
     .delete(teams.clear);
 
-  /*  app.route('/api/teams/join').all(teamsPolicy.isAllowed)
-      .put(teams.addMembers);
-  */
+  app.route('/api/teams/requests').all(teamsPolicy.isAllowed)
+    .get(teams.findRequests);
+
 
   // Single team routes
-  app.route('/api/teams/utils').all(teamsPolicy.isAllowed)
-    .get(teams.listUsers);
-    
   app.route('/api/teams/:teamId').all(teamsPolicy.isAllowed)
     .get(teams.read)
     .put(teams.update)
     .delete(teams.delete);
 
+  app.route('/api/teams/:teamIdRaw/raw').all(teamsPolicy.isAllowed)
+    .get(teams.read);
+
   app.route('/api/teams/:teamId.:userId/join').all(teamsPolicy.isAllowed)
-        .put(teams.addMembers);
+        .put(teams.askToJoin)
+        .patch(teams.requestToJoin);
 
   app.route('/api/teams/:teamId.:userId/ctl').all(teamsPolicy.isAllowedToAccept)
       .put(teams.decline)
@@ -37,4 +38,5 @@ module.exports = function (app) {
 
   // Finish by binding the team middleware
   app.param('teamId', teams.teamByID);
+  app.param('teamIdRaw', teams.teamByIDRaw);
 };

@@ -7,23 +7,20 @@ angular.module('teams')
        return $resource('api/teams/:teamId', {
           teamId: '@_id'
         }, {
+       findRequests: {
+           url: 'api/teams/requests',
+           method: 'GET',
+           isArray: true
+       },
         update: {
           method: 'PUT'
         },
+        getRaw: {
+          url: 'api/teams/:teamId/raw',
+          method: 'GET'
+        }
     });
   }
-])
-.factory('Teams1', ['$resource',
-    function ($resource) {
-        return $resource('api/teams/:teamId.:userId/join', {
-          teamId: '@_id',
-          userId: '@temp'
-        }, {
-            update: {
-                method: 'PUT'
-            },
-        });
-    }
 ])
 .factory('TeamsCtl', ['$resource',
     function ($resource) {
@@ -37,18 +34,17 @@ angular.module('teams')
             decline: {
               method: 'PUT'
             },
+            askToJoin: {
+              url: 'api/teams/:teamId.:userId/join',
+              method: 'PUT'
+            },
+            requestToJoin: {
+              url: 'api/teams/:teamId.:userId/join',
+              method: 'PATCH'
+            },
             remove: {
               method: 'PATCH'
             }
         });
     }
-])
-.factory('Utils', ['$resource', 
-  function ($resource) {
-    return $resource('api/teams/utils', {}, {
-      listUsers: {
-        method: 'GET', 
-        isArray: true
-      }
-    });
-}]);
+]);
