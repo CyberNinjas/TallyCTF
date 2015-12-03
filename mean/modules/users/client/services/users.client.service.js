@@ -6,6 +6,11 @@ angular.module('users').factory('Users', ['$resource',
     return $resource('api/users', {}, {
       update: {
         method: 'PUT'
+      },
+      listAvailableUsers: {
+        url: 'api/users/listAvailable',
+        method: 'GET',
+        isArray: true
       }
     });
   }

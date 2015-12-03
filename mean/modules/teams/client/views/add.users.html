@@ -1,13 +1,14 @@
-<section ng-controller="TeamsController" ng-init="findUsers()">
+<section ng-controller="TeamsController" ng-init="findAvailableUsers()">
   <div class="page-header">
     <h1>Add Users to you team...</h1>
   </div>
-  <div class="col-xs-6 col-xs-offset-3">
-    <div class="input-group">
+  <div>
+    <div class="input-group-lg">
         <input type="search" class="form-control" ng-model="search.username" placeholder="Search...">
     </div>
     <div class="list-group">
-	    <a class="list-group-item" ng-repeat="user in users | filter:search" ng-bind="user.username" ng-click="addUser(user)" style="cursor: pointer" ng-show="user.team === undefined"></a>
+	    <a class="list-group-item" ng-repeat="user in users | filter:search" ng-bind="user.username" ng-click="addUser(user)" style="cursor: pointer" ng-if="shouldAdd(user)"></a>
+      <p class="alert alert-warning text-center" ng-if="users.$resolved && !count">There are currently no available users to add :(</p>
 	</div>
   </div>
 </section>

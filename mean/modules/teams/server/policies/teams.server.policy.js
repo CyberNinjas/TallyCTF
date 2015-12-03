@@ -18,13 +18,13 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/teams',
       permissions: '*'
     }, {
-      resources: '/api/teams/utils',
-      permissions: ['get']
-    }, {
       resources: '/api/teams/:teamId.:userId/join',
       permissions: '*'
     }, {
       resources: '/api/teams/:teamId',
+      permissions: '*'
+    }, {
+      resources: '/api/teams/:teamIdRaw/raw',
       permissions: '*'
     }, {
       resources: '/api/teams/:teamId.:userId/ctl',
@@ -34,23 +34,23 @@ exports.invokeRolesPolicies = function () {
     roles: ['user'],
     allows: [{
       resources: '/api/teams',
-      permissions: ['get', 'post','put']
-    }, {
-      resources: '/api/teams/utils',
-      permissions: ['get']
+      permissions: ['get', 'post']
     }, {
       resources: '/api/teams/:teamId',
-      permissions: ['get','put', 'post']
+      permissions: ['get', 'put']
+    }, {
+      resources: '/api/teams/:teamId.:userId/join',
+      permissions: ['patch']
     }]
   }, {
     roles: ['teamCaptain'],
     allows: [
     {
+      resources: '/api/teams/:teamIdRaw/raw',
+      permissions: ['get']
+    }, {
       resources: '/api/teams/:teamId.:userId/join',
       permissions: '*'
-    }, {
-      resources: '/api/teams/utils',
-      permissions: ['get']
     }, {
       resources: '/api/teams/:teamId.:userId/ctl',
       permissions: '*'
@@ -60,14 +60,11 @@ exports.invokeRolesPolicies = function () {
     allows: [{
       resources: '/api/teams',
       permissions: ['get']
-    }, {
-      resources: '/api/teams/utils',
-      permissions: ['get']
-    }, {
-      resources: '/api/teams/:teamId.:userId/join',
-      permissions: '*'
     },{
       resources: '/api/teams/:teamId',
+      permissions: ['get']
+    }, {
+      resources: '/api/teams/:teamIdRaw/raw',
       permissions: ['get']
     }]
   }]);

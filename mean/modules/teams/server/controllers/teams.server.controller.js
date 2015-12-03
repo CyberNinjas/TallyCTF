@@ -26,7 +26,6 @@ exports.create = function (req, res) {
   // Save the user
   user.save(function (err) {
     if (err) {
-      console.log(err);
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -36,27 +35,23 @@ exports.create = function (req, res) {
           res.status(400).send({
             message: errorHandler.getErrorMessage(err)
           });
-        } else {
-          console.log("saved user");
         }
       });
     }
   });
 
+  // Save the score board
   scoreBoard.save(function (err) {
     if (err) {
-      console.log("SCOREBOARD SAVE");
-      console.log(err);
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     }
   });
 
+  // Save the team
   team.save(function (err) {
     if (err) {
-      console.log("TEAM SAVE");
-      console.log(err);
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -77,12 +72,13 @@ exports.read = function (req, res) {
  * Update a team
  */
 exports.update = function (req, res) {
-  console.log(req);
   var team = req.team;
+
   team.teamName = req.body.teamName;
   team.requestToJoin = req.body.requestToJoin;
   team.members = req.body.members;
   team.askToJoin = req.body.askToJoin;
+  
   var capt = req.team.teamCaptain;
   capt.notifications+=1;
   capt.save(function (err) {
@@ -154,7 +150,7 @@ exports.accept = function(req, res) {
 
 };
 
-exports.decline = function(req, res) {
+exports.decline = function (req, res) {
   var team = req.team;
   var user = req.model;
 
@@ -198,28 +194,23 @@ exports.decline = function(req, res) {
   });
 };
 
-exports.addMembers = function(req,res){
+/**
+ * Allows a team captain to add users (ask to, at least)
+ */
+exports.askToJoin = function (req, res) {
   var team = req.team;
   var user = req.model;
 
   team.askToJoin.push(user._id);
   user.askToJoin.push(team._id);
 
-  console.log("**************************");
-  console.log(team);
-  console.log(user);
-  console.log("**************************");
-
   team.save(function (err) {
-    console.log("I'm inside the save function");
     if (err) {
-      console.log(err);
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
       res.json(team);
-      console.log("asdfasdfasdf");
     }
   });
   
@@ -229,7 +220,34 @@ exports.addMembers = function(req,res){
         message: errorHandler.getErrorMessage(err)
       });
   });
+};
 
+/**
+ * Allows a team captain to add users (ask to, at least)
+ */
+exports.requestToJoin = function (req, res) {
+  var team = req.team;
+  var user = req.model;
+
+  team.requestToJoin.push(user._id);
+  user.requestToJoin.push(team._id);
+
+  team.save(function (err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json(team);
+    }
+  });
+  
+  user.save(function (err) {
+    if (err)
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+  });
 };
 
 /**
@@ -409,33 +427,13 @@ exports.delete = function (req, res) {
  * List of Teams
  */
 exports.list = function (req, res) {
-  Team.find().sort('-created')
-      .populate('members', 'username')
-      .populate('requestToJoin', 'username')
-      .populate('askToJoin', 'username')
-      .populate('teamCaptain','username')
-      .exec(function (err, teams) {
+  Team.find().sort('-created').exec(function (err, teams) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
       res.json(teams);
-    }
-  });
-};
-
-/**
- * List all user names
- */
-exports.listUsers = function (req, res) {
-  User.find({}, 'username team').exec(function (err, users) {
-    if (err) {
-      return res.status(400).send({
-      message: 'Team is invalid'
-    });
-    } else {
-      res.json(users);
     }
   });
 };
@@ -457,6 +455,30 @@ exports.teamByID = function (req, res, next, id) {
       .populate('askToJoin', 'username')
       .populate('teamCaptain','username notifications')
       .exec(function (err, team) {
+    if (err) {
+      return next(err);
+    } else if (!team) {
+      return res.status(404).send({
+        message: 'No team with that identifier has been found'
+      });
+    }
+    req.team = team;
+    next();
+  });
+};
+
+/**
+ * Team middleware (without population of fields)
+ */
+exports.teamByIDRaw = function (req, res, next, id) {
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).send({
+      message: 'Team is invalid'
+    });
+  }
+
+  Team.findById(id).exec(function (err, team) {
     if (err) {
       return next(err);
     } else if (!team) {
