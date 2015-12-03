@@ -7,6 +7,11 @@ angular.module('teams')
        return $resource('api/teams/:teamId', {
           teamId: '@_id'
         }, {
+       findRequests: {
+           url: 'api/teams/requests',
+           method: 'GET',
+           isArray: true
+       },
         update: {
           method: 'PUT'
         },

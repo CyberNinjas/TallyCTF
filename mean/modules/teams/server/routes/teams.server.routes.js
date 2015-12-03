@@ -13,9 +13,9 @@ module.exports = function (app) {
     .post(teams.create)
     .delete(teams.clear);
 
-  /*  app.route('/api/teams/join').all(teamsPolicy.isAllowed)
-      .put(teams.addMembers);
-  */
+  app.route('/api/teams/requests').all(teamsPolicy.isAllowed)
+    .get(teams.findRequests);
+
 
   // Single team routes
   app.route('/api/teams/:teamId').all(teamsPolicy.isAllowed)

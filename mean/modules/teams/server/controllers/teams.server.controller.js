@@ -467,6 +467,25 @@ exports.teamByID = function (req, res, next, id) {
   });
 };
 
+
+exports.findRequests = function (req, res) {
+  var combines = req.user.requestToJoin.concat(req.user.askToJoin);
+
+  Team.find({
+    '_id': { $in: combines }
+  }).select('teamName')
+    .exec(function (err, teams) {
+      if(err){
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        teams.push(req.user.askToJoin.length);
+        res.json(teams);
+      }
+  });
+};
+
 /**
  * Team middleware (without population of fields)
  */

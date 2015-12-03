@@ -164,11 +164,34 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
 
     // Find existing Team
     $scope.findTeam = function () {
-      $scope.mteam = Teams.get({
-        teamId: Authentication.user.team
-      });
+      if(Authentication.user.team){
+        $scope.mteam = Teams.get({
+          teamId: Authentication.user.team
+        });
+      } else{
+        var teams = Teams.findRequests(function () {
+          console.log(teams);
+          var len = teams.pop();
+
+          console.log(teams);
+          console.log(len);
+
+          $scope.askTeams = [];
+
+          while (len--)
+            $scope.askTeams.push(teams.pop());
+
+          $scope.requestTeams = teams;
+
+        });
+      }
     };
 
+    $scope.findTeamName = function(id){
+
+     // return $scope.requestTeam.teamName;
+
+    };
     // Finds available users to add
     $scope.findAvailableUsers = function(){
        $scope.users = Users.listAvailableUsers();
