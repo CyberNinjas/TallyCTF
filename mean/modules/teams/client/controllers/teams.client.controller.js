@@ -24,19 +24,18 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
 
       // Redirect after save
       team.$save(function (response) {
-
         Authentication.user.team = response._id;
-        var user = new Users($scope.authentication);
+        //var user = new Users($scope.authentication);
 
-        user.$update(function (response) {
-          $scope.success = true;
-          Authentication.user = response;
-          $state.go('teams.add');
-        }, function (response) {
-          $scope.error = response.data.message;
-        });
+        // user.$update(function (response) {
+        //   $scope.success = true;
+        //   Authentication.user = response;
+        // }, function (response) {
+        //   $scope.error = response.data.message;
+        // });
 
         $scope.teamName = '';
+        $state.go('teams.add');
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
@@ -134,20 +133,32 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       TeamsCtl.remove($scope.team);
     };
 
+    // Allows a user to accept a team or vice-versa
+    $scope.accept = function(usr, cond) {
+      var user = (usr ? usr : Authentication.user);
+      var team = (typeof cond === Number ? $scope.mteam : cond);
 
-    $scope.accept = function(user, index) {
-      var add = $scope.mteam.requestToJoin.splice(index, 1);
-      console.log(add);
-      $scope.mteam.members.push(add[0]);
-      $scope.mteam.temp = user._id;
-      TeamsCtl.accept($scope.mteam);
+      if (Authentication.user.team) {
+        var add = team.requestToJoin.splice(cond, 1);
+        team.members.push(add[0]);
+      }
+
+      team.temp = user._id;
+      TeamsCtl.accept(team);
     };
 
+    // Allows a user to decline a team or vice-versa
+    $scope.decline = function(usr, index, tm) {
+      var user = (usr ? usr : Authentication.user);
+      var team = (tm ? tm : $scope.mteam);
 
-    $scope.decline = function(user, index) {
-      $scope.mteam.temp = user._id;
-      TeamsCtl.decline($scope.mteam);
-      $scope.mteam.requestToJoin.splice(index, 1);
+      if (Authentication.user.team)
+        team.requestToJoin.splice(index, 1);
+      else
+        $scope.askTeams.splice(index, 1);
+
+      team.temp = user._id;
+      TeamsCtl.decline(team);
     };
 
     // Find a list of Teams
@@ -169,29 +180,18 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
           teamId: Authentication.user.team
         });
       } else{
-        var teams = Teams.findRequests(function () {
-          console.log(teams);
-          var len = teams.pop();
-
-          console.log(teams);
-          console.log(len);
-
+        $scope.teams = Teams.findRequests(function () {
+          var len = $scope.teams.pop();
           $scope.askTeams = [];
 
           while (len--)
-            $scope.askTeams.push(teams.pop());
+            $scope.askTeams.push($scope.teams.pop());
 
-          $scope.requestTeams = teams;
-
+          $scope.requestTeams = $scope.teams;
         });
       }
     };
 
-    $scope.findTeamName = function(id){
-
-     // return $scope.requestTeam.teamName;
-
-    };
     // Finds available users to add
     $scope.findAvailableUsers = function(){
        $scope.users = Users.listAvailableUsers();
@@ -202,16 +202,19 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
     };
 
     //teamMember and teamCaptain are mutually exclusive
-    $scope.shouldRender = function (role, usr) {
+    $scope.shouldRender = function (rle, usr) {
+      var role = (rle.length ? rle : [rle]);
       var user = (usr ? usr : Authentication.user);
 
-      if (role === 'user') {
+      if (role.indexOf('user') !== -1) {
         return (user && 
           (user.roles.indexOf('teamCaptain') === -1 ) &&
           (user.roles.indexOf('teamMember') === -1));
       }
 
-      return (user && user.roles.indexOf(role) !== -1);
+      for (var i = 0; i < role.length; ++i)
+        if (user && user.roles.indexOf(role[i]) !== -1)
+          return true;
     };
 
     // Checks which users should show up on the add users page

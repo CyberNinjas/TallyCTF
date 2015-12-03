@@ -6,7 +6,7 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   Team = mongoose.model('Team'),
-  User =mongoose.model('User'),
+  User = mongoose.model('User'),
   ScoreBoard = mongoose.model('ScoreBoard'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
@@ -17,46 +17,36 @@ exports.create = function (req, res) {
   var team = new Team(req.body);
   var user = req.user;
 
-  // Make the requesting user the team captain
-  user.roles.push('teamCaptain');
-
-  var scoreBoard = new ScoreBoard();
-  scoreBoard.team = team._id;
-
-  // Save the user
-  user.save(function (err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      req.login(user, function (err) {
-        if (err) {
-          res.status(400).send({
-            message: errorHandler.getErrorMessage(err)
-          });
-        }
-      });
-    }
-  });
-
-  // Save the score board
-  scoreBoard.save(function (err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    }
-  });
-
-  // Save the team
+  // Save the user / team
   team.save(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(team);
+      // Update the user's data
+      user.roles.push('teamCaptain');
+      user.team = team._id;
+
+      // Save the user
+      user.save(function (err) {
+        if (err) {
+          team.remove();
+          return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+          });
+        } else {
+          req.login(user, function (err) {
+            if (err) {
+              res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+              });
+            } else {
+              res.json(team);
+            }
+          });
+        }
+      });
     }
   });
 };
@@ -98,19 +88,24 @@ exports.update = function (req, res) {
 
 };
 
+/**
+ * Adds a user to a team or vice-versa
+ */
 exports.accept = function(req, res) {
   var team = req.team;
   var user = req.model;
-  console.log("NOTIFICATIONS");
-  console.log(user.notifications);
-  user.notifications+=1;
+  var capt = (user.roles.indexOf('teamCaptain') && team.teamCaptain._id.toString() === user._id);
 
+  // Used in the for loop below
   var reqLen = team.requestToJoin.length;
   var askLen = team.askToJoin.length;
   var max = ((reqLen > askLen) ? reqLen : askLen);
 
+  // This works by finding the max size and iterating over the max, skipping the smaller
+  // array once the index is over the smaller array's max
+  // Check if the requested user is in either array
   for (var i = 0; i < max; ++i) {
-    if (i < reqLen && team.requestToJoin[i]._id.toString() === user._id.toString()) {
+    if (i < reqLen && team.requestToJoin[i]._id.toString() === user._id.toString() && capt) {
       team.requestToJoin.splice(i, 1);
       team.members.push(user._id);
       break;
@@ -135,11 +130,9 @@ exports.accept = function(req, res) {
       message: "User is already a member of a team!"
     });
 
-
+  // FIXME: Support reverting changes on the user when this fails
   team.save(function (err) {
-    console.log("I'm inside the save function");
     if (err) {
-      console.log(err);
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -153,27 +146,38 @@ exports.accept = function(req, res) {
 exports.decline = function (req, res) {
   var team = req.team;
   var user = req.model;
+  var capt = (user.roles.indexOf('teamCaptain') && team.teamCaptain._id.toString() === user._id);
 
-  user.notifications+=1;
+  var reqLen = team.requestToJoin.length;
+  var askLen = team.askToJoin.length;
+  var max = ((reqLen > askLen) ? reqLen : askLen);
 
   // FIXME: This will fail if user both is requested to join a team and requests to join
   // FIXME: a team. Consider using a hash for the user requests. (Or a JSON. Whatever)
-  // Remove user from list of requests
-  for (var i = 0; i < team.requestToJoin.length; ++i) {
-    if (team.requestToJoin[i]._id.toString()=== user._id.toString()) {
+  // This works by finding the max size and iterating over the max, skipping the smaller
+  // array once the index is over the smaller array's max
+  // Remove user the lists
+  for (var i = 0; i < max; ++i) {
+    if (i < reqLen && team.requestToJoin[i]._id.toString() === user._id.toString() && capt) {
       team.requestToJoin.splice(i, 1);
+      user.requestToJoin.splice(user.requestToJoin.indexOf(team._id), 1);
+      break;
+    }
+
+    if (i < askLen && team.askToJoin[i]._id.toString() === user._id.toString()) {
+      // Remove the user's request fom the user
+      user.askToJoin.splice(user.askToJoin.indexOf(team._id), 1);
+      team.askToJoin.splice(i, 1);
       break;
     }
 
     // If it didn't find a user, fail
-    if (i === team.requestToJoin.length - 1)
+    if (i === max - 1)
       return res.status(400).send({
         message: "Invalid User to add"
       });
   }
 
-  // Remove the user's request fom the user
-  user.requestToJoin.splice(user.requestToJoin.indexOf(team._id), 1);
   user.save(function (err) {
     if (err)
       return res.status(400).send({
@@ -303,10 +307,10 @@ exports.addTeamToUser = function (user, team) {
   if (user.roles.indexOf('teamMember') !== -1)
     return false;
 
-  // Remove user from being a teamCaptain
-  var index = user.roles.indexOf('teamCaptain');
-  if (index !== -1)
-    user.roles.splice(index, 1);
+  // // Remove user from being a teamCaptain
+  // var index = user.roles.indexOf('teamCaptain');
+  // if (index !== -1)
+  //   user.roles.splice(index, 1);
 
   // Add them as team member and update relevant info
   user.roles.push('teamMember');
@@ -335,9 +339,9 @@ exports.addTeamToUser = function (user, team) {
       return false;
 
     for (var i = 0; i < teams.length; ++i) {
-      var index = teams[i].requestToJoin.indexOf(user._id);
+      var index = teams[i].askToJoin.indexOf(user._id);
       if (index !== -1) {
-        teams[i].requestToJoin.splice(index, 1);
+        teams[i].askToJoin.splice(index, 1);
         // FIXME: Have a way to handle this failing
         teams[i].save();
       }
@@ -372,6 +376,19 @@ exports.clear = function(req,res){
  */
 exports.delete = function (req, res) {
   var team = req.team;
+  var user = req.user;
+
+  console.log(user.team.toString());
+
+  // Make sure the person deleting this can delete this
+  if ((user.roles.indexOf('admin') === -1) &&
+    (!user || user.team.toString() !== team._id.toString())) {
+
+    return res.status(503).send({
+        message: "Not authorized to delete this team!"
+      });
+  }
+
 
   // Update all members / requestees / requesters of team deletion
   var members = User.find({

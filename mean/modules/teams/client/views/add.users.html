@@ -9,6 +9,6 @@
     <div class="list-group">
 	    <a class="list-group-item" ng-repeat="user in users | filter:search" ng-bind="user.username" ng-click="addUser(user)" style="cursor: pointer" ng-if="shouldAdd(user)"></a>
       <p class="alert alert-warning text-center" ng-if="users.$resolved && !count">There are currently no available users to add :(</p>
-	</div>
+    </div>
   </div>
 </section>
