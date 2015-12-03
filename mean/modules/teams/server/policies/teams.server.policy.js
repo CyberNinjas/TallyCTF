@@ -18,47 +18,67 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/teams',
       permissions: '*'
     }, {
-      resources: '/api/teams/ctl',
+      resources: '/api/teams/:teamId.:userId/join',
       permissions: '*'
     }, {
-      resources: '/api/teams/join',
-      permissions: '*'
-    }, { 
       resources: '/api/teams/:teamId',
+      permissions: '*'
+    }, {
+      resources: '/api/teams/:teamIdRaw/raw',
+      permissions: '*'
+    }, {
+      resources: '/api/teams/:teamId.:userId/ctl',
+      permissions: '*'
+    }]
+  }, {
+    roles: ['teamCaptain'],
+    allows: [
+    {
+      resources: '/api/teams/:teamId',
+      permissions: ['delete']
+    }, {
+      resources: '/api/teams/:teamIdRaw/raw',
+      permissions: ['get']
+    }, {
+      resources: '/api/teams/:teamId.:userId/join',
+      permissions: '*'
+    }, {
+      resources: '/api/teams/:teamId.:userId/ctl',
       permissions: '*'
     }]
   }, {
     roles: ['user'],
     allows: [{
       resources: '/api/teams',
-      permissions: ['get', 'post','put']
+      permissions: ['get', 'post']
+    }, {
+      resources: '/api/teams/requests',
+      permissions: ['get']
     }, {
       resources: '/api/teams/:teamId',
-      permissions: ['get','put', 'post']
+      permissions: ['get', 'put']
+    }, {
+      resources: '/api/teams/:teamId.:userId/join',
+      permissions: ['patch']
+    }, {
+      resources: '/api/teams/:teamId.:userId/ctl',
+      permissions: ['put', 'post']
     }]
   }, {
-    roles: ['teamCaptain'],
-    allows: [
-      {
-        resources: '/api/teams/ctl',
-        permissions: '*'
-      }
-    ]
-  },{
     roles: ['guest'],
     allows: [{
       resources: '/api/teams',
       permissions: ['get']
-    }, {
+    },{
       resources: '/api/teams/:teamId',
+      permissions: ['get']
+    }, {
+      resources: '/api/teams/:teamIdRaw/raw',
       permissions: ['get']
     }]
   }]);
 };
 
-/**
- * Check If Teams Policy Allows
- */
 exports.isAllowed = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
   // If a team is being processed and the current user created it then allow any manipulation
@@ -88,9 +108,9 @@ exports.isAllowedToAccept = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
   // If a team is being processed and the current user created it then allow any manipulation
   console.log(req.body.team);
-  if (req.user ===req.body.team.teamCaptain) {
-    return next();
-  }
+  //if (req.body.team && req.user === req.body.team.teamCaptain) {
+    //return next();
+  //}
 
   // Check for user roles
   acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(), function (err, isAllowed) {

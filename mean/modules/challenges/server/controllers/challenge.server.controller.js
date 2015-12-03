@@ -109,6 +109,15 @@ exports.submit = function(req, res) {
     console.log(attempt);
     console.log(challenge);
     if (attempt === challenge.flag){
+      challenge.solves += 1;
+      challenge.save(function (err) {
+        if (err) {
+          console.log(err);
+          return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+          });
+        }
+      });
       console.log("Correct Answer!");
       Team.findById(teamId).exec(function (err, team) {
         if (err) {
@@ -121,6 +130,7 @@ exports.submit = function(req, res) {
             message: 'No challenges with that identifier has been found'
           });
         }
+        console.log("Get to the Scoreboard");
         //get the scoreboard
         ScoreBoard.findById(team.scoreBoard).exec( function (err, scoreBoard) {
           if(err){
@@ -149,7 +159,8 @@ exports.submit = function(req, res) {
         });
       });
       return res.status(200).send({
-        message: 'Correct'
+        message: 'Correct',
+        solves: challenge.solves
       });
     }
     else{

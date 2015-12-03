@@ -242,3 +242,24 @@ exports.removeOAuthProvider = function (req, res, next) {
     }
   });
 };
+
+/**
+ * List all available users, or all users
+ */
+exports.listAvailableUsers = function (req, res) {
+  var user = req.user;
+
+  User.find({}, 'username team')
+  .where('team').exists(false)
+  // .where('_id').nin(user.team.requestToJoin)
+  // .where('_id').nin(user.team.askToJoin)
+  .exec(function (err, users) {
+    if (err) {
+      return res.status(400).send({
+      message: 'Something went wrong in listing available users!'
+    });
+    } else {
+      res.json(users);
+    }
+  });
+};

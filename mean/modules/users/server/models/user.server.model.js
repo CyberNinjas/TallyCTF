@@ -109,14 +109,18 @@ var UserSchema = new Schema({
     type: String,
     default: ""
   },
-  score: {
-    type: Number,
-    default: 0
-  },
   notifications: {
     type: Number,
     default: 0
-  }
+  },
+  askToJoin: [{
+    type: Schema.Types.ObjectId,
+    ref: "Team"
+  }],
+  requestToJoin: [{
+    type: Schema.Types.ObjectId,
+    ref: "Team"
+  }],
 });
 
 /**

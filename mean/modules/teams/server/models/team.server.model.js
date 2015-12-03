@@ -16,12 +16,6 @@ var TeamSchema = new Schema({
     unique: 'Team Name already exists',
     default: ''
   },
-  scoreBoard: {
-    type: Schema.Types.ObjectId,
-    ref: 'ScoreBoard',
-    required:'each team must have a scoreboard object ref',
-    unique: 'each scoreboard can belong to one team'
-  },
   teamCaptain: {
     type: Schema.Types.ObjectId,
     ref: 'User',

@@ -6,14 +6,16 @@ angular.module('challenges').run(['Menus',
     // Add the scoreBoard dropdown item
     Menus.addMenuItem('topbar', {
       title: 'Challenges',
-      state: 'challenges.list',
-      roles: ['*']
+      state: 'challenges',
+      type: 'dropdown',
+      //state: 'challenges.list',
     });
 
     // Add the dropdown list item
     Menus.addSubMenuItem('topbar', 'challenges', {
       title: 'List Challenges',
-      state: 'challenges.list'
+      state: 'challenges.list',
+      roles: ['*']
     });
 
     // Add the dropdown list item

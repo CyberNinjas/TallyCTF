@@ -1,40 +1,43 @@
 <section ng-controller="TeamsController" ng-init="findTeam()">
   <div class="page-header">
-<h1>
-  <span ng-bind="mteam.teamName"></span>
-</h1>
-    <div ng-if="shouldRender('teamCaptain')||shouldRender('teamMember')" class="list-group">
+    <h1>
+      <span ng-bind="mteam.teamName"></span>
+    </h1>
+    <div ng-if="shouldRender(['teamCaptain', 'teamMember'])" class="list-group">
       <h3>Roster</h3>
       <a ng-repeat="member in mteam.members" class="list-group-item">
-        <small class="list-group-item-text">
-          <span ng-bind=member.username></span>
-        </small>
-       <!-- <h4 class="list-group-item-heading" ng-bind="current.teamName"></h4> -->
+        <h4 ng-bind="member.username" class="list-group-item-heading"></h4>
       </a>
     </div>
-    <div ng-if="shouldRender('user')" class="list-group">
-      <h3>Pending teams</h3>
-      <a ng-repeat="request in mteam.requestToJoin" class="list-group-item">
-        <small class="list-group-item-text">
-          <span ng-bind=member.username></span>
-        </small>
-        <!-- <h4 class="list-group-item-heading" ng-bind="current.teamName"></h4> -->
-      </a>
-    </div>
-    <div ng-if="shouldRender('teamCaptain')" class="list-group">
-      <h3>Pending invites</h3>
-      <a ng-repeat="request in mteam.requestToJoin" class="list-group-item">
-        <small class="list-group-item-text">
-          <div class="pull-right">
-            <button ng-click='decline($index)'>Decline</button>
-          </div>
-          <div class="pull-right">
-            <button ng-click='accept(request)'>Accept</button>
-          </div>
-          <span ng-bind=request.username></span>
-        </small>
-        <!-- <h4 class="list-group-item-heading" ng-bind="current.teamName"></h4> -->
-      </a>
+    <div ng-if="shouldRender('user')">
+      <div class="row">
+        <h2>Teams that want you :D</h2>
+        <div class="list-group">
+          <a ng-repeat="ask in askTeams" class="list-group-item">
+            <small class="list-group-item-text">
+              <div class="pull-right">
+                <button ng-click='decline(undefined, $index, ask)'>Decline</button>
+              </div>
+              <div class="pull-right">
+                <button ng-click='accept(undefined, ask)'>Accept</button>
+              </div>
+            </small>
+            <h4 ng-bind="ask.teamName" class="list-group-item-heading"></h4>
+            <!-- <h4 class="list-group-item-heading" ng-bind="current.teamName"></h4> -->
+          </a>
+          <p class="alert alert-warning text-center" ng-if="teams.$resolved && !askTeams.length">No one wants you (yet)</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <h2>Teams that have yet to respond :(</h2>
+        <div class="list-group">
+          <a ng-repeat="request in requestTeams" class="list-group-item">
+            <span ng-bind="request.teamName"></span>
+          </a>
+          <p class="alert alert-warning text-center" ng-if="teams.$resolved && !requestTeams.length">No requests!</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>

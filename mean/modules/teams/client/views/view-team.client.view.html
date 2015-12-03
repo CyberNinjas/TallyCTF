@@ -1,22 +1,39 @@
 <section ng-controller="TeamsController" ng-init="findOne()">
   <div class="page-header">
+    <div class="pull-right" ng-if="shouldRender(['admin', 'teamCaptain'])">
+      <a class="btn btn-primary" ui-sref="teams.edit({teamId: team._id})">
+        <i class="glyphicon glyphicon-edit"></i>
+      </a>
+      <a class="btn btn-primary" ng-click="remove();">
+        <i class="glyphicon glyphicon-trash"></i>
+      </a>
+    </div>
     <h1 ng-bind="team.teamName"></h1>
   </div>
-  <div class="pull-right" ng-show="authentication.user._id == team.user._id">
-    <a class="btn btn-primary" ui-sref="teams.edit({teamId: team._id})">
-      <i class="glyphicon glyphicon-edit"></i>
-    </a>
-    <a class="btn btn-primary" ng-click="remove();">
-      <i class="glyphicon glyphicon-trash"></i>
+  <h2>Team Members</h2>
+  <div class="list-group">
+    <div class="list-group-item" ng-repeat="member in team.members">
+      <div ng-show="member.roles.indexOf('teamCaptain') !== -1" class="pull-right">
+        <small>
+          <p>Team Captain</p>
+        </small>
+      </div>
+      <span ng-bind="member.username"></span>
+    </div>
+  </div>
+  <div ng-if="shouldRender('teamCaptain')" class="list-group">
+    <h3>Pending requests</h3>
+    <a ng-repeat="request in mteam.requestToJoin" class="list-group-item">
+      <small class="list-group-item-text">
+        <div class="pull-right">
+          <button ng-click='decline(request, $index)'>Decline</button>
+        </div>
+        <div class="pull-right">
+          <button ng-click='accept(request, $index)'>Accept</button>
+        </div>
+      </small>
+      <h4 ng-bind="request.username" class="list-group-item-heading"></h4>
+      <p class="alert alert-warning text-center" ng-if="!requestTeams.length">No pending requests!</p>
     </a>
   </div>
-  <small>
-    <em class="text-muted">
-      Posted on
-      <span ng-bind="team.created | date:'mediumDate'"></span>
-      by
-      <span ng-bind="team.user.displayName"></span>
-    </em>
-  </small>
-  <p class="lead" ng-bind="team.content"></p>
 </section>

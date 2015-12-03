@@ -1,11 +1,12 @@
 'use strict';
 
-angular.module('core').controller('HeaderController', ['$scope', '$state', 'Authentication', 'Menus','Users',
-  function ($scope, $state, Authentication, Menus, Users) {
+angular.module('core').controller('HeaderController', ['$scope', '$interval','$state', 'Authentication', 'Menus','Users','Teams',
+  function ($scope, $interval, $state, Authentication, Menus, Users, Teams) {
     // Expose view variables
     $scope.$state = $state;
     $scope.authentication = Authentication;
     $scope.user = Users;
+    $scope.team = Teams;
     // Get the topbar menu
     $scope.menu = Menus.getMenu('topbar');
 
@@ -36,5 +37,15 @@ angular.module('core').controller('HeaderController', ['$scope', '$state', 'Auth
         $scope.error = response.data.message;
       });
     };
+    $scope.callAtInterval = function(){
+      $scope.mnotify = Authentication.user.notifications;
+      //$scope.team = Teams.query();
+      console.log($scope.mnotify);
+     // console.log("interval");
+    };
+
+    $interval(function(){$scope.callAtInterval();}, 5000);
   }
 ]);
+
+
