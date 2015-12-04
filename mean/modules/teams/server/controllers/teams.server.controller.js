@@ -29,6 +29,7 @@ exports.create = function (req, res) {
     } else {
       scoreBoard.save(function (err) {
         if (err) {
+          team.remove();
           return res.status(400).send({
             message: errorHandler.getErrorMessage(err)
           });

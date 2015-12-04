@@ -23,7 +23,7 @@ angular.module('teams').config(['$stateProvider',
         }
       })
       .state('teams.add',{
-        url:'/addusers',
+        url:'/addUsers',
         templateUrl: 'modules/teams/client/views/add.users.html',
         data: {
           roles: ['teamCaptain', 'admin']

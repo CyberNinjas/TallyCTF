@@ -69,6 +69,23 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
       }
       else return true;
     };
+    //have role 'teamMember', 'user'
+    //exclude 'teamcaptain' && include 'user'
+    $scope.displayExclude = function(role){
+      var mroles = Authentication.user.roles;
+      if (mroles.indexOf(role) > -1){
+        return false;
+      }
+      else return true;
+    };
+    $scope.displayInclude = function(role){
+      var mroles = Authentication.user.roles;
+      if (mroles.indexOf(role) > -1){
+        return true;
+      }
+      else return false;
+    };
+
 
 
     // Update existing Challenge
