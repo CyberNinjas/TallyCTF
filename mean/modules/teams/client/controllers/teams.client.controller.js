@@ -25,14 +25,6 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       // Redirect after save
       team.$save(function (response) {
         Authentication.user.team = response._id;
-        //var user = new Users($scope.authentication);
-
-        // user.$update(function (response) {
-        //   $scope.success = true;
-        //   Authentication.user = response;
-        // }, function (response) {
-        //   $scope.error = response.data.message;
-        // });
 
         $scope.teamName = '';
         $state.go('teams.view', {teamId: team._id});
@@ -201,7 +193,6 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
 
     //teamMember and teamCaptain are mutually exclusive
     $scope.shouldRender = function (rle, usr) {
-      console.log(typeof rle);
       var role = (typeof rle === 'string' ? [rle] : rle);
       var user = (usr ? usr : Authentication.user);
 
@@ -252,6 +243,16 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       // Increment the count of how many available users there are
       $scope.count += 1;
       return true;
+    };
+
+    // Checks if the current user is the captain of the team
+    $scope.isCaptain = function (tm) {
+      var team = (tm ? tm : $scope.team);
+
+      if (team && team.$resolved)
+        return (Authentication.user && Authentication.user.team.toString() === team._id.toString());
+
+      return false;
     };
   }
 ]);

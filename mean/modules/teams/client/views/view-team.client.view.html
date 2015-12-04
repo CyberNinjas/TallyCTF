@@ -1,6 +1,6 @@
 <section ng-controller="TeamsController" ng-init="findOne()">
   <div class="page-header">
-    <div class="pull-right" ng-if="shouldRender(['admin', 'teamCaptain'])">
+    <div class="pull-right" ng-if="shouldRender(['admin', 'teamCaptain']) && isCaptain()">
       <a class="btn btn-primary" ui-sref="teams.edit({teamId: team._id})">
         <i class="glyphicon glyphicon-edit"></i>
       </a>
@@ -33,7 +33,7 @@
         </div>
       </small>
       <h4 ng-bind="request.username" class="list-group-item-heading"></h4>
-      <p class="alert alert-warning text-center" ng-if="!team.requestToJoin">No pending requests!</p>
+      <p class="alert alert-warning text-center" ng-if="team.$resolved && !team.requestToJoin.length">No pending requests!</p>
     </a>
   </div>
 </section>
