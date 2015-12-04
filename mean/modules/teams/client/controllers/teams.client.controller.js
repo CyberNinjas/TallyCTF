@@ -114,6 +114,14 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
 
       // WARNING: Some sort of (effective) validation should be made
       $scope.team.temp = user._id;
+      for (var i = 0; i < $scope.users.length; ++i) {
+        if ($scope.users[i]._id.toString() === user._id.toString()) {
+          $scope.users.splice(i, 1);
+          $scope.count--;
+          break;
+        }
+      }
+
       TeamsCtl.askToJoin($scope.team);
     };
 
@@ -249,9 +257,10 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
     $scope.isCaptain = function (tm) {
       var team = (tm ? tm : $scope.team);
 
-      if (team && team.$resolved)
-        return (Authentication.user && team.teamCaptain._id.toString() === Authentication.user.team.toString() ||
-          Authentication.user.roles.indexOf('admin') > -1) ;
+      if (team && team.$resolved) {
+        return ((Authentication.user && team.teamCaptain._id.toString() === Authentication.user._id.toString()) ||
+          Authentication.user.roles.indexOf('admin') !== -1);
+      }
 
       return false;
     };

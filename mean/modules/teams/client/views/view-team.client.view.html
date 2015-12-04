@@ -10,7 +10,7 @@
     </div>
     <h1 ng-bind="team.teamName"></h1>
   </div>
-  <div class="pull-right" ng-if="shouldRender('teamCaptain')">
+  <div class="pull-right" ng-if="shouldRender('teamCaptain') && isCaptain()">
     <a class="btn btn-success" ui-sref="teams.add">
       <i class="glyphicon glyphicon-plus"></i>
     </a>
