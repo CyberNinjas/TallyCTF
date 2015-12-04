@@ -50,8 +50,8 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
           }
         }
       } else {
-        $scope.team.$remove(function () {
-          $location.path('teams');
+        $scope.team.$remove(function (response) {
+         $location.path('teams');
         });
       }
     };
@@ -250,7 +250,8 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       var team = (tm ? tm : $scope.team);
 
       if (team && team.$resolved)
-        return (Authentication.user && Authentication.user.team.toString() === team._id.toString());
+        return (Authentication.user && team.teamCaptain._id.toString() === Authentication.user.team.toString() ||
+          Authentication.user.roles.indexOf('admin') > -1) ;
 
       return false;
     };

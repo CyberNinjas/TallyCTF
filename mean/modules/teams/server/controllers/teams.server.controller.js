@@ -95,7 +95,6 @@ exports.accept = function(req, res) {
   console.log("beginning");
   var team = req.team;
   var user = req.model;
-  console.log(team.teamCaptain);
   var capt = (req.user.roles.indexOf('teamCaptain') !== -1 && team.teamCaptain._id.toString() === req.user._id.toString());
 
   // Used in the for loop below
@@ -383,7 +382,7 @@ exports.delete = function (req, res) {
 
   // Make sure the person deleting this can delete this
   if ((user.roles.indexOf('admin') === -1) &&
-    (!user || user.team.toString() !== team._id.toString())) {
+    (!user || team.teamCaptain._id.toString() !== user._id.toString())) {
 
     return res.status(503).send({
         message: "Not authorized to delete this team!"

@@ -10,6 +10,11 @@
     </div>
     <h1 ng-bind="team.teamName"></h1>
   </div>
+  <div class="pull-right" ng-if="shouldRender('teamCaptain')">
+    <a class="btn btn-success" ui-sref="teams.add">
+      <i class="glyphicon glyphicon-plus"></i>
+    </a>
+  </div>
   <h2>Team Members</h2>
   <div class="list-group">
     <div class="list-group-item" ng-repeat="member in team.members">
