@@ -1,5 +1,10 @@
 <section ng-controller="TeamsController" ng-init="find()">
   <div class="page-header">
+    <div class="pull-right" ng-if="shouldRender('user')">
+      <a class="btn btn-success" ui-sref="teams.create">
+        <i class="glyphicon glyphicon-plus"></i>
+      </a>
+    </div>
     <h1>Teams</h1>
   </div>
   <div class="list-group">

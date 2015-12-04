@@ -1,10 +1,67 @@
 'use strict';
 
 // Teams controller
-angular.module('teams').controller('TeamsController', ['$scope','$stateParams', '$location', '$state', 'Teams','Authentication','Users','TeamsCtl',
-  function ($scope, $stateParams, $location, $state, Teams, Authentication, Users, TeamsCtl) {
+angular.module('teams').controller('TeamsController', ['$scope','$stateParams', '$location', '$state', 'Teams','Authentication','Users','TeamsCtl', 'Socket',
+  function ($scope, $stateParams, $location, $state, Teams, Authentication, Users, TeamsCtl, Socket) {
     $scope.authentication = Authentication.user;
     $scope.users = Users;
+
+    // Setup the socket if it doesn't exist
+    if (!Socket.socket) {
+      Socket.connect();
+    }
+
+    Socket.on('userUpdate', function (message) {
+      if (!Authentication.user || message.recipients.indexOf(Authentication.user._id) === -1) {
+        console.log(message.recipients);
+        return;
+      }
+
+      switch (message.op) {
+        case 'insert':
+          if (!message.scopeField)
+            break;
+
+          var path = message.scopeField.split('.');
+          var root = $scope;
+          for (var i = 0; i < path.length; ++i)
+            root = (root[path[i]] ? root[path[i]] : root);
+
+          if (root)
+            root.push(message.data);
+
+          break;
+        case 'insertTeam':
+          if (!message.scopeField)
+            break;
+
+          path = message.scopeField.split('.');
+          root = $scope;
+          for (i = 0; i < path.length; ++i)
+            root = (root[path[i]] ? root[path[i]] : root);
+
+          if ($scope[root].indexOf(message.data))
+            $scope.team.members.push($scope[root].splice($scope[root].indexOf(message.data)));
+
+          break;
+        case 'remove':
+          console.log($scope[message.scopeField]);
+          for (var j = 0; $scope[message.scopeField] && j < $scope[message.scopeField].length; ++j) {
+            if ($scope[message.scopeField][j]._id.toString() === message.data.toString()) {
+              $scope[message.scopeField].splice(j, 1);
+              break;
+            }
+          }
+          break;
+        default:
+          break;
+      }
+    });
+
+    // Remove the event listener when the controller instance is destroyed
+    $scope.$on('$destroy', function () {
+      Socket.removeListener('userUpdate');
+    });
 
     // Create new Team
     $scope.create = function (isValid) {
@@ -24,15 +81,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
 
       // Redirect after save
       team.$save(function (response) {
-        Authentication.user.team = response._id;
-        //var user = new Users($scope.authentication);
-
-        // user.$update(function (response) {
-        //   $scope.success = true;
-        //   Authentication.user = response;
-        // }, function (response) {
-        //   $scope.error = response.data.message;
-        // });
+        Authentication.user = response;
 
         $scope.teamName = '';
         $state.go('teams.add');
@@ -58,7 +107,13 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
           }
         }
       } else {
-        $scope.team.$remove(function () {
+        $scope.team.$remove(function (response) {
+          var msg = {
+            recipients: response.members,
+            op: 'rmTeam'
+          };
+
+          Socket.emit('userUpdate', msg);
           $location.path('teams');
         });
       }
@@ -87,42 +142,32 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
 
     // User requests to join a team
     $scope.requestsToJoin = function (team) {
+      Socket.emit('userUpdate', {
+        recipients: [team.teamCaptain], 
+        op: 'insert',
+        scopeField: 'team.requestToJoin',
+        data: {username: Authentication.user.username, _id: Authentication.user._id}
+      });
+
       team.temp = Authentication.user._id;
       TeamsCtl.requestToJoin(team);
-      // // FIXME: Bad taste. Find a better way of getting access to the
-      // // FIXME: user's methods besides creating a new one.
-      // var user = new Users(Authentication.user);
-
-      // var flag = true;
-      // var requests = team.requestToJoin;
-
-      // console.log(flag);
-      // if(flag) {
-      //   team.teamCaptain.notifications+=1;
-      //   team.requestToJoin.push(user);
-      //   user.requestToJoin.push(team._id);
-
-      //   team.$update(function () {
-      //     $location.path('teams/' + team._id);
-      //   }, function (errorResponse) {
-      //     $scope.error = errorResponse.data.message;
-      //   });
-      //   user.$update(function (response) {
-      //     console.log(response);
-      //     Authentication.user = response;
-      //   }, function (response) {
-      //     $scope.error = response.data.message;
-      //   });
-      // }
     };
 
     //Adds the users to the team
     $scope.addUser = function (user) {
-      var teamID = $scope.mteam._id;
+      var teamID = $scope.team._id;
 
       // WARNING: Some sort of (effective) validation should be made
-      $scope.mteam.temp = user._id;
-      TeamsCtl.askToJoin($scope.mteam);
+      $scope.team.temp = user._id;
+      for (var i = 0; i < $scope.users.length; ++i) {
+        if ($scope.users[i]._id.toString() === user._id.toString()) {
+          $scope.users.splice(i, 1);
+          $scope.count--;
+          break;
+        }
+      }
+
+      TeamsCtl.askToJoin($scope.team);
     };
 
     // Remove a user from the team when editing the team
@@ -136,11 +181,18 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
     // Allows a user to accept a team or vice-versa
     $scope.accept = function(usr, cond) {
       var user = (usr ? usr : Authentication.user);
-      var team = (typeof cond === Number ? $scope.mteam : cond);
+      var team = (typeof cond === 'number' ? $scope.team : cond);
 
       if (Authentication.user.team) {
         var add = team.requestToJoin.splice(cond, 1);
         team.members.push(add[0]);
+
+        Socket.emit('userUpdate', {
+          recipients: [user._id],
+          op: 'insertTeam',
+          scopeField: 'team.askToJoin',
+          data: team._id
+        });
       }
 
       team.temp = user._id;
@@ -150,12 +202,20 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
     // Allows a user to decline a team or vice-versa
     $scope.decline = function(usr, index, tm) {
       var user = (usr ? usr : Authentication.user);
-      var team = (tm ? tm : $scope.mteam);
+      var team = (tm ? tm : $scope.team);
 
-      if (Authentication.user.team)
+      if (Authentication.user.team) {
+        Socket.emit('userUpdate', {
+          recipients: [user._id], 
+          op: 'remove',
+          field: 'requestToJoin',
+          scopeField: 'requestTeams',
+          data: team._id
+        });
         team.requestToJoin.splice(index, 1);
-      else
+      } else {
         $scope.askTeams.splice(index, 1);
+      }
 
       team.temp = user._id;
       TeamsCtl.decline(team);
@@ -193,7 +253,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
     // Finds available users to add
     $scope.findAvailableUsers = function(){
        $scope.users = Users.listAvailableUsers();
-       $scope.mteam = Teams.getRaw({teamId: Authentication.user.team});
+       $scope.team = Teams.getRaw({teamId: Authentication.user.team});
 
        // For UI, have a count of how many users are available to choose from
        $scope.count = 0;
@@ -201,7 +261,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
 
     //teamMember and teamCaptain are mutually exclusive
     $scope.shouldRender = function (rle, usr) {
-      var role = (rle.length ? rle : [rle]);
+      var role = (typeof rle === 'string' ? [rle] : rle);
       var user = (usr ? usr : Authentication.user);
 
       if (role.indexOf('user') !== -1) {
@@ -220,11 +280,11 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       var user = (usr ? usr : Authentication.user);
 
       // Make sure that there is a user to check for / a team to check from!
-      if (!user || !$scope.mteam.$resolved)
+      if (!user || !$scope.team.$resolved)
         return false;
 
-      var inReq = ($scope.mteam.requestToJoin.indexOf(user._id) !== -1);
-      var inAsk = ($scope.mteam.askToJoin.indexOf(user._id) !== -1);
+      var inReq = ($scope.team.requestToJoin.indexOf(user._id) !== -1);
+      var inAsk = ($scope.team.askToJoin.indexOf(user._id) !== -1);
 
       if (inReq || inAsk) 
         return false;
@@ -251,6 +311,22 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       // Increment the count of how many available users there are
       $scope.count += 1;
       return true;
+    };
+
+    // Checks if the current user is the captain of the team
+    $scope.isCaptain = function (hideFromAdmin) {
+      var team = $scope.team;
+      hideFromAdmin = (hideFromAdmin ? hideFromAdmin : false);
+
+      if (Authentication.user && team && team.$resolved) {
+        if (Authentication.user.roles.indexOf('admin') === -1) {
+          return (team.teamCaptain._id.toString() === Authentication.user._id.toString());
+        } else {
+          return (!hideFromAdmin || (team.teamCaptain._id.toString() === Authentication.user._id.toString()));
+        }
+      } else {
+        return false;
+      }
     };
   }
 ]);

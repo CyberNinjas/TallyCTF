@@ -1,11 +1,11 @@
 <section ng-controller="TeamsController" ng-init="findTeam()">
   <div class="page-header">
     <h1>
-      <span ng-bind="mteam.teamName"></span>
+      <span ng-bind="team.teamName"></span>
     </h1>
     <div ng-if="shouldRender(['teamCaptain', 'teamMember'])" class="list-group">
       <h3>Roster</h3>
-      <a ng-repeat="member in mteam.members" class="list-group-item">
+      <a ng-repeat="member in team.members" class="list-group-item">
         <h4 ng-bind="member.username" class="list-group-item-heading"></h4>
       </a>
     </div>

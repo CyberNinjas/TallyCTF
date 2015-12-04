@@ -1,6 +1,6 @@
 <section ng-controller="TeamsController" ng-init="findOne()">
   <div class="page-header">
-    <div class="pull-right" ng-if="shouldRender(['admin', 'teamCaptain'])">
+    <div class="pull-right" ng-if="shouldRender(['admin', 'teamCaptain']) && isCaptain()">
       <a class="btn btn-primary" ui-sref="teams.edit({teamId: team._id})">
         <i class="glyphicon glyphicon-edit"></i>
       </a>
@@ -9,6 +9,11 @@
       </a>
     </div>
     <h1 ng-bind="team.teamName"></h1>
+  </div>
+  <div class="pull-right" ng-if="shouldRender('teamCaptain') && isCaptain(true)">
+    <a class="btn btn-success" ui-sref="teams.add">
+      <i class="glyphicon glyphicon-plus"></i>
+    </a>
   </div>
   <h2>Team Members</h2>
   <div class="list-group">
@@ -21,9 +26,9 @@
       <span ng-bind="member.username"></span>
     </div>
   </div>
-  <div ng-if="shouldRender('teamCaptain')" class="list-group">
+  <div ng-if="shouldRender('teamCaptain') && isCaptain(true)" class="list-group">
     <h3>Pending requests</h3>
-    <a ng-repeat="request in mteam.requestToJoin" class="list-group-item">
+    <a ng-repeat="request in team.requestToJoin" class="list-group-item">
       <small class="list-group-item-text">
         <div class="pull-right">
           <button ng-click='decline(request, $index)'>Decline</button>
@@ -33,7 +38,13 @@
         </div>
       </small>
       <h4 ng-bind="request.username" class="list-group-item-heading"></h4>
-      <p class="alert alert-warning text-center" ng-if="!requestTeams.length">No pending requests!</p>
     </a>
+    <p class="alert alert-warning text-center" ng-if="team.$resolved && !team.requestToJoin.length">No pending requests!</p>
+
+    <h3>Pending invites</h3>
+    <a ng-repeat="request in team.askToJoin" class="list-group-item">
+      <h4 ng-bind="request.username" class="list-group-item-heading"></h4>
+    </a>
+    <p class="alert alert-warning text-center" ng-if="team.$resolved && !team.askToJoin.length">No pending invites!</p>
   </div>
 </section>
