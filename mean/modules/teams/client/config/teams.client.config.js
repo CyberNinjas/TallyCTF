@@ -27,5 +27,11 @@ angular.module('teams').run(['Menus','Authentication',
         roles: ['user']
       });
     }
+
+    Menus.addSubMenuItem('topbar', 'teams', {
+      title: 'Add Users to Team',
+      state: 'teams.add',
+      roles: ['teamCaptain']
+    });
   }
 ]);
