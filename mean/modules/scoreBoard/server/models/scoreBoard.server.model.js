@@ -37,7 +37,8 @@ var ScoreBoardSchema = new Schema({
     }
   }],
   score: {
-    type: Number
+    type: Number,
+    default: 0
   }
 });
 

@@ -35,10 +35,9 @@ exports.read = function (req, res) {
 /*
  * Append data to a score board
  */
-exports.append = function (req, res) {
-  var scoreBoard = req.scoreBoard;
+exports.append = function (team, challenge) {
+  var scoreBoard = team.scoreBoard;
   //FIXME: Change this when a validate function is made
-  var challenge = JSON.parse(req.query.challenge);
 
   scoreBoard.solved.push(challenge._id);
   scoreBoard.score += challenge.points;
