@@ -45,11 +45,9 @@ exports.append = function (team, challenge) {
   scoreBoard.save(function (err) {
     if (err) {
       console.log(err);
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
+      return false;
     } else {
-      res.json(scoreBoard);
+      return scoreBoard;
     }
   });
 };
