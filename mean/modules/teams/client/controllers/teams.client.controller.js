@@ -24,10 +24,9 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
 
       // Redirect after save
       team.$save(function (response) {
-        Authentication.user.team = response._id;
+        Authentication.user = response;
 
         $scope.teamName = '';
-        $state.reload();
         $state.go('teams.add');
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
@@ -163,7 +162,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
     $scope.findOne = function () {
       $scope.team = Teams.get({
         teamId: $stateParams.teamId
-      });
+      },"ussername");
     };
 
     // Find existing Team

@@ -37,14 +37,6 @@ angular.module('core').controller('HeaderController', ['$scope', '$interval','$s
         $scope.error = response.data.message;
       });
     };
-    $scope.callAtInterval = function(){
-      $scope.mnotify = Authentication.user.notifications;
-      //$scope.team = Teams.query();
-      console.log($scope.mnotify);
-     // console.log("interval");
-    };
-
-    $interval(function(){$scope.callAtInterval();}, 5000);
   }
 ]);
 
