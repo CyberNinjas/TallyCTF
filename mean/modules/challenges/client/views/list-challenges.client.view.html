@@ -57,11 +57,16 @@
       <td>{{challenge.created}}</td>
 	  <tr ng-show = "active" ng-repeat-end><td colspan="5"><div>
 	  {{challenge.description}}
-	  <br><br>
-	  <form name="form">
-	  <input type="text" class="form-control" ng-if="displaySubmit()" ng-model="challenge.solve" placeholder="Flag Value">
 	  <br>
-      <input type="submit" class="submitButton" ng-if="displaySubmit()" ng-click="submitItem(challenge)">
+    <span ng-if="displayExclude('teamMember') && displayExclude('teamCaptain')"><br><font color="red">You must be on a team to submit answers!</font></span>
+	  <form name="form">
+      <span ng-if="displayInclude('teamMember') || displayInclude('teamCaptain')">
+        <br>
+	  <input type="text" class="form-control" ng-model="challenge.solve" placeholder="Flag Value">
+        <br>
+      <input type="submit" class="submitButton" ng-click="submitItem(challenge)">
+        <br>
+        </span>
 
       <!--
 	  <div ng-if="challenge.category=='1'">
@@ -80,7 +85,7 @@
       --->
 
 	  </form>
-	  <br><br><br></div>
+	  <br></div>
 	  </td></tr>
     </tr>
   </table>

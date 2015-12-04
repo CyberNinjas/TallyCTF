@@ -1,8 +1,8 @@
 'use strict';
 
 // Challenges controller
-angular.module('challenges').controller('ChallengesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Challenges', '$http',
-  function ($scope, $stateParams, $location, Authentication, Challenges, $http) {
+angular.module('challenges').controller('ChallengesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Challenges', '$http', 'ScoreBoard',
+  function ($scope, $stateParams, $location, Authentication, Challenges, $http, ScoreBoard) {
     $scope.authentication = Authentication;
 
     // Create new Challenge
@@ -112,6 +112,10 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
       //Challenges will not be visible to participants unless event has started AND not ended.
       //if event has started AND not ended:
       $scope.challenges = Challenges.query();
+      if (Authentication.user && Authentication.user.team){
+        $scope.teamSolvedChallenges = ScoreBoard.get({scoreBoardTeamId: Authentication.user.team});
+        console.log($scope.teamSolvedChallenges);
+      }
       //$scope.challenges =[];
     };
 

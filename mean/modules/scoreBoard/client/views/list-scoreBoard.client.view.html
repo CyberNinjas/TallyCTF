@@ -5,7 +5,13 @@
   <div class="list-group">
     <a ng-repeat="scoreBoard in scoreBoard" ui-sref="scoreBoard.view({scoreBoardTeamId: scoreBoard.team._id})" class="list-group-item">
       <p class="pull-right" ng-bind="scoreBoard.score"></p>
-      <h4 class="list-group-item-heading" ng-bind="scoreBoard.team.teamName"></h4>
+      <h4 class="list-group-item-heading">
+        <span>
+          <strong>{{$index + 1}}. </strong>
+        </span>
+        <span ng-bind="scoreBoard.team.teamName">
+        </span>
+      </h4>
     </a>
   </div>
   <div class="alert alert-warning text-center" ng-if="scoreBoard.$resolved && !scoreBoard.length">

@@ -55,6 +55,12 @@ angular.module('scoreBoard').controller('ScoreBoardController', ['$scope', '$sta
       });
     };
 
+    //$scope.getChallengeName = function (challengeId){
+    //  return Challenge.get({
+    //    _id: challengeId
+    //  }, 'name');
+    //};
+
     // Find a list of ScoreBoard
     $scope.find = function () {
       $scope.scoreBoard = ScoreBoard.query();

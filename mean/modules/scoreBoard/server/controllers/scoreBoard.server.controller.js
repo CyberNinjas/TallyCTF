@@ -126,7 +126,10 @@ exports.scoreBoardByTeamID = function (req, res, next, id) {
 
   ScoreBoard.find({team: id})
   .populate('team', 'teamName')
-  .populate('solved', 'challenge')
+      .populate({
+        path: 'solved',
+        populate: { path: 'challengeId', select: 'name'}
+      })
   .exec(function (err, scoreBoard) {
     if (err) {
       return next(err);

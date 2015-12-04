@@ -95,6 +95,12 @@ exports.submit = function(req, res) {
   console.log(req.user);
   var teamId = req.user.team;
   var attempt = req.body.flag;
+  var roles = req.user.roles;
+  if ((roles.indexOf("teamMember") === -1) && (roles.indexOf("teamCaptain") === -1)){
+    return res.status(403).send({
+      message: 'You must be on a team to submit flags!'
+    });
+  }
   Challenge.findById(req.body.challenge._id).exec(function (err, challenge){
     if (err) {
       return res.status(400).send({
