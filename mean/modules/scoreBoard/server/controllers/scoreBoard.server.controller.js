@@ -35,20 +35,26 @@ exports.read = function (req, res) {
 /*
  * Append data to a score board
  */
-exports.append = function (team, challenge) {
-  var scoreBoard = team.scoreBoard;
-  //FIXME: Change this when a validate function is made
-
-  scoreBoard.solved.push(challenge._id);
-  scoreBoard.score += challenge.points;
-
-  scoreBoard.save(function (err) {
+exports.append = function (team, user, challenge, res) {
+  var scoreBoard = ScoreBoard.findById(team.scoreBoard).exec(function (err, scoreBoard){
     if (err) {
-      console.log(err);
-      return false;
-    } else {
-      return scoreBoard;
+      return err;
+    } else if (!scoreBoard) {
+      return res.status(404).send({
+        message:  'No scoreBoard with that identifier found'
+      });
     }
+    scoreBoard.solved.push({challengeId: challenge._id, userId: user._id, date: Date.now(), points: challenge.points});
+    scoreBoard.score += challenge.points;
+
+    scoreBoard.save(function (err) {
+      if (err) {
+        console.log(err);
+        return err;
+      } else {
+        return scoreBoard;
+      }
+    });
   });
 };
 
