@@ -118,11 +118,11 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
 
     //Adds the users to the team
     $scope.addUser = function (user) {
-      var teamID = $scope.mteam._id;
+      var teamID = $scope.team._id;
 
       // WARNING: Some sort of (effective) validation should be made
-      $scope.mteam.temp = user._id;
-      TeamsCtl.askToJoin($scope.mteam);
+      $scope.team.temp = user._id;
+      TeamsCtl.askToJoin($scope.team);
     };
 
     // Remove a user from the team when editing the team
@@ -136,7 +136,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
     // Allows a user to accept a team or vice-versa
     $scope.accept = function(usr, cond) {
       var user = (usr ? usr : Authentication.user);
-      var team = (typeof cond === Number ? $scope.mteam : cond);
+      var team = (typeof cond === 'number' ? $scope.team : cond);
 
       if (Authentication.user.team) {
         var add = team.requestToJoin.splice(cond, 1);
@@ -150,7 +150,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
     // Allows a user to decline a team or vice-versa
     $scope.decline = function(usr, index, tm) {
       var user = (usr ? usr : Authentication.user);
-      var team = (tm ? tm : $scope.mteam);
+      var team = (tm ? tm : $scope.team);
 
       if (Authentication.user.team)
         team.requestToJoin.splice(index, 1);
@@ -193,7 +193,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
     // Finds available users to add
     $scope.findAvailableUsers = function(){
        $scope.users = Users.listAvailableUsers();
-       $scope.mteam = Teams.getRaw({teamId: Authentication.user.team});
+       $scope.team = Teams.getRaw({teamId: Authentication.user.team});
 
        // For UI, have a count of how many users are available to choose from
        $scope.count = 0;
@@ -201,7 +201,8 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
 
     //teamMember and teamCaptain are mutually exclusive
     $scope.shouldRender = function (rle, usr) {
-      var role = (rle.length ? rle : [rle]);
+      console.log(typeof rle);
+      var role = (typeof rle === 'string' ? [rle] : rle);
       var user = (usr ? usr : Authentication.user);
 
       if (role.indexOf('user') !== -1) {
@@ -220,11 +221,11 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       var user = (usr ? usr : Authentication.user);
 
       // Make sure that there is a user to check for / a team to check from!
-      if (!user || !$scope.mteam.$resolved)
+      if (!user || !$scope.team.$resolved)
         return false;
 
-      var inReq = ($scope.mteam.requestToJoin.indexOf(user._id) !== -1);
-      var inAsk = ($scope.mteam.askToJoin.indexOf(user._id) !== -1);
+      var inReq = ($scope.team.requestToJoin.indexOf(user._id) !== -1);
+      var inAsk = ($scope.team.askToJoin.indexOf(user._id) !== -1);
 
       if (inReq || inAsk) 
         return false;

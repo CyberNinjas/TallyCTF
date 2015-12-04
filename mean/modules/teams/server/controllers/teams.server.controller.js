@@ -92,9 +92,11 @@ exports.update = function (req, res) {
  * Adds a user to a team or vice-versa
  */
 exports.accept = function(req, res) {
+  console.log("beginning");
   var team = req.team;
   var user = req.model;
-  var capt = (user.roles.indexOf('teamCaptain') && team.teamCaptain._id.toString() === user._id);
+  console.log(team.teamCaptain);
+  var capt = (req.user.roles.indexOf('teamCaptain') !== -1 && team.teamCaptain._id.toString() === req.user._id.toString());
 
   // Used in the for loop below
   var reqLen = team.requestToJoin.length;
@@ -123,7 +125,6 @@ exports.accept = function(req, res) {
         message: "Invalid User to add"
       });
   }
-
   // Try to add the user, error if alreay on a team
   if (!exports.addTeamToUser(user, team))
     return res.status(400).send({
@@ -146,7 +147,7 @@ exports.accept = function(req, res) {
 exports.decline = function (req, res) {
   var team = req.team;
   var user = req.model;
-  var capt = (user.roles.indexOf('teamCaptain') && team.teamCaptain._id.toString() === user._id);
+  var capt = (req.user.roles.indexOf('teamCaptain') !== -1 && team.teamCaptain._id.toString() === req.user._id.toString());
 
   var reqLen = team.requestToJoin.length;
   var askLen = team.askToJoin.length;
