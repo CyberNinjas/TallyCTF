@@ -17,6 +17,41 @@ exports.create = function (req, res) {
   var team = new Team(req.body);
   var user = req.user;
 
+  // Clear any previous requests / asks to join from other teams
+  var requests = Team.find({
+    "_id": { $in: user.requestToJoin }
+  }, function (err, teams) {
+    if (err)
+      return false;
+
+    for (var i = 0; i < teams.length; ++i) {
+      var index = teams[i].requestToJoin.indexOf(user._id);
+      if (index !== -1) {
+        teams[i].requestToJoin.splice(index, 1);
+        // FIXME: Have a way to handle this failing
+        teams[i].save();
+      }
+    }
+  });
+  var asks = Team.find({
+    "_id": { $in: user.askToJoin }
+  }, function (err, teams) {
+    if (err)
+      return false;
+
+    for (var i = 0; i < teams.length; ++i) {
+      var index = teams[i].askToJoin.indexOf(user._id);
+      if (index !== -1) {
+        teams[i].askToJoin.splice(index, 1);
+        // FIXME: Have a way to handle this failing
+        teams[i].save();
+      }
+    }
+  });
+
+  user.requestToJoin = [];
+  user.askToJoin = [];
+
   // Save the user / team
   team.save(function (err) {
     if (err) {
@@ -378,8 +413,6 @@ exports.delete = function (req, res) {
   var team = req.team;
   var user = req.user;
 
-  console.log(user.team.toString());
-
   // Make sure the person deleting this can delete this
   if ((user.roles.indexOf('admin') === -1) &&
     (!user || team.teamCaptain._id.toString() !== user._id.toString())) {
@@ -413,6 +446,36 @@ exports.delete = function (req, res) {
         // Remove the team from the user (MongoDB strips away all tags that are undefined)
         users[i].team = undefined;
 
+        // FIXME: Have a way to handle this failing
+        users[i].save();
+      }
+    }
+  });
+  var requests = User.find({
+    "_id": { $in: team.requestToJoin }
+  }, function (err, users) {
+    if (err)
+      return false;
+
+    for (var i = 0; i < users.length; ++i) {
+      var index = users[i].requestToJoin.indexOf(team._id);
+      if (index !== -1) {
+        users[i].requestToJoin.splice(index, 1);
+        // FIXME: Have a way to handle this failing
+        users[i].save();
+      }
+    }
+  });
+  var asks = User.find({
+    "_id": { $in: team.askToJoin }
+  }, function (err, users) {
+    if (err)
+      return false;
+
+    for (var i = 0; i < users.length; ++i) {
+      var index = users[i].askToJoin.indexOf(team._id);
+      if (index !== -1) {
+        users[i].askToJoin.splice(index, 1);
         // FIXME: Have a way to handle this failing
         users[i].save();
       }

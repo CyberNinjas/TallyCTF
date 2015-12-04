@@ -10,7 +10,7 @@
     </div>
     <h1 ng-bind="team.teamName"></h1>
   </div>
-  <div class="pull-right" ng-if="shouldRender('teamCaptain') && isCaptain()">
+  <div class="pull-right" ng-if="shouldRender('teamCaptain') && isCaptain(true)">
     <a class="btn btn-success" ui-sref="teams.add">
       <i class="glyphicon glyphicon-plus"></i>
     </a>
@@ -26,7 +26,7 @@
       <span ng-bind="member.username"></span>
     </div>
   </div>
-  <div ng-if="shouldRender('teamCaptain') && isCaptain()" class="list-group">
+  <div ng-if="shouldRender('teamCaptain') && isCaptain(true)" class="list-group">
     <h3>Pending requests</h3>
     <a ng-repeat="request in team.requestToJoin" class="list-group-item">
       <small class="list-group-item-text">
