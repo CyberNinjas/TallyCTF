@@ -9,8 +9,8 @@ var scoreBoardPolicy = require('../policies/scoreBoard.server.policy'),
 module.exports = function (app) {
   // ScoreBoard collection routes
   app.route('/api/scoreBoard').all(scoreBoardPolicy.isAllowed)
-    .get(scoreBoard.list)
-    .post(scoreBoard.create);
+    .get(scoreBoard.list);
+    //.post(scoreBoard.create);
 
   // Single scoreBoard routes
   app.route('/api/scoreBoard/:scoreBoardTeamId').all(scoreBoardPolicy.isAllowed)

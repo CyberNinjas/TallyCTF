@@ -11,19 +11,19 @@ var path = require('path'),
 /**
  * Create a score board entry
  */
-exports.create = function (req, res) {
-  var scoreBoard = new ScoreBoard(req.body);
-
-  scoreBoard.save(function (err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.json(scoreBoard);
-    }
-  });
-};
+//exports.create = function (req, res) {
+//  var scoreBoard = new ScoreBoard(req.body);
+//
+//  scoreBoard.save(function (err) {
+//    if (err) {
+//      return res.status(400).send({
+//        message: errorHandler.getErrorMessage(err)
+//      });
+//    } else {
+//      res.json(scoreBoard);
+//    }
+//  });
+//};
 
 /**
  * Show the current score board entry

@@ -35,7 +35,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
         // });
 
         $scope.teamName = '';
-        $state.go('teams.add');
+        $state.go('teams.view', {teamId: team._id});
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });

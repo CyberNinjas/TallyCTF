@@ -16,7 +16,10 @@ var path = require('path'),
 exports.create = function (req, res) {
   var team = new Team(req.body);
   var user = req.user;
-
+  var scoreBoard = new ScoreBoard();
+  team.scoreBoard = scoreBoard._id;
+  scoreBoard.team = team._id;
+  scoreBoard.teamName = team.teamName;
   // Save the user / team
   team.save(function (err) {
     if (err) {
@@ -24,6 +27,13 @@ exports.create = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
+      scoreBoard.save(function (err) {
+        if (err) {
+          return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+          });
+        }
+      });
       // Update the user's data
       user.roles.push('teamCaptain');
       user.team = team._id;
@@ -32,6 +42,7 @@ exports.create = function (req, res) {
       user.save(function (err) {
         if (err) {
           team.remove();
+          scoreBoard.remove();
           return res.status(400).send({
             message: errorHandler.getErrorMessage(err)
           });

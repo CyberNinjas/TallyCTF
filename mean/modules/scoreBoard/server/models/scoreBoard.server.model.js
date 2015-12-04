@@ -15,6 +15,9 @@ var ScoreBoardSchema = new Schema({
     ref: 'Team',
     require: 'Non-sensical otherwise.'
   },
+  teamName: {
+    type: String
+  },
   // 'challengeId': '{'users': {'userId': 'contrib'}, 'date': ISODate}'
   solved: [{
     challengeId:{
