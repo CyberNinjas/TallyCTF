@@ -115,15 +115,6 @@ exports.submit = function(req, res) {
     console.log(attempt);
     console.log(challenge);
     if (attempt === challenge.flag){
-      challenge.solves += 1;
-      challenge.save(function (err) {
-        if (err) {
-          console.log(err);
-          return res.status(400).send({
-            message: errorHandler.getErrorMessage(err)
-          });
-        }
-      });
       console.log("Correct Answer!");
       Team.findById(teamId).exec(function (err, team) {
         if (err) {
@@ -136,21 +127,22 @@ exports.submit = function(req, res) {
             message: 'No challenges with that identifier has been found'
           });
         }
+        scoreboard.append(team, req.user, challenge, res);
         console.log("Get to the Scoreboard");
         console.log("Before Push:");
         console.log(challenge._id);
         console.log(req.user._id);
-        scoreboard.append(team, req.user, challenge, res);
       });
-      return res.status(200).send({
-        message: 'Correct',
-        solves: challenge.solves
-      });
+      //return res.status(200).send({
+      //  message: 'Correct',
+      //  solves: challenge.solves
+      //});
     }
     else{
       console.log("Incorrect Answer!");
       return res.status(200).send({
-        message: 'Incorrect'
+        message: 'Incorrect',
+        solves: challenge.solves
       });
     }
   });

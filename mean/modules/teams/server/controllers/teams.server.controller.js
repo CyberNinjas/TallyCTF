@@ -56,41 +56,44 @@ exports.create = function (req, res) {
   user.requestToJoin = [];
   user.askToJoin = [];
 
+
   // Save the user / team
   team.save(function (err) {
     if (err) {
+      scoreBoard.remove();
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
+      console.log("before scoreboard save");
       scoreBoard.save(function (err) {
         if (err) {
-          team.remove();
           return res.status(400).send({
             message: errorHandler.getErrorMessage(err)
           });
         }
-      });
-      // Update the user's data
-      user.roles.push('teamCaptain');
-      user.team = team._id;
+        else{
+          console.log("after scoreboard save");
+          // Update the user's data
+          user.roles.push('teamCaptain');
+          user.team = team._id;
 
-      // Save the user
-      user.save(function (err) {
-        if (err) {
-          team.remove();
-          scoreBoard.remove();
-          return res.status(400).send({
-            message: errorHandler.getErrorMessage(err)
-          });
-        } else {
-          req.login(user, function (err) {
+          // Save the user
+          user.save(function (err) {
             if (err) {
-              res.status(400).send({
+              return res.status(400).send({
                 message: errorHandler.getErrorMessage(err)
               });
             } else {
-              res.json(user);
+              req.login(user, function (err) {
+                if (err) {
+                  res.status(400).send({
+                    message: errorHandler.getErrorMessage(err)
+                  });
+                } else {
+                  res.json(user);
+                }
+              });
             }
           });
         }

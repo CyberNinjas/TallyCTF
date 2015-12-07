@@ -32,6 +32,10 @@ exports.read = function (req, res) {
   res.json(req.scoreBoard);
 };
 
+function get_type(thing){
+  if(thing===null)return "[object Null]"; // special case
+  return Object.prototype.toString.call(thing);
+}
 /*
  * Append data to a score board
  */
@@ -40,10 +44,29 @@ exports.append = function (team, user, challenge, res) {
     if (err) {
       return err;
     } else if (!scoreBoard) {
-      return res.status(404).send({
-        message:  'No scoreBoard with that identifier found'
-      });
+      //3 == no scoreboard found
+      return 3;
     }
+
+    var cid;
+    for (cid=0; cid < scoreBoard.solved.length; cid++){
+      if (scoreBoard.solved[cid].challengeId.toString() == challenge._id.toString()){
+        console.log("LOGGING3: WE HAVE A MATCH");
+        return res.status(200).send({
+          message: 'A team may only solve a challenge once!',
+          solves: challenge.solves
+        });
+      }
+    }
+    challenge.solves += 1;
+    challenge.save(function (err) {
+      if (err) {
+        console.log(err);
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      }
+    });
     scoreBoard.solved.push({challengeId: challenge._id, userId: user._id, date: Date.now(), points: challenge.points});
     scoreBoard.score += challenge.points;
 
@@ -52,7 +75,10 @@ exports.append = function (team, user, challenge, res) {
         console.log(err);
         return err;
       } else {
-        return scoreBoard;
+        return res.status(200).send({
+          message: 'Correct',
+          solves: challenge.solves
+        });
       }
     });
   });
