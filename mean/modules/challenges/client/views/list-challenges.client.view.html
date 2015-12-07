@@ -62,7 +62,7 @@
 	  <tr ng-show = "active" ng-repeat-end><td colspan="5"><div>
 	  {{challenge.description}}
 	  <br>
-    <span ng-if="displayExclude('teamMember') && displayExclude('teamCaptain')"><br><font color="red">You must be on a team to submit answers!</font></span>
+    <span ng-if="displayExclude('teamMember') && displayExclude('teamCaptain')"><br><a ng-href="../teams"><font color="red">You must be on a team to submit answers! </font></a></span>
 	  <form name="form">
       <span ng-if="(displayInclude('teamMember') || displayInclude('teamCaptain')) && !challenge.solved && displayExclude('admin')">
         <br>
