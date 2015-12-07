@@ -129,9 +129,9 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
           for (i = 0; i < $scope.teamSolvedChallenges.length; i++){
             for (j = 0; j < $scope.challenges.length; j++){
               console.log("solvedChall: " + $scope.teamSolvedChallenges[i]);
-              console.log("Chall: " + $scope.challenges[i]._id.toString());
-              if ($scope.teamSolvedChallenges[i] === $scope.challenges[i]._id.toString()){
-                $scope.challenges[i].solved = true;
+              console.log("Chall: " + $scope.challenges[j]._id.toString());
+              if ($scope.teamSolvedChallenges[i] === $scope.challenges[j]._id.toString()){
+                $scope.challenges[j].solved = true;
               }
             }
           }
