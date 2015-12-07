@@ -1,14 +1,77 @@
 'use strict';
 
-angular.module('core').controller('HeaderController', ['$scope', '$interval','$state', 'Authentication', 'Menus','Users','Teams',
-  function ($scope, $interval, $state, Authentication, Menus, Users, Teams) {
+angular.module('core').controller('HeaderController', ['$scope', '$interval','$state', 'Authentication', 'Menus','Users', 'Socket',
+  function ($scope, $interval, $state, Authentication, Menus, Users, Socket) {
     // Expose view variables
     $scope.$state = $state;
     $scope.authentication = Authentication;
     $scope.user = Users;
-    $scope.team = Teams;
     // Get the topbar menu
     $scope.menu = Menus.getMenu('topbar');
+
+    // Setup messaging system
+    if (!Socket.socket) {
+      Socket.connect();
+    }
+
+    // Setup Listener for updating the authenticated user
+    Socket.on('userUpdate', function (message) {
+      if (message.recipients.indexOf('*') === -1 && 
+        (!Authentication.user || message.recipients.indexOf(Authentication.user._id) === -1)) {
+        
+        console.log(message.recipients);
+        return;
+      }
+
+      console.log("For me!");
+
+      switch (message.op) {
+        case 'newConnection':
+          console.log('New connection!');
+          break;
+        // Remove the user from its team
+        case 'notify':
+          Authentication.user.notifications++;
+          break;
+        case 'insert':
+          if (message.field)
+            Authentication.user[message.field].push(message.data);
+          break;
+        case 'remove':
+          if (Authentication.user[message.field].indexOf(message.data) !== -1) {
+            Authentication.user[message.field].splice(
+              Authentication.user[message.field].indexOf(message.data), 1
+            );
+          }
+          break;
+        case 'insertTeam':
+          if (Authentication.user && Authentication.user.roles) {
+            Authentication.user.roles.push('teamMember');
+            Authentication.user.team = message.data;
+          }
+          break;
+        case 'rmTeam':
+          delete Authentication.user.team;
+          if (Authentication.user.roles.indexOf('teamMember') !== -1)
+            Authentication.user.roles.splice(Authentication.user.roles.indexOf('teamMember'), 1);
+          if (Authentication.user.roles.indexOf('teamCaptain') !== -1)
+            Authentication.user.roles.splice(Authentication.user.roles.indexOf('teamCaptain'), 1);
+          break;
+        default:
+          console.log("Socket: Don't know what to do with: ");
+          console.log(message);
+          break;
+      }
+    });
+
+    $scope.test1 = function () {
+      Socket.emit('userUpdate', {recipients: [Authentication.user._id], poop: 'yep'});
+    };
+
+    // Remove the event listener when the controller instance is destroyed
+    $scope.$on('$destroy', function () {
+      Socket.removeListener('userUpdate');
+    });
 
     // Toggle the menu items
     $scope.isCollapsed = false;
@@ -24,27 +87,6 @@ angular.module('core').controller('HeaderController', ['$scope', '$interval','$s
     $scope.signout = function () {
       window.location="/api/auth/signout";
     };
-    $scope.removeNotifications = function() {
-      var user = new Users($scope.authentication);
-
-      user.notifications = 0;
-      user.$update(function (response) {
-        $scope.$broadcast('show-errors-reset', 'userForm');
-
-        $scope.success = true;
-        Authentication.user = response;
-      }, function (response) {
-        $scope.error = response.data.message;
-      });
-    };
-    $scope.callAtInterval = function(){
-      $scope.mnotify = Authentication.user.notifications;
-      //$scope.team = Teams.query();
-      console.log($scope.mnotify);
-     // console.log("interval");
-    };
-
-    $interval(function(){$scope.callAtInterval();}, 5000);
   }
 ]);
 
