@@ -142,7 +142,8 @@ exports.submit = function(req, res) {
       console.log("Incorrect Answer!");
       return res.status(200).send({
         message: 'Incorrect',
-        solves: challenge.solves
+        solves: challenge.solve,
+        solved: challenge.solved
       });
     }
   });

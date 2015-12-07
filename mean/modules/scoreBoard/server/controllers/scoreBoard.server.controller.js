@@ -50,11 +50,12 @@ exports.append = function (team, user, challenge, res) {
 
     var cid;
     for (cid=0; cid < scoreBoard.solved.length; cid++){
-      if (scoreBoard.solved[cid].challengeId.toString() == challenge._id.toString()){
+      if (scoreBoard.solved[cid].challengeId.toString() === challenge._id.toString()){
         console.log("LOGGING3: WE HAVE A MATCH");
         return res.status(200).send({
           message: 'A team may only solve a challenge once!',
-          solves: challenge.solves
+          solves: challenge.solves,
+          solved: challenge.solved
         });
       }
     }
@@ -77,7 +78,8 @@ exports.append = function (team, user, challenge, res) {
       } else {
         return res.status(200).send({
           message: 'Correct',
-          solves: challenge.solves
+          solves: challenge.solves,
+          solved: true
         });
       }
     });

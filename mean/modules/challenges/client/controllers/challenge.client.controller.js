@@ -113,9 +113,32 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
       //if event has started AND not ended:
       $scope.challenges = Challenges.query();
       if (Authentication.user && Authentication.user.team){
-        $scope.teamSolvedChallenges = ScoreBoard.get({scoreBoardTeamId: Authentication.user.team});
-        console.log($scope.teamSolvedChallenges);
+        $scope.teamScoreBoard = ScoreBoard.get({scoreBoardTeamId: Authentication.user.team});
       }
+      var chall;
+      $scope.teamSolvedChallenges = [];
+      $scope.teamScoreBoard.$promise.then(function (scoreboard){
+        for (chall = 0; chall < scoreboard.solved.length; chall++){
+          console.log("HERP: " + scoreboard.solved[chall].challengeId._id.toString());
+          $scope.teamSolvedChallenges.push(scoreboard.solved[chall].challengeId._id.toString());
+        }
+        console.log($scope.teamSolvedChallenges);
+
+        $scope.challenges.$promise.then(function (challenges){
+          var i, j;
+          for (i = 0; i < $scope.teamSolvedChallenges.length; i++){
+            for (j = 0; j < $scope.challenges.length; j++){
+              console.log("solvedChall: " + $scope.teamSolvedChallenges[i]);
+              console.log("Chall: " + $scope.challenges[i]._id.toString());
+              if ($scope.teamSolvedChallenges[i] === $scope.challenges[i]._id.toString()){
+                $scope.challenges[i].solved = true;
+              }
+            }
+          }
+        });
+        console.log($scope.challenges);
+      });
+
       //$scope.challenges =[];
     };
 
@@ -152,6 +175,7 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
      challenge.solve = null;
      $scope.success = response.message;
      challenge.solves = response.solves;
+     challenge.solved = response.solved;
      alert(response.message + '!');
      console.log("Success" + response.message);
    }).error(function (response){
