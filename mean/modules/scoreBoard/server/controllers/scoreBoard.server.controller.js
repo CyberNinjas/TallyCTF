@@ -6,24 +6,8 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   ScoreBoard = mongoose.model('ScoreBoard'),
-  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
-
-/**
- * Create a score board entry
- */
-//exports.create = function (req, res) {
-//  var scoreBoard = new ScoreBoard(req.body);
-//
-//  scoreBoard.save(function (err) {
-//    if (err) {
-//      return res.status(400).send({
-//        message: errorHandler.getErrorMessage(err)
-//      });
-//    } else {
-//      res.json(scoreBoard);
-//    }
-//  });
-//};
+  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+  ;
 
 /**
  * Show the current score board entry
@@ -32,10 +16,6 @@ exports.read = function (req, res) {
   res.json(req.scoreBoard);
 };
 
-function get_type(thing){
-  if(thing===null)return "[object Null]"; // special case
-  return Object.prototype.toString.call(thing);
-}
 /*
  * Append data to a score board
  */
@@ -44,14 +24,13 @@ exports.append = function (team, user, challenge, res) {
     if (err) {
       return err;
     } else if (!scoreBoard) {
-      //3 == no scoreboard found
-      return 3;
+      return res.status(503).send({
+        message: "No scoreoard by that id found!"
+      });
     }
 
-    var cid;
-    for (cid=0; cid < scoreBoard.solved.length; cid++){
+    for (var cid = 0; cid < scoreBoard.solved.length; ++cid) {
       if (scoreBoard.solved[cid].challengeId.toString() === challenge._id.toString()){
-        console.log("LOGGING3: WE HAVE A MATCH");
         return res.status(200).send({
           message: 'A team may only solve a challenge once!',
           solves: challenge.solves,
@@ -59,6 +38,7 @@ exports.append = function (team, user, challenge, res) {
         });
       }
     }
+
     challenge.solves += 1;
     challenge.save(function (err) {
       if (err) {

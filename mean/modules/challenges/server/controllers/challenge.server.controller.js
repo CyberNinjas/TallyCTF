@@ -128,15 +128,7 @@ exports.submit = function(req, res) {
           });
         }
         scoreboard.append(team, req.user, challenge, res);
-        console.log("Get to the Scoreboard");
-        console.log("Before Push:");
-        console.log(challenge._id);
-        console.log(req.user._id);
       });
-      //return res.status(200).send({
-      //  message: 'Correct',
-      //  solves: challenge.solves
-      //});
     }
     else{
       console.log("Incorrect Answer!");
