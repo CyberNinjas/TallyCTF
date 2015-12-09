@@ -12,6 +12,22 @@
 //   });
 // });
 
+//Create a User
+// describe('Create a User',function(){
+//   it('Should create a new user',function(){
+//     browser.get('http://localhost:3000');
+//     var username = element(by.model('credentials.username'));
+//     var password = element(by.model('credentials.password'));
+//     var button = element(by.buttonText('Sign in'));
+//     username.sendKeys('admin');
+//     password.sendKeys('1Qasdfghjkl;\'');
+//     button.click();
+//     var name = element(by.binding('authentication.user.username'));
+//     expect(name.getText()).toEqual('admin');
+//   });
+// });
+
+
 //Test to log user in
 describe('Signin Acceptance',function(){
   it('Should sign the user in',function(){
@@ -55,6 +71,7 @@ describe('Change Users Settings',function(){
     username.sendKeys('admin1');
     button.click();
     var name = element(by.binding('authentication.user.username'));
+    browser.sleep(3000);
     expect(name.getText()).toEqual('admin1');
   });
 });
