@@ -19,7 +19,6 @@ exports.read = function (req, res) {
  * Append data to a score board
  */
 exports.append = function (team, user, challenge, res) {
-  console.log(challenge);
   var scoreBoard = ScoreBoard.findById(team.scoreBoard).exec(function (err, scoreBoard){
     if (err) {
       return err;
