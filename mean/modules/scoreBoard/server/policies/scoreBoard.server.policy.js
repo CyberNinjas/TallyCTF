@@ -22,16 +22,7 @@ exports.invokeRolesPolicies = function () {
       permissions: '*'
     }]
   }, {
-    roles: ['user'],
-    allows: [{
-      resources: '/api/scoreBoard',
-      permissions: ['get']
-    }, {
-      resources: '/api/scoreBoard/:scoreBoardTeamId',
-      permissions: ['get']
-    }]
-  }, {
-    roles: ['guest'],
+    roles: ['user', 'guest'],
     allows: [{
       resources: '/api/scoreBoard',
       permissions: ['get']

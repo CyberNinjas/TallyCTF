@@ -1,19 +1,18 @@
 <section ng-controller="TeamsController" ng-init="find()">
   <div class="page-header">
+    <div class="pull-right" ng-if="shouldRender('user')">
+      <a class="btn btn-success" id ="addTeams1" ui-sref="teams.create">
+        <i class="glyphicon glyphicon-plus"></i>
+      </a>
+    </div>
     <h1>Teams</h1>
   </div>
   <div class="list-group">
     <a ng-repeat="team in teams" ui-sref="teams.view({teamId: team._id})" class="list-group-item">
-      <small class="list-group-item-text">
-        <!--Team Captain: <span ng-bind="team.user.displayName"></span> -->
-        <!--Team Name: <span ng-bind="team.teamName"></span>-->
-      </small>
-      <div class="pull-right" ng-if="shouldRender('user')">
+      <div class="pull-right" ng-if="shouldRender('user') && shouldReq(team)">
         <button ng-click='requestsToJoin(team)'>Join</button>
       </div>
       <h4 class="list-group-item-heading" ng-bind="team.teamName"></h4>
-
-
     </a>
   </div>
   <div class="alert alert-warning text-center" ng-if="teams.$resolved && !teams.length">

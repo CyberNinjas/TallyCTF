@@ -1,7 +1,7 @@
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 <section ng-controller="ChallengesController" ng-init="find()">
   <div class="page-header">
-    <h1>Challenge</h1>
+    <h1>Challenges</h1>
   </div>
   <!-- <div class="list-group">
     <a ng-repeat="challenge in challenges" ui-sref="challenges.view({challengeId: challenge._id})" class="list-group-item">
@@ -44,6 +44,9 @@
        <th ng-click="sort('created')">Created
          <span ng-show="sortType == 'created' && reverseSort" class="fa fa-caret-down"></span>
          <span ng-show="sortType == 'created' && !reverseSort" class="fa fa-caret-up"></span></th>
+        <th ng-click="sort('solved')">Solved
+          <span ng-show="sortType == 'solved' && reverseSort" class="fa fa-caret-down"></span>
+          <span ng-show="sortType == 'solved' && !reverseSort" class="fa fa-caret-up"></span></th>
        </tr>
      </thead>
 	 <!--
@@ -55,36 +58,35 @@
       <td>{{challenge.points}}</td>
       <td>{{challenge.solves}}</td>
       <td>{{challenge.created}}</td>
-	  <tr ng-show = "active" ng-repeat-end><td colspan="5"><div>
-	  {{challenge.description}}
-	  <br><br>
-	  <form name="form">
-	  <input type="text" class="form-control" ng-if="displaySubmit()" ng-model="challenge.solve" placeholder="Flag Value">
-	  <br>
-      <input type="submit" class="submitButton" ng-if="displaySubmit()" ng-click="submitItem(challenge)">
-
-      <!--
-	  <div ng-if="challenge.category=='1'">
-	  <input type="radio" name="answer" ng-model="challenge.val" value="A"/> answer 1
-	  <br>
-	  <input type="radio" name="answer" ng-model="challenge.val" value="B"/> answer 2
-	  <br>
-	  <input type="radio" name="answer" ng-model="challenge.val" value="C"/> answer 3
-	  <br><br>
-	  </div>
-	  <div ng-if="challenge.category!='1'">
-	  <input type="text" class="form-control" ng-model="challenge.val" placeholder="Flag Value">
-	  <br>
-	  </div>
-      <input type="submit" class="submitButton" ng-click="submitItem(challenge)">
-      --->
-
-	  </form>
-	  <br><br><br></div>
+      <td>{{challenge.solved}}</td>
+	  <tr ng-show = "active" ng-repeat-end><td colspan="5">
+    <div>
+  	  {{challenge.description}}
+  	  <br>
+      <span ng-if="displayExclude('teamMember') && displayExclude('teamCaptain')"><br><a ng-href="../teams"><font color="red">You must be on a team to submit answers! </font></a></span>
+  	  <form name="form">
+        <span ng-if="(displayInclude('teamMember') || displayInclude('teamCaptain')) && !challenge.solved && displayExclude('admin')">
+          <br>
+          <input type="text" class="form-control" ng-model="challenge.solve" placeholder="Flag Value">
+          <br>
+          <input type="submit" class="submitButton" ng-click="submitItem(challenge)">
+          <br>
+        </span>
+        <div ng-if="displayInclude('admin')">
+          <span class="pull-right btn btn-danger" ng-click="remove(challenge)">
+            <span class="glyphicon glyphicon-trash"></span>
+          </span>
+          <span class="pull-right btn btn-primary" ui-sref="challenges.edit({challengeId: challenge._id})">
+            <span class="glyphicon glyphicon-edit"></span>
+          </span>
+        </div>
+  	  </form>
+      <br>
+    </div>
 	  </td></tr>
     </tr>
   </table>
-    <div class="alert alert-warning text-center" ng-if="challenges.$resolved && !challenges.length">
-      No challenges yet, why don't you <a ui-sref="challenges.create">create one</a>?
-    </div>
+  <div class="alert alert-warning text-center" ng-if="challenges.$resolved && !challenges.length && displayInclude('admin')">
+    No challenges yet, why don't you <a ui-sref="challenges.create">create one</a>?
+  </div>
 </section>

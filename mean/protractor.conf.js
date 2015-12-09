@@ -2,5 +2,7 @@
 
 // Protractor configuration
 exports.config = {
-  specs: ['modules/*/tests/e2e/*.js']
+  framework: 'jasmine',
+  seleniumAddress: 'http://localhost:4444/wd/hub',
+  specs: ['modules/users/tests/e2e/*.js']
 };

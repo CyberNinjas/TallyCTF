@@ -16,17 +16,16 @@ var TeamSchema = new Schema({
     unique: 'Team Name already exists',
     default: ''
   },
-  scoreBoard: {
-    type: Schema.Types.ObjectId,
-    ref: 'ScoreBoard',
-    required:'each team must have a scoreboard object ref',
-    unique: 'each scoreboard can belong to one team'
-  },
   teamCaptain: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     unique: 'You cannot be captain of 2 teams',
     required: "You must have a team captain"
+  },
+  scoreBoard: {
+    type: Schema.Types.ObjectId,
+    ref: 'ScoreBoard',
+    required: "each team needs a scoreboard"
   },
   members: [{
     type: Schema.Types.ObjectId,
