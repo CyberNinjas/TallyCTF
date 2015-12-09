@@ -109,8 +109,6 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
 
     // Find a list of Challenges
     $scope.find = function () {
-      //Challenges will not be visible to participants unless event has started AND not ended.
-      //if event has started AND not ended:
       $scope.challenges = Challenges.query();
       if (Authentication.user && Authentication.user.team){
         $scope.teamScoreBoard = ScoreBoard.get({scoreBoardTeamId: Authentication.user.team});
