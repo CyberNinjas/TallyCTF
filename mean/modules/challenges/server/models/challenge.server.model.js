@@ -39,8 +39,8 @@ var ChallengeSchema = new Schema({
     min: 0,
     default: 0
   },
-  flag: {
-    type: String,
+  flags: {
+    type: Array,
     required: 'Challenge must have a flag set',
     trim: true
   }
