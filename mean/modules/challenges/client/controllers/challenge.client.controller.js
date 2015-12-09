@@ -4,6 +4,7 @@
 angular.module('challenges').controller('ChallengesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Challenges', '$http', 'ScoreBoard',
   function ($scope, $stateParams, $location, Authentication, Challenges, $http, ScoreBoard) {
     $scope.authentication = Authentication;
+    $scope.flags = [];
 
     // Create new Challenge
     $scope.create = function (isValid) {
@@ -22,21 +23,21 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
         solves: 0,
         category: this.category,
         points: this.points,
-        flag: this.flag
+        flags: this.flags
       });
 
       // Redirect after save
       challenge.$save(function (response) {
         $location.path('challenges');
-        //$location.path('challenges/' + response._id);
 
         // Clear form fields
-        $scope.name= '';
-        $scope.description= '';
-        $scope.solves= '';
-        $scope.category= '';
-        $scope.points= '';
+        $scope.name = '';
+        $scope.description = '';
+        $scope.solves = '';
+        $scope.category = '';
+        $scope.points = '';
         $scope.flag = '';
+        $scope.flags = [];
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
@@ -59,34 +60,35 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
       }
     };
 
+    // Set of utility methods to facilitate the hiding and showing of elements based on role
     $scope.displaySubmit = function(){
       var mroles = Authentication.user.roles;
-      if (mroles.indexOf('admin') > -1){
+      if (mroles.indexOf('admin') > -1) {
         return false;
-      }
-      else if(mroles.indexOf('guest') > -1){
+      } else if(mroles.indexOf('guest') > -1) {
         return false;
+      } else {
+        return true;
       }
-      else return true;
     };
     //have role 'teamMember', 'user'
     //exclude 'teamcaptain' && include 'user'
-    $scope.displayExclude = function(role){
+    $scope.displayExclude = function(role) {
       var mroles = Authentication.user.roles;
-      if (mroles.indexOf(role) > -1){
+      if (mroles.indexOf(role) > -1) {
         return false;
+      } else {
+        return true;
       }
-      else return true;
     };
     $scope.displayInclude = function(role){
       var mroles = Authentication.user.roles;
       if (mroles.indexOf(role) > -1){
         return true;
+      } else {
+        return false;
       }
-      else return false;
     };
-
-
 
     // Update existing Challenge
     $scope.update = function (isValid) {
@@ -101,7 +103,7 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
       var challenge = $scope.challenge;
 
       challenge.$update(function () {
-        $location.path('challenges/' + challenge._id);
+        $location.path('challenges');
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
@@ -112,34 +114,28 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
       //Challenges will not be visible to participants unless event has started AND not ended.
       //if event has started AND not ended:
       $scope.challenges = Challenges.query();
-      if (Authentication.user && Authentication.user.team){
+
+      // If the user is on a team, get list of all solved challenges by them
+      if (Authentication.user && Authentication.user.team) {
+        // Initialize the arrays that will hold the solved IDs
+        $scope.teamSolvedChallenges = [];
         $scope.teamScoreBoard = ScoreBoard.get({scoreBoardTeamId: Authentication.user.team});
-      }
-      var chall;
-      $scope.teamSolvedChallenges = [];
-      $scope.teamScoreBoard.$promise.then(function (scoreboard){
-        for (chall = 0; chall < scoreboard.solved.length; chall++){
-          console.log("HERP: " + scoreboard.solved[chall].challengeId._id.toString());
-          $scope.teamSolvedChallenges.push(scoreboard.solved[chall].challengeId._id.toString());
-        }
-        console.log($scope.teamSolvedChallenges);
 
-        $scope.challenges.$promise.then(function (challenges){
-          var i, j;
-          for (i = 0; i < $scope.teamSolvedChallenges.length; i++){
-            for (j = 0; j < $scope.challenges.length; j++){
-              console.log("solvedChall: " + $scope.teamSolvedChallenges[i]);
-              console.log("Chall: " + $scope.challenges[j]._id.toString());
-              if ($scope.teamSolvedChallenges[i] === $scope.challenges[j]._id.toString()){
-                $scope.challenges[j].solved = true;
-              }
-            }
+        // Check the team's solved challenges
+        $scope.teamScoreBoard.$promise.then(function (scoreboard){
+          for (var chall = 0; chall < scoreboard.solved.length; chall++) {
+            $scope.teamSolvedChallenges.push(scoreboard.solved[chall].challengeId._id);
           }
-        });
-        console.log($scope.challenges);
-      });
 
-      //$scope.challenges =[];
+          // Update the local scope of challenges to match the team's solved list
+          $scope.challenges.$promise.then(function (challenges) {
+            for (var i = 0; i < $scope.challenges.length; ++i) {
+              if ($scope.teamSolvedChallenges.indexOf($scope.challenges[i]._id) > -1)
+                $scope.challenges[i].solved = true;
+            }
+          });
+        });
+      }
     };
 
     // Find existing Challenge
@@ -149,47 +145,63 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
       });
     };
 	
-	$scope.sortType = "name";
-    $scope.reverseSort = false;    
+    $scope.sortType = "name";
+    $scope.reverseSort = false;  
+
     $scope.sort = function(p) {
      if ($scope.sortType === p) {
-         $scope.reverseSort = !$scope.reverseSort;
-     } 
-	 else {
-         $scope.sortType = p;
-         if ($scope.sortType === "points"){
-           $scope.reverseSort = true;
-         }
-         else{		 
-           $scope.reverseSort = false;
-		 }
-     }
- };
- //$scope.item = {};
- $scope.submitItem = function(challenge){
-   var flag = challenge.solve;
-   console.log(flag);
-   console.log(challenge);
+        $scope.reverseSort = !$scope.reverseSort;
+      } else {
+        $scope.sortType = p;
+        
+        if ($scope.sortType === "points"){
+          $scope.reverseSort = true;
+        } else {		 
+          $scope.reverseSort = false;
+        }
+      }
+    };
 
-   $http.post('/api/challenges/submit', {challenge: challenge, flag: flag}).success(function (response) {
-     challenge.solve = null;
-     $scope.success = response.message;
-     challenge.solves = response.solves;
-     challenge.solved = response.solved;
-     alert(response.message + '!');
-     console.log("Success" + response.message);
-   }).error(function (response){
-     challenge.solve = null;
-     $scope.error = response.message;
-     console.log("Error" + response.message);
-   });
+    // Submits an answer in the hope that it is correct
+    $scope.submitItem = function(challenge){
+      Challenges.submit(null, challenge, function (response) {
+        // On successful submit
+        challenge.solve = null;
+        $scope.success = response.message;
+        challenge.solves = response.solves;
+        challenge.solved = response.solved;
+        alert(response.message + '!');
+      }, function (response) {
+        challenge.solve = null;
+        $scope.error = response.message;
+      });
+    };
 
-    //if (challenge.val === challenge.name){
-    //console.log("yes");
-	//}
-	//else{
-	//console.log("no");
-	//}
+  // Adds a flag to the set of possible flags
+  $scope.addFlag = function (chall) {
+    var challenge = (chall ? chall : $scope);
+
+    if (!$scope.flag)
+      return;
+
+    challenge.flags.push({flag: $scope.flag, regex: false});
+    challenge.flag = '';
   };
-  }
-]);
+
+  // Removes a flag from the set of flags
+  $scope.removeFlag = function (index, chall) {
+    var challenge = (chall ? chall : $scope);
+    if (index < 0)
+      return;
+
+    challenge.flags.splice(index, 1);
+  };
+
+  // Changes a flag type between being regex and being a string literal
+  $scope.toggleRegEx = function (flag) {
+    if (!flag)
+      return;
+
+    flag.regex = !flag.regex;
+  };
+}]);

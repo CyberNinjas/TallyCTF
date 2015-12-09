@@ -6,8 +6,7 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   ScoreBoard = mongoose.model('ScoreBoard'),
-  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-  ;
+  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 /**
  * Show the current score board entry
@@ -20,6 +19,7 @@ exports.read = function (req, res) {
  * Append data to a score board
  */
 exports.append = function (team, user, challenge, res) {
+  console.log(challenge);
   var scoreBoard = ScoreBoard.findById(team.scoreBoard).exec(function (err, scoreBoard){
     if (err) {
       return err;
@@ -133,22 +133,22 @@ exports.scoreBoardByTeamID = function (req, res, next, id) {
   }
 
   ScoreBoard.find({team: id})
-  .populate('team', 'teamName')
-      .populate({
-        path: 'solved',
-        populate: { path: 'challengeId', select: 'name'}
-      })
-  .exec(function (err, scoreBoard) {
-    if (err) {
-      return next(err);
-    } else if (!scoreBoard) {
-      return res.status(404).send({
-        message: 'No score board with that team identifier has been found'
-      });
-    }
-    
-    req.scoreBoard = (scoreBoard.length > 1 ? scoreBoard : scoreBoard[0]);
+    .populate('team', 'teamName')
+    .populate({
+      path: 'solved',
+      populate: { path: 'challengeId userId', select: 'name username' }
+    })
+    .exec(function (err, scoreBoard) {
+      if (err) {
+        return next(err);
+      } else if (!scoreBoard) {
+        return res.status(404).send({
+          message: 'No score board with that team identifier has been found'
+        });
+      }
+      
+      req.scoreBoard = (scoreBoard.length > 1 ? scoreBoard : scoreBoard[0]);
 
-    next();
-  });
+      next();
+    });
 };

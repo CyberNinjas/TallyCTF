@@ -27,9 +27,9 @@ angular.module('challenges').config(['$stateProvider',
       })
       .state('challenges.edit', {
         url: '/:challengeId/edit',
-        templateUrl: 'modules/challenges/client/views/edit-challenges.client.view.html',
+        templateUrl: 'modules/challenges/client/views/edit-challenge.client.view.html',
         data: {
-          roles: ['user', 'admin']
+          roles: ['admin']
         }
       });
   }
