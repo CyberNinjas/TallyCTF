@@ -73,7 +73,7 @@
           <br>
         </span>
         <div ng-if="displayInclude('admin')">
-          <span class="pull-right btn btn-danger" ng-click="remove(challenge)">
+          <span class="pull-right btn btn-danger" ng-click="confirmDelete(challenge)">
             <span class="glyphicon glyphicon-trash"></span>
           </span>
           <span class="pull-right btn btn-primary" ui-sref="challenges.edit({challengeId: challenge._id})">

@@ -89,7 +89,13 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
         return false;
       }
     };
+  $scope.confirmDelete = function(challenge) {
+    if(confirm("Are you sure you want to delete?")){
+      console.log('challenge delete');
+      $scope.remove(challenge);
+    }
 
+  };
     // Update existing Challenge
     $scope.update = function (isValid) {
       $scope.error = null;
