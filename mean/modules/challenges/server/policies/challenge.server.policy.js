@@ -13,6 +13,7 @@ acl = new acl(new acl.memoryBackend());
  */
 exports.invokeRolesPolicies = function () {
   acl.allow([{
+    //define administrative permissions
     roles: ['admin'],
     allows: [{
       resources: '/api/challenges',
@@ -22,6 +23,7 @@ exports.invokeRolesPolicies = function () {
       permissions: '*'
     }]
   }, {
+    //restrict user role to http methods below for given endpoint
     roles: ['user'],
     allows: [{
       resources: '/api/challenges',
@@ -34,6 +36,7 @@ exports.invokeRolesPolicies = function () {
       permissions: ['get']
     }]
   }, {
+    //restrict guest role to http methods below for given endpoint
     roles: ['guest'],
     allows: [{
       resources: '/api/challenges',
@@ -52,6 +55,7 @@ exports.invokeRolesPolicies = function () {
 exports.isAllowedSubmit = function (req, res, next){
   var roles = (req.user) ? req.user.roles : ['guest'];
 
+  //user must be registered on site to attempt submit
   if (req.body.challenge && req.user && req.user.roles.indexOf("user") > -1){
     return next();
   }
