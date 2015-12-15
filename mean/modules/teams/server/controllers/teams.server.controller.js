@@ -566,11 +566,11 @@ exports.teamByID = function (req, res, next, id) {
 /**
  * Find Team names from requestToJoin field and askToJoin field
  */
+//FIXME: the following two methods need to be re-architected.
 exports.findRequests = function (req, res) {
-  var combines = req.user.requestToJoin.concat(req.user.askToJoin);
 
   Team.find({
-    '_id': { $in: combines }
+    '_id': { $in: req.user.requestToJoin }
   }).select('teamName')
     .exec(function (err, teams) {
       if(err){
@@ -578,10 +578,29 @@ exports.findRequests = function (req, res) {
           message: errorHandler.getErrorMessage(err)
         });
       } else {
-        teams.push(req.user.askToJoin.length);
+
         res.json(teams);
       }
   });
+};
+
+/**
+ * Find Team names from requestToJoin field and askToJoin field
+ */
+exports.findAsks = function (req, res) {
+
+  Team.find({
+    '_id': { $in: req.user.askToJoin }
+  }).select('teamName')
+      .exec(function (err, teams) {
+        if(err){
+          return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+          });
+        } else {
+          res.json(teams);
+        }
+      });
 };
 
 /**

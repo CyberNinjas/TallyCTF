@@ -12,6 +12,11 @@ angular.module('teams')
            method: 'GET',
            isArray: true
        },
+       findAsks: {
+           url: 'api/teams/asks',
+           method: 'GET',
+           isArray: true
+       },
         update: {
           method: 'PUT'
         },

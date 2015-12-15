@@ -277,15 +277,8 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       if(Authentication.user.team){
         $state.go('teams.view', {teamId: Authentication.user.team});
       } else{
-        $scope.teams = Teams.findRequests(function () {
-          var len = $scope.teams.pop();
-          $scope.askTeams = [];
-
-          while (len--)
-            $scope.askTeams.push($scope.teams.pop());
-
-          $scope.requestTeams = $scope.teams;
-        });
+        $scope.requestTeams = Teams.findRequests();
+        $scope.askTeams = Teams.findAsks();
       }
     };
 
