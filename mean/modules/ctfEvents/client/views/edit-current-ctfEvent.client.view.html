@@ -50,7 +50,7 @@
           <h2 bcollapse>Teams</h2>
           <div class="collapse">
             <div class="well well-lg list-group">
-              <a ng-repeat="team in teams" ui-sref="team.edit({teamId: team._id})" class="list-group-item">
+              <a ng-repeat="team in teams" ui-sref="teams.edit({teamId: team._id})" class="list-group-item">
                 <h4 ng-bind="team.teamName" class="list-group-item-header"></h4>
               </a>
             </div>
