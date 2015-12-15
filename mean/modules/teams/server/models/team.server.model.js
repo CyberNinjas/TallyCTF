@@ -31,10 +31,12 @@ var TeamSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   }],
+  //list of Users who request to join the team
   requestToJoin: [{
     type: Schema.Types.ObjectId,
     ref: 'User'
   }],
+  //list of Users who the teamCaptain asked to join the team
   askToJoin:[{
     type: Schema.Types.ObjectId,
     ref: 'User'

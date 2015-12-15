@@ -22,14 +22,14 @@ module.exports = function (app) {
     .get(teams.read)
     .put(teams.update)
     .delete(teams.delete);
-
+    //route for team MiddleWare(with no populates)
   app.route('/api/teams/:teamIdRaw/raw').all(teamsPolicy.isAllowed)
     .get(teams.read);
-
+    //rotue for askToJoin and requestToJoin
   app.route('/api/teams/:teamId.:userId/join').all(teamsPolicy.isAllowed)
         .put(teams.askToJoin)
         .patch(teams.requestToJoin);
-
+    //route for accepting,declining, and removing member
   app.route('/api/teams/:teamId.:userId/ctl').all(teamsPolicy.isAllowedToAccept)
       .put(teams.decline)
       .post(teams.accept)

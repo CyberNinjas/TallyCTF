@@ -110,7 +110,7 @@ exports.read = function (req, res) {
 };
 
 /**
- * Update a team
+ * Update a team and its schema model
  */
 exports.update = function (req, res) {
   var team = req.team;
@@ -119,13 +119,7 @@ exports.update = function (req, res) {
   team.requestToJoin = req.body.requestToJoin;
   team.members = req.body.members;
   team.askToJoin = req.body.askToJoin;
-  
-  var capt = req.team.teamCaptain;
-  capt.notifications+=1;
-  capt.save(function (err) {
-    if (err)
-      console.log('error updating captain');
-  });
+
   team.save(function (err) {
     if (err) {
       console.log(err);
@@ -193,7 +187,9 @@ exports.accept = function(req, res) {
   });
 
 };
-
+/**
+ * Function to decline a request, removing a user from requestToJoin from both User and Team Schemas
+ */
 exports.decline = function (req, res) {
   var team = req.team;
   var user = req.model;
@@ -228,7 +224,7 @@ exports.decline = function (req, res) {
         message: "Invalid User to add"
       });
   }
-
+//save user
   user.save(function (err) {
     if (err)
       return res.status(400).send({
@@ -255,10 +251,11 @@ exports.decline = function (req, res) {
 exports.askToJoin = function (req, res) {
   var team = req.team;
   var user = req.model;
-
+  //update user and team askToJoin fields
   team.askToJoin.push(user._id);
   user.askToJoin.push(team._id);
 
+  //Save team
   team.save(function (err) {
     if (err) {
       return res.status(400).send({
@@ -268,7 +265,7 @@ exports.askToJoin = function (req, res) {
       res.json(team);
     }
   });
-  
+  //Save user
   user.save(function (err) {
     if (err)
       return res.status(400).send({
@@ -283,10 +280,11 @@ exports.askToJoin = function (req, res) {
 exports.requestToJoin = function (req, res) {
   var team = req.team;
   var user = req.model;
-
+  //update user and team requestToJoin fields
   team.requestToJoin.push(user._id);
   user.requestToJoin.push(team._id);
 
+  //Save team
   team.save(function (err) {
     if (err) {
       return res.status(400).send({
@@ -296,7 +294,7 @@ exports.requestToJoin = function (req, res) {
       res.json(team);
     }
   });
-  
+  //Save user
   user.save(function (err) {
     if (err)
       return res.status(400).send({
@@ -351,7 +349,7 @@ exports.removeMember = function (req, res) {
 
 
 /**
- * Update a user's roles / team
+ * Update a user's roles / team when the
  */
 exports.addTeamToUser = function (user, team) {
   // Fail if already a team member
@@ -409,7 +407,9 @@ exports.addTeamToUser = function (user, team) {
 
   return true;
 };
-
+/**
+ * Removes Team
+ */
 exports.clear = function(req,res){
   Team.remove({}, function(err,thing) {
     if (err){
@@ -423,7 +423,7 @@ exports.clear = function(req,res){
 };
 
 /**
- * Delete an team
+ * Delete a team
  */
 exports.delete = function (req, res) {
   var team = req.team;
@@ -563,7 +563,9 @@ exports.teamByID = function (req, res, next, id) {
   });
 };
 
-
+/**
+ * Find Team names from requestToJoin field and askToJoin field
+ */
 exports.findRequests = function (req, res) {
   var combines = req.user.requestToJoin.concat(req.user.askToJoin);
 

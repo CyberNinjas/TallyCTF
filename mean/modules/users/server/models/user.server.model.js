@@ -109,14 +109,12 @@ var UserSchema = new Schema({
     type: String,
     default: ""
   },
-  notifications: {
-    type: Number,
-    default: 0
-  },
+  //List of Teams that asked the current user to join their team
   askToJoin: [{
     type: Schema.Types.ObjectId,
     ref: "Team"
   }],
+  //List of Teams that the User requested to join
   requestToJoin: [{
     type: Schema.Types.ObjectId,
     ref: "Team"

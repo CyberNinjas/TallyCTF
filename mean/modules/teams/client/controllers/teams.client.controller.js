@@ -270,7 +270,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       });
     };
 
-    /** Find existing Team
+    /** Find existing reqeusts and asks to join from all Teams for a user
      *
      */
     $scope.findTeam = function () {
