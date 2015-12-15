@@ -19,6 +19,7 @@ exports.read = function (req, res) {
  * Append data to a score board
  */
 exports.append = function (team, user, challenge, res) {
+  //retrieve scoreboard from all scoreboards using teamID
   var scoreBoard = ScoreBoard.findById(team.scoreBoard).exec(function (err, scoreBoard){
     if (err) {
       return err;
@@ -28,6 +29,7 @@ exports.append = function (team, user, challenge, res) {
       });
     }
 
+    //check if the team has already solved the challenge
     for (var cid = 0; cid < scoreBoard.solved.length; ++cid) {
       if (scoreBoard.solved[cid].challengeId.toString() === challenge._id.toString()){
         return res.status(200).send({
@@ -38,7 +40,9 @@ exports.append = function (team, user, challenge, res) {
       }
     }
 
+    //if they haven't, increment solves
     challenge.solves += 1;
+    //and save the challenge
     challenge.save(function (err) {
       if (err) {
         console.log(err);
@@ -47,9 +51,13 @@ exports.append = function (team, user, challenge, res) {
         });
       }
     });
+    //append the solve to the scoreBoard object
     scoreBoard.solved.push({challengeId: challenge._id, userId: user._id, date: Date.now(), points: challenge.points});
+
+    //increment team's score in scoreboard
     scoreBoard.score += challenge.points;
 
+    //and save the scoreboard
     scoreBoard.save(function (err) {
       if (err) {
         console.log(err);
@@ -106,6 +114,7 @@ exports.delete = function (req, res) {
  * List of ScoreBoard
  */
 exports.list = function (req, res) {
+  //get all scoreboards sorted descending by score value
   ScoreBoard.find().sort('-score')
   .populate('team', 'teamName')
   .populate('solved')

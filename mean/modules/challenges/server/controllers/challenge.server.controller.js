@@ -7,8 +7,8 @@ var path = require('path'),
   mongoose = require('mongoose'),
   Team = mongoose.model('Team'),
   Challenge = mongoose.model('Challenge'),
-    CurrentCtfEvent = mongoose.model('CurrentCtfEvent'),
-    ScoreBoard = mongoose.model('ScoreBoard'),
+  CurrentCtfEvent = mongoose.model('CurrentCtfEvent'),
+  ScoreBoard = mongoose.model('ScoreBoard'),
   scoreboard = require(path.resolve('./modules/scoreBoard/server/controllers/scoreBoard.server.controller.js')),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
@@ -16,9 +16,13 @@ var path = require('path'),
  * Create a challenges
  */
 exports.create = function (req, res) {
+  //create new challenge object (mongoose) out of request's body
   var challenge = new Challenge(req.body);
+
+  //set challenge creator
   challenge.user = req.user;
 
+  //commit new challenge to DB
   challenge.save(function (err) {
     if (err) {
       return res.status(400).send({
@@ -43,12 +47,14 @@ exports.read = function (req, res) {
 exports.update = function (req, res) {
   var challenge = req.challenge;
 
+  //set challenge properties from request body
   challenge.name = req.body.name;
   challenge.description = req.body.description;
   challenge.category = req.body.category;
   challenge.points = req.body.points;
   challenge.flags = req.body.flags;
 
+  //commit changes to DB
   challenge.save(function (err) {
     if (err) {
       return res.status(400).send({
@@ -82,6 +88,7 @@ exports.delete = function (req, res) {
  * List of Challenges
  */
 exports.list = function (req, res) {
+  //use mongoose object's 'select' after 'find' function to strip out the flag's value from the response
   Challenge.find().select('-flags').sort('-created').exec(function (err, challenges) {
     if (err) {
       return res.status(400).send({
@@ -93,10 +100,19 @@ exports.list = function (req, res) {
   });
 };
 
+//Method to validate and register challenge solve or reject incorrect answer
 exports.submit = function(req, res) {
+
+  //get teamID of user requesting submit
   var teamId = req.user.team;
+
+  //get the string to be considered for submission
   var attempt = req.body.solve;
+
+  //get the user's roles
   var roles = req.user.roles;
+
+  //get the challenge they are submitting for
   var challenge = req.challenge;
 
   // Check that the user is able to submit (must be on a team)
@@ -125,12 +141,15 @@ exports.submit = function(req, res) {
       correct = (attempt === challenge.flags[i].flag);
     }
 
+    //if submitted response matches any of the challenge flags, break
     if (correct)
       break;
   }
 
+  //if the answer submitted matches any of the challenge's flags
   if (correct) {
     console.log("Correct Answer!");
+    //retrieve the team object the user belongs to
     Team.findById(teamId).exec(function (err, team) {
       if (err) {
         return res.status(400).send({
@@ -149,6 +168,7 @@ exports.submit = function(req, res) {
   } else {
     // On incorrect answer
     console.log("Incorrect Answer!");
+    //return a successful submit with the message informing them the answer was wrong
     return res.status(200).send({
       message: 'Incorrect',
       solves: challenge.solves,
@@ -168,6 +188,7 @@ exports.challengeByID = function (req, res, next, id) {
     });
   }
 
+  //finds a single challenge by id
   Challenge.findById(id).exec(function (err, challenge) {
     if (err) {
       return next(err);

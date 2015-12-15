@@ -17,6 +17,7 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
 
       // Create new CtfEvent object
       var ctfEvent = new CtfEvents({
+        //set value of new object to field's values
         created: this.created,
         title: this.title,
         start: this.start,
@@ -45,8 +46,10 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
     // Remove existing CtfEvent
     $scope.remove = function (ctfEvent) {
       if (ctfEvent) {
+        // from backend:
         ctfEvent.$remove();
 
+        // from display:
         for (var i in $scope.ctfEvents) {
           if ($scope.ctfEvents[i] === ctfEvent) {
             $scope.ctfEvents.splice(i, 1);
@@ -61,6 +64,7 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
 
     // Save the Current Event to the db
     $scope.saveCurrent = function () {
+
       // Create new CtfEvent object
       var ctfEvent = new CtfEvents({
         created: Date.now(),
@@ -102,12 +106,14 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
       // Save basic info to the current event
       var _ctfEvent = (ctfEvent ? ctfEvent : $scope.ctfEvent);
 
+      // create new ctfEvent object and assign to it the following fields
       var currentCtfEvent = new CurrentCtfEvents({
         title: _ctfEvent.title,
         start: _ctfEvent.start,
         end  : _ctfEvent.end
       });
 
+      // save new ctfEvent to db
       currentCtfEvent.$save(function (response) {}, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
@@ -134,8 +140,10 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
         return false;
       }
 
+      //get reference to in-browser ctfEvent
       var ctfEvent = $scope.ctfEvent;
 
+      //commit ctfEvent to db
       ctfEvent.$update(function () {
         $location.path('ctfEvents');
       }, function (errorResponse) {
