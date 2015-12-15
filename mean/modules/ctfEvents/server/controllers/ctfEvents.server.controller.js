@@ -16,8 +16,11 @@ var path = require('path'),
  * Create a ctfEvent
  */
 exports.create = function (req, res) {
+
+  //create new Mongoose object out of request body
   var ctfEvent = new CtfEvent(req.body);
 
+  //commit to db
   ctfEvent.save(function (err) {
     if (err) {
       return res.status(400).send({
@@ -42,6 +45,7 @@ exports.read = function (req, res) {
 exports.update = function (req, res) {
   var ctfEvent = req.ctfEvent;
 
+  //allow updating of Title, startTime and endTime
   ctfEvent.title = req.body.title;
   ctfEvent.start = req.body.start;
   ctfEvent.end = req.body.end;
@@ -65,8 +69,10 @@ exports.update = function (req, res) {
  * Create a currentCtfEvent
  */
 exports.createCurrent = function (req, res) {
+  //create new mongoose model from request body
   var currentCtfEvent = new CurrentCtfEvent(req.body);
 
+  //commit to db
   currentCtfEvent.save(function (err) {
     if (err) {
       console.log(err);
@@ -83,6 +89,8 @@ exports.createCurrent = function (req, res) {
  * Clear the working set
  */
 exports.clear = function (req, res) {
+
+  //remove all challenges
   Challenge.remove({}, function (err, thing) {
     if (err) {
       return res.status(400).send({
@@ -90,6 +98,8 @@ exports.clear = function (req, res) {
       });
     }
   });
+
+  //remove all teams
   Team.remove({}, function (err, thing) {
     if (err) {
       return res.status(400).send({
@@ -109,12 +119,11 @@ exports.clear = function (req, res) {
   res.status(200).send();
 };
 
-/*
- * Event loading stuff
- */
+//load an event into the current ctf event
 exports.loadCurrent = function (req, res) {
   if (req.body.Challenges.length > 0)
   {
+    //insert all challenge records from ctfEvent to currentCtfEvent
     Challenge.collection.insertMany(req.body.Challenges, function (err, r) {
       if (err) {
         return res.status(400).send({
@@ -126,6 +135,7 @@ exports.loadCurrent = function (req, res) {
 
   if (req.body.Teams > 0)
   {
+    //insert all team records from ctfEvent to currentCtfEvent
     Team.collection.insertMany(req.body.Teams, function (err, r) {
       if (err) {
         return res.status(400).send({
