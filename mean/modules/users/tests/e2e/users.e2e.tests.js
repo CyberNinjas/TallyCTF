@@ -15,41 +15,41 @@ function writeScreenShot(data, filename) {
 //******** Guests **********//
 
   //Traverse through the HomePage,Scoreboard,Teams
-  
-  //Register an account
-  describe('Create a User',function(){
-    it('Should create a new user',function(){
-      browser.get('http://localhost:3000/authentication/signup');
-      var firstname = element(by.model('credentials.firstName'));
-      var lastname = element(by.model('credentials.lastName'));
-      var country = element(by.model('credentials.country'));
-      var email = element(by.model('credentials.email'));
-      var username = element(by.model('credentials.username'));
-      var password = element(by.model('credentials.password'));
-      var button = element(by.buttonText('Sign up'));
 
-      firstname.sendKeys('admin');
-      browser.sleep(500);
-      lastname.sendKeys('admin');
-      browser.sleep(500);
-      country.sendKeys('Denmark');
-      browser.sleep(500);
-      email.sendKeys('admin@admin.com');
-      browser.sleep(500);
-      username.sendKeys('admin');
-      browser.sleep(500);
-      password.sendKeys('1Qasdfghjkl;\'');
-      browser.sleep(500);
-
-      button.click();
-      browser.takeScreenshot().then(function (png){
-          writeScreenShot(png, 'screenshots/createUser.png');
-      });
-      browser.sleep(500);
-      var name = element(by.binding('authentication.user.username'));
-      expect(name.getText()).toEqual('admin');
-    });
-  });
+  // //Register an account
+  // describe('Create a User',function(){
+  //   it('Should create a new user',function(){
+  //     browser.get('http://localhost:3000/authentication/signup');
+  //     var firstname = element(by.model('credentials.firstName'));
+  //     var lastname = element(by.model('credentials.lastName'));
+  //     var country = element(by.model('credentials.country'));
+  //     var email = element(by.model('credentials.email'));
+  //     var username = element(by.model('credentials.username'));
+  //     var password = element(by.model('credentials.password'));
+  //     var button = element(by.buttonText('Sign up'));
+  //
+  //     firstname.sendKeys('admin');
+  //     browser.sleep(500);
+  //     lastname.sendKeys('admin');
+  //     browser.sleep(500);
+  //     country.sendKeys('Denmark');
+  //     browser.sleep(500);
+  //     email.sendKeys('admin@admin.com');
+  //     browser.sleep(500);
+  //     username.sendKeys('admin');
+  //     browser.sleep(500);
+  //     password.sendKeys('1Qasdfghjkl;\'');
+  //     browser.sleep(500);
+  //
+  //     button.click();
+  //     browser.takeScreenshot().then(function (png){
+  //         writeScreenShot(png, 'screenshots/createUser.png');
+  //     });
+  //     browser.sleep(500);
+  //     var name = element(by.binding('authentication.user.username'));
+  //     expect(name.getText()).toEqual('admin');
+  //   });
+  // });
 
   //Get to the sign in page
 
@@ -57,21 +57,112 @@ function writeScreenShot(data, filename) {
 //******** Users  **********// Refresh after each use
 
   //Sign in
+  // //Test to log user in
+  describe('Signin Acceptance',function(){
+    it('Should sign the user in',function(){
+      browser.get('http://localhost:3000/authentication/signin');
+      browser.sleep(1000);
+      var username = element(by.model('credentials.username'));
+      var password = element(by.model('credentials.password'));
+      var button = element(by.buttonText('Sign in'));
+      //username.sendKeys('admin');
+      username.sendKeys('test');
+      browser.sleep(500);
+      password.sendKeys('1Qasdfghjkl;\'');
+      browser.sleep(500);
+      button.click();
+      var name = element(by.binding('authentication.user.username'));
+      //expect(name.getText()).toEqual('admin');
+      expect(name.getText()).toEqual('test');
+    });
+  });
+
   //Traverse through the HomePage,Challenges,Scoreboard,Teams
 
   //***** Challenges ******//
     //*** User not on team ***//
       //In challenges, list out challenges
-      //In challenges, filter challenges
-      //In challenges, click on a challenge, see description
+      // describe('User not on a team',function(){
+      //   it('should just list out challenges',function(){
+      //     browser.get('http://localhost:3000/challenges');
+      //     var allOptions = element.all(by.options("challenge as challenge.category for challenge in challenges | unique: 'category' | orderBy: 'category'"));
+      //     browser.sleep(500);
+      //     var secondOption = allOptions.get(1);
+      //     var RegEx = element(by.binding('RegEx'));
+      //     browser.sleep(500);
+      //     expect(secondOption.getText()).toEqual('RegEx');
+      //     browser.takeScreenshot().then(function (png){
+      //         writeScreenShot(png, 'screenshots/createUser.png');
+      //     });
+      //   });
+      // });
+      //
+      //
+      // //In challenges, click on a challenge, see description
+      // describe('User not on a team',function(){
+      //   it('should click on a challenge',function(){
+      //     var challenge = element.all(by.repeater("challenge in challenges | filter:{category: challengeFilter.category}:true | orderBy:sortType:reverseSort").column('challenge.name'));
+      //     var actual = challenge.get(0);
+      //     actual.click();
+      //     browser.sleep(1000);
+      //     var text = element(by.linkText('You must be on a team to submit answers!'));
+      //     expect(text.getText()).toEqual('You must be on a team to submit answers!');
+      //   });
+      // });
+
+
     //*** User on a team ***//
       //In challenges, list out challenges
-      //In challenges, filter challenges
-      //In challenges, click on a challenge, see description
-      //In challenges, answer a challenge
+      describe('User not on a team',function(){
+        it('should just list out challenges',function(){
+          browser.get('http://localhost:3000/challenges');
+          var allOptions = element.all(by.options("challenge as challenge.category for challenge in challenges | unique: 'category' | orderBy: 'category'"));
+          browser.sleep(500);
+          var secondOption = allOptions.get(1);
+          secondOption.click();
+          browser.sleep(500);
+          expect(secondOption.getText()).toEqual('RegEx');
+          browser.takeScreenshot().then(function (png){
+              writeScreenShot(png, 'screenshots/createUser.png');
+          });
+        });
+      });
 
+
+      //In challenges, answer a challenge incorrectly THEN answer it correctly
+      describe('User on a team',function(){
+        it('should click on a challenge',function(){
+          var allOptions = element.all(by.options("challenge as challenge.category for challenge in challenges | unique: 'category' | orderBy: 'category'"));
+          var secondOption = allOptions.get(1);
+          browser.sleep(1000);
+          var RegEx = element(by.binding('RegEx'));
+          var challenge = element.all(by.repeater("challenge in challenges | filter:{category: challengeFilter.category}:true | orderBy:sortType:reverseSort").column('challenge.name'));
+          var actual = challenge.get(0);
+          actual.click();
+          var answer = element(by.model('challenge.solve'));
+          answer.sendKeys('\\dd*');
+          var button = element(by.className('submitButton'));
+          button.click();
+          browser.sleep(3000);
+          var alertDialog = browser.switchTo().alert();
+          alertDialog.accept();
+          answer.clear();
+          answer.sendKeys('\\d*');
+          button.click();
+          browser.sleep(3000);
+          alertDialog = browser.switchTo().alert();
+          alertDialog.accept();
+          expect(alertDialog.getText()).toEqual('Correct!');
+        });
+      });
   //***** Scoreboard ******//
     //click on team
+    // describe('User',function(){
+    //   it('should be able to view scoreboard',function(){
+    //     browser.get('http://localhost:3000/scoreboard');
+    //     var team = element(by.)
+    //   })
+    // })
     //click on solved challenges
 
   //***** Teams *****//
@@ -151,11 +242,12 @@ function writeScreenShot(data, filename) {
 // // //Test to log user in
 // describe('Signin Acceptance',function(){
 //   it('Should sign the user in',function(){
+//
+//
 //     browser.get('http://localhost:3000');
-//     var signOutButton = element(by.model('menu'));
-//     signOutButton.$('[value="Signout"]').click();
-//     signOutButton.click();
-//     browser.sleep(2000);
+//     var button1 = element(by.className('dropdown-toggle user-header-dropdown-toggle'));
+//     button1.click();
+//     browser.sleep(1000);
 //     var username = element(by.model('credentials.username'));
 //     var password = element(by.model('credentials.password'));
 //     var button = element(by.buttonText('Sign in'));
