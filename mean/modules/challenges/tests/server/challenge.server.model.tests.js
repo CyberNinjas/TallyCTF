@@ -29,10 +29,13 @@ describe('Challenge Model Unit Tests:', function () {
 
     user.save(function () {
       challenge = new Challenge({
-        title: 'Challenge Title',
-        content: 'Challenge Content',
-        user: user
-      });
+          name: "challengeName",
+          description: "challengeDescription",
+          solves: 0,
+          category: "challengeCategory",
+          points: 100,
+          flag: "challengeFlag"
+        });
 
       done();
     });
@@ -48,7 +51,16 @@ describe('Challenge Model Unit Tests:', function () {
     });
 
     it('should be able to show an error when try to save without title', function (done) {
-      challenge.title = '';
+      challenge.name = '';
+
+      return challenge.save(function (err) {
+        should.exist(err);
+        done();
+      });
+    });
+
+    it('should be able to show an error when try to save without description', function (done) {
+      challenge.description = '';
 
       return challenge.save(function (err) {
         should.exist(err);
@@ -56,6 +68,34 @@ describe('Challenge Model Unit Tests:', function () {
       });
     });
   });
+
+  it('should be able to show an error when try to save without category', function (done) {
+    challenge.category = '';
+
+    return challenge.save(function (err) {
+      should.exist(err);
+      done();
+    });
+  });
+
+  it('should be able to show an error when try to save without points', function (done) {
+    challenge.points = null;
+
+    return challenge.save(function (err) {
+      should.exist(err);
+      done();
+    });
+  });
+
+  it('should be able to show an error when try to save without flag', function (done) {
+    challenge.flag = '';
+
+    return challenge.save(function (err) {
+      should.exist(err);
+      done();
+    });
+  });
+
 
   afterEach(function (done) {
     Challenge.remove().exec(function () {
