@@ -14,63 +14,137 @@ function writeScreenShot(data, filename) {
 
 //******** Guests **********//
 
-//Traverse through the HomePage,Scoreboard,Teams
-//Register an account
-//Get to the sign in page
+  //Traverse through the HomePage,Scoreboard,Teams
+  
+  //Register an account
+  describe('Create a User',function(){
+    it('Should create a new user',function(){
+      browser.get('http://localhost:3000/authentication/signup');
+      var firstname = element(by.model('credentials.firstName'));
+      var lastname = element(by.model('credentials.lastName'));
+      var country = element(by.model('credentials.country'));
+      var email = element(by.model('credentials.email'));
+      var username = element(by.model('credentials.username'));
+      var password = element(by.model('credentials.password'));
+      var button = element(by.buttonText('Sign up'));
+
+      firstname.sendKeys('admin');
+      browser.sleep(500);
+      lastname.sendKeys('admin');
+      browser.sleep(500);
+      country.sendKeys('Denmark');
+      browser.sleep(500);
+      email.sendKeys('admin@admin.com');
+      browser.sleep(500);
+      username.sendKeys('admin');
+      browser.sleep(500);
+      password.sendKeys('1Qasdfghjkl;\'');
+      browser.sleep(500);
+
+      button.click();
+      browser.takeScreenshot().then(function (png){
+          writeScreenShot(png, 'screenshots/createUser.png');
+      });
+      browser.sleep(500);
+      var name = element(by.binding('authentication.user.username'));
+      expect(name.getText()).toEqual('admin');
+    });
+  });
+
+  //Get to the sign in page
 
 
-//******** Users  **********//
+//******** Users  **********// Refresh after each use
 
-//Sign in
-//Traverse through the HomePage,Challenges,Scoreboard,Teams
+  //Sign in
+  //Traverse through the HomePage,Challenges,Scoreboard,Teams
 
-  //On challenges, list out challenges
-  //In challenges, filter challenges
-  //In challenges, click on a challenge, see shit
-  //
+  //***** Challenges ******//
+    //*** User not on team ***//
+      //In challenges, list out challenges
+      //In challenges, filter challenges
+      //In challenges, click on a challenge, see description
+    //*** User on a team ***//
+      //In challenges, list out challenges
+      //In challenges, filter challenges
+      //In challenges, click on a challenge, see description
+      //In challenges, answer a challenge
 
-//******** Team Captain *********//
+  //***** Scoreboard ******//
+    //click on team
+    //click on solved challenges
 
-//Traverse through the HomePage,Challenges,Scoreboard,Teams
+  //***** Teams *****//
+    //*** User not on a Team ***//
+      //Click on a team
+      //click on Request to Join
+      //Click on user's myTeam and view pending request status
+      //Click to decline askToJoin
+      //Click to accept askToJoin team
+
+
+    //*** User on a Team ****//
+      //Click on teams
+      //Click on their team and see team members
+      //Click on myTeam and see if registered to that team
+
+    //*** Team Captain (teams) ***//
+      //click on my team
+      //click on "+"
+        //add a user
+        //click on my team again
+      //Accept pending user
+      //Decline pending user
+      //click on edit
+        //change name
+        //delete a team member
+        //press update
+      //click on my team again
+        //click delete
+        //confirm delete
+
 
 //******** Admin  **********//
 
-//Traverse through the HomePage,Challenges,Scoreboard,Teams
+  //Traverse through the HomePage,Challenges,Scoreboard,Teams
 
-// Create a User
-describe('Create a User',function(){
-  it('Should create a new user',function(){
-    browser.get('http://localhost:3000/authentication/signup');
-    var firstname = element(by.model('credentials.firstName'));
-    var lastname = element(by.model('credentials.lastName'));
-    var country = element(by.model('credentials.country'));
-    var email = element(by.model('credentials.email'));
-    var username = element(by.model('credentials.username'));
-    var password = element(by.model('credentials.password'));
-    var button = element(by.buttonText('Sign up'));
+  //**** Challenges ****//
+    //List challenges (assuming ctfEvent start time is bug)
+    //Create a challenge
+    //edit a challenge
+    //delete a challenge
+    //confirm delete
 
-    firstname.sendKeys('admin');
-    browser.sleep(500);
-    lastname.sendKeys('admin');
-    browser.sleep(500);
-    country.sendKeys('Denmark');
-    browser.sleep(500);
-    email.sendKeys('admin@admin.com');
-    browser.sleep(500);
-    username.sendKeys('admin');
-    browser.sleep(500);
-    password.sendKeys('1Qasdfghjkl;\'');
-    browser.sleep(500);
+  //**** Scoreboard ****//
+    //Same as a User
 
-    button.click();
-    browser.takeScreenshot().then(function (png){
-        writeScreenShot(png, 'createUser.png');
-    });
-    browser.sleep(500);
-    var name = element(by.binding('authentication.user.username'));
-    expect(name.getText()).toEqual('admin');
-  });
-});
+  //**** Teams ****//
+    //Edit any team
+    //Delete any team
+
+  //*** Manage User Auths ***//
+    //Create a User Auth
+
+  //*** Manage Users ***//
+    //Manage Users
+    //Edit Users
+    //Delete Users
+    //Confirm delete
+
+  //*** Manage Events ***//
+    //Create an Event
+    //Click on Current Event
+    //Edit/Fill Current Event
+    //Update Events
+    //Check options --> save Event
+    //Check options --> delete Event
+    //Set any event --> Current event
+
+
+
+
+
+
 
 
 // //******************************//
