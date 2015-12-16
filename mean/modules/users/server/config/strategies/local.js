@@ -10,9 +10,9 @@ var passport = require('passport'),
 module.exports = function () {
   // Use local strategy
   passport.use(new LocalStrategy({
-      usernameField: 'username',
-      passwordField: 'password'
-    },
+    usernameField: 'username',
+    passwordField: 'password'
+  },
     function (username, password, done) {
       User.findOne({
         username: username.toLowerCase()

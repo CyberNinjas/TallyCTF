@@ -32,8 +32,7 @@ exports.invokeRolesPolicies = function () {
     }]
   }, {
     roles: ['teamCaptain'], //teamCaptain permissions
-    allows: [
-    {
+    allows: [{
       resources: '/api/teams/:teamId',
       permissions: ['delete']
     }, {

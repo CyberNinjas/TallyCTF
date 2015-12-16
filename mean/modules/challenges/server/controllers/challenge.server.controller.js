@@ -116,7 +116,7 @@ exports.submit = function(req, res) {
   var challenge = req.challenge;
 
   // Check that the user is able to submit (must be on a team)
-  if ((roles.indexOf("teamMember") === -1) && (roles.indexOf("teamCaptain") === -1)){
+  if ((roles.indexOf('teamMember') === -1) && (roles.indexOf('teamCaptain') === -1)){
     return res.status(403).send({
       message: 'You must be on a team to submit flags!'
     });
@@ -148,7 +148,7 @@ exports.submit = function(req, res) {
 
   //if the answer submitted matches any of the challenge's flags
   if (correct) {
-    console.log("Correct Answer!");
+    console.log('Correct Answer!');
     //retrieve the team object the user belongs to
     Team.findById(teamId).exec(function (err, team) {
       if (err) {
@@ -167,7 +167,7 @@ exports.submit = function(req, res) {
     });
   } else {
     // On incorrect answer
-    console.log("Incorrect Answer!");
+    console.log('Incorrect Answer!');
     //return a successful submit with the message informing them the answer was wrong
     return res.status(200).send({
       message: 'Incorrect',

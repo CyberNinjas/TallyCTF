@@ -1,8 +1,14 @@
 'use strict';
 
 // Protractor configuration
-exports.config = {
-  framework: 'jasmine',
-  seleniumAddress: 'http://localhost:4444/wd/hub',
-  specs: ['modules/users/tests/e2e/*.js']
+var config = {
+  specs: ['modules/*/tests/e2e/*.js']
 };
+
+if (process.env.TRAVIS) {
+  config.capabilities = {
+    browserName: 'firefox'
+  };
+}
+
+exports.config = config;

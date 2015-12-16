@@ -25,7 +25,7 @@ exports.append = function (team, user, challenge, res) {
       return err;
     } else if (!scoreBoard) {
       return res.status(503).send({
-        message: "No scoreoard by that id found!"
+        message: 'No scoreboard by that id found!'
       });
     }
 
@@ -52,7 +52,7 @@ exports.append = function (team, user, challenge, res) {
       }
     });
     //append the solve to the scoreBoard object
-    scoreBoard.solved.push({challengeId: challenge._id, userId: user._id, date: Date.now(), points: challenge.points});
+    scoreBoard.solved.push({ challengeId: challenge._id, userId: user._id, date: Date.now(), points: challenge.points });
 
     //increment team's score in scoreboard
     scoreBoard.score += challenge.points;
@@ -140,7 +140,7 @@ exports.scoreBoardByTeamID = function (req, res, next, id) {
     });
   }
 
-  ScoreBoard.find({team: id})
+  ScoreBoard.find({ team: id })
     .populate('team', 'teamName')
     .populate({
       path: 'solved',

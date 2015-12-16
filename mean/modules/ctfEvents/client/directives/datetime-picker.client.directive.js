@@ -7,7 +7,7 @@ angular.module('ctfEvents').directive('datetime', function () {
     link: function (scope, elem, attrs) {
       $(function () {
         $(elem).datetimepicker({
-          format: "YYYY-MM-DDTHH:mm:ss.SSS[Z]"
+          format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]'
         });
 
         // Need to tell angular that date has changed when element is unselected

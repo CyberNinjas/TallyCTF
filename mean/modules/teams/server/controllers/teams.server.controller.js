@@ -23,7 +23,7 @@ exports.create = function (req, res) {
 
   // Clear any previous requests / asks to join from other teams
   var requests = Team.find({
-    "_id": { $in: user.requestToJoin }
+    '_id': { $in: user.requestToJoin }
   }, function (err, teams) {
     if (err)
       return false;
@@ -38,7 +38,7 @@ exports.create = function (req, res) {
     }
   });
   var asks = Team.find({
-    "_id": { $in: user.askToJoin }
+    '_id': { $in: user.askToJoin }
   }, function (err, teams) {
     if (err)
       return false;
@@ -65,7 +65,7 @@ exports.create = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      console.log("before scoreboard save");
+      console.log('before scoreboard save');
       scoreBoard.save(function (err) {
         if (err) {
           return res.status(400).send({
@@ -73,7 +73,7 @@ exports.create = function (req, res) {
           });
         }
         else{
-          console.log("after scoreboard save");
+          console.log('after scoreboard save');
           // Update the user's data
           user.roles.push('teamCaptain');
           user.team = team._id;
@@ -137,7 +137,7 @@ exports.update = function (req, res) {
  * Adds a user to a team or vice-versa
  */
 exports.accept = function(req, res) {
-  console.log("beginning");
+  console.log('beginning');
   var team = req.team;
   var user = req.model;
   var capt = (req.user.roles.indexOf('teamCaptain') !== -1 && team.teamCaptain._id.toString() === req.user._id.toString());
@@ -166,13 +166,13 @@ exports.accept = function(req, res) {
     // If it didn't find a user, fail
     if (i === max - 1)
       return res.status(400).send({
-        message: "Invalid User to add"
+        message: 'Invalid User to add'
       });
   }
   // Try to add the user, error if alreay on a team
   if (!exports.addTeamToUser(user, team))
     return res.status(400).send({
-      message: "User is already a member of a team!"
+      message: 'User is already a member of a team!'
     });
 
   // FIXME: Support reverting changes on the user when this fails
@@ -221,7 +221,7 @@ exports.decline = function (req, res) {
     // If it didn't find a user, fail
     if (i === max - 1)
       return res.status(400).send({
-        message: "Invalid User to add"
+        message: 'Invalid User to add'
       });
   }
 //save user
@@ -313,7 +313,7 @@ exports.removeMember = function (req, res) {
   // Check to make sure the user being removed is part of the team
   if (user.team.toString() !== team._id.toString()) {
     return res.status(400).send({
-      message: "User is not in specified team!"
+      message: 'User is not in specified team!'
     });
   }
 
@@ -367,7 +367,7 @@ exports.addTeamToUser = function (user, team) {
 
   // Clear any previous requests / asks to join from other teams
   var requests = Team.find({
-    "_id": { $in: user.requestToJoin }
+    '_id': { $in: user.requestToJoin }
   }, function (err, teams) {
     if (err)
       return false;
@@ -382,7 +382,7 @@ exports.addTeamToUser = function (user, team) {
     }
   });
   var asks = Team.find({
-    "_id": { $in: user.askToJoin }
+    '_id': { $in: user.askToJoin }
   }, function (err, teams) {
     if (err)
       return false;
@@ -434,14 +434,14 @@ exports.delete = function (req, res) {
     (!user || team.teamCaptain._id.toString() !== user._id.toString())) {
 
     return res.status(503).send({
-        message: "Not authorized to delete this team!"
-      });
+      message: 'Not authorized to delete this team!'
+    });
   }
 
 
   // Update all members / requestees / requesters of team deletion
   var members = User.find({
-    "_id": { $in: team.members }
+    '_id': { $in: team.members }
   }, function (err, users) {
     if (err) {
       return res.status(400).send({
@@ -455,7 +455,7 @@ exports.delete = function (req, res) {
         if (captain > -1)
           users[i].roles.splice(captain, 1);
 
-        var member  = users[i].roles.indexOf('teamMember');
+        var member = users[i].roles.indexOf('teamMember');
         if (member > -1)
           users[i].roles.splice(member, 1);
 
@@ -468,7 +468,7 @@ exports.delete = function (req, res) {
     }
   });
   var requests = User.find({
-    "_id": { $in: team.requestToJoin }
+    '_id': { $in: team.requestToJoin }
   }, function (err, users) {
     if (err)
       return false;
@@ -483,7 +483,7 @@ exports.delete = function (req, res) {
     }
   });
   var asks = User.find({
-    "_id": { $in: team.askToJoin }
+    '_id': { $in: team.askToJoin }
   }, function (err, users) {
     if (err)
       return false;
@@ -499,7 +499,7 @@ exports.delete = function (req, res) {
   });
 
   // Delete the scoreBoard associated with the team being deleted
-  ScoreBoard.remove({team: team._id}, function (err, scoreBoard) {
+  ScoreBoard.remove({ team: team._id }, function (err, scoreBoard) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -551,16 +551,16 @@ exports.teamByID = function (req, res, next, id) {
       .populate('askToJoin', 'username')
       .populate('teamCaptain','username notifications')
       .exec(function (err, team) {
-    if (err) {
-      return next(err);
-    } else if (!team) {
-      return res.status(404).send({
-        message: 'No team with that identifier has been found'
+        if (err) {
+          return next(err);
+        } else if (!team) {
+          return res.status(404).send({
+            message: 'No team with that identifier has been found'
+          });
+        }
+        req.team = team;
+        next();
       });
-    }
-    req.team = team;
-    next();
-  });
 };
 
 /**
@@ -581,7 +581,7 @@ exports.findRequests = function (req, res) {
         teams.push(req.user.askToJoin.length);
         res.json(teams);
       }
-  });
+    });
 };
 
 /**

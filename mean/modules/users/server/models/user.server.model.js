@@ -29,7 +29,7 @@ var validateLocalStrategyEmail = function (email) {
 var UserSchema = new Schema({
   type: {
     type: String,
-    default: "user"
+    default: 'user'
   },
   firstName: {
     type: String,
@@ -103,21 +103,21 @@ var UserSchema = new Schema({
   },
   team: {
     type: Schema.Types.ObjectId,
-    ref: "Team"
+    ref: 'Team'
   },
   country: {
     type: String,
-    default: ""
+    default: ''
   },
   //List of Teams that asked the current user to join their team
   askToJoin: [{
     type: Schema.Types.ObjectId,
-    ref: "Team"
+    ref: 'Team'
   }],
   //List of Teams that the User requested to join
   requestToJoin: [{
     type: Schema.Types.ObjectId,
-    ref: "Team"
+    ref: 'Team'
   }],
 });
 

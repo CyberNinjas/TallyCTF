@@ -14,15 +14,13 @@ angular.module('challenges').directive('regEx', function () {
 
       // Toggles view on click
       element.on('click', function (event) {
-      	event.preventDefault();
-      	var prop = element.prop('class');
-      	var index = prop.search(' active');
-
-      	if (index !== -1)
-      	  prop = prop.slice(0, index);
+        event.preventDefault();
+        var prop = element.prop('class');
+        var index = prop.search(' active');
+        if (index !== -1)
+          prop = prop.slice(0, index);
       	else
-      	  prop = prop + ' active';
-
+          prop = prop + ' active';
         element.prop('class', prop);
       });
     }

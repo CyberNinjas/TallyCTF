@@ -1,38 +1,35 @@
 'use strict';
 
-// Rename this file to local.js for having a local configuration variables that
+// Rename this file to local-NODE_ENV.js (i.e. local-development.js, or local-test.js) for having a local configuration variables that
 // will not get commited and pushed to remote repositories.
 // Use it for your API keys, passwords, etc.
 
-/* For example:
- ​
- module.exports = {
- db: {
- uri: 'mongodb://localhost/local-dev',
- options: {
- user: '',
- pass: ''
- }
- },
- facebook: {
- clientID: process.env.FACEBOOK_ID || 'APP_ID',
- clientSecret: process.env.FACEBOOK_SECRET || 'APP_SECRET',
- callbackURL: '/api/auth/facebook/callback'
- }
- };
- */
+// WARNING: When using this example for multiple NODE_ENV's concurrently, make sure you update the 'db' settings appropriately.
+// You do not want to accidentally overwrite/lose any data. For instance, if you create a file for 'test' and don't change the 
+// database name in the setting below, running the tests will drop all the data from the specified database.
+//
+// You may end up with a list of files, that will be used with their corresponding NODE_ENV:
+//
+// local-development.js
+// local-test.js
+// local-production.js
+//
+
+/* For example (Development):
 
 module.exports = {
   db: {
-    uri: 'mongodb://justchoose.me:25565/group9a',
+    uri: 'mongodb://localhost/local-dev',
     options: {
-      user: 'cyber',
-      pass: 'ninjas'
+      user: '',
+      pass: ''
     }
   },
-  google: {
-    clientID: process.env.GOOGLE_ID || '603376827845-24agn835cc74v84hc52v9vdco3sb9oda.apps.googleusercontent.com',
-    clientSecret: process.env.GOOGLE_SECRET || 'QpkR-FZkYsacM4WzZqVMMP4H',
-    callbackURL: '/api/auth/google/callback'
+  sessionSecret: process.env.SESSION_SECRET || 'youshouldchangethistosomethingsecret',
+  facebook: {
+    clientID: process.env.FACEBOOK_ID || 'APP_ID',
+    clientSecret: process.env.FACEBOOK_SECRET || 'APP_SECRET',
+    callbackURL: '/api/auth/facebook/callback'
   }
 };
+*/

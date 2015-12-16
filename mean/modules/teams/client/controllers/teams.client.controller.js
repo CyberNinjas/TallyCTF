@@ -100,7 +100,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
      *
      */
     $scope.delete = function() {
-        $scope.tasks.splice(this.$index, 1);
+      $scope.tasks.splice(this.$index, 1);
     };
 
 
@@ -163,7 +163,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
         recipients: [team.teamCaptain], 
         op: 'insert',
         scopeField: 'team.requestToJoin',
-        data: {username: Authentication.user.username, _id: Authentication.user._id}
+        data: { username: Authentication.user.username, _id: Authentication.user._id }
       });
 
       team.temp = Authentication.user._id;
@@ -275,7 +275,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
      */
     $scope.findTeam = function () {
       if(Authentication.user.team){
-        $state.go('teams.view', {teamId: Authentication.user.team});
+        $state.go('teams.view', { teamId: Authentication.user.team });
       } else{
         $scope.teams = Teams.findRequests(function () {
           var len = $scope.teams.pop();
@@ -293,11 +293,11 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
      *
      */
     $scope.findAvailableUsers = function(){
-       $scope.users = Users.listAvailableUsers();
-       $scope.team = Teams.getRaw({teamId: Authentication.user.team});
+      $scope.users = Users.listAvailableUsers();
+      $scope.team = Teams.getRaw({ teamId: Authentication.user.team });
 
        // For UI, have a count of how many users are available to choose from
-       $scope.count = 0;
+      $scope.count = 0;
     };
 
     /**teamMember and teamCaptain are mutually exclusive
@@ -311,9 +311,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       var user = (usr ? usr : Authentication.user);
 
       if (role.indexOf('user') !== -1) {
-        return (user && 
-          (user.roles.indexOf('teamCaptain') === -1 ) &&
-          (user.roles.indexOf('teamMember') === -1));
+        return (user && (user.roles.indexOf('teamCaptain') === -1) && (user.roles.indexOf('teamMember') === -1));
       }
 
       for (var i = 0; i < role.length; ++i)
@@ -390,7 +388,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
      *
      */
     $scope.confirmDelete = function(){
-      if(confirm("Are you sure you want to delete?"))
+      if(confirm('Are you sure you want to delete?'))
         $scope.remove();
     };
   }
