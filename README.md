@@ -46,6 +46,8 @@ Capture-The-Flag Scoreboard & CTF Event Running Software.
   *  Teams ranked by points
   *  Display solved challenges per team
 
+## For screenshots of all listed features, visit this [Imgur Link](https://imgur.com/a/Y4h2B)
+
 ## Installation
 ### Prerequisites
 This webapp is based off of the [MEAN.js](http://meanjs.org) framework and thus requires all of its dependencies, which can be found [here](http://meanjs.org/docs.html#getting-started).
