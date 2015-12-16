@@ -1,10 +1,13 @@
 'use strict';
 
-describe('Teams E2E Tests:', function () {
-  describe('Test teams page', function () {
-    it('Should report missing credentials', function () {
-      browser.get('http://localhost:3000/teams');
-      expect(element.all(by.repeater('team in teams')).count()).toEqual(0);
-    });
-  });
-});
+// //Test to log user in
+// describe('Team Creation',function(){
+//   it('Should create a team',function(){
+//     browser.get('http://localhost:3000/teams');
+//     var button =  element(by.id("addTeams1"));
+//     button.click();
+//     browser.sleep(1000);
+//     var url = browser.getCurrentUrl();
+//     expect(url).toEqual('teams/create');
+//   });
+// });

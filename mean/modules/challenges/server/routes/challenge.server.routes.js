@@ -12,7 +12,8 @@ module.exports = function (app) {
     .get(challenges.list)
     .post(challenges.create);
 
-  app.route('/api/challenges/submit').all(challengesPolicy.isAllowedSubmit)
+  //route for submitting a challenge, uses different policy than the rest
+  app.route('/api/challenges/:challengeId/submit').all(challengesPolicy.isAllowedSubmit)
       .post(challenges.submit);
 
   // Single challenges routes

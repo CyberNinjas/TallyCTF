@@ -7,8 +7,8 @@ angular.module('ctfEvents').directive('bcollapse', function () {
   return {
     link: function (scope, elem, attrs) {
       // Stylize it to make it seem obvious that it expands
-      $(elem).css("cursor", "pointer");
-      $(elem).css("text-decoration", "underline");
+      $(elem).css('cursor', 'pointer');
+      $(elem).css('text-decoration', 'underline');
 
       // Add expand functionality
       $(elem).on('click', function(e) {

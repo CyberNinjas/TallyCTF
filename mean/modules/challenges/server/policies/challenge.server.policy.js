@@ -13,6 +13,7 @@ acl = new acl(new acl.memoryBackend());
  */
 exports.invokeRolesPolicies = function () {
   acl.allow([{
+    //define administrative permissions
     roles: ['admin'],
     allows: [{
       resources: '/api/challenges',
@@ -22,22 +23,14 @@ exports.invokeRolesPolicies = function () {
       permissions: '*'
     }]
   }, {
+    //restrict user role to http methods below for given endpoint
     roles: ['user'],
     allows: [{
       resources: '/api/challenges',
       permissions: ['get']
     }, {
-      resources: '/api/challenges/submit/challengeId',
+      resources: '/api/challenges/:challengeId/submit',
       permissions: ['post']
-    }, {
-      resources: '/api/challenges/:challengeId',
-      permissions: ['get']
-    }]
-  }, {
-    roles: ['guest'],
-    allows: [{
-      resources: '/api/challenges',
-      permissions: ['get']
     }, {
       resources: '/api/challenges/:challengeId',
       permissions: ['get']
@@ -52,7 +45,8 @@ exports.invokeRolesPolicies = function () {
 exports.isAllowedSubmit = function (req, res, next){
   var roles = (req.user) ? req.user.roles : ['guest'];
 
-  if (req.body.challenge && req.user && req.user.roles.indexOf("user") > -1){
+  //user must be registered on site to attempt submit
+  if (req.body.challenge && req.user && req.user.roles.indexOf('user') > -1){
     return next();
   }
 
@@ -75,11 +69,6 @@ exports.isAllowedSubmit = function (req, res, next){
 };
 exports.isAllowed = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
-
-  // If an challenges is being processed and the current user created it then allow any manipulation
-  if (req.challenge && req.user && req.challenge.user.id === req.user.id) {
-    return next();
-  }
 
   // Check for user roles
   acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(), function (err, isAllowed) {

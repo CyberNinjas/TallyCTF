@@ -11,12 +11,12 @@ var passport = require('passport'),
 module.exports = function (userAuth) {
   // Use google strategy
   passport.use(new GoogleStrategy({
-      clientID: userAuth.clientId || 'EMPTY',
-      clientSecret: userAuth.clientSecret || 'EMPTY',
-      callbackURL: userAuth.callbackURL || 'EMPTY',
-      scope: userAuth.scope || 'EMPTY',
-      passReqToCallback: true
-    },
+    clientID: userAuth.clientId || 'EMPTY',
+    clientSecret: userAuth.clientSecret || 'EMPTY',
+    callbackURL: userAuth.callbackURL || 'EMPTY',
+    scope: userAuth.scope || 'EMPTY',
+    passReqToCallback: true
+  },
     function (req, accessToken, refreshToken, profile, done) {
       // Set the provider data and include tokens
       var providerData = profile._json;

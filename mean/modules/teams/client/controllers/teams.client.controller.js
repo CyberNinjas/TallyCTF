@@ -58,12 +58,18 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       }
     });
 
-    // Remove the event listener when the controller instance is destroyed
+    /** Remove the event listener when the controller instance is destroyed
+     *
+     */
     $scope.$on('$destroy', function () {
       Socket.removeListener('userUpdate');
     });
 
-    // Create new Team
+    /** Create new Team
+     *
+     * @param isValid
+     * @returns {boolean}
+     */
     $scope.create = function (isValid) {
       $scope.error = null;
 
@@ -90,13 +96,18 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       });
     };
 
-    // Deletes users from the team SHOULD ONLY BE FOR ADMIN DO NOT ATTEMP THIS.
+    /** Deletes users from the team SHOULD ONLY BE FOR ADMIN DO NOT ATTEMP THIS.
+     *
+     */
     $scope.delete = function() {
-        $scope.tasks.splice(this.$index, 1);
+      $scope.tasks.splice(this.$index, 1);
     };
 
 
-    // Remove existing Team
+    /** Remove existing Team
+     *
+     * @param team
+     */
     $scope.remove = function (team) {
       if (team) {
         team.$remove();
@@ -120,8 +131,11 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
     };
 
 
-
-    // Update existing Team
+    /** Update existing Team
+     *
+     * @param isValid
+     * @returns {boolean}
+     */
     $scope.update = function (isValid) {
       $scope.error = null;
 
@@ -140,20 +154,26 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       });
     };
 
-    // User requests to join a team
+    /** User requests to join a team
+     *
+     * @param team
+     */
     $scope.requestsToJoin = function (team) {
       Socket.emit('userUpdate', {
         recipients: [team.teamCaptain], 
         op: 'insert',
         scopeField: 'team.requestToJoin',
-        data: {username: Authentication.user.username, _id: Authentication.user._id}
+        data: { username: Authentication.user.username, _id: Authentication.user._id }
       });
 
       team.temp = Authentication.user._id;
       TeamsCtl.requestToJoin(team);
     };
 
-    //Adds the users to the team
+    /**Adds the users to the team
+     *
+     * @param user
+     */
     $scope.addUser = function (user) {
       var teamID = $scope.team._id;
 
@@ -170,7 +190,11 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       TeamsCtl.askToJoin($scope.team);
     };
 
-    // Remove a user from the team when editing the team
+    /** Remove a user from the team when editing the team
+     *
+     * @param user
+     * @param index
+     */
     $scope.removeMember = function (user, index) {
       $scope.team.members.splice(index, 1);
       $scope.team.temp = user._id;
@@ -178,7 +202,11 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       TeamsCtl.remove($scope.team);
     };
 
-    // Allows a user to accept a team or vice-versa
+    /** Allows a user to accept a team or vice-versa
+     *
+     * @param usr
+     * @param cond
+     */
     $scope.accept = function(usr, cond) {
       var user = (usr ? usr : Authentication.user);
       var team = (typeof cond === 'number' ? $scope.team : cond);
@@ -199,7 +227,12 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       TeamsCtl.accept(team);
     };
 
-    // Allows a user to decline a team or vice-versa
+    /** Allows a user to decline a team or vice-versa
+     *
+     * @param usr
+     * @param index
+     * @param tm
+     */
     $scope.decline = function(usr, index, tm) {
       var user = (usr ? usr : Authentication.user);
       var team = (tm ? tm : $scope.team);
@@ -221,53 +254,57 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       TeamsCtl.decline(team);
     };
 
-    // Find a list of Teams
+    /** Find a list of Teams
+     *
+     */
     $scope.find = function () {
       $scope.teams = Teams.query();
     };
 
-    // Find existing Team
+    /** Find existing Team
+     *
+     */
     $scope.findOne = function () {
       $scope.team = Teams.get({
         teamId: $stateParams.teamId
       });
     };
 
-    // Find existing Team
+    /** Find existing reqeusts and asks to join from all Teams for a user
+     *
+     */
     $scope.findTeam = function () {
       if(Authentication.user.team){
-        $state.go('teams.view', {teamId: Authentication.user.team});
+        $state.go('teams.view', { teamId: Authentication.user.team });
       } else{
-        $scope.teams = Teams.findRequests(function () {
-          var len = $scope.teams.pop();
-          $scope.askTeams = [];
-
-          while (len--)
-            $scope.askTeams.push($scope.teams.pop());
-
-          $scope.requestTeams = $scope.teams;
-        });
+        $scope.requestTeams = Teams.findRequests();
+        $scope.askTeams = Teams.findAsks();
       }
     };
 
-    // Finds available users to add
+    /** Finds available users to add
+     *
+     */
     $scope.findAvailableUsers = function(){
-       $scope.users = Users.listAvailableUsers();
-       $scope.team = Teams.getRaw({teamId: Authentication.user.team});
+      $scope.users = Users.listAvailableUsers();
+      $scope.team = Teams.getRaw({ teamId: Authentication.user.team });
 
        // For UI, have a count of how many users are available to choose from
-       $scope.count = 0;
+      $scope.count = 0;
     };
 
-    //teamMember and teamCaptain are mutually exclusive
+    /**teamMember and teamCaptain are mutually exclusive
+     *
+     * @param rle
+     * @param usr
+     * @returns {*}
+     */
     $scope.shouldRender = function (rle, usr) {
       var role = (typeof rle === 'string' ? [rle] : rle);
       var user = (usr ? usr : Authentication.user);
 
       if (role.indexOf('user') !== -1) {
-        return (user && 
-          (user.roles.indexOf('teamCaptain') === -1 ) &&
-          (user.roles.indexOf('teamMember') === -1));
+        return (user && (user.roles.indexOf('teamCaptain') === -1) && (user.roles.indexOf('teamMember') === -1));
       }
 
       for (var i = 0; i < role.length; ++i)
@@ -275,7 +312,11 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
           return true;
     };
 
-    // Checks which users should show up on the add users page
+    /** Checks which users should show up on the add users page
+     *
+     * @param usr
+     * @returns {boolean}
+     */
     $scope.shouldAdd = function (usr) {
       var user = (usr ? usr : Authentication.user);
 
@@ -294,7 +335,11 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       return true;
     };
 
-    // Checks which users should show up on the add users page
+    /** Checks which users should show up on the add users page
+     *
+     * @param team
+     * @returns {boolean}
+     */
     $scope.shouldReq = function (team) {
       var user = Authentication.user;
 
@@ -313,7 +358,11 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       return true;
     };
 
-    // Checks if the current user is the captain of the team
+    /** Checks if the current user is the captain of the team
+     *
+     * @param hideFromAdmin
+     * @returns {boolean}
+     */
     $scope.isCaptain = function (hideFromAdmin) {
       var team = $scope.team;
       hideFromAdmin = (hideFromAdmin ? hideFromAdmin : false);
@@ -327,6 +376,13 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       } else {
         return false;
       }
+    };
+    /**Asks the user to confirm decision to delete team
+     *
+     */
+    $scope.confirmDelete = function(){
+      if(confirm('Are you sure you want to delete?'))
+        $scope.remove();
     };
   }
 ]);

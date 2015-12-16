@@ -1,22 +1,18 @@
 <section ng-controller="ScoreBoardController" ng-init="findOne()">
   <div class="page-header">
-    <div class="pull-right" ng-if="authentication.user.roles.indexOf('admin') !== -1">
-      <a class="btn btn-primary" ui-sref="scoreBoard.edit({scoreBoardId: scoreBoard._id})">
-        <i class="glyphicon glyphicon-edit"></i>
-      </a>
-      <a class="btn btn-primary" ng-click="remove();">
-        <i class="glyphicon glyphicon-trash"></i>
-      </a>
-  </div>
+
     <h1 ng-bind="scoreBoard.team.teamName"></h1>
   </div>
   <div class="form-group collapse-group">
     <h2 bcollapse>Solved Challenges</h2>
     <div class="collapse">
       <div class="well list-group">
-        <a ng-repeat="challenge in scoreBoard.solved" ui-sref="challenges.view({challengeId: challenge._id})" class="list-group-item">
+        <a ng-repeat="challenge in scoreBoard.solved" class="list-group-item">
           <p class="pull-right" ng-bind="challenge.points"></p>
-          <h4 ng-bind="challenge.name" class="list-group-item-heading"></h4>
+          <h4 ng-bind="challenge.challengeId.name" class="list-group-item-heading"></h4>
+          <small>
+            <span><em>Solved by <span ng-bind="challenge.userId.username"></span> at <span ng-bind="challenge.date"></span></em></span>
+          </small>
         </a>
         <div ng-if="scoreBoard.$resolved && !scoreBoard.solved.length">
           No challenges solved

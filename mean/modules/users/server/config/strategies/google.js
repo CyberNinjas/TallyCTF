@@ -10,11 +10,11 @@ var passport = require('passport'),
 module.exports = function (config) {
   // Use google strategy
   passport.use(new GoogleStrategy({
-      clientID: config.google.clientID,
-      clientSecret: config.google.clientSecret,
-      callbackURL: config.google.callbackURL,
-      passReqToCallback: true
-    },
+    clientID: config.google.clientID,
+    clientSecret: config.google.clientSecret,
+    callbackURL: config.google.callbackURL,
+    passReqToCallback: true
+  },
     function (req, accessToken, refreshToken, profile, done) {
       // Set the provider data and include tokens
       var providerData = profile._json;

@@ -9,49 +9,29 @@ var path = require('path'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 /**
- * Create a score board entry
- */
-//exports.create = function (req, res) {
-//  var scoreBoard = new ScoreBoard(req.body);
-//
-//  scoreBoard.save(function (err) {
-//    if (err) {
-//      return res.status(400).send({
-//        message: errorHandler.getErrorMessage(err)
-//      });
-//    } else {
-//      res.json(scoreBoard);
-//    }
-//  });
-//};
-
-/**
  * Show the current score board entry
  */
 exports.read = function (req, res) {
   res.json(req.scoreBoard);
 };
 
-function get_type(thing){
-  if(thing===null)return "[object Null]"; // special case
-  return Object.prototype.toString.call(thing);
-}
 /*
  * Append data to a score board
  */
 exports.append = function (team, user, challenge, res) {
+  //retrieve scoreboard from all scoreboards using teamID
   var scoreBoard = ScoreBoard.findById(team.scoreBoard).exec(function (err, scoreBoard){
     if (err) {
       return err;
     } else if (!scoreBoard) {
-      //3 == no scoreboard found
-      return 3;
+      return res.status(503).send({
+        message: 'No scoreboard by that id found!'
+      });
     }
 
-    var cid;
-    for (cid=0; cid < scoreBoard.solved.length; cid++){
+    //check if the team has already solved the challenge
+    for (var cid = 0; cid < scoreBoard.solved.length; ++cid) {
       if (scoreBoard.solved[cid].challengeId.toString() === challenge._id.toString()){
-        console.log("LOGGING3: WE HAVE A MATCH");
         return res.status(200).send({
           message: 'A team may only solve a challenge once!',
           solves: challenge.solves,
@@ -59,7 +39,10 @@ exports.append = function (team, user, challenge, res) {
         });
       }
     }
+
+    //if they haven't, increment solves
     challenge.solves += 1;
+    //and save the challenge
     challenge.save(function (err) {
       if (err) {
         console.log(err);
@@ -68,9 +51,13 @@ exports.append = function (team, user, challenge, res) {
         });
       }
     });
-    scoreBoard.solved.push({challengeId: challenge._id, userId: user._id, date: Date.now(), points: challenge.points});
+    //append the solve to the scoreBoard object
+    scoreBoard.solved.push({ challengeId: challenge._id, userId: user._id, date: Date.now(), points: challenge.points });
+
+    //increment team's score in scoreboard
     scoreBoard.score += challenge.points;
 
+    //and save the scoreboard
     scoreBoard.save(function (err) {
       if (err) {
         console.log(err);
@@ -127,6 +114,7 @@ exports.delete = function (req, res) {
  * List of ScoreBoard
  */
 exports.list = function (req, res) {
+  //get all scoreboards sorted descending by score value
   ScoreBoard.find().sort('-score')
   .populate('team', 'teamName')
   .populate('solved')
@@ -152,23 +140,23 @@ exports.scoreBoardByTeamID = function (req, res, next, id) {
     });
   }
 
-  ScoreBoard.find({team: id})
-  .populate('team', 'teamName')
-      .populate({
-        path: 'solved',
-        populate: { path: 'challengeId', select: 'name'}
-      })
-  .exec(function (err, scoreBoard) {
-    if (err) {
-      return next(err);
-    } else if (!scoreBoard) {
-      return res.status(404).send({
-        message: 'No score board with that team identifier has been found'
-      });
-    }
-    
-    req.scoreBoard = (scoreBoard.length > 1 ? scoreBoard : scoreBoard[0]);
+  ScoreBoard.find({ team: id })
+    .populate('team', 'teamName')
+    .populate({
+      path: 'solved',
+      populate: { path: 'challengeId userId', select: 'name username' }
+    })
+    .exec(function (err, scoreBoard) {
+      if (err) {
+        return next(err);
+      } else if (!scoreBoard) {
+        return res.status(404).send({
+          message: 'No score board with that team identifier has been found'
+        });
+      }
+      
+      req.scoreBoard = (scoreBoard.length > 1 ? scoreBoard : scoreBoard[0]);
 
-    next();
-  });
+      next();
+    });
 };

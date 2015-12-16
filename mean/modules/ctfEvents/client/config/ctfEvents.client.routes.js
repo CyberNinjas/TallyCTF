@@ -4,6 +4,7 @@
 angular.module('ctfEvents').config(['$stateProvider',
   function ($stateProvider) {
     // CtfEvents state routing
+    // All ctfEvent states restricted to Admin view only!
     $stateProvider
       .state('ctfEvents', {
         abstract: true,

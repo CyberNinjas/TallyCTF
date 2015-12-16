@@ -29,7 +29,7 @@ angular.module('userAuths').controller('UserAuthsController', ['$scope', '$state
         authType: this.authType,
         authURL: this.authURL,
         userInfoURL: this.userInfoURL,
-        callbackURL: "/api/auth/userAuths/" + this.provider.toLowerCase() + "/callback",
+        callbackURL: '/api/auth/userAuths/' + this.provider.toLowerCase() + '/callback',
         tokenURL: this.tokenURL,
         clientId: this.clientId,
         clientSecret: this.clientSecret,
