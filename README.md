@@ -52,6 +52,9 @@ This webapp is based off of the [MEAN.js](http://meanjs.org) framework and thus 
 4.  Install meanjs/node dependencies:
   *  `npm install`
 5.  Edit local-production.js to your preference (Local vs. remote Mongo)
+  1.  Browse to `TallyCTF/mean/config/env`
+  2.  Copy `local.example.js` to `local-production.js`
+  3.  Edit the `uri` and options to match your mongo server's uri and credentials.  If you are running a local Mongo instance, the default settings provided should connect without modification.
 6.  Run meanjs using grunt:
   *  `grunt prod`
 
