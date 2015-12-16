@@ -12,6 +12,11 @@ angular.module('teams')
           method: 'GET',
           isArray: true
         },
+        findAsks: {
+          url: 'api/teams/asks',
+          method: 'GET',
+          isArray: true
+        },
         update: {
           method: 'PUT'
         },
@@ -22,29 +27,29 @@ angular.module('teams')
       });
     }
   ])
-.factory('TeamsCtl', ['$resource',
-  function ($resource) {
-    return $resource('api/teams/:teamId.:userId/ctl', {
-      teamId: '@_id',
-      userId: '@temp'
-    }, {
-      accept: {
-        method: 'POST'
-      },
-      decline: {
-        method: 'PUT'
-      },
-      askToJoin: {
-        url: 'api/teams/:teamId.:userId/join',
-        method: 'PUT'
-      },
-      requestToJoin: {
-        url: 'api/teams/:teamId.:userId/join',
-        method: 'PATCH'
-      },
-      remove: {
-        method: 'PATCH'
-      }
-    });
-  }
-]);
+  .factory('TeamsCtl', ['$resource',
+    function ($resource) {
+      return $resource('api/teams/:teamId.:userId/ctl', {
+        teamId: '@_id',
+        userId: '@temp'
+      }, {
+        accept: {
+          method: 'POST'
+        },
+        decline: {
+          method: 'PUT'
+        },
+        askToJoin: {
+          url: 'api/teams/:teamId.:userId/join',
+          method: 'PUT'
+        },
+        requestToJoin: {
+          url: 'api/teams/:teamId.:userId/join',
+          method: 'PATCH'
+        },
+        remove: {
+          method: 'PATCH'
+        }
+      });
+    }
+  ]);

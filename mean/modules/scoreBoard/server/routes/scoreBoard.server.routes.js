@@ -15,8 +15,8 @@ module.exports = function (app) {
   // Single scoreBoard routes
   app.route('/api/scoreBoard/:scoreBoardTeamId').all(scoreBoardPolicy.isAllowed)
     .get(scoreBoard.read)
-    .put(scoreBoard.update)
-    .delete(scoreBoard.delete);
+    .put(scoreBoard.update);
+
 
   // Finish by binding the scoreBoard middleware
   app.param('scoreBoardTeamId', scoreBoard.scoreBoardByTeamID);

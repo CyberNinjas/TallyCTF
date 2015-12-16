@@ -25,7 +25,8 @@
             <h4 ng-bind="ask.teamName" class="list-group-item-heading"></h4>
             <!-- <h4 class="list-group-item-heading" ng-bind="current.teamName"></h4> -->
           </a>
-          <p class="alert alert-warning text-center" ng-if="teams.$resolved && !askTeams.length">No one wants you (yet)</p>
+
+          <p class="alert alert-warning text-center" ng-if="askTeams.$resolved && !askTeams.length">No one wants you (yet)</p>
         </div>
       </div>
 
@@ -35,7 +36,7 @@
           <a ng-repeat="request in requestTeams" class="list-group-item">
             <span ng-bind="request.teamName"></span>
           </a>
-          <p class="alert alert-warning text-center" ng-if="teams.$resolved && !requestTeams.length">No requests!</p>
+          <p class="alert alert-warning text-center" ng-if="requestTeams.$resolved && !requestTeams.length">No requests!</p>
         </div>
       </div>
     </div>

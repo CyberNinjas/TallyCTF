@@ -54,6 +54,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/teams/requests',
       permissions: ['get']
     }, {
+      resources: '/api/teams/asks',
+      permissions: ['get']
+    }, {
       resources: '/api/teams/:teamId',
       permissions: ['get', 'put']
     }, {
