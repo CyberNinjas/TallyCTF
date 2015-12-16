@@ -46,7 +46,7 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
     // Remove existing CtfEvent
     $scope.remove = function (ctfEvent) {
       // Confirm deletion
-      if (!confirm("Are you sure that you want to delete this event?"))
+      if (!confirm('Are you sure that you want to delete this event?'))
         return;
 
       if (ctfEvent) {
