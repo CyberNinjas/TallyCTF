@@ -45,10 +45,14 @@ describe('Challenge CRUD tests', function () {
 
     // Save a user to the test db and create new challenges
     user.save(function () {
-      challenge = {
-        title: 'Challenge Title',
-        content: 'Challenge Content'
-      };
+      challenge = new Challenge({
+        name: 'challengeName',
+        description: 'challengeDescription',
+        solves: 0,
+        category: 'challengeCategory',
+        points: 100,
+        flag: 'challengeFlag'
+      });
 
       done();
     });
@@ -111,7 +115,7 @@ describe('Challenge CRUD tests', function () {
 
   it('should not be able to save an challenges if no title is provided', function (done) {
     // Invalidate title field
-    challenge.title = '';
+    challenge.name = '';
 
     agent.post('/api/auth/signin')
       .send(credentials)
@@ -131,7 +135,7 @@ describe('Challenge CRUD tests', function () {
           .expect(400)
           .end(function (challengeSaveErr, challengeSaveRes) {
             // Set message assertion
-            (challengeSaveRes.body.message).should.match('Title cannot be blank');
+            (challengeSaveRes.body.message).should.match('Name cannot be blank');
 
             // Handle challenges save error
             done(challengeSaveErr);

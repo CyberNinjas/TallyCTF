@@ -201,7 +201,7 @@ exports.updateCurrent = function (req, res) {
 
   currentCtfEvent.title = req.body.title;
   currentCtfEvent.start = req.body.start;
-  currentCtfEvent.end   = req.body.end;
+  currentCtfEvent.end = req.body.end;
 
   if (currentCtfEvent.current === 0)
     exports.deleteCurrent(req, res);

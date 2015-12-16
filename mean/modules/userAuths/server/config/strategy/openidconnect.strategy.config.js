@@ -9,17 +9,17 @@ var passport = require('passport'),
   users = require(path.resolve('./modules/users/server/controllers/users.server.controller'));
 
 module.exports = function (userAuth) {
-  console.log("RUNNING WITH: " + userAuth.provider);
+  console.log('RUNNING WITH: ' + userAuth.provider);
   passport.use(new OpenIDConnect({
-      authorizationURL: userAuth.authURL,
-      tokenURL: userAuth.tokenURL,
-      userInfoURL: userAuth.userInfoURL,
-      clientID: userAuth.clientId,
-      clientSecret: userAuth.clientSecret,
-      callbackURL: userAuth.callbackURL,
-      scope: 'openid profile email',
-      passReqToCallback: true
-    },
+    authorizationURL: userAuth.authURL,
+    tokenURL: userAuth.tokenURL,
+    userInfoURL: userAuth.userInfoURL,
+    clientID: userAuth.clientId,
+    clientSecret: userAuth.clientSecret,
+    callbackURL: userAuth.callbackURL,
+    scope: 'openid profile email',
+    passReqToCallback: true
+  },
     function (req, accessToken, refreshToken, profile, done) {
       console.log(profile);
       // Set the provider data and include tokens

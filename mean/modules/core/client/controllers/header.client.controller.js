@@ -23,7 +23,7 @@ angular.module('core').controller('HeaderController', ['$scope', '$interval','$s
         return;
       }
 
-      console.log("For me!");
+      console.log('For me!');
 
       switch (message.op) {
         case 'newConnection':
@@ -58,14 +58,14 @@ angular.module('core').controller('HeaderController', ['$scope', '$interval','$s
             Authentication.user.roles.splice(Authentication.user.roles.indexOf('teamCaptain'), 1);
           break;
         default:
-          console.log("Socket: Don't know what to do with: ");
+          console.log('Socket: Don\'t know what to do with: ');
           console.log(message);
           break;
       }
     });
 
     $scope.test1 = function () {
-      Socket.emit('userUpdate', {recipients: [Authentication.user._id], poop: 'yep'});
+      Socket.emit('userUpdate', { recipients: [Authentication.user._id], poop: 'yep' });
     };
 
     // Remove the event listener when the controller instance is destroyed
@@ -85,7 +85,7 @@ angular.module('core').controller('HeaderController', ['$scope', '$interval','$s
     });
 
     $scope.signout = function () {
-      window.location="/api/auth/signout";
+      window.location='/api/auth/signout';
     };
   }
 ]);

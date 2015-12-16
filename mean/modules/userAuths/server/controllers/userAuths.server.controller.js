@@ -48,7 +48,7 @@ exports.update = function (req, res) {
   userAuth.clientSecret = req.body.clientSecret;
   userAuth.scope = req.body.scope;
   userAuth.providerImage = req.body.providerImage;
-  userAuth.callbackURL = "/api/auth/userAuths/" + userAuth.provider.toLowerCase() + "/callback";
+  userAuth.callbackURL = '/api/auth/userAuths/' + userAuth.provider.toLowerCase() + '/callback';
   userAuth.updated = Date.now();
 
   userAuth.save(function (err) {
@@ -120,7 +120,7 @@ exports.userAuthByID = function (req, res, next, id) {
 
 exports.userAuthByProvider = function (req, res, next, provider) {
 
-  UserAuth.findOne({provider: provider}).exec(function (err, userAuth) {
+  UserAuth.findOne({ provider: provider }).exec(function (err, userAuth) {
     if (err) {
       return next(err);
     } else if (!userAuth) {
@@ -137,7 +137,7 @@ exports.userAuthByProvider = function (req, res, next, provider) {
  * User OAuth call
  */
 exports.oauthCall = function (req, res, scope) {
-  console.log("AUTH CALL on: " + req.userAuth.authType);
+  console.log('AUTH CALL on: ' + req.userAuth.authType);
 
   require(path.resolve('./modules/userAuths/server/config/strategy/' + 
     req.userAuth.authType + '.strategy.config.js'))(req.userAuth);
@@ -149,6 +149,6 @@ exports.oauthCall = function (req, res, scope) {
  * User OAuth callback
  */
 exports.oauthCallback = function (req, res, next) {
-  console.log("AUTH CALLBACK on: " + req.userAuth.authType);
+  console.log('AUTH CALLBACK on: ' + req.userAuth.authType);
   users.oauthCallback(req.userAuth.authType)(req, res, next);
 };

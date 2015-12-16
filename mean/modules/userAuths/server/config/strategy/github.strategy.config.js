@@ -11,12 +11,12 @@ var passport = require('passport'),
 module.exports = function (userAuth) {
   // Use github strategy
   passport.use(new GithubStrategy({
-      clientID: userAuth.clientId,
-      clientSecret: userAuth.clientSecret,
-      callbackURL: userAuth.callbackURL,
-      scope: userAuth.scope,
-      passReqToCallback: true
-    },
+    clientID: userAuth.clientId,
+    clientSecret: userAuth.clientSecret,
+    callbackURL: userAuth.callbackURL,
+    scope: userAuth.scope,
+    passReqToCallback: true
+  },
     function (req, accessToken, refreshToken, profile, done) {
       // Set the provider data and include tokens
       var providerData = profile._json;

@@ -1,9 +1,15 @@
 'use strict';
 
 var cfenv = require('cfenv'),
-  appEnv = cfenv.getAppEnv(),
-  cfMongoUrl = appEnv.getService('mean-mongo') ?
-  appEnv.getService('mean-mongo').credentials.uri : undefined;
+  appEnv = cfenv.getAppEnv();
+var cfMongoUrl = (function() {
+  if (appEnv.getService('mean-mongo')) {
+    var mongoCreds = appEnv.getService('mean-mongo').credentials;
+    return mongoCreds.uri || mongoCreds.url;
+  } else {
+    throw new Error('No service names "mean-mongo" bound to the application.');
+  }
+}());
 
 var getCred = function (serviceName, credProp) {
   return appEnv.getService(serviceName) ?
@@ -64,6 +70,30 @@ module.exports = {
       auth: {
         user: getCred('mean-mail', 'username') || 'MAILER_EMAIL_ID',
         pass: getCred('mean-mail', 'password') || 'MAILER_PASSWORD'
+      }
+    }
+  },
+  seedDB: {
+    seed: process.env.MONGO_SEED === 'true' ? true : false,
+    options: {
+      logResults: process.env.MONGO_SEED_LOG_RESULTS === 'false' ? false : true,
+      seedUser: {
+        username: process.env.MONGO_SEED_USER_USERNAME || 'user',
+        provider: 'local',
+        email: process.env.MONGO_SEED_USER_EMAIL || 'user@localhost.com',
+        firstName: 'User',
+        lastName: 'Local',
+        displayName: 'User Local',
+        roles: ['user']
+      },
+      seedAdmin: {
+        username: process.env.MONGO_SEED_ADMIN_USERNAME || 'admin',
+        provider: 'local',
+        email: process.env.MONGO_SEED_ADMIN_EMAIL || 'admin@localhost.com',
+        firstName: 'Admin',
+        lastName: 'Local',
+        displayName: 'Admin Local',
+        roles: ['user', 'admin']
       }
     }
   }

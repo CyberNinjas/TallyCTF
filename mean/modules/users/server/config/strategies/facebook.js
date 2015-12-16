@@ -10,12 +10,12 @@ var passport = require('passport'),
 module.exports = function (config) {
   // Use facebook strategy
   passport.use(new FacebookStrategy({
-      clientID: config.facebook.clientID,
-      clientSecret: config.facebook.clientSecret,
-      callbackURL: config.facebook.callbackURL,
-      profileFields: ['id', 'name', 'displayName', 'emails', 'photos'],
-      passReqToCallback: true
-    },
+    clientID: config.facebook.clientID,
+    clientSecret: config.facebook.clientSecret,
+    callbackURL: config.facebook.callbackURL,
+    profileFields: ['id', 'name', 'displayName', 'emails', 'photos'],
+    passReqToCallback: true
+  },
     function (req, accessToken, refreshToken, profile, done) {
       // Set the provider data and include tokens
       var providerData = profile._json;

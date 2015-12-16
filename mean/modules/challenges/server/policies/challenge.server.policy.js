@@ -35,16 +35,6 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/challenges/:challengeId',
       permissions: ['get']
     }]
-  }, {
-    //restrict guest role to http methods below for given endpoint
-    roles: ['guest'],
-    allows: [{
-      resources: '/api/challenges',
-      permissions: ['get']
-    }, {
-      resources: '/api/challenges/:challengeId',
-      permissions: ['get']
-    }]
   }]);
 };
 
@@ -56,7 +46,7 @@ exports.isAllowedSubmit = function (req, res, next){
   var roles = (req.user) ? req.user.roles : ['guest'];
 
   //user must be registered on site to attempt submit
-  if (req.body.challenge && req.user && req.user.roles.indexOf("user") > -1){
+  if (req.body.challenge && req.user && req.user.roles.indexOf('user') > -1){
     return next();
   }
 

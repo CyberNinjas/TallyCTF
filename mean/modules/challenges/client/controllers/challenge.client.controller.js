@@ -95,7 +95,7 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
 
     //method to confirm deletion of team on frontend
     $scope.confirmDelete = function(challenge) {
-      if(confirm("Are you sure you want to delete?")){
+      if(confirm('Are you sure you want to delete?')){
         console.log('challenge delete');
         $scope.remove(challenge);
       }
@@ -132,7 +132,7 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
         $scope.teamSolvedChallenges = [];
 
         //retrieve the team's scoreboard, to cross-reference team's solved challenges
-        $scope.teamScoreBoard = ScoreBoard.get({scoreBoardTeamId: Authentication.user.team});
+        $scope.teamScoreBoard = ScoreBoard.get({ scoreBoardTeamId: Authentication.user.team });
 
         // Check the team's solved challenges only once promise is fulfilled
         $scope.teamScoreBoard.$promise.then(function (scoreboard){
@@ -165,18 +165,18 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
     };
 
     //set default values for sortType and reverseSort
-    $scope.sortType = "name";
+    $scope.sortType = 'name';
     $scope.reverseSort = false;  
 
     //method to set and toggle sort-per-column
     $scope.sort = function(p) {
       //if sort type is already set, simply reverse it
-     if ($scope.sortType === p) {
+      if ($scope.sortType === p) {
         $scope.reverseSort = !$scope.reverseSort;
       } else {
         $scope.sortType = p;
         
-        if ($scope.sortType === "points"){
+        if ($scope.sortType === 'points'){
           $scope.reverseSort = true;
         } else {		 
           $scope.reverseSort = false;
@@ -201,32 +201,32 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
       });
     };
 
-  // Adds a flag to the set of possible flags
-  $scope.addFlag = function (chall) {
-    var challenge = (chall ? chall : $scope);
+    // Adds a flag to the set of possible flags
+    $scope.addFlag = function (chall) {
+      var challenge = (chall ? chall : $scope);
 
-    if (!$scope.flag)
-      return;
+      if (!$scope.flag)
+        return;
 
-    //add flag to flags array
-    challenge.flags.push({flag: $scope.flag, regex: false});
-    challenge.flag = '';
-  };
+      //add flag to flags array
+      challenge.flags.push({ flag: $scope.flag, regex: false });
+      challenge.flag = '';
+    };
 
-  // Removes a flag from the set of flags
-  $scope.removeFlag = function (index, chall) {
-    var challenge = (chall ? chall : $scope);
-    if (index < 0)
-      return;
+    // Removes a flag from the set of flags
+    $scope.removeFlag = function (index, chall) {
+      var challenge = (chall ? chall : $scope);
+      if (index < 0)
+        return;
 
-    challenge.flags.splice(index, 1);
-  };
+      challenge.flags.splice(index, 1);
+    };
 
-  // Changes a flag type between being regex and being a string literal
-  $scope.toggleRegEx = function (flag) {
-    if (!flag)
-      return;
+    // Changes a flag type between being regex and being a string literal
+    $scope.toggleRegEx = function (flag) {
+      if (!flag)
+        return;
 
-    flag.regex = !flag.regex;
-  };
-}]);
+      flag.regex = !flag.regex;
+    };
+  }]);

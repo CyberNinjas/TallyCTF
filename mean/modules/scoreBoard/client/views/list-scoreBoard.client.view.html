@@ -3,7 +3,7 @@
     <h1>Score Board</h1>
   </div>
   <div class="list-group">
-    <a ng-repeat="scoreBoard in scoreBoard" ui-sref="scoreBoard.view({scoreBoardTeamId: scoreBoard.team._id})" class="list-group-item">
+    <a ng-repeat="scoreBoard in scoreBoards" ui-sref="scoreBoard.view({scoreBoardTeamId: scoreBoard.team._id})" class="list-group-item">
       <p class="pull-right" ng-bind="scoreBoard.score"></p>
       <h4 class="list-group-item-heading">
         <span>

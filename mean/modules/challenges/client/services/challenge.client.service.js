@@ -10,8 +10,8 @@ angular.module('challenges').factory('Challenges', ['$resource',
         method: 'PUT'
       },
       submit: {
-      	url: 'api/challenges/:challengeId/submit',
-      	method: 'POST'
+        url: 'api/challenges/:challengeId/submit',
+        method: 'POST'
       }
     });
   }

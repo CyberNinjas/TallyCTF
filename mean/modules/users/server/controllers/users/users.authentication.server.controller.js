@@ -256,8 +256,8 @@ exports.listAvailableUsers = function (req, res) {
   .exec(function (err, users) {
     if (err) {
       return res.status(400).send({
-      message: 'Something went wrong in listing available users!'
-    });
+        message: 'Something went wrong in listing available users!'
+      });
     } else {
       res.json(users);
     }
