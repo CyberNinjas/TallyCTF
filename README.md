@@ -67,6 +67,10 @@ This webapp is based off of the [MEAN.js](http://meanjs.org) framework and thus 
   *  `cd ./TallyCTF/mean`
 4.  Install meanjs/node dependencies:
   *  `npm install`
+  *  If you receive an error message in the form of '/bin/sh: 1: node: not found' and/or 'npm WARN This failure might be due to the use of legacy binary "node"', then you may simply need to create a symlink pointing to your installed nodejs.
+    *  Try running `node` and `nodejs` on your terminal.  If running node fails, create a symlink to it:
+	*  `sudo ln -s $(which nodejs) /usr/local/bin/node`
+	*  Then run `npm install` again
 5.  Edit local-production.js to your preference (Local vs. remote Mongo)
   1.  Browse to `TallyCTF/mean/config/env`
   2.  Copy `local.example.js` to `local-production.js`
