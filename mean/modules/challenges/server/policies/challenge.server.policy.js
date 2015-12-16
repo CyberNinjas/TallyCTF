@@ -35,16 +35,6 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/challenges/:challengeId',
       permissions: ['get']
     }]
-  }, {
-    //restrict guest role to http methods below for given endpoint
-    roles: ['guest'],
-    allows: [{
-      resources: '/api/challenges',
-      permissions: ['get']
-    }, {
-      resources: '/api/challenges/:challengeId',
-      permissions: ['get']
-    }]
   }]);
 };
 
