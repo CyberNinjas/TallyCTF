@@ -84,6 +84,7 @@ This project could not have been completed without the major help of the followi
 - [Tom Guarnery](https://github.com/tguar)
 - [Dennis Chris James](https://github.com/tobaljackson)
 - [Denzel Mathew](https://github.com/dmathew93)
+
 ### Acknowledgements
 - Thank you to the MeanJS team for providing a robust framework 
 - And to [Eonasdan](https://github.com/Eonasdan) for their Date Time Picker module
