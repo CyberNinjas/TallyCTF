@@ -63,7 +63,7 @@ angular.module('scoreBoard').controller('ScoreBoardController', ['$scope', '$sta
 
     // Find a list of ScoreBoard
     $scope.find = function () {
-      $scope.scoreBoard = ScoreBoard.query();
+      $scope.scoreBoards = ScoreBoard.query();
     };
 
     // Find existing ScoreBoard
@@ -72,6 +72,6 @@ angular.module('scoreBoard').controller('ScoreBoardController', ['$scope', '$sta
         scoreBoardTeamId: $stateParams.scoreBoardTeamId
       });
     };
-		
+
   }
 ]);
