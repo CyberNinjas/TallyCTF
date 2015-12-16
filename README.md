@@ -3,34 +3,46 @@ Capture-The-Flag Scoreboard & CTF Event Running Software.
 
 ## Features Implemented
 
-### Challenges
-- CR
-- Basic checking of answers
-- Basic scoring
+### Admin
+#### CTF Events
+  *  Define CTF event
+    *  Start & End time, Title
+  *  Save CTF event
+    *  Challenges, Users, Teams
+  *  Load CTF Event
+	*  Challenges, Users, Teams
+#### Challenges
+  *  Create Challenges
+    *  Title
+    *  Category
+    *  Description
+	*  Points
+	*  Flag value
+	  *  String value
+      *  Regex value
+      *  Multiple answers per challenge
+#### User Authentication
+  *  Manage User Authentication Schemes
+	*  Dynamic generation of custom user authentications (OAuth2.0 & OpenIDConnect)
 
-### Events
-- CRUD
-- Saving / Loading past events (of the current instance)
-
-### Score Board
-- CRUD
-- Display the current scores of all teams
-- Display solved challenges of all teams
+### Users
+#### Registration
+  *  Create local accounts stored on Mongo
+  *  Log in using Auth provider (Google, Facebook, etc..)
+  *  Join Team
+  *  Create Team
 
 ### Teams
-- CRUD
-- Team - User request system
-- Displaying members
-- Dynamic user addition / deletion
+  *  Invite Users to team 
+  *  Accept/Reject requests to join Team as Team Captain
+  *  View team members
 
-### User Authentication
-- CRUD
-- Dynamic generation of custom user authentications (OAuth2.0 & OpenIDConnect)
-
-## Bugs
-- If a user both requests to join a team and is asked to join a team, dummy data is inserted
-- Whacky signin-signout behavior
-- Split team management functionality
+### Scoreboard
+  *  Team members can Submit answers for challenges
+  *  Earn points for correct submissions
+  *  Points count for team score
+  *  Teams ranked by points
+  *  Display solved challenges per team
 
 ## Installation
 ### Prerequisites
