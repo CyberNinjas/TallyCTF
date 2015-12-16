@@ -10,6 +10,7 @@ var path = require('path'),
   Challenge = mongoose.model('Challenge'),
   Team = mongoose.model('Team'),
   User = mongoose.model('User'),
+  ScoreBoard = mongoose.model('ScoreBoard'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 /**
@@ -101,6 +102,14 @@ exports.clear = function (req, res) {
 
   //remove all teams
   Team.remove({}, function (err, thing) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    }
+  });
+
+  ScoreBoard.remove({}, function (err, thing) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
