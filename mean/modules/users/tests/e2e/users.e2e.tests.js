@@ -66,14 +66,14 @@ function writeScreenShot(data, filename) {
       var password = element(by.model('credentials.password'));
       var button = element(by.buttonText('Sign in'));
       //username.sendKeys('admin');
-      username.sendKeys('test');
+      username.sendKeys('admin');
       browser.sleep(500);
       password.sendKeys('1Qasdfghjkl;\'');
       browser.sleep(500);
       button.click();
       var name = element(by.binding('authentication.user.username'));
       //expect(name.getText()).toEqual('admin');
-      expect(name.getText()).toEqual('test');
+      expect(name.getText()).toEqual('admin');
     });
   });
 
@@ -113,56 +113,63 @@ function writeScreenShot(data, filename) {
 
     //*** User on a team ***//
       //In challenges, list out challenges
-      describe('User not on a team',function(){
-        it('should just list out challenges',function(){
-          browser.get('http://localhost:3000/challenges');
-          var allOptions = element.all(by.options("challenge as challenge.category for challenge in challenges | unique: 'category' | orderBy: 'category'"));
-          browser.sleep(500);
-          var secondOption = allOptions.get(1);
-          secondOption.click();
-          browser.sleep(500);
-          expect(secondOption.getText()).toEqual('RegEx');
-          browser.takeScreenshot().then(function (png){
-              writeScreenShot(png, 'screenshots/createUser.png');
-          });
-        });
-      });
+      // describe('User on a team',function(){
+      //   it('should just list out challenges',function(){
+      //     browser.get('http://localhost:3000/challenges');
+      //
+      //     //Get all challenges and then filter by requested identifier. (Regex)
+      //     var allOptions = element.all(by.options("challenge as challenge.category for challenge in challenges | unique: 'category' | orderBy: 'category'"));
+      //     browser.sleep(500);
+      //     var secondOption = allOptions.get(1);
+      //     secondOption.click();
+      //     browser.sleep(500);
+      //     expect(secondOption.getText()).toEqual('RegEx');
+      //     browser.takeScreenshot().then(function (png){
+      //         writeScreenShot(png, 'screenshots/createUser.png');
+      //     });
+      //   });
+      // });
+      //
+      // //In challenges, answer a challenge incorrectly THEN answer it correctly
+      // describe('User on a team',function(){
+      //   it('should click on a challenge',function(){
+      //
+      //     var challenge = element.all(by.repeater("challenge in challenges | filter:{category: challengeFilter.category}:true | orderBy:sortType:reverseSort").column('challenge.name'));
+      //     var actual = challenge.get(0);
+      //     actual.click();
+      //     browser.sleep(2000);
+      //     var answer = element(by.model('challenge.solve'));
+      //     answer.sendKeys('\\dd*');
+      //     var button = element(by.className('submitButton'));
+      //     button.click();
+      //     browser.sleep(3000);
+      //     var alertDialog = browser.switchTo().alert();
+      //     alertDialog.accept();
+      //     answer.clear();
+      //     answer.sendKeys('\\d*');
+      //     button.click();
+      //     browser.sleep(3000);
+      //     alertDialog = browser.switchTo().alert();
+      //     alertDialog.accept();
+      //     expect(alertDialog.getText()).toEqual('Correct!');
+      //   });
+      // });
 
-
-      //In challenges, answer a challenge incorrectly THEN answer it correctly
-      describe('User on a team',function(){
-        it('should click on a challenge',function(){
-          var allOptions = element.all(by.options("challenge as challenge.category for challenge in challenges | unique: 'category' | orderBy: 'category'"));
-          var secondOption = allOptions.get(1);
-          browser.sleep(1000);
-          var RegEx = element(by.binding('RegEx'));
-          var challenge = element.all(by.repeater("challenge in challenges | filter:{category: challengeFilter.category}:true | orderBy:sortType:reverseSort").column('challenge.name'));
-          var actual = challenge.get(0);
-          actual.click();
-          var answer = element(by.model('challenge.solve'));
-          answer.sendKeys('\\dd*');
-          var button = element(by.className('submitButton'));
-          button.click();
-          browser.sleep(3000);
-          var alertDialog = browser.switchTo().alert();
-          alertDialog.accept();
-          answer.clear();
-          answer.sendKeys('\\d*');
-          button.click();
-          browser.sleep(3000);
-          alertDialog = browser.switchTo().alert();
-          alertDialog.accept();
-          expect(alertDialog.getText()).toEqual('Correct!');
-        });
-      });
-  //***** Scoreboard ******//
+  // //***** Scoreboard ******//
     //click on team
-    // describe('User',function(){
-    //   it('should be able to view scoreboard',function(){
-    //     browser.get('http://localhost:3000/scoreboard');
-    //     var team = element(by.)
-    //   })
-    // })
+    describe("Users (team or no team)",function(){
+      it("should be able to view scoreboard",function(){
+        browser.get('http://localhost:3000/scoreBoard');
+        var scoreBoard = element.all(by.repeater("scoreBoard in scoreBoards").column('scoreBoard.team.teamName'));
+        var actual = scoreBoard.first();
+        actual.click();
+        browser.sleep(2000);
+
+        var actual1 = element(by.binding('scoreBoard.team.teamName'));
+        browser.sleep(2000);
+        expect(actual1.getText()).toEqual(actual);
+      });
+    });
     //click on solved challenges
 
   //***** Teams *****//
