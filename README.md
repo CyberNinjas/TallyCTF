@@ -88,3 +88,4 @@ This project could not have been completed without the major help of the followi
 ### Acknowledgements
 - Thank you to the MeanJS team for providing a robust framework 
 - And to [Eonasdan](https://github.com/Eonasdan) for their Date Time Picker module
+- Additionlly, Thank you to [Doug Logan](https://www.cyberninjas.com/) for his encouragement and help with this project
