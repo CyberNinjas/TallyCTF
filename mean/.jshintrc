@@ -14,6 +14,8 @@
   "strict": true, // Require `use strict` pragma in every file.
   "globals": { // Globals variables.
     "angular": true,
+    "$": false,
+    "jQuery": true,
     "io": true,
     "ApplicationConfiguration": true
   },

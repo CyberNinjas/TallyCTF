@@ -3,7 +3,6 @@
 angular.module('ctfEvents').directive('bcollapse', function () {
   // Needed to tell JSHint about the external $ (jquery)
   /* globals $ */
-
   return {
     link: function (scope, elem, attrs) {
       // Stylize it to make it seem obvious that it expands
