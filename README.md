@@ -11,6 +11,7 @@ Capture-The-Flag Scoreboard & CTF Event Running Software.
     *  Challenges, Users, Teams
   *  Load CTF Event
 	*  Challenges, Users, Teams
+
 #### Challenges
   *  Create Challenges
     *  Title
@@ -21,6 +22,7 @@ Capture-The-Flag Scoreboard & CTF Event Running Software.
 	  *  String value
       *  Regex value
       *  Multiple answers per challenge
+
 #### User Authentication
   *  Manage User Authentication Schemes
 	*  Dynamic generation of custom user authentications (OAuth2.0 & OpenIDConnect)
