@@ -55,6 +55,9 @@ This webapp is based off of the [MEAN.js](http://meanjs.org) framework and thus 
 1.  Satisfy Mean.js dependencies:
   1.  Install nodejs and npm:
     *  https://nodejs.org/en/download/
+	*  If your version of node is < 0.12 you may run into issues later on.
+	*  Use one of these scripts to update to the latest version of node:
+	  *  https://gist.github.com/isaacs/579814
   2.  Set up a MongoDB:
     *  https://www.mongodb.org/downloads#production
   3.  Install bower:
