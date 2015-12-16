@@ -37,23 +37,23 @@ Capture-The-Flag Scoreboard & CTF Event Running Software.
 This webapp is based off of the [MEAN.js](http://meanjs.org) framework and thus requires all of its dependencies, which can be found [here](http://meanjs.org/docs.html#getting-started).
 ### Installation
 1.  Satisfy Mean.js dependencies:
-    a.  Install nodejs and npm:
-        i.  https://nodejs.org/en/download/
-    b.  Set up a MongoDB:
-        i.  https://www.mongodb.org/downloads#production
-    c.  Install bower:
-        i.  `npm install -g bower`
-    d.  Install grunt-cli:
-        i.  `npm install -g grunt-cli`
+  1.  Install nodejs and npm:
+    *  https://nodejs.org/en/download/
+  2.  Set up a MongoDB:
+    *  https://www.mongodb.org/downloads#production
+  3.  Install bower:
+    *  `npm install -g bower`
+  4.  Install grunt-cli:
+    *  `npm install -g grunt-cli`
 2.  Clone the repository:
-    a.  `git clone https://github.com/CyberNinjas/TallyCTF.git`
+  *  `git clone https://github.com/CyberNinjas/TallyCTF.git`
 3.  Change directory into the mean folder:
-    a.  `cd ./TallyCTF/mean`
+  *  `cd ./TallyCTF/mean`
 4.  Install meanjs/node dependencies:
-    a.  `npm install`
+  *  `npm install`
 5.  Edit local-production.js to your preference (Local vs. remote Mongo)
 6.  Run meanjs using grunt:
-    a.  `grunt prod`
+  *  `grunt prod`
 
 ## Documentation
 
