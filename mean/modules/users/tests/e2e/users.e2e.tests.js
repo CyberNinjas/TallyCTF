@@ -6,9 +6,9 @@ var fs = require('fs');
 
 // abstract writing screen shot to a file
 function writeScreenShot(data, filename) {
-    var stream = fs.createWriteStream(filename);
-    stream.write(new Buffer(data, 'base64'));
-    stream.end();
+  var stream = fs.createWriteStream(filename);
+  stream.write(new Buffer(data, 'base64'));
+  stream.end();
 }
 
 
@@ -56,26 +56,26 @@ function writeScreenShot(data, filename) {
 
 //******** Users  **********// Refresh after each use
 
-  //Sign in
-  // //Test to log user in
-  describe('Signin Acceptance',function(){
-    it('Should sign the user in',function(){
-      browser.get('http://localhost:3000/authentication/signin');
-      browser.sleep(1000);
-      var username = element(by.model('credentials.username'));
-      var password = element(by.model('credentials.password'));
-      var button = element(by.buttonText('Sign in'));
-      //username.sendKeys('admin');
-      username.sendKeys('admin');
-      browser.sleep(500);
-      password.sendKeys('1Qasdfghjkl;\'');
-      browser.sleep(500);
-      button.click();
-      var name = element(by.binding('authentication.user.username'));
-      //expect(name.getText()).toEqual('admin');
-      expect(name.getText()).toEqual('admin');
-    });
+//Sign in
+// //Test to log user in
+describe('Signin Acceptance',function(){
+  it('Should sign the user in',function(){
+    browser.get('http://localhost:3000/authentication/signin');
+    browser.sleep(1000);
+    var username = element(by.model('credentials.username'));
+    var password = element(by.model('credentials.password'));
+    var button = element(by.buttonText('Sign in'));
+    //username.sendKeys('admin');
+    username.sendKeys('admin');
+    browser.sleep(500);
+    password.sendKeys('1Qasdfghjkl;\'');
+    browser.sleep(500);
+    button.click();
+    var name = element(by.binding('authentication.user.username'));
+    //expect(name.getText()).toEqual('admin');
+    expect(name.getText()).toEqual('admin');
   });
+});
 
   //Traverse through the HomePage,Challenges,Scoreboard,Teams
 
@@ -157,19 +157,19 @@ function writeScreenShot(data, filename) {
 
   // //***** Scoreboard ******//
     //click on team
-    describe("Users (team or no team)",function(){
-      it("should be able to view scoreboard",function(){
-        browser.get('http://localhost:3000/scoreBoard');
-        var scoreBoard = element.all(by.repeater("scoreBoard in scoreBoards").column('scoreBoard.team.teamName'));
-        var actual = scoreBoard.first();
-        actual.click();
-        browser.sleep(2000);
+describe('Users (team or no team)',function(){
+  it('should be able to view scoreboard',function(){
+    browser.get('http://localhost:3000/scoreBoard');
+    var scoreBoard = element.all(by.repeater('scoreBoard in scoreBoards').column('scoreBoard.team.teamName'));
+    var actual = scoreBoard.first();
+    actual.click();
+    browser.sleep(2000);
 
-        var actual1 = element(by.binding('scoreBoard.team.teamName'));
-        browser.sleep(2000);
-        expect(actual1.getText()).toEqual(actual);
-      });
-    });
+    var actual1 = element(by.binding('scoreBoard.team.teamName'));
+    browser.sleep(2000);
+    expect(actual1.getText()).toEqual(actual);
+  });
+});
     //click on solved challenges
 
   //***** Teams *****//
