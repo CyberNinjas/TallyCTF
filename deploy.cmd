@@ -105,8 +105,13 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   popd
 )
 
-:: 4. Grunt Build
-call grunt build --grunt-file D:\home\site\wwwroot\gruntfile.js
+# 4. Run grunt
+if [ -e "$DEPLOYMENT_SOURCE/Gruntfile.js" ]; then
+  eval $NPM_CMD install grunt-cli
+  exitWithMessageOnError "installing grunt failed"
+  ./node_modules/.bin/grunt --no-color build
+  exitWithMessageOnError "grunt failed"
+fi
 
 :: 5. Clean-up
 call !NPM_CMD! prune --production
