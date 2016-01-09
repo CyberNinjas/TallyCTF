@@ -2,7 +2,6 @@
   "name": "meanjs",
   "description": "Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js.",
   "version": "0.4.2",
-  "engine": "4.2.4",
   "meanjs-version": "0.4.2",
   "private": false,
   "license": "MIT",
@@ -11,7 +10,7 @@
     "url": "https://github.com/CyberNinjas/TallyCTF.git"
   },
   "engines": {
-    "node": ">=0.12.0",
+    "node": "4.2.4",
     "npm": ">=2.0.0"
   },
   "scripts": {
