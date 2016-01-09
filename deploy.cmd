@@ -109,7 +109,7 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 IF EXIST "$DEPLOYMENT_SOURCE/gruntfile.js" (
   call !NPM_CMD! install grunt-cli
   exitWithMessageOnError "installing grunt failed"
-  ./node_modules/.bin/grunt --no-color build
+  ./node_modules/.bin/grunt --no-color build 1>>output.txt 2>>output.txt
   exitWithMessageOnError "grunt failed"
 )
 
