@@ -108,9 +108,9 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 :: 4. Run grunt
 IF EXIST "%DEPLOYMENT_TARGET%/gruntfile.js" (
   pushd "%DEPLOYMENT_TARGET%"
-  call !NPM_CMD! install grunt-cli
+  call :ExecuteCmd !NPM_CMD! install grunt-cli
   IF !ERRORLEVEL! NEQ 0 goto error
-  call .node_modules/.bin/grunt --no-color --grunt-file %DEPLOYMENT_TARGET%/gruntfile.js build
+  call :ExecuteCmd /.node_modules/.bin/grunt --no-color --grunt-file "%DEPLOYMENT_TARGET%/gruntfile.js" build
   IF !ERRORLEVEL! NEQ 0 goto error
   popd
 )
