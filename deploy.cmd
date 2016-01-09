@@ -106,7 +106,7 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 )
 
 :: 4. Grunt Build
-call grunt build
+call grunt --grunt-file %~dp0%/gruntfile.js build
 
 :: 5. Clean-up
 call !NPM_CMD! prune --production
