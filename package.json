@@ -4,18 +4,17 @@
   "version": "0.4.2",
   "meanjs-version": "0.4.2",
   "private": false,
-  "author": "https://github.com/meanjs/mean/graphs/contributors",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/meanjs/mean.git"
+    "url": "https://github.com/CyberNinjas/TallyCTF.git"
   },
   "engines": {
     "node": ">=0.12.0",
     "npm": ">=2.0.0"
   },
   "scripts": {
-    "start": "grunt",
+    "start": "node server.js",
     "test": "grunt test",
     "postinstall": "bower install --config.interactive=false"
   },
