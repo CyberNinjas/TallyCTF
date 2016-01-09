@@ -64,10 +64,6 @@ This webapp is based off of the [MEAN.js](http://meanjs.org) framework and thus 
     *  `npm install -g bower`
   4.  Install grunt-cli:
     *  `npm install -g grunt-cli`
-  5.  Install Ruby
-	*  Use your distribution's repositories or http://rubyinstaller.org/downloads
-  6.  Install SASS
-	*  gem install sass
 2.  Clone the repository:
   *  `git clone https://github.com/CyberNinjas/TallyCTF.git`
 3.  Change directory into the mean folder:
