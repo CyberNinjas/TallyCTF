@@ -105,10 +105,13 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   popd
 )
 
-:: 4. Run grunt
-IF EXIST "%DEPLOYMENT_TARGET%/gruntfile.js" (
-  call !NPM_CMD! install grunt-cli
-  call ./node_modules/.bin/grunt --no-color --grunt-file %DEPLOYMENT_TARGET%/gruntfile.js build
+:: 4. Build with Gulp
+IF EXIST "%DEPLOYMENT_TARGET%\Gulpfile.js" (
+  pushd "%DEPLOYMENT_TARGET%"
+  echo "Building web site using Gulp"
+  call :ExecuteCmd ".\node_modules\.bin\gulp.cmd"
+  if !ERRORLEVEL! NEQ 0 goto error
+  popd
 )
 
 :: 5. Clean-up
