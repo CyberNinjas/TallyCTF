@@ -59,6 +59,7 @@ local.properties
 
 # IntelliJ
 # ========
+.idea
 *.iml
 
 # Cloud9 IDE

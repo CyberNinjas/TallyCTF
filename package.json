@@ -1,10 +1,11 @@
 {
-  "name": "meanjs",
-  "description": "Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js.",
+  "name": "TallyCTF",
+  "description": "CTF Scoreboard & Event Management Tool.",
+  "author" : "Cyber Ninjas",
   "version": "0.4.2",
   "meanjs-version": "0.4.2",
   "private": false,
-  "license": "MIT",
+  "license": "Apache",
   "repository": {
     "type": "git",
     "url": "https://github.com/CyberNinjas/TallyCTF.git"
