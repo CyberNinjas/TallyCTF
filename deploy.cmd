@@ -106,11 +106,9 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 )
 
 :: 4. Run grunt
-IF EXIST "%DEPLOYMENT_TARGET%/Gruntfile.js" (
-  pushd "%DEPLOYMENT_TARGET%"
+IF EXIST "%DEPLOYMENT_TARGET%/gruntfile.js" (
   call !NPM_CMD! install grunt-cli
-  call %DEPLOYMENT_TARGET%/node_modules/.bin/grunt --no-color --grunt-file %DEPLOYMENT_TARGET%/Gruntfile.js build
-  popd
+  call ./node_modules/.bin/grunt --no-color --grunt-file %DEPLOYMENT_TARGET%/gruntfile.js build
 )
 
 :: 5. Clean-up
