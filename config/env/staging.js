@@ -1,6 +1,6 @@
 'use strict';
 
-//Development File. This will always be local dev.
+//Staging File. This will be on Azure.
 
 var defaultEnvConfig = require('./default');
 
