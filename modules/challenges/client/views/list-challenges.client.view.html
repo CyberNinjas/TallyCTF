@@ -57,7 +57,7 @@
       <td>{{challenge.category}}</td>
       <td>{{challenge.points}}</td>
       <td>{{challenge.solves}}</td>
-      <td>{{challenge.created}}</td>
+      <td>{{challenge.created | date:"MM/dd/yy 'at' h:mma"}}</td>
       <td>{{challenge.solved}}</td>
 	  <tr ng-show = "active" ng-repeat-end><td colspan="5">
     <div>
