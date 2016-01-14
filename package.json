@@ -1,7 +1,7 @@
 {
   "name": "TallyCTF",
   "description": "CTF Scoreboard & Event Management Tool.",
-  "author" : "Cyber Ninjas",
+  "author": "Cyber Ninjas",
   "version": "0.4.2",
   "meanjs-version": "0.4.2",
   "private": false,
@@ -57,6 +57,7 @@
     "passport-linkedin": "~0.1.3",
     "passport-local": "^1.0.0",
     "passport-paypal-openidconnect": "^0.1.1",
+    "passport-saml": "^0.15.0",
     "passport-twitter": "^1.0.2",
     "phantomjs": ">=1.9.0",
     "serve-favicon": "^2.3.0",

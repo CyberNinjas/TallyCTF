@@ -51,6 +51,10 @@ module.exports = function (app) {
   app.route('/api/auth/github').get(users.oauthCall('github'));
   app.route('/api/auth/github/callback').get(users.oauthCallback('github'));
 
+  // Setting the github oauth routes
+  app.route('/api/auth/saml').get(users.oauthCall('saml'));
+  app.route('/api/auth/saml/callback').get(users.oauthCallback('saml'));
+
   // Setting the paypal oauth routes
   app.route('/api/auth/paypal').get(users.oauthCall('paypal'));
   app.route('/api/auth/paypal/callback').get(users.oauthCallback('paypal'));

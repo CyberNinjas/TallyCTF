@@ -21,6 +21,11 @@ module.exports = {
     clientSecret: process.env.FACEBOOK_SECRET || 'APP_SECRET',
     callbackURL: '/api/auth/facebook/callback'
   },
+  saml: {
+    clientID: process.env.SAML_ID || 'APP_ID',
+    clientSecret: process.env.SAML_SECRET || 'APP_SECRET',
+    callbackURL: '/api/auth/saml/callback'
+  },
   twitter: {
     clientID: process.env.TWITTER_KEY || 'CONSUMER_KEY',
     clientSecret: process.env.TWITTER_SECRET || 'CONSUMER_SECRET',

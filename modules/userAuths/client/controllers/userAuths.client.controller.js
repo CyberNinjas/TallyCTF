@@ -8,6 +8,7 @@ angular.module('userAuths').controller('UserAuthsController', ['$scope', '$state
       'facebook': false,
       'github': false,
       'google': false,
+      'saml': false,
       'linkedin': false,
       'oauth2': true,
       'openidconnect': true
