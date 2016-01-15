@@ -105,7 +105,17 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   popd
 )
 
-:: 4. Build with Gulp
+:: 4. Install Bower
+if [ -e "$DEPLOYMENT_TARGET/bower.json" ]; then
+  cd "$DEPLOYMENT_TARGET"
+  eval $NPM_CMD install bower
+  exitWithMessageOnError "installing bower failed"
+  ./node_modules/.bin/bower install
+  exitWithMessageOnError "bower failed"
+  cd - > /dev/null
+fi
+
+:: 5. Build with Gulp
 IF EXIST "%DEPLOYMENT_TARGET%\Gulpfile.js" (
   pushd "%DEPLOYMENT_TARGET%"
   echo "Building web site using Gulp"
@@ -114,7 +124,7 @@ IF EXIST "%DEPLOYMENT_TARGET%\Gulpfile.js" (
   popd
 )
 
-:: 5. Clean-up
+:: 6. Clean-up
 call !NPM_CMD! prune --production
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
