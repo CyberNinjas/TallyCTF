@@ -106,14 +106,14 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 )
 
 :: 4. Install Bower
-if [ -e "$DEPLOYMENT_TARGET/bower.json" ]; then
-  cd "$DEPLOYMENT_TARGET"
-  eval $NPM_CMD install bower
-  exitWithMessageOnError "installing bower failed"
+IF EXIST "%DEPLOYMENT_TARGET%\bower.json" (
+  pushd "%DEPLOYMENT_TARGET%"
+  call !NPM_CMD! install bower
+  IF !ERRORLEVEL! NEQ 0 goto error
   ./node_modules/.bin/bower install
-  exitWithMessageOnError "bower failed"
-  cd - > /dev/null
-fi
+  IF !ERRORLEVEL! NEQ 0 goto error
+  popd
+)
 
 :: 5. Build with Gulp
 IF EXIST "%DEPLOYMENT_TARGET%\Gulpfile.js" (
