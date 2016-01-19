@@ -19,7 +19,6 @@ IF %ERRORLEVEL% NEQ 0 (
 :: -----
 
 setlocal enabledelayedexpansion
-
 SET ARTIFACTS=%~dp0%..\artifacts
 
 IF NOT DEFINED DEPLOYMENT_SOURCE (
@@ -47,7 +46,7 @@ IF NOT DEFINED KUDU_SYNC_CMD (
   :: Locally just running "kuduSync" would also work
   SET KUDU_SYNC_CMD=%appdata%\npm\kuduSync.cmd
 )
-goto Deployment
+goto ConfigSetup
 
 :: Utility Functions
 :: -----------------
@@ -63,7 +62,7 @@ IF DEFINED KUDU_SELECT_NODE_VERSION_CMD (
     SET /p NODE_EXE=<"%DEPLOYMENT_TEMP%\__nodeVersion.tmp"
     IF !ERRORLEVEL! NEQ 0 goto error
   )
-  
+
   IF EXIST "%DEPLOYMENT_TEMP%\__npmVersion.tmp" (
     SET /p NPM_JS_PATH=<"%DEPLOYMENT_TEMP%\__npmVersion.tmp"
     IF !ERRORLEVEL! NEQ 0 goto error
@@ -82,6 +81,31 @@ IF DEFINED KUDU_SELECT_NODE_VERSION_CMD (
 goto :EOF
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Config Setup
+:ConfigSetup
+echo Handling Config Setup
+
+:: 1. Select node version
+call :SelectNodeVersion
+
+:: 2. Set new MSBuild Path
+SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
+
+:: 3. Set NPM Cache to the Temp Directory
+echo Setting NPM Cache to %TEMP%\npm-cache
+call :ExecuteCmd !NPM_CMD! config set cache %TEMP%\npm-cache --global
+IF !ERRORLEVEL! NEQ 0 goto error
+
+:: 4. Clear Node Cache
+IF /I "%NPM_CLEAR_CACHE%" EQU "1" (
+  echo Clearing NPM Cache
+  call :ExecuteCmd !NPM_CMD! cache clear
+  IF !ERRORLEVEL! NEQ 0 goto error
+)
+
+goto Deployment
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Deployment
 :: ----------
 
@@ -94,10 +118,7 @@ IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   IF !ERRORLEVEL! NEQ 0 goto error
 )
 
-:: 2. Select node version
-call :SelectNodeVersion
-
-:: 3. Install npm packages
+:: 2. Install npm packages
 IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   pushd "%DEPLOYMENT_TARGET%"
   call :ExecuteCmd !NPM_CMD! install --msvs_version=2013
@@ -105,27 +126,30 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   popd
 )
 
-:: 4. Install Bower
+:: 3. Install Bower
 IF EXIST "%DEPLOYMENT_TARGET%\bower.json" (
   pushd "%DEPLOYMENT_TARGET%"
-  echo "Running Bower Install"
+  echo Running Bower Install
   call !NPM_CMD! install bower
   IF !ERRORLEVEL! NEQ 0 goto error
-  call ExecuteCmd ".\node_modules\.bin\bower" install
+  call :ExecuteCmd ".\node_modules\.bin\bower" install
   IF !ERRORLEVEL! NEQ 0 goto error
   popd
 )
 
-:: 5. Build with Gulp
+:: 4. Build with Gulp
 IF EXIST "%DEPLOYMENT_TARGET%\Gulpfile.js" (
   pushd "%DEPLOYMENT_TARGET%"
-  echo "Building web site using Gulp"
-  call :ExecuteCmd ".\node_modules\.bin\gulp.cmd" build
+  echo Running Gulp Install
+  call !NPM_CMD! install gulp
+  echo Building web site using Gulp
+  echo Command: %DEPLOYMENT_TARGET%\node_modules\.bin\gulp.cmd build
+  call :ExecuteCmd %DEPLOYMENT_TARGET%\node_modules\.bin\gulp.cmd build
   if !ERRORLEVEL! NEQ 0 goto error
   popd
 )
 
-:: 6. Clean-up
+:: 5. Clean-up
 call !NPM_CMD! prune --production
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
