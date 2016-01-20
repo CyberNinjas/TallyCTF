@@ -38,12 +38,6 @@ module.exports.initLocalVariables = function (app) {
   app.locals.logo = config.logo;
   app.locals.favicon = config.favicon;
 
-  app.use(function (req, res,next){
-    console.log(req.connection.remoteAddress);
-    console.log(req.headers['x-forwarded-for']);
-    console.log(req.ip);
-    next();
-  });
   // Passing the request url to environment locals
   app.use(function (req, res, next) {
     res.locals.host = req.protocol + '://' + req.hostname;
@@ -56,8 +50,10 @@ module.exports.initLocalVariables = function (app) {
  * Initialize application middleware
  */
 module.exports.initMiddleware = function (app) {
-  //Set Trusted Proxies. This will set IP, URL, etc properly when behind proxy
-  app.set('trust proxy', config.trustedProxies.split(','));
+  if (config.trustedProxies) {
+    //Set Trusted Proxies. This will set IP, URL, etc properly when behind proxy
+    app.set('trust proxy', config.trustedProxies.split(','));
+  }
 
   // Showing stack errors
   app.set('showStackError', config.showStackError);
