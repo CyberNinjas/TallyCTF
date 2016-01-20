@@ -5,6 +5,7 @@
 var defaultEnvConfig = require('./default');
 
 module.exports = {
+  showStackError: true,
   log: {
     // logging with Morgan - https://github.com/expressjs/morgan
     // Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'

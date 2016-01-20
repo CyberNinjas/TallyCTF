@@ -5,6 +5,8 @@
 var defaultEnvConfig = require('./default');
 
 module.exports = {
+  //See http://expressjs.com/en/guide/behind-proxies.html
+  trustedProxies : 'uniquelocal',
   log: {
     // logging with Morgan - https://github.com/expressjs/morgan
     // Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'

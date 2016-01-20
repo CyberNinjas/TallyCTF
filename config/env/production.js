@@ -3,6 +3,8 @@
 //Production File. This will be on Azure.
 
 module.exports = {
+  //See http://expressjs.com/en/guide/behind-proxies.html
+  trustedProxies : 'uniquelocal',
   secure: {
     ssl: true,
     privateKey: './config/sslcerts/key.pem',
