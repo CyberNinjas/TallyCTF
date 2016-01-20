@@ -63,6 +63,7 @@ module.exports = {
     }
   },
   port: process.env.PORT || 3000,
+  bindIp: process.env.BINDIP || "0.0.0.0",
   templateEngine: 'swig',
   // Session Cookie settings
   sessionCookie: {
