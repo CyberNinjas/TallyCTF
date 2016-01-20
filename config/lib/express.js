@@ -38,6 +38,10 @@ module.exports.initLocalVariables = function (app) {
   app.locals.logo = config.logo;
   app.locals.favicon = config.favicon;
 
+  app.use(function (req, res,next){
+    console.log(request.connection.remoteAddress);
+    console.log(request.headers['x-forwarded-for']);
+  });
   // Passing the request url to environment locals
   app.use(function (req, res, next) {
     res.locals.host = req.protocol + '://' + req.hostname;
