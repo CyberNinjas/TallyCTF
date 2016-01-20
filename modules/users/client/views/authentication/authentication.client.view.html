@@ -1,7 +1,7 @@
 <section class="row" ng-controller="UserAuthsController" ng-init="find()">
   <h3 class="col-md-12 text-center">Sign in using your social accounts</h3>
   <div class="col-md-12 text-center">
-    <img ng-repeat="auth in userAuths" ng-click="callOauthProvider(auth.provider)" ng-src="/modules/users/client/img/buttons/{{auth.provider}}.png">
+    <img ng-repeat="auth in userAuths" ng-click="callOauthProvider(auth.provider)" ng-src="/modules/users/client/img/buttons/{{auth.provider.toLowerCase()}}.png">
   </div>
   <div ui-view></div>
 </section>
