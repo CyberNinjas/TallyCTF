@@ -39,8 +39,8 @@ module.exports.initLocalVariables = function (app) {
   app.locals.favicon = config.favicon;
 
   app.use(function (req, res,next){
-    console.log(request.connection.remoteAddress);
-    console.log(request.headers['x-forwarded-for']);
+    console.log(req.connection.remoteAddress);
+    console.log(req.headers['x-forwarded-for']);
   });
   // Passing the request url to environment locals
   app.use(function (req, res, next) {
