@@ -17,6 +17,7 @@
   "scripts": {
     "start": "node server.js",
     "build": "gulp build",
+    "postinstall" : "bower install",
     "test": "grunt test"
   },
   "dependencies": {
