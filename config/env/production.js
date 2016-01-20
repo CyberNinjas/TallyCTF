@@ -5,11 +5,12 @@
 module.exports = {
   //See http://expressjs.com/en/guide/behind-proxies.html
   trustedProxies : 'uniquelocal',
+  /* Uncomment for SSL after adding the appropriate sslcert files.
   secure: {
     ssl: true,
     privateKey: './config/sslcerts/key.pem',
     certificate: './config/sslcerts/cert.pem'
-  },
+  },//*/
   port: process.env.PORT || 8443,
   log: {
     // logging with Morgan - https://github.com/expressjs/morgan
