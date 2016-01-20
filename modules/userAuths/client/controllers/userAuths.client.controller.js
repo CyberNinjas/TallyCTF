@@ -26,7 +26,7 @@ angular.module('userAuths').controller('UserAuthsController', ['$scope', '$state
 
       // Create new User Auth object
       var userAuth = new UserAuths({
-        provider: this.provider,
+        provider: this.provider.toLowerCase(),
         authType: this.authType,
         authURL: this.authURL,
         userInfoURL: this.userInfoURL,
