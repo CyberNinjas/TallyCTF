@@ -12,10 +12,11 @@
   },
   "engines": {
     "node": "4.2.4",
-    "npm": "2.14.12"
+    "npm": "3.5.1"
   },
   "scripts": {
     "start": "node server.js",
+    "build": "gulp build",
     "test": "grunt test"
   },
   "dependencies": {
