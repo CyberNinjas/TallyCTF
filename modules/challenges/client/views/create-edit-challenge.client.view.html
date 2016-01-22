@@ -1,5 +1,10 @@
-<section ng-controller="ChallengesController">
+<section ng-controller="ChallengeUpdateController">
   <div class="page-header">
+    <div class="pull-right" ng-if="id!='new'">
+      <a class="btn btn-primary" ng-click="confirmDelete()">
+        <i class="glyphicon glyphicon-trash"></i>
+      </a>
+    </div>
     <h1>Challenge Detail</h1>
   </div>
   <div class="col-md-12">
@@ -48,7 +53,7 @@
           </div>
         </div>
         <div class="form-group">
-          <input type="submit" class="btn btn-default">
+          <input type="submit" class="btn btn-default" value="Update">
         </div>
         <div ng-show="error" class="text-danger">
           <strong ng-bind="error"></strong>
