@@ -14,86 +14,6 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
 
     $scope.defaultType = $scope.challenge.type;
 
-    // Create new Challenge
-    $scope.updateOrCreate = function (isValid) {
-        $scope.error = "";
-        this.addFlag();
-        if (!isValid) {
-            $scope.$broadcast('show-errors-check-validity', 'challengeForm');
-            return false;
-        }
-
-        // Redirect after save
-        $scope.challenge[$stateParams.challengeId ? '$update' : '$create'](function (response) {
-            $location.path('challenges');
-
-            // Clear form fields
-            $scope.challenge = Challenges.get({challengeId : 'new' });
-
-        }, function (errorResponse) {
-            //if there's an error, set it in browser
-            $scope.error = errorResponse.data.message;
-        });
-    };
-
-    // Remove existing Challenge
-    $scope.remove = function (challenge) {
-      if (challenge) {
-        //remove challenge from backend
-        challenge.$remove();
-
-        //remove challenge from displayed list of challenges in browser
-        for (var i in $scope.challenges) {
-          if ($scope.challenges[i] === challenge) {
-            $scope.challenges.splice(i, 1);
-          }
-        }
-      } else {
-        $scope.challenge.$remove(function () {
-          $location.path('challenges');
-        });
-      }
-    };
-
-    // Set of utility methods to facilitate the hiding and showing of elements based on role
-    $scope.displaySubmit = function(){
-      var mroles = Authentication.user.roles;
-      if (mroles.indexOf('admin') > -1) {
-        return false;
-      } else if(mroles.indexOf('guest') > -1) {
-        return false;
-      } else {
-        return true;
-      }
-    };
-    //method used to exclude a user role for element display
-    $scope.displayExclude = function(role) {
-      var mroles = Authentication.user.roles;
-      if (mroles.indexOf(role) > -1) {
-        return false;
-      } else {
-        return true;
-      }
-    };
-    //method used to include a user role for element display
-    $scope.displayInclude = function(role){
-      var mroles = Authentication.user.roles;
-      if (mroles.indexOf(role) > -1){
-        return true;
-      } else {
-        return false;
-      }
-    };
-
-    //method to confirm deletion of team on frontend
-    $scope.confirmDelete = function(challenge) {
-      if(confirm('Are you sure you want to delete?')){
-        console.log('challenge delete');
-        $scope.remove(challenge);
-      }
-
-    };
-
     // Find a list of Challenges
     $scope.find = function () {
       $scope.challenges = Challenges.query();
@@ -165,35 +85,5 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
         challenge.solve = null;
         $scope.error = response.message;
       });
-    };
-
-    // Adds a flag to the set of possible flags
-    $scope.addFlag = function (chall) {
-        var challenge = (chall ? chall : $scope);
-
-        if (!$scope.flagValue)
-            return;
-
-        //add flag to flags array
-        $scope.challenge.flags.push({ flag: $scope.flagValue, regex: false });
-        $scope.flagValue = "";
-
-    };
-
-    // Removes a flag from the set of flags
-    $scope.removeFlag = function (index, chall) {
-      var challenge = (chall ? chall : $scope);
-      if (index < 0)
-        return;
-
-      challenge.flags.splice(index, 1);
-    };
-
-    // Changes a flag type between being regex and being a string literal
-    $scope.toggleRegEx = function (flag) {
-      if (!flag)
-        return;
-
-      flag.regex = !flag.regex;
     };
   }]);
