@@ -19,6 +19,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/challenges',
       permissions: '*'
     }, {
+      resources: '/api/challenges/new',
+      permissions: '*'
+    }, {
       resources: '/api/challenges/:challengeId',
       permissions: '*'
     }]

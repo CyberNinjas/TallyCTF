@@ -18,7 +18,7 @@ angular.module('challenges').config(['$stateProvider',
       // Register create state. Admin use only
       .state('challenges.create', {
         url: '/create',
-        templateUrl: 'modules/challenges/client/views/create-challenges.client.view.html',
+        templateUrl: 'modules/challenges/client/views/create-edit-challenge.client.view.html',
         data: {
           roles: ['admin']
         }
@@ -31,7 +31,7 @@ angular.module('challenges').config(['$stateProvider',
       // Register edit state. Admin use only
       .state('challenges.edit', {
         url: '/:challengeId/edit',
-        templateUrl: 'modules/challenges/client/views/edit-challenge.client.view.html',
+        templateUrl: 'modules/challenges/client/views/create-edit-challenge.client.view.html',
         data: {
           roles: ['admin']
         }

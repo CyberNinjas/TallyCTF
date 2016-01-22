@@ -4,44 +4,36 @@
 angular.module('challenges').controller('ChallengesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Challenges', '$http', 'ScoreBoard',
   function ($scope, $stateParams, $location, Authentication, Challenges, $http, ScoreBoard) {
     $scope.authentication = Authentication;
-    $scope.flags = [];
+    $scope.challengeTypes = {   'multiple-choice' : "Multiple-Choice",
+                                'true-false' : "True/False",
+                                'short-answer' : "Short Answer",
+                                'long-answer' : "Long Answer"
+                            };
+
+    $scope.challenge = Challenges.get({challengeId : $stateParams.challengeId || 'new' });
+
+    $scope.defaultType = $scope.challenge.type;
 
     // Create new Challenge
-    $scope.create = function (isValid) {
-      $scope.error = null;
+    $scope.updateOrCreate = function (isValid) {
+        $scope.error = "";
+        this.addFlag();
+        if (!isValid) {
+            $scope.$broadcast('show-errors-check-validity', 'challengeForm');
+            return false;
+        }
 
-      if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'challengeForm');
-        return false;
-      }
+        // Redirect after save
+        $scope.challenge[$stateParams.challengeId ? '$update' : '$create'](function (response) {
+            $location.path('challenges');
 
-      // Create new Challenge object
-      var challenge = new Challenges({
-        //set values of object to form field values
-        name: this.name,
-        description: this.description,
-        solves: 0,
-        category: this.category,
-        points: this.points,
-        flags: this.flags
-      });
+            // Clear form fields
+            $scope.challenge = Challenges.get({challengeId : 'new' });
 
-      // Redirect after save
-      challenge.$save(function (response) {
-        $location.path('challenges');
-
-        // Clear form fields
-        $scope.name = '';
-        $scope.description = '';
-        $scope.solves = '';
-        $scope.category = '';
-        $scope.points = '';
-        $scope.flag = '';
-        $scope.flags = [];
-      }, function (errorResponse) {
-        //if there's an error, set it in browser
-        $scope.error = errorResponse.data.message;
-      });
+        }, function (errorResponse) {
+            //if there's an error, set it in browser
+            $scope.error = errorResponse.data.message;
+        });
     };
 
     // Remove existing Challenge
@@ -101,25 +93,6 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
       }
 
     };
-    // Update existing Challenge
-    $scope.update = function (isValid) {
-      $scope.error = null;
-
-      //verify the fields satisfy challenge creation requirements
-      if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'challengeForm');
-        return false;
-      }
-
-      var challenge = $scope.challenge;
-
-      //push update using challenge of $scope
-      challenge.$update(function () {
-        $location.path('challenges');
-      }, function (errorResponse) {
-        $scope.error = errorResponse.data.message;
-      });
-    };
 
     // Find a list of Challenges
     $scope.find = function () {
@@ -155,13 +128,6 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
           });
         });
       }
-    };
-
-    // Find existing Challenge by ID
-    $scope.findOne = function () {
-      $scope.challenge = Challenges.get({
-        challengeId: $stateParams.challengeId
-      });
     };
 
     //set default values for sortType and reverseSort
@@ -203,14 +169,15 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
 
     // Adds a flag to the set of possible flags
     $scope.addFlag = function (chall) {
-      var challenge = (chall ? chall : $scope);
+        var challenge = (chall ? chall : $scope);
 
-      if (!$scope.flag)
-        return;
+        if (!$scope.flagValue)
+            return;
 
-      //add flag to flags array
-      challenge.flags.push({ flag: $scope.flag, regex: false });
-      challenge.flag = '';
+        //add flag to flags array
+        $scope.challenge.flags.push({ flag: $scope.flagValue, regex: false });
+        $scope.flagValue = "";
+
     };
 
     // Removes a flag from the set of flags

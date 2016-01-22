@@ -4,70 +4,68 @@
  * Module dependencies.
  */
 var path = require('path'),
-  mongoose = require('mongoose'),
-  Team = mongoose.model('Team'),
-  Challenge = mongoose.model('Challenge'),
-  CurrentCtfEvent = mongoose.model('CurrentCtfEvent'),
-  ScoreBoard = mongoose.model('ScoreBoard'),
-  scoreboard = require(path.resolve('./modules/scoreBoard/server/controllers/scoreBoard.server.controller.js')),
-  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
+    mongoose = require('mongoose'),
+    Team = mongoose.model('Team'),
+    Challenge = mongoose.model('Challenge'),
+    CurrentCtfEvent = mongoose.model('CurrentCtfEvent'),
+    ScoreBoard = mongoose.model('ScoreBoard'),
+    scoreboard = require(path.resolve('./modules/scoreBoard/server/controllers/scoreBoard.server.controller.js')),
+    errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+    Q = require('q');
+    var self = this;
 
 /**
- * Create a challenges
+ * read - Returns the current challenge as a JSON Object.
+ * NOTE: req.challenge is only populated if :challengeId is in the route so that
+ * this.challengeByID is run first.
  */
-exports.create = function (req, res) {
-  //create new challenge object (mongoose) out of request's body
-  var challenge = new Challenge(req.body);
+exports.read = function (req, res, next) {
+    res.json(req.challenge);
+};
 
-  //set challenge creator
-  challenge.user = req.user;
+/**
+ * default - Sets req.challenge to a default, blank, challenge object, and calls read for the display.
+ * @param req - Express Request Object
+ * @param res - Express Response Object
+ * @param next - Next Function in the MiddleWare
+ */
+exports.default = function(req, res, next){
+    req.challenge = new Challenge({"type": "short-answer", "points": 10, "flags": []});
+    self.read(req, res, next);//Use Default Output for Challenge
+}
 
-  //commit new challenge to DB
-  challenge.save(function (err) {
+/**
+ * updateOrCreate - Updates or creates a challenge if it doesn't exist yet.
+ * Sends the output to a JSON response of {success:true} if successful or {success:false, error:MESSAGE} if failed.
+ * @param req - Express Request Object
+ * @param res - Express Response Object
+ */
+exports.updateOrCreate = function (req, res) {
+    var challenge = req.challenge || new Challenge({});
+
+    //set challenge creator
+    challenge.user = req.user;
+
+    //set challenge properties from request body
+    challenge.name = req.body.name;
+    challenge.description = req.body.description;
+    challenge.category = req.body.category;
+    challenge.points = req.body.points;
+    challenge.flags = req.body.flags;
+    challenge.type = req.body.type;
+
+    //commit changes to DB
+    challenge.save(function (err) {
     if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
+      res.send({success:false, error : err });
     } else {
-      res.json(challenge);
+      res.send({success:true});
     }
-  });
+    });
 };
 
 /**
- * Show the current challenges
- */
-exports.read = function (req, res) {
-  res.json(req.challenge);
-};
-
-/**
- * Update a challenges
- */
-exports.update = function (req, res) {
-  var challenge = req.challenge;
-
-  //set challenge properties from request body
-  challenge.name = req.body.name;
-  challenge.description = req.body.description;
-  challenge.category = req.body.category;
-  challenge.points = req.body.points;
-  challenge.flags = req.body.flags;
-
-  //commit changes to DB
-  challenge.save(function (err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.json(challenge);
-    }
-  });
-};
-
-/**
- * Delete an challenges
+ * Delete a challenge
  */
 exports.delete = function (req, res) {
   var challenge = req.challenge;
@@ -181,23 +179,40 @@ exports.submit = function(req, res) {
  * Challenge middleware
  */
 exports.challengeByID = function (req, res, next, id) {
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).send({
-      message: 'Challenge is invalid'
-    });
-  }
-
-  //finds a single challenge by id
-  Challenge.findById(id).exec(function (err, challenge) {
-    if (err) {
-      return next(err);
-    } else if (!challenge) {
-      return res.status(404).send({
-        message: 'No challenges with that identifier has been found'
-      });
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).send({
+            message: 'Challenge is invalid'
+        });
     }
-    req.challenge = challenge;
-    next();
-  });
+    getChallengeById(id).then(function(challenge){
+        req.challenge = challenge;
+        next();
+    }, function(err){
+        if(err.number == 404)
+            res.status(404).send(error.message);
+        else
+            res.status(500);
+        next(err);
+    }).finally(function(err){});
 };
+
+/**
+ * getChallengeById - Takes the id value, looks it up in the MongoDB, and retrieves a challenge object.
+ * @param id - The challenge id for the object.
+ * @returns {*|promise} - The challenge object, as a promise
+ */
+function getChallengeById(id){
+    var deferred = Q.defer();
+    Challenge.findById(id).exec(function (err, challenge) {
+        if (err) {
+            deferred.reject(err);
+        } else if (!challenge) {
+            var error = new Error("No challenges with that identifier were found");
+            error.number = 404;
+            deferred.reject(error);
+        } else {
+            deferred.resolve(challenge);
+        }
+    });
+    return deferred.promise;
+}
