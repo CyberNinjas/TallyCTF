@@ -16,7 +16,7 @@
             <p class="help-block error-text" ng-message="required">Challenge name is required.</p>
           </div>
           <select name="type" ng-model="challenge.type" id="type" class="form-control">
-            <option ng-repeat="(value, display) in challengeTypes" value="{{value}}" ng-selected="defaultType==value">{{display}}</option>
+            <option ng-repeat="(value, display) in challengeTypes" value="{{value}}" ng-selected="defaultType==value" required>{{display}}</option>
           </select>
           <input name="category" type="text" ng-model="challenge.category" id="category" class="form-control" placeholder="Category" required>
           <div ng-messages="challengeForm.category.$error" role="alert">
@@ -31,11 +31,16 @@
             <p class="help-block error-text" ng-message="required">Challenge points is required.</p>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" show-errors>
           <div class="input-group">
-            <input name="flag" type="text" ng-model="flagValue" id="flagValue" class="form-control" placeholder="Flag Value">
+            <input name="flagValue" type="text" ng-model="flagValue" class="form-control" placeholder="Flag Value" ng-required="challenge.flags.length<1">
             <div class="input-group-addon btn" title="Add a flag" ng-click="addFlag()">
               <span class="glyphicon glyphicon-plus"></span>
+            </div>
+          </div>
+          <div class="input-group">
+            <div ng-messages="challengeForm.flagValue.$error" role="alert">
+              <p class="help-block error-text" ng-message="required">At least one flag value is required.</p>
             </div>
           </div>
           <div class="list-group">
