@@ -21,6 +21,7 @@ module.exports = function (app) {
   // Setup custom auth routes
   app.route('/api/auth/userAuths/:userAuthProvider').get(userAuths.oauthCall);
   app.route('/api/auth/userAuths/:userAuthProvider/callback').get(userAuths.oauthCallback);
+  app.route('/api/auth/userAuths/:userAuthProvider/callback').post(userAuths.oauthCallback);
 
   // Finish by binding the user auth middleware
   app.param('userAuthId', userAuths.userAuthByID);
