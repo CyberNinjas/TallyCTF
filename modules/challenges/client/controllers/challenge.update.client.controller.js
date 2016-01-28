@@ -62,12 +62,10 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
     };
 
     // Removes a flag from the set of flags
-    $scope.removeFlag = function (index, chall) {
-      var challenge = (chall ? chall : $scope);
-      if (index < 0)
-        return;
-
-      challenge.flags.splice(index, 1);
+    $scope.removeFlag = function (index) {
+        if (typeof index === 'undefined')
+            return;
+        $scope.challenge.flags.splice(index,1);
     };
 
     // Changes a flag type between being regex and being a string literal
