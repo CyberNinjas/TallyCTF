@@ -4,13 +4,14 @@
 angular.module('challenges').controller('ChallengesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Challenges', '$http', 'ScoreBoard',
   function ($scope, $stateParams, $location, Authentication, Challenges, $http, ScoreBoard) {
     $scope.authentication = Authentication;
-    $scope.challengeTypes = {   'multiple-choice' : "Multiple-Choice",
-                                'true-false' : "True/False",
-                                'short-answer' : "Short Answer",
-                                'long-answer' : "Long Answer"
-                            };
+    $scope.challengeTypes = {
+      'multiple-choice': 'Multiple-Choice',
+      'true-false': 'True/False',
+      'short-answer': 'Short Answer',
+      'long-answer': 'Long Answer'
+    };
 
-    $scope.challenge = Challenges.get({challengeId : $stateParams.challengeId || 'new' });
+    $scope.challenge = Challenges.get({ challengeId: $stateParams.challengeId || 'new' });
 
     $scope.defaultType = $scope.challenge.type;
 
@@ -28,7 +29,7 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
         $scope.teamScoreBoard = ScoreBoard.get({ scoreBoardTeamId: Authentication.user.team });
 
         // Check the team's solved challenges only once promise is fulfilled
-        $scope.teamScoreBoard.$promise.then(function (scoreboard){
+        $scope.teamScoreBoard.$promise.then(function (scoreboard) {
 
           //populate scope's teamSolveChallenges array with solved challenge id's
           for (var chall = 0; chall < scoreboard.solved.length; chall++) {
@@ -52,26 +53,26 @@ angular.module('challenges').controller('ChallengesController', ['$scope', '$sta
 
     //set default values for sortType and reverseSort
     $scope.sortType = 'name';
-    $scope.reverseSort = false;  
+    $scope.reverseSort = false;
 
     //method to set and toggle sort-per-column
-    $scope.sort = function(p) {
+    $scope.sort = function (p) {
       //if sort type is already set, simply reverse it
       if ($scope.sortType === p) {
         $scope.reverseSort = !$scope.reverseSort;
       } else {
         $scope.sortType = p;
-        
-        if ($scope.sortType === 'points'){
+
+        if ($scope.sortType === 'points') {
           $scope.reverseSort = true;
-        } else {		 
+        } else {
           $scope.reverseSort = false;
         }
       }
     };
 
     // Submits an answer in the hope that it is correct
-    $scope.submitItem = function(challenge){
+    $scope.submitItem = function (challenge) {
       //makes a request to backend submit challenge response
       Challenges.submit(null, challenge, function (response) {
         // On successful submit; successful submit includes incorrect answers, and returns appropriate message

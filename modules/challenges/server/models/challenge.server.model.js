@@ -21,7 +21,7 @@ var ChallengeSchema = new Schema({
   },
   type : {
     type: String,
-    required: "Challenge must be of the list of available challenge types.",
+    required: 'Challenge must be of the list of available challenge types.',
     enum: ['multiple-choice', 'true-false', 'short-answer', 'long-answer'],
     trim: true
   },
