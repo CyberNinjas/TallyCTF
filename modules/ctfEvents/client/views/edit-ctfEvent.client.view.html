@@ -1,9 +1,9 @@
 <section ng-controller="CtfEventsController" ng-init="findOne()">
   <div class="page-header">
     <div class="btn-group pull-right">
-      <btn type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Options <span class="caret">
-      </btn>
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Options <span class="caret"></span>
+      </button>
       <ul class="dropdown-menu">
         <li><a style="cursor: pointer" ng-click="setCurrent()">Set as current event</a></li>
         <li><a style="cursor: pointer" ng-click="remove()">Delete Event</a></li>
@@ -15,7 +15,7 @@
     <form name="ctfEventForm" class="form-horizontal" ng-submit="update(ctfEventForm.$valid)" novalidate>
       <fieldset>
         <div class="form-group collapse-group">
-          <h2 bcollapse>Basic Info</h2>
+          <button class="btn btn-secondary dropdown-toggle" bcollapse>Basic Info</button>
             <div class="collapse">
               <div class="well well-lg">
                 <div class="form-group">
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="form-group collapse-group">
-          <h2 bcollapse>Challenges</h2>
+          <button class="btn btn-secondary dropdown-toggle" bcollapse>Challenges</button>
           <div class="collapse">
             <div class="well list-group">
               <a ng-repeat="challenge in ctfEvent.challenges" ui-sref="challenges.edit({challengeId: challenge._id})" class="list-group-item">
@@ -47,7 +47,7 @@
           </div>
         </div>
         <div class="form-group collapse-group">
-          <h2 bcollapse>Teams</h2>
+          <button class="btn btn-secondary dropdown-toggle" bcollapse>Teams</button>
           <div class="collapse">
             <div class="well well-lg list-group">
               <a ng-repeat="team in ctfEvent.teams" ui-sref="teams.edit({teamId: team._id})" class="list-group-item">
@@ -57,17 +57,17 @@
           </div>
         </div>
         <div class="form-group collapse-group">
-          <h2 bcollapse>Users</h2>
+          <button class="btn btn-secondary dropdown-toggle" bcollapse>Users</button>
           <div class="collapse">
             <div class="well well-lg list-group">
-              <a ng-repeat="user in ctfEvent.users" ui-sref="admin.user({userId: user._id})" class="list-group-item">
-                <h4 ng-bind="user.username" class="list-group-item-header"></h4>
-              </a>
+              <button type='button' ng-repeat="user in users" ui-sref="admin.user({userId: user._id})" class="list-group-item">
+                {{user.username}}
+              </button>
             </div>
           </div>
         </div>
         <div class="form-group">
-          <input type="submit" value="Update" class="btn btn-default">
+          <input class="btn btn-success dropdown-toggle" type="submit" value="Update">
         </div>
         <div ng-show="error" class="text-danger">
           <strong ng-bind="error"></strong>

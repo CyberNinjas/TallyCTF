@@ -27,7 +27,7 @@ angular.module('ctfEvents').config(['$stateProvider',
       })
       .state('ctfEvents.current', {
         url: '/current',
-        templateUrl: 'modules/ctfEvents/client/views/edit-current-ctfEvent.client.view.html',
+        templateUrl: 'modules/ctfEvents/client/views/edit-ctfEvent.client.view.html',
         data: {
           roles: ['admin']
         }

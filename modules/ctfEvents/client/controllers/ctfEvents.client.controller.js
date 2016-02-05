@@ -1,7 +1,7 @@
 'use strict';
 
 // CtfEvents controller
-angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$stateParams', '$location', 'Authentication', 'CtfEvents', 'CurrentCtfEvents', 'Challenges', 'Teams', 'Users',
+angular.module('ctfEvents').controller('CtfEventsController', ['$scope','$stateParams', '$location', 'Authentication', 'CtfEvents', 'CurrentCtfEvents', 'Challenges', 'Teams', 'Users',
   function ($scope, $stateParams, $location, Authentication, CtfEvents, CurrentCtfEvents, Challenges, Teams, Users) {
     $scope.authentication = Authentication;
 
@@ -11,7 +11,6 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
 
       if (!isValid) {
         $scope.$broadcast('show-errors-check-validity', 'ctfEventForm');
-
         return false;
       }
 
@@ -143,10 +142,8 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
 
         return false;
       }
-
       //get reference to in-browser ctfEvent
       var ctfEvent = $scope.ctfEvent;
-
       //commit ctfEvent to db
       ctfEvent.$update(function () {
         $location.path('ctfEvents');
@@ -154,28 +151,27 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope', '$state
         $scope.error = errorResponse.data.message;
       });
     };
-
     // Find a list of CtfEvents
     $scope.find = function () {
       $scope.ctfEvents = CtfEvents.query();
     };
 
-    // Find existing CtfEvent
+    // Find selected CtfEvent
     $scope.findOne = function () {
-      $scope.ctfEvent = CtfEvents.get({
-        ctfEventId: $stateParams.ctfEventId
-      });
-      $scope.currentCtfEvent = CurrentCtfEvents.get();
-    };
-
-    // Find existing current CtfEvent
-    $scope.findCurrent = function () {
-      $scope.ctfEvent = CurrentCtfEvents.get();
-
-      // Load the extra data
-      $scope.challenges = Challenges.query();
-      $scope.teams = Teams.query();
-      $scope.users = Users.query();
+      var final = $location.path().split('/').pop();
+      console.log(final);
+      if(final === 'current'){
+        $scope.ctfEvent = CurrentCtfEvents.get();
+        $scope.challenges = Challenges.query();
+        $scope.teams = Teams.query();
+        $scope.users = Users.query();
+      }
+      else {
+        $scope.ctfEvent = CtfEvents.get({
+          ctfEventId: $stateParams.ctfEventId
+        });
+        $scope.currentCtfEvent = CurrentCtfEvents.get();
+      }
     };
   }
 ]);

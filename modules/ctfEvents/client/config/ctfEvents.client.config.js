@@ -11,11 +11,5 @@ angular.module('ctfEvents').run(['Menus',
       roles: ['admin'],
       position: 3
     });
-
-    // Add the dropdown list item
-    //Menus.addSubMenuItem('topbar', 'ctfEvents', {
-    //  title: 'List CtfEvents',
-    //  state: 'ctfEvents.list'
-    //});
   }
 ]);
