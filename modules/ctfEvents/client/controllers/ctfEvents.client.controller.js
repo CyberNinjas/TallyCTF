@@ -1,8 +1,9 @@
 'use strict';
 
 // CtfEvents controller
-angular.module('ctfEvents').controller('CtfEventsController', ['$scope','$stateParams', '$location', 'Authentication', 'CtfEvents', 'CurrentCtfEvents', 'Challenges', 'Teams', 'Users',
-  function ($scope, $stateParams, $location, Authentication, CtfEvents, CurrentCtfEvents, Challenges, Teams, Users) {
+angular.module('ctfEvents').controller('CtfEventsController', ['$scope','$stateParams', '$location', 'Authentication',
+  'CtfEvents', 'CurrentCtfEvents', 'Challenges', 'Teams', 'Users', function ($scope, $stateParams, $location, Authentication,
+                                                                             CtfEvents, CurrentCtfEvents, Challenges, Teams, Users) {
     $scope.authentication = Authentication;
 
     // Create new CtfEvent
@@ -19,12 +20,14 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope','$stateP
         //set value of new object to field's values
         created: this.created,
         title: this.title,
+        description: this.description,
         start: this.start,
-        end: this.end
-        // Eventually add ability to import
-        //challenges: this.import.challenges,
-        //teams: this.import.teams,
-        //users: this.import.users
+        end: this.end,
+        registraionStart: this.registraionStart,
+        registraionEnd: this.registraionEnd,
+        challenges: this.challenges,
+        teams: this.teams,
+        users: this.users
       });
 
       // Redirect after save
@@ -156,22 +159,21 @@ angular.module('ctfEvents').controller('CtfEventsController', ['$scope','$stateP
       $scope.ctfEvents = CtfEvents.query();
     };
 
+    $scope.createEvent = function(){
+      $scope.challenges = Challenges.query();
+      $scope.teams = Teams.query();
+      $scope.users = Users.query();
+    }
+
     // Find selected CtfEvent
-    $scope.findOne = function () {
+    $scope.findEvent = function () {
       var final = $location.path().split('/').pop();
-      console.log(final);
-      if(final === 'current'){
-        $scope.ctfEvent = CurrentCtfEvents.get();
-        $scope.challenges = Challenges.query();
-        $scope.teams = Teams.query();
-        $scope.users = Users.query();
-      }
-      else {
-        $scope.ctfEvent = CtfEvents.get({
-          ctfEventId: $stateParams.ctfEventId
-        });
-        $scope.currentCtfEvent = CurrentCtfEvents.get();
-      }
-    };
+      $scope.ctfEvent = (final === 'current') ? CurrentCtfEvents.get()
+                                            : $scope.ctfEvent = CtfEvents.get({ ctfEventId: $stateParams.ctfEventId });
+      $scope.challenges = Challenges.query();
+      $scope.teams = Teams.query();
+      $scope.users = Users.query();
+      $scope.currentCtfEvent = CurrentCtfEvents.get();
+    }
   }
 ]);
