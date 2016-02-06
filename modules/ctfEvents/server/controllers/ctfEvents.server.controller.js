@@ -130,7 +130,7 @@ exports.clear = function (req, res) {
 
 //load an event into the current ctf event
 exports.loadCurrent = function (req, res) {
-  if (req.body.Challenges.length > 0)
+  if (req.body.Challenges != null && req.body.Challenges.length > 0)
   {
     //insert all challenge records from ctfEvent to currentCtfEvent
     Challenge.collection.insertMany(req.body.Challenges, function (err, r) {

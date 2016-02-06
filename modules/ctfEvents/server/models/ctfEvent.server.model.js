@@ -20,11 +20,22 @@ var CtfEventSchema = new Schema({
     trim: true,
     required: 'Event Title cannot be blank'
   },
+  description:{
+    type: String,
+    default: ''
+  },
   start: {
     type: Date,
     default: Date.now
   },
   end: {
+    type: Date
+  },
+  registrationStart: {
+    type: Date,
+    default: Date.now
+  },
+  registrationEnd: {
     type: Date
   },
   challenges: {
