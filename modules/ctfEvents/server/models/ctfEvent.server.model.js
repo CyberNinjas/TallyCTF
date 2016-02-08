@@ -36,20 +36,29 @@ var CtfEventSchema = new Schema({
     default: Date.now
   },
   registrationEnd: {
-    type: Date
+    type: this.end
   },
-  challenges: {
-    type: Array,
-    default: []
+  settings: {
+    userAuths: {
+      type: Schema.Types.Objectid,
+      ref: 'UserAuth'
+    },
+    maxTries: [{
+     type: Number
+  }]
   },
-  teams: {
-    type: Array,
-    default: []
-  },
-  users: {
-    type: Array,
-    default: []
-  }
+  challenges: [{
+    type: Schema.Types.Objectid,
+    ref: 'Challenge'
+  }],
+  teams: [{
+    type: Schema.Types.Objectid,
+    ref: 'Team'
+  }],
+  users: [{
+    type: Schema.Types.Objectid,
+    ref: 'User'
+  }]
 });
 
 var CurrentCtfEventSchema = new Schema({
