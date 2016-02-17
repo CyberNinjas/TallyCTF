@@ -23,7 +23,7 @@ module.exports = function (app) {
   // Get / Update / Delete Challenge
   app.route('/api/challenges/:challengeId').all(challengesPolicy.isAllowed)
     .get(challenges.read)
-    .put(challenges.updateOrCreate)
+    .post(challenges.updateOrCreate)
     .delete(challenges.delete);
 
   // Finish by binding the challenges middleware
