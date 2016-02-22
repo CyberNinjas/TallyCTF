@@ -18,16 +18,23 @@ angular.module('ctfEvents').config(['$stateProvider',
           roles: ['admin']
         }
       })
+      .state('ctfEvents.upcoming', {
+        url: '/upcoming',
+        templateUrl: 'modules/ctfEvents/client/views/upcoming-events-ctfEvents.client.view.html',
+        data: {
+          roles: ['user']
+        }
+      })
+      .state('ctfEvents.dashboard', {
+        url: '/dash/:ctfEventId',
+        templateUrl: 'modules/ctfEvents/client/views/dashboard-ctfEvents.client.view.html',
+        data: {
+          roles: ['user']
+        }
+      })
       .state('ctfEvents.create', {
         url: '/create',
         templateUrl: 'modules/ctfEvents/client/views/create-ctfEvent.client.view.html',
-        data: {
-          roles: ['admin']
-        }
-      })
-      .state('ctfEvents.current', {
-        url: '/current',
-        templateUrl: 'modules/ctfEvents/client/views/edit-ctfEvent.client.view.html',
         data: {
           roles: ['admin']
         }
