@@ -11,19 +11,4 @@ angular.module('ctfEvents').factory('CtfEvents', ['$resource',
       }
     });
   }
-]).factory('CurrentCtfEvents', ['$resource',
-  function ($resource) {
-    //register service keywords with HTTP methods
-    return $resource('api/ctfEvents/current', {}, {
-      update: {
-        method: 'POST'
-      },
-      load: {
-        method: 'PUT'
-      },
-      clear: {
-        method: 'DELETE'
-      }
-    });
-  }
 ]);
