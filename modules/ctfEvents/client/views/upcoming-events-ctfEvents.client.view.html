@@ -1,16 +1,15 @@
 <section ng-controller="ListEventsController">
     <div class="page-header">
-        <h1>CtfEvents
-            <button type=button class="btn btn-success pull-right" ui-sref="ctfEvents.create">Create Event</button>
-        </h1>
+        <h1>Upcoming Events</h1>
     </div>
     <div class="list-group">
-        <a ng-repeat="ctfEvent in ctfEvents" ui-sref="ctfEvents.edit({ctfEventId: ctfEvent._id})"
+        <a ng-repeat="ctfEvent in ctfEvents" ui-sref="ctfEvents.dashboard({ctfEventId: ctfEvent._id})"
            class="list-group-item">
             <small class="list-group-item-text">
                 Created on
                 <span ng-bind="ctfEvent.created | date:'mediumDate'"></span>
             </small>
+            <i class="fa fa-pencil-square-o pull-right"> register</i>
             <h4 class="list-group-item-heading" ng-bind="ctfEvent.title"></h4>
         </a>
     </div>
