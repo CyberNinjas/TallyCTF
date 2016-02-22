@@ -45,11 +45,11 @@ exports.invokeRolesPolicies = function () {
  * Check If Challenges Policy Allows
  */
 
-exports.isAllowedSubmit = function (req, res, next){
+exports.isAllowedSubmit = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
 
   //user must be registered on site to attempt submit
-  if (req.body.challenge && req.user && req.user.roles.indexOf('user') > -1){
+  if (req.body.challenge && req.user && req.user.roles.indexOf('user') > -1) {
     return next();
   }
 

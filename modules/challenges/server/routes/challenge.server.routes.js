@@ -9,22 +9,22 @@ var challengesPolicy = require('../policies/challenge.server.policy.js'),
 module.exports = function (app) {
   // Challenges collection routes
   app.route('/api/challenges').all(challengesPolicy.isAllowed)
-    .get(challenges.list)
+  .get(challenges.list)
 
   //route for submitting a challenge, uses different policy than the rest
   app.route('/api/challenges/:challengeId/submit').all(challengesPolicy.isAllowedSubmit)
-      .post(challenges.submit);
+  .post(challenges.submit);
 
   //Create New Challenge / Return Default Value
   app.route('/api/challenges/new').all(challengesPolicy.isAllowed)
-      .get(challenges.default)
-      .post(challenges.updateOrCreate);
+  .get(challenges.default)
+  .post(challenges.updateOrCreate);
 
   // Get / Update / Delete Challenge
   app.route('/api/challenges/:challengeId').all(challengesPolicy.isAllowed)
-    .get(challenges.read)
-    .post(challenges.updateOrCreate)
-    .delete(challenges.delete);
+  .get(challenges.read)
+  .post(challenges.updateOrCreate)
+  .delete(challenges.delete);
 
   // Finish by binding the challenges middleware
   app.param('challengeId', challenges.challengeByID);

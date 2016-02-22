@@ -1,117 +1,133 @@
 <section ng-controller="ChallengeUpdateController">
-  <div class="page-header">
-    <div class="pull-right" ng-if="id!='new'">
-      <a class="btn btn-primary" ng-click="removeChallenge()">
-        <i class="glyphicon glyphicon-trash"></i>
-      </a>
+    <div class="page-header">
+        <div class="pull-right" ng-if="id!='new'">
+            <a class="btn btn-primary" ng-click="removeChallenge()">
+                <i class="glyphicon glyphicon-trash"></i>
+            </a>
+        </div>
+        <h1>Challenge Detail</h1>
     </div>
-    <h1>Challenge Detail</h1>
-  </div>
-  <div class="col-md-12">
-    <form name="challengeForm" class="form-horizontal" ng-submit="updateOrCreate(challengeForm.$valid)" novalidate>
-      <fieldset>
-        <div class="form-group" show-errors>
-          <div class="row">
-            <div class="col-md-3">
-              <label class="control-label">Name</label>
-              <input name="name" type="text" ng-model="challenge.name" id="name" class="form-control" placeholder="Name" required>
-              <div ng-messages="challengeForm.name.$error" role="alert">
-                <p class="help-block error-text" ng-message="required">Challenge name is required.</p>
-              </div>
-            </div>
-            <div class="col-md-5">
-              <label class="control-label">Categories</label>
-              <input name="category" type="text" ng-model="challenge.category" id="category" class="ui-select-multiple form-control" placeholder="Category" required>
-              <div ng-messages="challengeForm.category.$error" role="alert">
-                <p class="help-block error-text" ng-message="required">Challenge category is required.</p>
-              </div>
-            </div>
-            <div class="col-xs-2">
-              <label class="control-label">Points</label>
-              <input name="points" type="number" ng-model="challenge.points" id="points" class="form-control" placeholder="Points" required>
-              <div ng-messages="challengeForm.points.$error" role="alert">
-                <p class="help-block error-text" ng-message="required">Challenge points is required.</p>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-10">
-              <label class="control-label">Description</label>
-              <textarea name="description" type="text" ng-model="challenge.description" id="description" class="form-control" placeholder="Description" required></textarea>
-              <div ng-messages="challengeForm.description.$error" role="alert">
-                <p class="help-block error-text" ng-message="required">Challenge description is required.</p>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-5">
-              <label class="control-label">Challenge Type</label>
-              <select class="form-control" ng-model="challenge.type" ng-options="challengeType.displayName for challengeType in challengeTypes track by challengeType.name"
-                      ng-change="updateType()" required></select>
-            </div>
-            <div class="col-lg-5">
-              <label class="control-label">Challenge Format</label>
-              <select class="form-control" ng-model="challenge.format" ng-options="format.displayName for format in challenge.type.formats track by format.name"
-                      ng-change="updateFormat()" required></select>
-            </div>
-          </div>
-        </div>
-        <div class="form-group" ng-show="challenge.format" show-errors>
-          <div class="row">
-            <div class="col-lg-10">
-              <legend>Answers</legend>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-10">
-              <div class="input-group" ng-show="allowAddAnswers">
-                <input name="answerValue" type="text" ng-model="answerValue" class="form-control" placeholder="Challenge Answer" ng-required="!existsCorrectAnswer()" >
-                <div class="input-group-addon btn" title="Add an Answer" ng-click="addAnswer()">
-                  <span class="glyphicon glyphicon-plus"></span>
+    <div class="col-md-12">
+        <form name="challengeForm" class="form-horizontal" ng-submit="updateOrCreate(challengeForm.$valid)" novalidate>
+            <fieldset>
+                <div class="form-group" show-errors>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="control-label">Name</label>
+                            <input name="name" type="text" ng-model="challenge.name" id="name" class="form-control"
+                                   placeholder="Name" required>
+                            <div ng-messages="challengeForm.name.$error" role="alert">
+                                <p class="help-block error-text" ng-message="required">Challenge name is required.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="control-label">Categories</label>
+                            <input name="category" type="text" ng-model="challenge.category" id="category"
+                                   class="ui-select-multiple form-control" placeholder="Category" required>
+                            <div ng-messages="challengeForm.category.$error" role="alert">
+                                <p class="help-block error-text" ng-message="required">Challenge category is
+                                    required.</p>
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <label class="control-label">Points</label>
+                            <input name="points" type="number" ng-model="challenge.points" id="points"
+                                   class="form-control" placeholder="Points" required>
+                            <div ng-messages="challengeForm.points.$error" role="alert">
+                                <p class="help-block error-text" ng-message="required">Challenge points is required.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <label class="control-label">Description</label>
+                            <textarea name="description" type="text" ng-model="challenge.description" id="description"
+                                      class="form-control" placeholder="Description" required></textarea>
+                            <div ng-messages="challengeForm.description.$error" role="alert">
+                                <p class="help-block error-text" ng-message="required">Challenge description is
+                                    required.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <label class="control-label">Challenge Type</label>
+                            <select class="form-control" ng-model="challenge.type"
+                                    ng-options="challengeType.displayName for challengeType in challengeTypes track by challengeType.name"
+                                    ng-change="updateType()" required></select>
+                        </div>
+                        <div class="col-lg-5">
+                            <label class="control-label">Challenge Format</label>
+                            <select class="form-control" ng-model="challenge.format"
+                                    ng-options="format.displayName for format in challenge.type.formats track by format.name"
+                                    ng-change="updateFormat()" required></select>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div ng-messages="challengeForm.answerValue.$error" role="alert">
-                <p class="help-block error-text" ng-message="required">At least one selected answer is required.</p>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-              <div class="col-lg-10" ng-repeat="answer in challenge.answers" style="min-height:2.5em;">
-                <div class="col-lg-8" >
-                  <input ng-if="challenge.format.inputType == 'radio'"      type="radio"    name="answers"
-                         ng-model="challenge.answers[$index].isCorrect" ng-value="true" ng-checked="answer.isCorrect" required />
-                  <input ng-if="challenge.format.inputType == 'checkbox'"   type="checkbox" name="answers"
-                         ng-model="challenge.answers[$index].isCorrect" ng-value="true" ng-checked="answer.isCorrect" />
-                  <label ng-if="challenge.format.inputType == 'checkbox' || challenge.format.inputType == 'radio'" class="form-label">{{answer.value}}</label>
+                <div class="form-group" ng-show="challenge.format" show-errors>
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <legend>Answers</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <div class="input-group" ng-show="allowAddAnswers">
+                                <input name="answerValue" type="text" ng-model="answerValue" class="form-control"
+                                       placeholder="Challenge Answer" ng-required="!existsCorrectAnswer()">
+                                <div class="input-group-addon btn" title="Add an Answer" ng-click="addAnswer()">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </div>
+                            </div>
+                            <div ng-messages="challengeForm.answerValue.$error" role="alert">
+                                <p class="help-block error-text" ng-message="required">At least one selected answer is
+                                    required.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-10" ng-repeat="answer in challenge.answers" style="min-height:2.5em;">
+                            <div class="col-lg-8">
+                                <input ng-if="challenge.format.inputType == 'radio'" type="radio" name="answers"
+                                       ng-model="challenge.answers[$index].isCorrect" ng-value="true"
+                                       ng-checked="answer.isCorrect" required/>
+                                <input ng-if="challenge.format.inputType == 'checkbox'" type="checkbox" name="answers"
+                                       ng-model="challenge.answers[$index].isCorrect" ng-value="true"
+                                       ng-checked="answer.isCorrect"/>
+                                <label ng-if="challenge.format.inputType == 'checkbox' || challenge.format.inputType == 'radio'"
+                                       class="form-label">{{answer.value}}</label>
 
-                  <input ng-if="challenge.format.inputType == 'text'" type="text" name="answers" class="form-control"
-                         ng-model="challenge.answers[$index].value" ng-value="answer.value" />
+                                <input ng-if="challenge.format.inputType == 'text'" type="text" name="answers"
+                                       class="form-control"
+                                       ng-model="challenge.answers[$index].value" ng-value="answer.value"/>
                   <textarea ng-if="challenge.format.inputType == 'textarea'" name="answers" class="form-control"
-                            ng-model="challenge.answers[$index].value" ng-value="answer.value" />
+                            ng-model="challenge.answers[$index].value" ng-value="answer.value"/>
+                            </div>
+                            <div class="col-lg-2 btn-group pull-right">
+                                <div class="btn"
+                                     ng-class="{'btn-success': answer.isRegex, 'btn-default' : !answer.isRegex}"
+                                     ng-if="challenge.format.inputType == 'text' || challenge.format.inputType == 'textarea'"
+                                     ng-click="toggleAnswerRegEx($index)" title="Enable/Disable Regular Expressions">
+                                    <span>RegEx</span>
+                                </div>
+                                <div class="btn btn-danger" ng-click="removeAnswer($index)" ng-if="allowAddAnswers">
+                                    <span class="glyphicon glyphicon-trash"></span></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-lg-2 btn-group pull-right" >
-                  <div class="btn" ng-class="{'btn-success': answer.isRegex, 'btn-default' : !answer.isRegex}"
-                       ng-if="challenge.format.inputType == 'text' || challenge.format.inputType == 'textarea'"
-                       ng-click="toggleAnswerRegEx($index)" title="Enable/Disable Regular Expressions">
-                    <span>RegEx</span>
-                  </div>
-                  <div class="btn btn-danger" ng-click="removeAnswer($index)" ng-if="allowAddAnswers"><span class="glyphicon glyphicon-trash"></span></div>
-                </div>
-              </div>
-          </div>
-        </div>
 
-        <div class="form-group">
-          <div class="row">
-            <div class="col-lg-10">
-              <input type="submit" class="btn btn-default" value="Update" ng-disabled="!challenge.format">
-              <div ng-show="error" class="text-danger">
-                <strong ng-bind="error"></strong>
-              </div>
-            </div>
-          </div>
-        </div>
-      </fieldset>
-    </form>
-  </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input type="submit" class="btn btn-default" value="Update" ng-disabled="!challenge.format">
+                            <div ng-show="error" class="text-danger">
+                                <strong ng-bind="error"></strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
 </section>

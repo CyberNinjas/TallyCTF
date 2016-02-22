@@ -4,15 +4,15 @@
  * Module dependencies.
  */
 var path = require('path'),
-    mongoose = require('mongoose'),
-    Team = mongoose.model('Team'),
-    Challenge = mongoose.model('Challenge'),
-    CurrentCtfEvent = mongoose.model('CurrentCtfEvent'),
-    ScoreBoard = mongoose.model('ScoreBoard'),
-    scoreboard = require(path.resolve('./modules/scoreBoard/server/controllers/scoreBoard.server.controller.js')),
-    errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-    Q = require('q');
-    var self = this;
+  mongoose = require('mongoose'),
+  Team = mongoose.model('Team'),
+  Challenge = mongoose.model('Challenge'),
+  CurrentCtfEvent = mongoose.model('CurrentCtfEvent'),
+  ScoreBoard = mongoose.model('ScoreBoard'),
+  scoreboard = require(path.resolve('./modules/scoreBoard/server/controllers/scoreBoard.server.controller.js')),
+  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+  Q = require('q');
+var self = this;
 
 /**
  * read - Returns the current challenge as a JSON Object.
@@ -20,7 +20,7 @@ var path = require('path'),
  * this.challengeByID is run first.
  */
 exports.read = function (req, res, next) {
-    res.json(req.challenge);
+  res.json(req.challenge);
 };
 
 /**
@@ -29,9 +29,14 @@ exports.read = function (req, res, next) {
  * @param res - Express Response Object
  * @param next - Next Function in the MiddleWare
  */
-exports.default = function(req, res, next){
-    req.challenge = new Challenge({"challenge_type": "text", "challenge_format" : "short-answer", "points": 10, "answers": []});
-    self.read(req, res, next);//Use Default Output for Challenge
+exports.default = function (req, res, next) {
+  req.challenge = new Challenge({
+    'challenge_type': 'text',
+    'challenge_format': 'short-answer',
+    'points': 10,
+    'answers': []
+  });
+  self.read(req, res, next);//Use Default Output for Challenge
 }
 
 /**
@@ -41,35 +46,35 @@ exports.default = function(req, res, next){
  * @param res - Express Response Object
  */
 exports.updateOrCreate = function (req, res) {
-    //Test if its a create since req.challenge will be null.
-    var isCreate = (req.challenge) ? false : true;
-    var challenge = req.challenge || new Challenge({});
+  //Test if its a create since req.challenge will be null.
+  var isCreate = (req.challenge) ? false : true;
+  var challenge = req.challenge || new Challenge({});
 
-    if(isCreate) //Set Create if its being created
-        challenge.createdBy = req.user._id;
-    challenge.lastModifiedBy = req.user._id;
+  if (isCreate) //Set Create if its being created
+    challenge.createdBy = req.user._id;
+  challenge.lastModifiedBy = req.user._id;
 
-    //Set lastModified
-    challenge.lastModified = Date.now();
+  //Set lastModified
+  challenge.lastModified = Date.now();
 
-    //set challenge properties from request body
-    challenge.name = req.body.name;
-    challenge.description = req.body.description;
-    challenge.category = req.body.category;
-    challenge.points = req.body.points;
-    challenge.answers = req.body.answers;
-    challenge.challenge_type = req.body.challenge_type;
-    challenge.challenge_format = req.body.challenge_format;
-    //challenge.files = req.body.challenge.files;
+  //set challenge properties from request body
+  challenge.name = req.body.name;
+  challenge.description = req.body.description;
+  challenge.category = req.body.category;
+  challenge.points = req.body.points;
+  challenge.answers = req.body.answers;
+  challenge.challenge_type = req.body.challenge_type;
+  challenge.challenge_format = req.body.challenge_format;
+  //challenge.files = req.body.challenge.files;
 
-    //commit changes to DB
-    challenge.save(function (err) {
+  //commit changes to DB
+  challenge.save(function (err) {
     if (err) {
-      res.send({success:false, error : err });
+      res.send({ success: false, error: err });
     } else {
-      res.send({success:true});
+      res.send({ success: true });
     }
-    });
+  });
 };
 
 /**
@@ -107,7 +112,7 @@ exports.list = function (req, res) {
 };
 
 //Method to validate and register challenge solve or reject incorrect answer
-exports.submit = function(req, res) {
+exports.submit = function (req, res) {
 
   //get teamID of user requesting submit
   var teamId = req.user.team;
@@ -122,7 +127,7 @@ exports.submit = function(req, res) {
   var challenge = req.challenge;
 
   // Check that the user is able to submit (must be on a team)
-  if ((roles.indexOf('teamMember') === -1) && (roles.indexOf('teamCaptain') === -1)){
+  if ((roles.indexOf('teamMember') === -1) && (roles.indexOf('teamCaptain') === -1)) {
     return res.status(403).send({
       message: 'You must be on a team to submit flags!'
     });
@@ -137,8 +142,7 @@ exports.submit = function(req, res) {
 
   // Check if the answer provided is correct
   var correct = false;
-  for (var i = 0; i < challenge.flags.length; ++i)
-  {
+  for (var i = 0; i < challenge.flags.length; ++i) {
     // Handle regular expression case
     if (challenge.flags[i].regex) {
       var pat = new RegExp(challenge.flags[i].flag);
@@ -187,21 +191,22 @@ exports.submit = function(req, res) {
  * Challenge middleware
  */
 exports.challengeByID = function (req, res, next, id) {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).send({
-            message: 'Challenge is invalid'
-        });
-    }
-    getChallengeById(id).then(function(challenge){
-        req.challenge = challenge;
-        next();
-    }, function(err){
-        if(err.number == 404)
-            res.status(404).send(error.message);
-        else
-            res.status(500);
-        next(err);
-    }).finally(function(err){});
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).send({
+      message: 'Challenge is invalid'
+    });
+  }
+  getChallengeById(id).then(function (challenge) {
+    req.challenge = challenge;
+    next();
+  }, function (err) {
+    if (err.number == 404)
+      res.status(404).send(error.message);
+    else
+      res.status(500);
+    next(err);
+  }).finally(function (err) {
+  });
 };
 
 /**
@@ -209,18 +214,18 @@ exports.challengeByID = function (req, res, next, id) {
  * @param id - The challenge id for the object.
  * @returns {*|promise} - The challenge object, as a promise
  */
-function getChallengeById(id){
-    var deferred = Q.defer();
-    Challenge.findById(id).exec(function (err, challenge) {
-        if (err) {
-            deferred.reject(err);
-        } else if (!challenge) {
-            var error = new Error("No challenges with that identifier were found");
-            error.number = 404;
-            deferred.reject(error);
-        } else {
-            deferred.resolve(challenge);
-        }
-    });
-    return deferred.promise;
+function getChallengeById(id) {
+  var deferred = Q.defer();
+  Challenge.findById(id).exec(function (err, challenge) {
+    if (err) {
+      deferred.reject(err);
+    } else if (!challenge) {
+      var error = new Error('No challenges with that identifier were found');
+      error.number = 404;
+      deferred.reject(error);
+    } else {
+      deferred.resolve(challenge);
+    }
+  });
+  return deferred.promise;
 }

@@ -60,57 +60,57 @@ describe('Challenge CRUD tests', function () {
 
   it('should be able to save an challenges if logged in', function (done) {
     agent.post('/api/auth/signin')
-      .send(credentials)
+    .send(credentials)
+    .expect(200)
+    .end(function (signinErr, signinRes) {
+      // Handle signin error
+      if (signinErr) {
+        return done(signinErr);
+      }
+
+      // Get the userId
+      var userId = user.id;
+
+      // Save a new challenges
+      agent.post('/api/challenges')
+      .send(challenge)
       .expect(200)
-      .end(function (signinErr, signinRes) {
-        // Handle signin error
-        if (signinErr) {
-          return done(signinErr);
+      .end(function (challengeSaveErr, challengeSaveRes) {
+        // Handle challenges save error
+        if (challengeSaveErr) {
+          return done(challengeSaveErr);
         }
 
-        // Get the userId
-        var userId = user.id;
+        // Get a list of challenges
+        agent.get('/api/challenges')
+        .end(function (challengesGetErr, challengesGetRes) {
+          // Handle challenges save error
+          if (challengesGetErr) {
+            return done(challengesGetErr);
+          }
 
-        // Save a new challenges
-        agent.post('/api/challenges')
-          .send(challenge)
-          .expect(200)
-          .end(function (challengeSaveErr, challengeSaveRes) {
-            // Handle challenges save error
-            if (challengeSaveErr) {
-              return done(challengeSaveErr);
-            }
+          // Get challenges list
+          var challenges = challengesGetRes.body;
 
-            // Get a list of challenges
-            agent.get('/api/challenges')
-              .end(function (challengesGetErr, challengesGetRes) {
-                // Handle challenges save error
-                if (challengesGetErr) {
-                  return done(challengesGetErr);
-                }
+          // Set assertions
+          (challenges[0].user._id).should.equal(userId);
+          (challenges[0].title).should.match('Challenge Title');
 
-                // Get challenges list
-                var challenges = challengesGetRes.body;
-
-                // Set assertions
-                (challenges[0].user._id).should.equal(userId);
-                (challenges[0].title).should.match('Challenge Title');
-
-                // Call the assertion callback
-                done();
-              });
-          });
+          // Call the assertion callback
+          done();
+        });
       });
+    });
   });
 
   it('should not be able to save an challenges if not logged in', function (done) {
     agent.post('/api/challenges')
-      .send(challenge)
-      .expect(403)
-      .end(function (challengeSaveErr, challengeSaveRes) {
-        // Call the assertion callback
-        done(challengeSaveErr);
-      });
+    .send(challenge)
+    .expect(403)
+    .end(function (challengeSaveErr, challengeSaveRes) {
+      // Call the assertion callback
+      done(challengeSaveErr);
+    });
   });
 
   it('should not be able to save an challenges if no title is provided', function (done) {
@@ -118,76 +118,76 @@ describe('Challenge CRUD tests', function () {
     challenge.name = '';
 
     agent.post('/api/auth/signin')
-      .send(credentials)
-      .expect(200)
-      .end(function (signinErr, signinRes) {
-        // Handle signin error
-        if (signinErr) {
-          return done(signinErr);
-        }
+    .send(credentials)
+    .expect(200)
+    .end(function (signinErr, signinRes) {
+      // Handle signin error
+      if (signinErr) {
+        return done(signinErr);
+      }
 
-        // Get the userId
-        var userId = user.id;
+      // Get the userId
+      var userId = user.id;
 
-        // Save a new challenges
-        agent.post('/api/challenges')
-          .send(challenge)
-          .expect(400)
-          .end(function (challengeSaveErr, challengeSaveRes) {
-            // Set message assertion
-            (challengeSaveRes.body.message).should.match('Name cannot be blank');
+      // Save a new challenges
+      agent.post('/api/challenges')
+      .send(challenge)
+      .expect(400)
+      .end(function (challengeSaveErr, challengeSaveRes) {
+        // Set message assertion
+        (challengeSaveRes.body.message).should.match('Name cannot be blank');
 
-            // Handle challenges save error
-            done(challengeSaveErr);
-          });
+        // Handle challenges save error
+        done(challengeSaveErr);
       });
+    });
   });
 
   it('should be able to update an challenges if signed in', function (done) {
     agent.post('/api/auth/signin')
-      .send(credentials)
+    .send(credentials)
+    .expect(200)
+    .end(function (signinErr, signinRes) {
+      // Handle signin error
+      if (signinErr) {
+        return done(signinErr);
+      }
+
+      // Get the userId
+      var userId = user.id;
+
+      // Save a new challenges
+      agent.post('/api/challenges')
+      .send(challenge)
       .expect(200)
-      .end(function (signinErr, signinRes) {
-        // Handle signin error
-        if (signinErr) {
-          return done(signinErr);
+      .end(function (challengeSaveErr, challengeSaveRes) {
+        // Handle challenges save error
+        if (challengeSaveErr) {
+          return done(challengeSaveErr);
         }
 
-        // Get the userId
-        var userId = user.id;
+        // Update challenges title
+        challenge.title = 'WHY YOU GOTTA BE SO MEAN?';
 
-        // Save a new challenges
-        agent.post('/api/challenges')
-          .send(challenge)
-          .expect(200)
-          .end(function (challengeSaveErr, challengeSaveRes) {
-            // Handle challenges save error
-            if (challengeSaveErr) {
-              return done(challengeSaveErr);
-            }
+        // Update an existing challenges
+        agent.put('/api/challenges/' + challengeSaveRes.body._id)
+        .send(challenge)
+        .expect(200)
+        .end(function (challengeUpdateErr, challengeUpdateRes) {
+          // Handle challenges update error
+          if (challengeUpdateErr) {
+            return done(challengeUpdateErr);
+          }
 
-            // Update challenges title
-            challenge.title = 'WHY YOU GOTTA BE SO MEAN?';
+          // Set assertions
+          (challengeUpdateRes.body._id).should.equal(challengeSaveRes.body._id);
+          (challengeUpdateRes.body.title).should.match('WHY YOU GOTTA BE SO MEAN?');
 
-            // Update an existing challenges
-            agent.put('/api/challenges/' + challengeSaveRes.body._id)
-              .send(challenge)
-              .expect(200)
-              .end(function (challengeUpdateErr, challengeUpdateRes) {
-                // Handle challenges update error
-                if (challengeUpdateErr) {
-                  return done(challengeUpdateErr);
-                }
-
-                // Set assertions
-                (challengeUpdateRes.body._id).should.equal(challengeSaveRes.body._id);
-                (challengeUpdateRes.body.title).should.match('WHY YOU GOTTA BE SO MEAN?');
-
-                // Call the assertion callback
-                done();
-              });
-          });
+          // Call the assertion callback
+          done();
+        });
       });
+    });
   });
 
   it('should be able to get a list of challenges if not signed in', function (done) {
@@ -198,13 +198,13 @@ describe('Challenge CRUD tests', function () {
     challengeObj.save(function () {
       // Request challenges
       request(app).get('/api/challenges')
-        .end(function (req, res) {
-          // Set assertion
-          res.body.should.be.instanceof(Array).and.have.lengthOf(1);
+      .end(function (req, res) {
+        // Set assertion
+        res.body.should.be.instanceof(Array).and.have.lengthOf(1);
 
-          // Call the assertion callback
-          done();
-        });
+        // Call the assertion callback
+        done();
+      });
 
     });
   });
@@ -216,81 +216,81 @@ describe('Challenge CRUD tests', function () {
     // Save the challenges
     challengeObj.save(function () {
       request(app).get('/api/challenges/' + challengeObj._id)
-        .end(function (req, res) {
-          // Set assertion
-          res.body.should.be.instanceof(Object).and.have.property('title', challenge.title);
+      .end(function (req, res) {
+        // Set assertion
+        res.body.should.be.instanceof(Object).and.have.property('title', challenge.title);
 
-          // Call the assertion callback
-          done();
-        });
+        // Call the assertion callback
+        done();
+      });
     });
   });
 
   it('should return proper error for single challenges with an invalid Id, if not signed in', function (done) {
     // test is not a valid mongoose Id
     request(app).get('/api/challenges/test')
-      .end(function (req, res) {
-        // Set assertion
-        res.body.should.be.instanceof(Object).and.have.property('message', 'Challenge is invalid');
+    .end(function (req, res) {
+      // Set assertion
+      res.body.should.be.instanceof(Object).and.have.property('message', 'Challenge is invalid');
 
-        // Call the assertion callback
-        done();
-      });
+      // Call the assertion callback
+      done();
+    });
   });
 
   it('should return proper error for single challenges which doesnt exist, if not signed in', function (done) {
     // This is a valid mongoose Id but a non-existent challenges
     request(app).get('/api/challenges/559e9cd815f80b4c256a8f41')
-      .end(function (req, res) {
-        // Set assertion
-        res.body.should.be.instanceof(Object).and.have.property('message', 'No challenges with that identifier has been found');
+    .end(function (req, res) {
+      // Set assertion
+      res.body.should.be.instanceof(Object).and.have.property('message', 'No challenges with that identifier has been found');
 
-        // Call the assertion callback
-        done();
-      });
+      // Call the assertion callback
+      done();
+    });
   });
 
   it('should be able to delete an challenges if signed in', function (done) {
     agent.post('/api/auth/signin')
-      .send(credentials)
+    .send(credentials)
+    .expect(200)
+    .end(function (signinErr, signinRes) {
+      // Handle signin error
+      if (signinErr) {
+        return done(signinErr);
+      }
+
+      // Get the userId
+      var userId = user.id;
+
+      // Save a new challenges
+      agent.post('/api/challenges')
+      .send(challenge)
       .expect(200)
-      .end(function (signinErr, signinRes) {
-        // Handle signin error
-        if (signinErr) {
-          return done(signinErr);
+      .end(function (challengeSaveErr, challengeSaveRes) {
+        // Handle challenges save error
+        if (challengeSaveErr) {
+          return done(challengeSaveErr);
         }
 
-        // Get the userId
-        var userId = user.id;
+        // Delete an existing challenges
+        agent.delete('/api/challenges/' + challengeSaveRes.body._id)
+        .send(challenge)
+        .expect(200)
+        .end(function (challengeDeleteErr, challengeDeleteRes) {
+          // Handle challenges error error
+          if (challengeDeleteErr) {
+            return done(challengeDeleteErr);
+          }
 
-        // Save a new challenges
-        agent.post('/api/challenges')
-          .send(challenge)
-          .expect(200)
-          .end(function (challengeSaveErr, challengeSaveRes) {
-            // Handle challenges save error
-            if (challengeSaveErr) {
-              return done(challengeSaveErr);
-            }
+          // Set assertions
+          (challengeDeleteRes.body._id).should.equal(challengeSaveRes.body._id);
 
-            // Delete an existing challenges
-            agent.delete('/api/challenges/' + challengeSaveRes.body._id)
-              .send(challenge)
-              .expect(200)
-              .end(function (challengeDeleteErr, challengeDeleteRes) {
-                // Handle challenges error error
-                if (challengeDeleteErr) {
-                  return done(challengeDeleteErr);
-                }
-
-                // Set assertions
-                (challengeDeleteRes.body._id).should.equal(challengeSaveRes.body._id);
-
-                // Call the assertion callback
-                done();
-              });
-          });
+          // Call the assertion callback
+          done();
+        });
       });
+    });
   });
 
   it('should not be able to delete an challenges if not signed in', function (done) {
@@ -304,14 +304,14 @@ describe('Challenge CRUD tests', function () {
     challengeObj.save(function () {
       // Try deleting challenges
       request(app).delete('/api/challenges/' + challengeObj._id)
-        .expect(403)
-        .end(function (challengeDeleteErr, challengeDeleteRes) {
-          // Set message assertion
-          (challengeDeleteRes.body.message).should.match('User is not authorized');
+      .expect(403)
+      .end(function (challengeDeleteErr, challengeDeleteRes) {
+        // Set message assertion
+        (challengeDeleteRes.body.message).should.match('User is not authorized');
 
-          // Handle challenges error error
-          done(challengeDeleteErr);
-        });
+        // Handle challenges error error
+        done(challengeDeleteErr);
+      });
 
     });
   });
