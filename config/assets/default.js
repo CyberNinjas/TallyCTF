@@ -6,6 +6,7 @@ module.exports = {
       css: [
         'public/lib/bootstrap/dist/css/bootstrap.css',
         'public/lib/bootstrap/dist/css/bootstrap-theme.css',
+        'public/lib/eeh-navigation/dist/eeh-navigation.css',
         'public/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'
       ],
       js: [
@@ -19,9 +20,11 @@ module.exports = {
         'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
         'public/lib/angular-file-upload/angular-file-upload.js',
         'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
+        'public/lib/bootstrap/dist/js/bootstrap.min.js',
         'public/lib/moment/min/moment.min.js',
-        'public/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-        'public/lib/bootstrap/dist/js/bootstrap.min.js'
+        'public/lib/eeh-navigation/dist/eeh-navigation.js',
+        'public/lib/eeh-navigation/dist/eeh-navigation.tpl.js',
+        'public/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']
     },
