@@ -54,18 +54,18 @@ var CtfEventSchema = new Schema({
     }]
   },
   challenges: [{
-    //type: Schema.Types.ObjectId,
-    //ref: 'Challenge',
+    type: Schema.Types.ObjectId,
+    ref: 'Challenge',
     default: []
   }],
   teams: [{
-    //type: Schema.Types.ObjectId,
-    //ref: 'Team',
+    type: Schema.Types.ObjectId,
+    ref: 'Team',
     default: []
   }],
   users: [{
-    //type: Schema.Types.ObjectId,
-    //ref: 'User',
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     default: []
   }]
 });

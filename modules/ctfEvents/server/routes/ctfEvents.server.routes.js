@@ -12,14 +12,6 @@ module.exports = function (app) {
     .get(ctfEvents.list)
     .post(ctfEvents.create);
 
-  // Current ctfEvent routes
-  app.route('/api/ctfEvents/current').all(ctfEventsPolicy.isAllowed)
-    .get(ctfEvents.readCurrent)
-    .put(ctfEvents.loadCurrent)
-    .post(ctfEvents.setCurrent)
-    .delete(ctfEvents.clear);
-
-  // Single ctfEvent routes
   app.route('/api/ctfEvents/:ctfEventId').all(ctfEventsPolicy.isAllowed)
     .get(ctfEvents.read)
     .put(ctfEvents.update)

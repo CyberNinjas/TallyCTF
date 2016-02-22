@@ -1,76 +1,105 @@
-<section ng-controller="CtfEventsController" ng-init="findEvent()">
-  <div class="page-header">
-    <div class="btn-group pull-right">
-      <button class="btn btn-success margin-right" ng-click="update(ctfEventForm.$valid)">Submit</button>
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Options <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu">
-        <li><a style="cursor: pointer" ng-click="setCurrent()">Set as current event</a></li>
-        <li><a style="cursor: pointer" ng-click="remove()">Delete Event</a></li>
-      </ul>
+<section ng-controller="UpdateEventsController">
+    <div class="page-header">
+        <div class="pull-right">
+            <button type='button' class="btn btn-success dropdown-toggle" ng-click="update(ctfEventForm.$valid)">
+                Update
+            </button>
+        </div>
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-default dropdown-toggle margin-right" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                Options <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a style="cursor: pointer" ng-click="remove()">Delete Event</a></li>
+            </ul>
+        </div>
+        <h1 ng-bind="ctfEvent.title"></h1>
     </div>
-    <h1 ng-bind="ctfEvent.title"> </h1>
-  </div>
-  <div class="col-md-12">
-    <form name="ctfEventForm" class="form-horizontal" ng-submit="update(ctfEventForm.$valid)" novalidate>
-      <fieldset>
-        <div class="form-group collapse-group">
-          <button class="btn btn-secondary dropdown-toggle btn-block" bcollapse>Basic Info</button>
-            <div class="collapse">
-              <div class="well well-lg">
-                <div class="form-group">
-                  <label for="title">Event Title</label>
-                  <input name="title" type="text" ng-model="ctfEvent.title" id="title" class="form-control" placeholder="Event Title" required>
+    <div class="col-md-12">
+        <form name="ctfEventForm" class="form-horizontal" ng-submit="update(ctfEventForm.$valid)" novalidate>
+            <fieldset>
+                <div class="form-group collapse-group">
+                    <button class="btn btn-secondary dropdown-toggle btn-block" bcollapse>Basic Info</button>
+                    <div class="collapse">
+                        <div class="well well-lg">
+
+                            <div class="form-group">
+                                <label for="title">Event Title</label>
+                                <input name="title" type="text" ng-model="ctfEvent.title" id="title"
+                                       class="form-control" placeholder="Event Title" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description">Event Description</label>
+                                <input name="description" type="text" ng-model="ctfEvent.description" id="description"
+                                       class="form-control" placeholder="Event Description" required>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <label for="start">Start Time</label>
+                                    <input name="start" type="datetime" ng-model="ctfEvent.start" id="start"
+                                           class="form-control" datetime>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="end">End Time</label>
+                                    <input name="end" type="datetime" ng-model="ctfEvent.end" id="end"
+                                           class="form-control" datetime>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <label for="registrationStart">Registration Start Time</label>
+                                    <input name="registrationStart" type="datetime"
+                                           ng-model="ctfEvent.registrationStart" id="registrationStart"
+                                           class="form-control" datetime>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="registrationEnd">Registration End Time</label>
+                                    <input name="registrationEnd" type="datetime" ng-model="ctfEvent.registrationEnd"
+                                           id="registrationEnd" class="form-control" datetime>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                  <label for="start">Start Time</label>
-                  <input name="start" type="datetime" ng-model="ctfEvent.start" id="start" class="form-control" datetime>
+
+                <div class="form-group collapse-group">
+                    <button class="btn btn-secondary btn-block" bcollapse>Challenges</button>
+                    <div class="collapse well well-lg">
+                        <div class="well list-group">
+                            <dual-multi options="challengeOptions"></dual-multi>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                  <label for="start">End Time</label>
-                  <input name="end" type="datetime" ng-model="ctfEvent.end" id="end" class="form-control" datetime>
+
+                <div class="form-group collapse-group">
+                    <button class="btn btn-secondary btn-block" bcollapse>Teams</button>
+                    <div class="collapse well well-lg">
+                        <div>
+                            <dual-multi options="teamOptions"></dual-multi>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
-        </div>
-        <div class="form-group collapse-group">
-          <button class="btn btn-secondary dropdown-toggle btn-block" bcollapse>Challenges</button>
-          <div class="collapse">
-            <div class="well list-group">
-              <a ng-repeat="challenge in ctfEvent.challenges" ui-sref="challenges.edit({challengeId: challenge._id})" class="list-group-item">
-                <h4 ng-bind="challenge.name" class="list-group-item-header"></h4>
-              </a>
-              <div class="list-group-item" ng-if="ctfEvent.challenges.$resolved && !ctfEvent.challenges.length">
-                No challenges
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="form-group collapse-group">
-          <button class="btn btn-secondary dropdown-toggle btn-block" bcollapse>Teams</button>
-          <div class="collapse">
-            <div class="well well-lg list-group">
-              <a ng-repeat="team in ctfEvent.teams" ui-sref="teams.edit({teamId: team._id})" class="list-group-item">
-                <h4 ng-bind="team.teamName" class="list-group-item-header"></h4>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="form-group collapse-group">
-          <button class="btn btn-secondary dropdown-toggle btn-block" bcollapse>Users</button>
-          <div class="collapse">
-            <div class="well well-lg list-group">
-              <button type='button' ng-repeat="user in ctfEvent.users" ui-sref="admin.user({userId: user._id})" class="list-group-item">
-                {{user.username}}
-              </button>
-            </div>
-          </div>
-        </div>
-        <div ng-show="error" class="text-danger">
-          <strong ng-bind="error"></strong>
-        </div>
-      </fieldset>
-    </form>
-  </div>
+
+                <div class="form-group collapse-group">
+                    <button class="btn btn-secondary btn-block" bcollapse>Users</button>
+                    <div class="collapse well well-lg">
+                        <div>
+                            <dual-multi options="userOptions"></dual-multi>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-show="error" class="text-danger">
+                    <strong ng-bind="error"></strong>
+                </div>
+            </fieldset>
+        </form>
+    </div>
 </section>
