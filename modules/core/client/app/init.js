@@ -36,6 +36,8 @@ angular.module(ApplicationConfiguration.applicationModuleName).run(function ($ro
     }
   });
 
+  $rootScope.$state = $state;
+
   // Record previous state
   $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
     if (!fromState.data || !fromState.data.ignoreState) {
