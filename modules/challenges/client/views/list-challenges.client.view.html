@@ -38,7 +38,7 @@
        </tr>
      </thead>
 	 <!--
-	 The below two rows use ng-repeat to populate the challenge board. The filter in the <tr> fills the category filter with all challenge types found on the board and the ':true' enables filtering by exact matches only.
+	 The below two rows use ng-repeat to populate the challenge board. The filter in the <tr> fills the category filter with all challenge formats found on the board and the ':true' enables filtering by exact matches only.
 	 -->
     <tr ng-repeat-start="challenge in challenges | filter:{category: challengeFilter.category}:true | orderBy:sortType:reverseSort" ng-click="active = !active">
       <td>{{challenge.name}}</td>
