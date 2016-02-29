@@ -4,6 +4,7 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$filte
   'CtfEvents', 'Challenges', 'Teams', 'Users', function ($scope, $filter, $stateParams, $location, Authentication,
                                                          CtfEvents, Challenges, Teams, Users) {
 
+    $scope.authentication = Authentication;
 
     // Each query is nested in the previous one's promise to make sure
     // everything resolves before we set each of the select's options
@@ -13,46 +14,63 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$filte
       $scope.challenges.$promise.then(function(data) {
         $scope.teams = Teams.query();
         $scope.teams.$promise.then(function(data) {
+          //$scope.scoreBoard= scoreBoard.get();
+          //$scope.scoreBoard.$promise.then(function(data) {
           $scope.eventTeams = $filter('selected')($scope.teams, $scope.ctfEvent.teams);
           $scope.eventChallenges = $filter('selected')($scope.challenges, $scope.ctfEvent.challenges);
+          $scope.eventId = $stateParams.ctfEventId
+
+          $scope.ongoing = $scope.getOngoing()
+          $scope.getRemainingTime()
+          $scope.remainingTime = $scope.ongoing === false ? '00:00:00' : $scope.hours + ':' + $scope.minutes
+
+          $scope.tile_stats = {
+            points: { title: 'Number Of Points Available:',
+              value: $scope.ongoing === false ? 0 : $scope.getPointTotal(),
+              change: null,
+              icon: 'fa fa-star'
+
+            },
+            position: { title: 'Your Team\'s Position',
+              value: $scope.ongoing === false ? 'N/A' : '1st',
+              change: $scope.ongoing === false ? null : 0,
+              icon: 'fa fa-sort-numeric-asc'
+
+            },
+            total: { title: 'Your Team\'s Total Points',
+              value: $scope.ongoing === false ? 0 : 0,
+              change: $scope.ongoing === false ? null : 0,
+              icon: 'fa fa-bullseye'
+            }
+          }
+          //});
         });
       });
     });
 
-    $scope.remainingTime = '00:00:00'
-    $scope.tile_stats = {
-      points: { title: 'Number Of Points Available:',
-                value: 5309,
-                change: null,
-                icon: 'fa fa-star'
+    $scope.getPointTotal = function(){
+      var pointTotal = $scope.eventChallenges.reduce(function(total, challenge){
+        return total + challenge.points;
+      }, 0);
+      return pointTotal
+    }
 
-      },
-      position: { title: 'Your Team\'s Position',
-        value: '5th',
-        change: -1,
-        icon: 'fa fa-sort-numeric-asc'
+    $scope.getOngoing = function(){
+      var hasStarted = $scope.ctfEvent.start < moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+               && moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') < $scope.ctfEvent.end
+      return hasStarted
+    }
 
-      },
-      total: { title: 'Your Team\'s Total Points',
-               value: 339,
-               change: 3,
-               icon: 'fa fa-bullseye'
-      }
-    };
-  }]).filter('unselected', function() {
-    return function(list, obj) {
-      return list.filter(function(item) {
-        if (obj.indexOf(item._id)< 0) {
-          return true;
-        }
-      });
-    };
-  }).filter('selected', function() {
-    return function(list, obj) {
-      return list.filter(function(item) {
-        if (obj.indexOf(item._id)>= 0) {
-          return true;
-        }
-      });
-    };
-  });
+    $scope.getRemainingTime = function(){
+      var duration = moment.duration(moment($scope.ctfEvent.end).diff(moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')))
+      var milliseconds = duration._milliseconds; milliseconds = Math.floor(milliseconds/1000);
+      $scope.seconds = (milliseconds % 60); milliseconds = Math.floor(milliseconds/60);
+      $scope.minutes = (milliseconds % 60); milliseconds = Math.floor(milliseconds/60);
+      $scope.hours = milliseconds ;
+    }
+
+    $scope.getUserName = function(id){
+      var user = Users.get({ userId : id });
+      console.log(user.firstName)
+    }
+  }]);
