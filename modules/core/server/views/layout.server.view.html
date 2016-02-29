@@ -59,22 +59,20 @@
         <div class="side-menu-container">
           <ul class="nav navbar-nav">
 
-            <li><a href="#"><span class="glyphicon glyphicon-send"></span> Chat</a></li>
-            <li class="active"><a href="#"><span class="glyphicon glyphicon-plane"></span> Dashboard</a></li>
+            <li class="active"><a ui-sref="#"><span class="glyphicon glyphicon-plane"></span> Dashboard</a></li>
+            <li><a ui-sref="scoreBoard.list()"><span class="glyphicon glyphicon-signal"></span> Score Board</a></li>
             <li><a href="#"><span class="glyphicon glyphicon-cloud"></span> Credentials</a></li>
-
+            <li><a href="#"><span class="glyphicon glyphicon-send"></span> Chat</a></li>
             <!-- Dropdown-->
             <li class="panel panel-default" id="dropdown">
               <a data-toggle="collapse" href="#dropdown-lvl1">
-                <span class="glyphicon glyphicon-user"></span> Todo <span class="caret"></span>
+                <span class="glyphicon glyphicon-user"></span> Meta <span class="caret"></span>
               </a>
-
               <!-- Dropdown level 1 -->
               <div id="dropdown-lvl1" class="panel-collapse collapse">
                 <div class="panel-body">
                   <ul class="nav navbar-nav">
-                    <li><a href="#">Link</a></li>
-
+                    <li><a ui-sref="ctfEvents.registration({ctfEventId: $state.params.ctfEventId})">Registration</a></li>
                     <!-- Dropdown level 2 -->
                     <li class="panel panel-default" id="dropdown">
                       <a data-toggle="collapse" href="#dropdown-lvl2">
@@ -92,9 +90,6 @@
                 </div>
               </div>
             </li>
-
-            <li><a href="#"><span class="glyphicon glyphicon-signal"></span> Score Board</a></li>
-
           </ul>
         </div><!-- /.navbar-collapse -->
       </nav>
@@ -111,12 +106,12 @@
   <script type="text/javascript">
     var user = {{ user | json | safe }};
   </script>
-  
+
   <!--Load The Socket.io File-->
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 
   <!--Application JavaScript Files-->
-  {% for jsFile in jsFiles %}<script type="text/javascript" src="{{jsFile}}"></script>{% endfor %} 
+  {% for jsFile in jsFiles %}<script type="text/javascript" src="{{jsFile}}"></script>{% endfor %}
 
   {% if livereload %}
   <!--Livereload script rendered -->

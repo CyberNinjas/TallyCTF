@@ -9,13 +9,11 @@ angular.module('ctfEvents').run(['Menus',
       state: 'ctfEvents',
       type: 'dropdown'
     });
-
     Menus.addSubMenuItem('topbar', 'ctfEvents', {
       title: 'List Events',
       state: 'ctfEvents.upcoming',
       roles: ['*']
     });
-
     Menus.addSubMenuItem('topbar', 'admin', {
       title: 'Manage Events',
       state: 'ctfEvents.list',

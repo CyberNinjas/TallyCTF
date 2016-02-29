@@ -32,6 +32,13 @@ angular.module('ctfEvents').config(['$stateProvider',
           roles: ['user']
         }
       })
+      .state('ctfEvents.registration', {
+        url: '/register/:ctfEventId',
+        templateUrl: 'modules/ctfEvents/client/views/team-registration-ctfEvent.client.view.html',
+        data: {
+          roles: ['user']
+        }
+      })
       .state('ctfEvents.create', {
         url: '/create',
         templateUrl: 'modules/ctfEvents/client/views/create-ctfEvent.client.view.html',

@@ -4,7 +4,7 @@
 angular.module('challenges').config(['$stateProvider',
   function ($stateProvider) {
     // Challenges state routing
-  $stateProvider
+    $stateProvider
     .state('challenges', {
       abstract: true,
       url: '/challenges',
