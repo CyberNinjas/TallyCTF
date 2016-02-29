@@ -29,7 +29,8 @@ var CtfEventSchema = new Schema({
     default: Date.now
   },
   end: {
-    type: Date
+    type: Date,
+    default: Date('Y-m-d', Date.now + 86400)
   },
   registrationStart: {
     type: Date,
@@ -63,6 +64,10 @@ var CtfEventSchema = new Schema({
     ref: 'Team',
     default: []
   }],
+  //scoreboard: {
+  //  type: Scema.Types.ObjectId,
+  //  ref: scoreBoard
+  //},
   users: [{
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -70,17 +75,4 @@ var CtfEventSchema = new Schema({
   }]
 });
 
-var CurrentCtfEventSchema = new Schema({
-  title: {
-    type: String
-  },
-  start: {
-    type: Date
-  },
-  end: {
-    type: Date
-  }
-});
-
 mongoose.model('CtfEvent', CtfEventSchema);
-mongoose.model('CurrentCtfEvent', CurrentCtfEventSchema);
