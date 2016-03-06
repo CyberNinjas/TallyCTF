@@ -3,19 +3,17 @@
 // Configuring the ScoreBoard module
 angular.module('challenges').run(['Menus',
   function (Menus) {
-    // Add the scoreBoard dropdown item
-    Menus.addMenuItem('topbar', {
-      title: 'Challenges',
-      state: 'challenges',
-      type: 'dropdown',
-      //state: 'challenges.list',
-    });
 
-    // Add the dropdown list item
-    Menus.addSubMenuItem('topbar', 'challenges', {
+    Menus.addSubMenuItem('topbar', 'admin', {
       title: 'List Challenges',
       state: 'challenges.list',
-      roles: ['*']
+      position: 6
+    });
+
+    Menus.addSubMenuItem('topbar', 'admin', {
+      title: 'Create Challenges',
+      state: 'challenges.create',
+      position: 5
     });
 
     // Add the dropdown list item
@@ -25,11 +23,5 @@ angular.module('challenges').run(['Menus',
       roles: ['teamCaptain']
     });
 
-    // Add the dropdown create item
-    Menus.addSubMenuItem('topbar', 'challenges', {
-      title: 'Create Challenges',
-      state: 'challenges.create',
-      roles: ['admin']
-    });
   }
 ]);
