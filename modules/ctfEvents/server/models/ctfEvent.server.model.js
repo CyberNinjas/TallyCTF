@@ -59,20 +59,19 @@ var CtfEventSchema = new Schema({
     ref: 'Challenge',
     default: []
   }],
-  teams: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Team',
+  teams: {
+    type: Array,
     default: []
-  }],
-  //scoreboard: {
-  //  type: Scema.Types.ObjectId,
-  //  ref: scoreBoard
-  //},
+  },
   users: [{
     type: Schema.Types.ObjectId,
     ref: 'User',
     default: []
   }]
+  //scoreboard: {
+  //  type: Scema.Types.ObjectId,
+  //  ref: scoreBoard
+  //},
 });
 
 mongoose.model('CtfEvent', CtfEventSchema);

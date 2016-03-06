@@ -4,10 +4,11 @@
 angular.module('scoreBoard').run(['Menus',
   function (Menus) {
     // Add the scoreBoard dropdown item
-    Menus.addMenuItem('topbar', {
+    Menus.addSubMenuItem('topbar', 'admin', {
       title: 'Score Board',
       state: 'scoreBoard.list',
-      roles: ['*']
+      roles: ['*'],
+      position: 4
     });
   }
 ]);
