@@ -20,29 +20,32 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$filte
           $scope.eventChallenges = $filter('selected')($scope.challenges, $scope.ctfEvent.challenges);
           $scope.eventId = $stateParams.ctfEventId
 
-          $scope.ongoing = $scope.getOngoing()
+          $scope.ongoing = $scope.isOngoing()
           $scope.getRemainingTime()
           $scope.remainingTime = $scope.ongoing === false ? '00:00:00' : $scope.hours + ':' + $scope.minutes
 
-          $scope.tile_stats = {
-            points: { title: 'Number Of Points Available:',
-              value: $scope.ongoing === false ? 0 : $scope.getPointTotal(),
-              change: null,
-              icon: 'fa fa-star'
-
-            },
-            position: { title: 'Your Team\'s Position',
+          $scope.tile_stats = [
+            { title: 'Your Position',
               value: $scope.ongoing === false ? 'N/A' : '1st',
               change: $scope.ongoing === false ? null : 0,
               icon: 'fa fa-sort-numeric-asc'
-
             },
-            total: { title: 'Your Team\'s Total Points',
+            { title: 'Points Available:',
+              value: $scope.ongoing === false ? 0 : $scope.getPointTotal(),
+              change: null,
+              icon: 'fa fa-diamond'
+            },
+            { title: 'Your Point Total ',
               value: $scope.ongoing === false ? 0 : 0,
               change: $scope.ongoing === false ? null : 0,
               icon: 'fa fa-bullseye'
+            },
+            { title: 'Points Behind 1st',
+              value: $scope.ongoing === false ? 0 : 0,
+              change: $scope.ongoing === false ? null : 0,
+              icon: 'fa fa-thumbs-o-down'
             }
-          }
+          ]
           //});
         });
       });
@@ -55,7 +58,7 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$filte
       return pointTotal
     }
 
-    $scope.getOngoing = function(){
+    $scope.isOngoing = function(){
       var hasStarted = $scope.ctfEvent.start < moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
                && moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') < $scope.ctfEvent.end
       return hasStarted
