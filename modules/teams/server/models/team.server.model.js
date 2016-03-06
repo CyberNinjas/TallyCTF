@@ -40,7 +40,15 @@ var TeamSchema = new Schema({
   askToJoin:[{
     type: Schema.Types.ObjectId,
     ref: 'User'
-  }]
+  }],
+  logoImage: {
+    type: String,
+    default: 'modules/teams/client/img/logo/default.png'
+  },
+  //teamSoundTrack: {
+  //  type: String,
+  //  default: 'modules/teams/client/file/sound/default.mp4'
+  //}
 });
 
 mongoose.model('Team', TeamSchema);

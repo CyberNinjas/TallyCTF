@@ -160,7 +160,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
      */
     $scope.requestsToJoin = function (team) {
       Socket.emit('userUpdate', {
-        recipients: [team.teamCaptain], 
+        recipients: [team.teamCaptain],
         op: 'insert',
         scopeField: 'team.requestToJoin',
         data: { username: Authentication.user.username, _id: Authentication.user._id }
@@ -239,7 +239,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
 
       if (Authentication.user.team) {
         Socket.emit('userUpdate', {
-          recipients: [user._id], 
+          recipients: [user._id],
           op: 'remove',
           field: 'requestToJoin',
           scopeField: 'requestTeams',
@@ -327,7 +327,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       var inReq = ($scope.team.requestToJoin.indexOf(user._id) !== -1);
       var inAsk = ($scope.team.askToJoin.indexOf(user._id) !== -1);
 
-      if (inReq || inAsk) 
+      if (inReq || inAsk)
         return false;
 
       // Increment the count of how many available users there are
@@ -350,7 +350,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       var inReq = (team.requestToJoin.indexOf(user._id) !== -1);
       var inAsk = (team.askToJoin.indexOf(user._id) !== -1);
 
-      if (inReq || inAsk) 
+      if (inReq || inAsk)
         return false;
 
       // Increment the count of how many available users there are

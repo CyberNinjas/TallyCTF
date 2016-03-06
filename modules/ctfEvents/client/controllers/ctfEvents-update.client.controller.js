@@ -20,14 +20,14 @@ angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$fi
             $scope.teamOptions= {
               title: 'Teams',
               display: 'teamName',
-              items: $filter('unselected')($scope.teams, $scope.ctfEvent.teams),
-              selectedItems: $filter('selected')($scope.teams, $scope.ctfEvent.teams)
+              items: $filter('unselectedTeam')($scope.teams, $scope.ctfEvent.teams),
+              selectedItems: $filter('selectedTeam')($scope.teams, $scope.ctfEvent.teams)
             };
 
             $scope.challengeOptions = {
               title: 'Challenges',
-              items: $filter('unselected')($scope.challenges, $scope.ctfEvent.challenges),
               display: 'name',
+              items: $filter('unselected')($scope.challenges, $scope.ctfEvent.challenges),
               selectedItems: $filter('selected')($scope.challenges, $scope.ctfEvent.challenges)
             };
 
@@ -76,6 +76,7 @@ angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$fi
       }
       var ctfEvent = $scope.ctfEvent;
       ctfEvent.challenges = $scope.challengeOptions.selectedItems.map(function(obj){return obj._id})
+      //If it's in $scope.teams then keep the users otherwise empty array
       ctfEvent.teams = $scope.teamOptions.selectedItems.map(function(obj){return obj._id})
       ctfEvent.users = $scope.userOptions.selectedItems.map(function(obj){return obj._id})
 

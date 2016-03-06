@@ -45,6 +45,13 @@ angular.module('ctfEvents').controller('CreateEventsController', ['$scope','$sta
         return false;
       }
 
+      var eventTeams = [];
+      angular.forEach($scope.teamOptions.selectedItems, function(team) {
+        var teamListing = {};
+        teamListing[team._id] = [];
+        eventTeams.push(teamListing);
+      });
+
       // Create new CtfEvent object
       var ctfEvent = new CtfEvents({
         //set value of new object to field's values
@@ -56,7 +63,7 @@ angular.module('ctfEvents').controller('CreateEventsController', ['$scope','$sta
         registraionStart: this.registraionStart,
         registraionEnd: this.registraionEnd,
         challenges: $scope.challengeOptions.selectedItems,
-        teams: $scope.teamOptions.selectedItems,
+        teams: eventTeams,
         users: $scope.userOptions.selectedItems
       });
 
