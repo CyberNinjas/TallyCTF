@@ -3,10 +3,9 @@
   height: 100%;
 }
 
-
 .no-pad{
-  padding-left: 0px;
-  padding-right: 0px;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .full-height{
@@ -47,4 +46,3 @@ a:hover .header-profile-image {
 .has-error .help-inline.error-text {
   display: inline;
 }
-
