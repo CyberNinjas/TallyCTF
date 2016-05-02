@@ -25,10 +25,7 @@
                         <h4 class="modal-title">Would you like to register a team?</h4>
                     </div>
                     <div class="modal-body">
-                        <select
-                          ng-model="selectedTeam"
-                          ng-options="team.teamName for team in captainsTeams" >
-                        </select>
+                        <select ng-model="selectedTeam" ng-options="team.teamName for team in captainsTeams"></select>
                     </div>
                     <div class="modal-footer">
                         <button type="button" ng-click="close()" class="btn btn-primary" data-dismiss="modal">Finish</button>

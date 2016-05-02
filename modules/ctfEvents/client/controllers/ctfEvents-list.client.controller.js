@@ -1,5 +1,5 @@
 'use strict';
-angular.module('ctfEvents').controller('ListEventsController', ['$state', '$scope', '$stateParams', '$location', '$filter', 'Teams', 'Authentication', 'CtfEvents', 'captainsTeamsService', 'ModalService', function ($state, $scope, $stateParams, $location, $filter, Teams, Authentication, CtfEvents, captainsTeamsService, ModalService) {
+angular.module('ctfEvents').controller('ListEventsController', ['$state', '$scope', '$stateParams', '$location', '$filter', '$q', 'Teams', 'Authentication', 'CtfEvents', 'captainsTeamsService', 'ModalService', function ($state, $scope, $stateParams, $location, $filter, $q, Teams, Authentication, CtfEvents, captainsTeamsService, ModalService) {
   $scope.authentication = Authentication;
   $scope.userId = $scope.authentication.user._id
   $scope.ctfEvents = CtfEvents.query();
@@ -15,26 +15,18 @@ angular.module('ctfEvents').controller('ListEventsController', ['$state', '$scop
       ctfEvent.users.push($scope.userId)
       if($scope.authentication.user.roles.indexOf('teamCaptain') > -1) {
         var teamId = $scope.authentication.user.team
-        var team = $scope.show()
-        console.log('team')
-        console.log(team)
-        if(team !== 'None') {
-          ctfEvent.teams.push({
-            teamId: team,
-            users: [$scope.userId]
-          })
-        }
+        var team = $scope.show(ctfEvent)
+      } else {
+        ctfEvent.$update(function () {
+          console.log(ctfEvent)
+          $location.path('ctfEvents/dash/' + ctfEvent._id);
+        }, function (errorResponse) {
+          $scope.error = errorResponse.data.message;
+        });
       }
-    }).then(function (data) {
-      ctfEvent.$update(function () {
-        console.log(ctfEvent)
-        $location.path('ctfEvents/dash/' + ctfEvent._id);
-      }, function (errorResponse) {
-        $scope.error = errorResponse.data.message;
-      });
     })
   };
-  $scope.show = function () {
+  $scope.show = function (ctfEvent) {
     $scope.teams = Teams.query();
     $scope.teams.$promise.then(function (data) {
       //var probables = $filter('captainsTeams')($scope.teams, $scope.authentication.user.team)
@@ -49,8 +41,20 @@ angular.module('ctfEvents').controller('ListEventsController', ['$state', '$scop
       }).then(function (modal) {
         modal.element.modal();
         modal.close.then(function (result) {
+          console.log(result)
           captainsTeamsService.resetTeams()
-          return result._id;
+          if(result.teamName !== 'None') {
+            ctfEvent.teams.push({
+              teamId: result.teamId,
+              users: [$scope.userId]
+            })
+          }
+          ctfEvent.$update(function () {
+            console.log(ctfEvent)
+            $location.path('ctfEvents/dash/' + ctfEvent._id);
+          }, function (errorResponse) {
+            $scope.error = errorResponse.data.message;
+          });
         });
       });
     })
