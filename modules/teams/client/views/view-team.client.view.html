@@ -18,7 +18,7 @@
   <h2>Team Members</h2>
   <div class="list-group">
     <div class="list-group-item" ng-repeat="member in team.members">
-      <div ng-show="member.roles.indexOf('teamCaptain') !== -1" class="pull-right">
+      <div ng-show="team.teamCaptain._id === member._id" class="pull-right">
         <small>
           <p>Team Captain</p>
         </small>

@@ -65,7 +65,6 @@ exports.create = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      console.log('before scoreboard save');
       scoreBoard.save(function (err) {
         if (err) {
           return res.status(400).send({
@@ -73,7 +72,6 @@ exports.create = function (req, res) {
           });
         }
         else{
-          console.log('after scoreboard save');
           // Update the user's data
           user.roles.push('teamCaptain');
           user.team = team._id;
@@ -122,7 +120,6 @@ exports.update = function (req, res) {
 
   team.save(function (err) {
     if (err) {
-      console.log(err);
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -137,7 +134,6 @@ exports.update = function (req, res) {
  * Adds a user to a team or vice-versa
  */
 exports.accept = function(req, res) {
-  console.log('beginning');
   var team = req.team;
   var user = req.model;
   var capt = (req.user.roles.indexOf('teamCaptain') !== -1 && team.teamCaptain._id.toString() === req.user._id.toString());
@@ -235,7 +231,6 @@ exports.decline = function (req, res) {
   // Save the team
   team.save(function (err) {
     if (err) {
-      console.log(err);
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -353,53 +348,9 @@ exports.removeMember = function (req, res) {
  */
 exports.addTeamToUser = function (user, team) {
   // Fail if already a team member
-  if (user.roles.indexOf('teamMember') !== -1)
-    return false;
-
-  // // Remove user from being a teamCaptain
-  // var index = user.roles.indexOf('teamCaptain');
-  // if (index !== -1)
-  //   user.roles.splice(index, 1);
-
-  // Add them as team member and update relevant info
-  user.roles.push('teamMember');
-  user.team = team._id;
-
-  // Clear any previous requests / asks to join from other teams
-  var requests = Team.find({
-    '_id': { $in: user.requestToJoin }
-  }, function (err, teams) {
-    if (err)
-      return false;
-
-    for (var i = 0; i < teams.length; ++i) {
-      var index = teams[i].requestToJoin.indexOf(user._id);
-      if (index !== -1) {
-        teams[i].requestToJoin.splice(index, 1);
-        // FIXME: Have a way to handle this failing
-        teams[i].save();
-      }
-    }
-  });
-  var asks = Team.find({
-    '_id': { $in: user.askToJoin }
-  }, function (err, teams) {
-    if (err)
-      return false;
-
-    for (var i = 0; i < teams.length; ++i) {
-      var index = teams[i].askToJoin.indexOf(user._id);
-      if (index !== -1) {
-        teams[i].askToJoin.splice(index, 1);
-        // FIXME: Have a way to handle this failing
-        teams[i].save();
-      }
-    }
-  });
-
-  // Clear any previous requests / asks to join from the user
-  user.requestToJoin = [];
-  user.askToJoin = [];
+  if (user.roles.indexOf('teamMember') === -1)
+    user.roles.push('teamMember');
+  user.team.push(team._id)
   user.save(function (err) {
     if (err)
       return false;

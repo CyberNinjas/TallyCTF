@@ -1,6 +1,6 @@
 <section ng-controller="TeamsController" ng-init="find()">
   <div class="page-header">
-    <div class="pull-right" ng-if="shouldRender('user')">
+    <div class="pull-right">
       <a class="btn btn-success" id ="addTeams1" ui-sref="teams.create">
         <i class="glyphicon glyphicon-plus"></i>
       </a>
@@ -9,7 +9,7 @@
   </div>
   <div class="list-group">
     <a ng-repeat="team in teams" ui-sref="teams.view({teamId: team._id})" class="list-group-item">
-      <div class="pull-right" ng-if="shouldRender('user') && shouldReq(team)">
+      <div class="pull-right" ng-if="shouldRender(['user', 'teamCaptain']) && shouldReq(team)">
         <button ng-click='requestsToJoin(team)'>Join</button>
       </div>
       <h4 class="list-group-item-heading" ng-bind="team.teamName"></h4>

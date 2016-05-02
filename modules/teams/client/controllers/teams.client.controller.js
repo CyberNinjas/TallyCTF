@@ -4,6 +4,7 @@
 angular.module('teams').controller('TeamsController', ['$scope','$stateParams', '$location', '$state', 'Teams','Authentication','Users','TeamsCtl', 'Socket',
   function ($scope, $stateParams, $location, $state, Teams, Authentication, Users, TeamsCtl, Socket) {
     $scope.authentication = Authentication.user;
+    console.log($scope.authentication)
     $scope.users = Users;
 
     // Setup the socket if it doesn't exist
@@ -13,7 +14,6 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
 
     Socket.on('userUpdate', function (message) {
       if (!Authentication.user || message.recipients.indexOf(Authentication.user._id) === -1) {
-        console.log(message.recipients);
         return;
       }
 
@@ -45,7 +45,6 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
 
           break;
         case 'remove':
-          console.log($scope[message.scopeField]);
           for (var j = 0; $scope[message.scopeField] && j < $scope[message.scopeField].length; ++j) {
             if ($scope[message.scopeField][j]._id.toString() === message.data.toString()) {
               $scope[message.scopeField].splice(j, 1);
@@ -198,7 +197,6 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
     $scope.removeMember = function (user, index) {
       $scope.team.members.splice(index, 1);
       $scope.team.temp = user._id;
-      console.log($scope.team);
       TeamsCtl.remove($scope.team);
     };
 
@@ -304,7 +302,7 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
       var user = (usr ? usr : Authentication.user);
 
       if (role.indexOf('user') !== -1) {
-        return (user && (user.roles.indexOf('teamCaptain') === -1) && (user.roles.indexOf('teamMember') === -1));
+        return (user)
       }
 
       for (var i = 0; i < role.length; ++i)
@@ -349,8 +347,10 @@ angular.module('teams').controller('TeamsController', ['$scope','$stateParams', 
 
       var inReq = (team.requestToJoin.indexOf(user._id) !== -1);
       var inAsk = (team.askToJoin.indexOf(user._id) !== -1);
+      var inAsk = (team.members.indexOf(user._id) !== -1);
+      var isCaptain = (team.teamCaptain === user._id);
 
-      if (inReq || inAsk)
+      if (inReq || inAsk || isCaptain)
         return false;
 
       // Increment the count of how many available users there are
