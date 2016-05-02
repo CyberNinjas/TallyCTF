@@ -3,15 +3,38 @@
         <h1>Upcoming Events</h1>
     </div>
     <div class="list-group">
-        <a ng-repeat="ctfEvent in ctfEvents" ui-sref="{{isRegistered(ctfEvent)}}"
-           ng-class="ctfEvent.users.indexOf(userId) == -1 ? 'list-group-item disabled' : 'list-group-item'">
+        <a ng-repeat="ctfEvent in ctfEvents" ui-sref="{{isRegistered(ctfEvent)}}" ng-class="ctfEvent.users.indexOf(userId) == -1 ? 'list-group-item disabled' : 'list-group-item'">
             <small class="list-group-item-text">
                 Created on
                 <span ng-bind="ctfEvent.created | date:'mediumDate'"></span>
             </small>
-            <button ng-show="ctfEvent.users.indexOf(userId) == -1" ng-click="registerForEvent(ctfEvent._id)"
-                    class="btn btn-xs btn-success pull-right"><i class="fa fa-pencil-square-o"> register</i></button>
+            <div class="pull-right">
+                <button class='btn btn-success' ng-show="ctfEvent.users.indexOf(userId) == -1" ng-click="registerForEvent(ctfEvent._id)">
+                    <i class="fa fa-pencil-square-o"></i>register</button>
+            </div>
             <h4 class="list-group-item-heading" ng-bind="ctfEvent.title"></h4>
         </a>
     </div>
+
+    <!-- The actual modal template -->
+    <script type="text/ng-template" id="modal.html">
+        <div class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Would you like to register a team?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <select
+                          ng-model="selectedTeam"
+                          ng-options="team.teamName for team in captainsTeams" >
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" ng-click="close()" class="btn btn-primary" data-dismiss="modal">Finish</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
 </section>

@@ -91,12 +91,10 @@ angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$fi
             }
           }
           var team = { teamId: team_listing._id, users: existingUsers }
-          console.log(team)
           ctfEvent.teams.push(team)
           return team
         })
         team_listing.$promise.finally(function(data) {
-          console.log(ctfEvent.teams)
           ctfEvent.$update(function () {
             $location.path('ctfEvents');
           }, function (errorResponse) {

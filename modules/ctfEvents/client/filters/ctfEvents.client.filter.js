@@ -38,4 +38,14 @@ angular.module('ctfEvents').filter('unselected', function() {
       }
     });
   };
+}).filter('captainsTeams', function() {
+  return function(list, obj) {
+    return list.filter(function(item) {
+      for(var y = 0;y<obj.length;y++){
+        if (obj[y] === item._id) {
+          return true;
+        }
+      }
+    });
+  };
 });
