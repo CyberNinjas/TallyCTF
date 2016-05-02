@@ -10,7 +10,7 @@ module.exports = function (app) {
   // CtfEvents collection routes
   app.route('/api/ctfEvents').all(ctfEventsPolicy.isAllowed)
     .get(ctfEvents.list)
-    .post(ctfEvents.create);
+    .post(ctfEvents.create)
 
   app.route('/api/ctfEvents/:ctfEventId').all(ctfEventsPolicy.isAllowed)
     .get(ctfEvents.read)

@@ -44,6 +44,7 @@ exports.read = function (req, res) {
  */
 exports.update = function (req, res) {
   var ctfEvent = req.ctfEvent;
+  console.log(ctfEvent)
 
   //allow updating of Title, startTime and endTime
   ctfEvent.title = req.body.title;

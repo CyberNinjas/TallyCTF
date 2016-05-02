@@ -16,10 +16,8 @@ angular.module('core').controller('HeaderController', ['$scope', '$interval','$s
 
     // Setup Listener for updating the authenticated user
     Socket.on('userUpdate', function (message) {
-      if (message.recipients.indexOf('*') === -1 && 
+      if (message.recipients.indexOf('*') === -1 &&
         (!Authentication.user || message.recipients.indexOf(Authentication.user._id) === -1)) {
-        
-        console.log(message.recipients);
         return;
       }
 
@@ -89,5 +87,3 @@ angular.module('core').controller('HeaderController', ['$scope', '$interval','$s
     };
   }
 ]);
-
-
