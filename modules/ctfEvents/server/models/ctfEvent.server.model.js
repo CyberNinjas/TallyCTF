@@ -59,10 +59,10 @@ var CtfEventSchema = new Schema({
     ref: 'Challenge',
     default: []
   }],
-  teams: {
-    type: Array,
-    default: []
-  },
+  teams: [{
+    teamId: String,
+    users: Array,
+  }],
   users: [{
     type: Schema.Types.ObjectId,
     ref: 'User',

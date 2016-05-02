@@ -19,7 +19,6 @@ var TeamSchema = new Schema({
   teamCaptain: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    unique: 'You cannot be captain of 2 teams',
     required: 'You must have a team captain'
   },
   scoreBoard: {

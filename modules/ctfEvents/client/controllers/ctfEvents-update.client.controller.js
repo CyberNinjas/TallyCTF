@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$filter','$stateParams', '$location', 'Authentication',
-  'CtfEvents', 'Challenges', 'Teams', 'Users', function ($scope, $filter, $stateParams, $location, Authentication,
-                                                                             CtfEvents, Challenges, Teams, Users) {
+  'CtfEvents', 'Challenges', 'Teams', 'Users', function ($scope, $filter, $stateParams, $location, Authentication, CtfEvents, Challenges, Teams, Users) {
 
     // Find selected CtfEvent
     // Each query is nested in the previous one's promise to make sure
@@ -15,6 +14,7 @@ angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$fi
         $scope.challenges.$promise.then(function(data) {
           $scope.teams = Teams.query();
           $scope.teams.$promise.then(function(data) {
+            console.log($scope.ctfEvent)
 
             //dual select options
             $scope.teamOptions= {
@@ -23,14 +23,12 @@ angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$fi
               items: $filter('unselectedTeam')($scope.teams, $scope.ctfEvent.teams),
               selectedItems: $filter('selectedTeam')($scope.teams, $scope.ctfEvent.teams)
             };
-
             $scope.challengeOptions = {
               title: 'Challenges',
               display: 'name',
               items: $filter('unselected')($scope.challenges, $scope.ctfEvent.challenges),
               selectedItems: $filter('selected')($scope.challenges, $scope.ctfEvent.challenges)
             };
-
             $scope.userOptions = {
               title: 'Users',
               display: 'firstName',
@@ -76,15 +74,35 @@ angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$fi
       }
       var ctfEvent = $scope.ctfEvent;
       ctfEvent.challenges = $scope.challengeOptions.selectedItems.map(function(obj){return obj._id})
-      //If it's in $scope.teams then keep the users otherwise empty array
-      ctfEvent.teams = $scope.teamOptions.selectedItems.map(function(obj){return obj._id})
+
       ctfEvent.users = $scope.userOptions.selectedItems.map(function(obj){return obj._id})
 
-      //commit ctfEvent to db
-      ctfEvent.$update(function () {
-        $location.path('ctfEvents');
-      }, function (errorResponse) {
-        $scope.error = errorResponse.data.message;
-      });
+      ctfEvent.teams = []
+      var teams = $scope.teamOptions.selectedItems.map(function(obj){
+        var team_listing = Teams.get({
+          teamId: String(obj._id)
+        });
+        team_listing.$promise.then(function(data) {
+          var existingUsers = []
+          var members = team_listing.members.map(function(member){return member._id})
+          for(var user = 0; user < ctfEvent.users.length; user++){
+            if(members.indexOf(ctfEvent.users[user]) > -1){
+              existingUsers.push(ctfEvent.users[user])
+            }
+          }
+          var team = { teamId: team_listing._id, users: existingUsers }
+          console.log(team)
+          ctfEvent.teams.push(team)
+          return team
+        })
+        team_listing.$promise.finally(function(data) {
+          console.log(ctfEvent.teams)
+          ctfEvent.$update(function () {
+            $location.path('ctfEvents');
+          }, function (errorResponse) {
+            $scope.error = errorResponse.data.message;
+          });
+        })
+      })
     };
   }])

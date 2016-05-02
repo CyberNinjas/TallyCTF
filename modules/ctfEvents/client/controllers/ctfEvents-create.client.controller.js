@@ -1,6 +1,5 @@
 angular.module('ctfEvents').controller('CreateEventsController', ['$scope','$stateParams', '$location', 'Authentication',
-  'CtfEvents', 'Challenges', 'Teams', 'Users', function ($scope, $stateParams, $location, Authentication,
-                                                                             CtfEvents, Challenges, Teams, Users) {
+  'CtfEvents', 'Challenges', 'Teams', 'Users', function ($scope, $stateParams, $location, Authentication, CtfEvents, Challenges, Teams, Users) {
 
     // Find selected CtfEvent
     // Each query is nested in the previous one's promise to make sure
@@ -46,11 +45,11 @@ angular.module('ctfEvents').controller('CreateEventsController', ['$scope','$sta
       }
 
       var eventTeams = [];
+
       angular.forEach($scope.teamOptions.selectedItems, function(team) {
-        var teamListing = {};
-        teamListing[team._id] = [];
-        eventTeams.push(teamListing);
-      });
+        var team = { teamId: team._id, users: [] }
+        eventTeams.push(team)
+      })
 
       // Create new CtfEvent object
       var ctfEvent = new CtfEvents({

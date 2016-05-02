@@ -3,7 +3,7 @@
         <h1>Upcoming Events</h1>
     </div>
     <div class="list-group">
-        <a ng-repeat="ctfEvent in ctfEvents" ui-sref="ctfEvents.dashboard({ctfEventId: ctfEvent._id})"
+        <a ng-repeat="ctfEvent in ctfEvents" ui-sref="{{isRegistered(ctfEvent)}}"
            ng-class="ctfEvent.users.indexOf(userId) == -1 ? 'list-group-item disabled' : 'list-group-item'">
             <small class="list-group-item-text">
                 Created on

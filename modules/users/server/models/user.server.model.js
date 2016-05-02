@@ -102,10 +102,10 @@ var UserSchema = new Schema({
   resetPasswordExpires: {
     type: Date
   },
-  team: {
+  team: [{
     type: Schema.Types.ObjectId,
     ref: 'Team'
-  },
+  }],
   country: {
     type: String,
     default: ''
