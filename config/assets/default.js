@@ -7,6 +7,7 @@ module.exports = {
         'public/lib/bootstrap/dist/css/bootstrap.css',
         'public/lib/bootstrap/dist/css/bootstrap-theme.css',
         'public/lib/angular-bootstrap/ui-bootstrap-csp.js',
+        'public/lib/sweetalert/dist/sweetalert.css',
         'public/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'
       ],
       js: [
@@ -21,7 +22,10 @@ module.exports = {
         'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
         'public/lib/bootstrap/dist/js/bootstrap.min.js',
         'public/lib/angular-bootstrap/ui-bootstrap.min.js',
+        'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js',
         'public/lib/moment/min/moment.min.js',
+        'public/lib/sweetalert/dist/sweetalert.min.js',
+        'public/lib/ngSweetAlert/SweetAlert.min.js',
         'public/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']

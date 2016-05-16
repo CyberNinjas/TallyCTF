@@ -1,4 +1,4 @@
-<section ng-controller="TeamsController">
+<section ng-controller="CreateTeamsController">
   <div class="page-header">
     <h1>New Team</h1>
   </div>
@@ -9,8 +9,8 @@
           <label for="title">Team Name</label>
           <input name="teamName" type="text" ng-model="teamName" id="teamName" class="form-control" placeholder="Team Name" required>
           <div ng-messages="teamForm.teamName.$error" role="alert">
-            <p class="help-block error-text" ng-message="required">Team name is required.</p>
-            <p class="help-block error-text" ng-message="required">Team captain is required.</p>
+            <p class="help-block error-text" ng-message="required">Team name is required.
+            </p>
           </div>
         </div>
 

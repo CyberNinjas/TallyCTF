@@ -1,6 +1,6 @@
-<section ng-controller="TeamsController" ng-init="findOne()">
+<section ng-controller="TeamsViewController" ng-init="findCurrentTeam()">
   <div class="page-header">
-    <div class="pull-right" ng-if="shouldRender(['admin', 'teamCaptain']) && isCaptain()">
+    <div class="pull-right" ng-if="shouldRender('admin') || isCaptain()">
       <a class="btn btn-primary" ui-sref="teams.edit({teamId: team._id})">
         <i class="glyphicon glyphicon-edit"></i>
       </a>
@@ -10,8 +10,8 @@
     </div>
     <h1 ng-bind="team.teamName"></h1>
   </div>
-  <div class="pull-right" ng-if="shouldRender('teamCaptain') && isCaptain(true)">
-    <a class="btn btn-success" ui-sref="teams.add">
+    <div class="pull-right" ng-if="shouldRender('admin') || isCaptain()">
+    <a class="btn btn-success" ui-sref="teams.add({teamId: team._id})">
       <i class="glyphicon glyphicon-plus"></i>
     </a>
   </div>
@@ -26,7 +26,7 @@
       <span ng-bind="member.username"></span>
     </div>
   </div>
-  <div ng-if="shouldRender('teamCaptain') && isCaptain(true)" class="list-group">
+  <div ng-if="isCaptain(true)" class="list-group">
     <h3>Pending Requests</h3>
     <a ng-repeat="request in team.requestToJoin" class="list-group-item">
       <small class="list-group-item-text">
