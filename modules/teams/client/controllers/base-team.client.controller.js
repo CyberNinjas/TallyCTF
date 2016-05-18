@@ -11,8 +11,10 @@ angular.module('teams')
     function ($scope, Teams, Authentication, Users, Socket) {
 
       $scope.authentication = Authentication.user;
+
       $scope.users = Users;
       $scope.teams = Teams.query();
+
       $scope.socket = Socket
       $scope.socket.connect()
 

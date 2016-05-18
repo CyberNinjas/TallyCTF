@@ -15,7 +15,6 @@ angular.module('teams')
       $controller('BaseTeamsController', {
         $scope: $scope
       });
-      console.log($scope);
 
       $scope.shouldRender = function () {
         return($scope.authentication.type.indexOf('admin') === -1)

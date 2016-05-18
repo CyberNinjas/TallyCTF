@@ -6,15 +6,23 @@ module.exports = function (io, socket) {
     recipients: '*',
     op: 'newConnection'
   });
-
   // Send a message to all connected sockets when a message is received
-  socket.on('userUpdate', function (message) {
-    // Emit the 'userUpdate' event
-    io.emit('userUpdate', message);
+  socket.on('newTeam', function (message) {
+    io.emit('newTeam', message);
   });
-  // Send a message to all connected sockets when a message is received
+  socket.on('deleteTeam', function (message) {
+    io.emit('deleteTeam', message);
+  });
+  socket.on('insertRequest', function (message) {
+    io.emit('insertRequest', message);
+  });
+  socket.on('declineUser', function (message) {
+    io.emit('declineUser', message);
+  });
+  socket.on('acceptUser', function (message) {
+    io.emit('acceptUser', message);
+  });
   socket.on('teamUpdate', function (message) {
-    // Emit the 'userUpdate' event
     io.emit('teamUpdate', message);
   });
 };
