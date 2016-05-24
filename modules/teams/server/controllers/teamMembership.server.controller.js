@@ -1,4 +1,11 @@
 'use strict';
+/**
+ * @ngdoc controller
+ * @name teamsServer.controller:TeamMembershipController
+ * @description
+ * Handles the members array within team objects by effectively allowing
+ * the addition and removal of a team's memebers.
+ */
 var path = require('path'),
   mongoose = require('mongoose'),
   Team = mongoose.model('Team'),

@@ -1,6 +1,10 @@
 'use strict';
 /**
- * Module dependencies.
+ * @ngdoc controller
+ * @name teamsServer.controller:TeamCrudController
+ * @description
+ * Base IO functionality for teams. Includes Create, Read, Update, and Delete
+ * functionality.
  */
 var path = require('path'),
   mongoose = require('mongoose'),
@@ -8,7 +12,6 @@ var path = require('path'),
   User = mongoose.model('User'),
   ScoreBoard = mongoose.model('ScoreBoard'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
-
 exports.create = function (req, res) {
   var team = new Team(req.body);
   var user = req.user;
@@ -58,11 +61,9 @@ exports.create = function (req, res) {
     }
   });
 };
-
 exports.read = function (req, res) {
   res.json(req.team);
 };
-
 exports.update = function (req, res) {
   var team = req.team;
   team.teamName = req.body.teamName;
@@ -79,7 +80,6 @@ exports.update = function (req, res) {
     }
   });
 };
-
 exports.delete = function (req, res) {
   var team = req.team;
   var user = req.user;
@@ -102,17 +102,10 @@ exports.delete = function (req, res) {
     } else {
       for(var i = 0; i < users.length; ++i) {
         // Update the User's roles (Remove teamMember / teamCaptain role)
-        var captain = users[i]
-          .roles
-          .indexOf('teamCaptain');
-        if(captain > -1)
-          users[i].roles.splice(captain, 1);
-        var member = users[i]
-          .roles
-          .indexOf('teamMember');
-        if(member > -1)
-          users[i].roles.splice(member, 1);
-
+        var captain = users[i].roles.indexOf('teamCaptain');
+        if(captain > -1) users[i].roles.splice(captain, 1);
+        var member = users[i].roles.indexOf('teamMember');
+        if(member > -1) users[i].roles.splice(member, 1);
         // Remove the team from the user (MongoDB strips away all tags that are undefined)
         users[i].team = undefined;
         // FIXME: Have a way to handle this failing
@@ -125,16 +118,11 @@ exports.delete = function (req, res) {
       $in: team.requestToJoin
     }
   }, function (err, users) {
-    if(err)
-      return false;
+    if(err) return false;
     for(var i = 0; i < users.length; ++i) {
-      var index = users[i]
-        .requestToJoin
-        .indexOf(team._id);
+      var index = users[i].requestToJoin.indexOf(team._id);
       if(index !== -1) {
-        users[i]
-          .requestToJoin
-          .splice(index, 1);
+        users[i].requestToJoin.splice(index, 1);
         // FIXME: Have a way to handle this failing
         users[i].save();
       }
@@ -145,16 +133,11 @@ exports.delete = function (req, res) {
       $in: team.askToJoin
     }
   }, function (err, users) {
-    if(err)
-      return false;
+    if(err) return false;
     for(var i = 0; i < users.length; ++i) {
-      var index = users[i]
-        .askToJoin
-        .indexOf(team._id);
+      var index = users[i].askToJoin.indexOf(team._id);
       if(index !== -1) {
-        users[i]
-          .askToJoin
-          .splice(index, 1);
+        users[i].askToJoin.splice(index, 1);
         // FIXME: Have a way to handle this failing
         users[i].save();
       }
@@ -165,21 +148,17 @@ exports.delete = function (req, res) {
     team: team._id
   }, function (err, scoreBoard) {
     if(err) {
-      return res
-        .status(400)
-        .send({
-          message: errorHandler.getErrorMessage(err)
-        });
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
     }
   });
   // Delete the team
   team.remove(function (err) {
     if(err) {
-      return res
-        .status(400)
-        .send({
-          message: errorHandler.getErrorMessage(err)
-        });
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
     } else {
       res.json(team);
     }

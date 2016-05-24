@@ -1,9 +1,15 @@
 'use strict';
+/**
+ * @ngdoc controller
+ * @name teamsServer.controller:TeamUtilController
+ * @description
+ * Provides the functionality for requesting teams by specific parameters
+ * and listing the entire teams document by date created
+ */
 var path = require('path'),
   mongoose = require('mongoose'),
   Team = mongoose.model('Team'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
-
 exports.list = function (req, res) {
   Team.find().sort('-created').exec(function (err, teams) {
     if(err) {
@@ -15,7 +21,6 @@ exports.list = function (req, res) {
     }
   });
 };
-
 /**
  * Team middleware
  */
@@ -25,25 +30,17 @@ exports.teamByID = function (req, res, next, id) {
       message: 'Team is invalid'
     });
   }
-  Team
-    .findById(id)
-    .populate('members', 'username roles notifications')
-    .populate('requestToJoin', 'username roles')
-    .populate('askToJoin', 'username')
-    .populate('teamCaptain', 'username notifications')
-    .exec(function (err, team) {
-      if(err) {
-        return next(err);
-      } else if(!team) {
-        return res
-          .status(404)
-          .send({
-            message: 'No team with that identifier has been found'
-          });
-      }
-      req.team = team;
-      next();
-    });
+  Team.findById(id).populate('members', 'username roles notifications').populate('requestToJoin', 'username roles').populate('askToJoin', 'username').populate('teamCaptain', 'username notifications').exec(function (err, team) {
+    if(err) {
+      return next(err);
+    } else if(!team) {
+      return res.status(404).send({
+        message: 'No team with that identifier has been found'
+      });
+    }
+    req.team = team;
+    next();
+  });
 };
 /**
  * Team middleware (without population of fields)
@@ -54,17 +51,15 @@ exports.teamByIDRaw = function (req, res, next, id) {
       message: 'Team is invalid'
     });
   }
-  Team
-    .findById(id)
-    .exec(function (err, team) {
-      if(err) {
-        return next(err);
-      } else if(!team) {
-        return res.status(404).send({
-          message: 'No team with that identifier has been found'
-        });
-      }
-      req.team = team;
-      next();
-    });
+  Team.findById(id).exec(function (err, team) {
+    if(err) {
+      return next(err);
+    } else if(!team) {
+      return res.status(404).send({
+        message: 'No team with that identifier has been found'
+      });
+    }
+    req.team = team;
+    next();
+  });
 };
