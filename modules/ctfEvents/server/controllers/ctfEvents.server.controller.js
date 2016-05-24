@@ -1,5 +1,4 @@
 'use strict';
-
 /**
  * Module dependencies.
  */
@@ -11,18 +10,15 @@ var path = require('path'),
   User = mongoose.model('User'),
   ScoreBoard = mongoose.model('ScoreBoard'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
-
 /**
  * Create a ctfEvent
  */
-exports.create = function (req, res) {
-
+exports.create = function(req, res) {
   //create new Mongoose object out of request body
   var ctfEvent = new CtfEvent(req.body);
-
   //commit to db
-  ctfEvent.save(function (err) {
-    if (err) {
+  ctfEvent.save(function(err) {
+    if(err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -31,21 +27,17 @@ exports.create = function (req, res) {
     }
   });
 };
-
 /**
  * Show a ctfEvent
  */
-exports.read = function (req, res) {
+exports.read = function(req, res) {
   res.json(req.ctfEvent);
 };
-
 /**
  * Update a ctfEvent
  */
-exports.update = function (req, res) {
+exports.update = function(req, res) {
   var ctfEvent = req.ctfEvent;
-  console.log(ctfEvent)
-
   //allow updating of Title, startTime and endTime
   ctfEvent.title = req.body.title;
   ctfEvent.start = req.body.start;
@@ -53,9 +45,8 @@ exports.update = function (req, res) {
   ctfEvent.teams = req.body.teams;
   ctfEvent.challenges = req.body.challenges;
   ctfEvent.users = req.body.users;
-
-  ctfEvent.save(function (err) {
-    if (err) {
+  ctfEvent.save(function(err) {
+    if(err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -64,14 +55,13 @@ exports.update = function (req, res) {
     }
   });
 };
-
 /*
  * Delete an ctfEvent
  */
-exports.delete = function (req, res) {
+exports.delete = function(req, res) {
   var ctfEvent = req.ctfEvent;
-  ctfEvent.remove(function (err) {
-    if (err) {
+  ctfEvent.remove(function(err) {
+    if(err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -80,13 +70,12 @@ exports.delete = function (req, res) {
     }
   });
 };
-
 /**
  * List of CtfEvents
  */
-exports.list = function (req, res) {
-  CtfEvent.find().sort('-created').exec(function (err, ctfEvents) {
-    if (err) {
+exports.list = function(req, res) {
+  CtfEvent.find().sort('-created').exec(function(err, ctfEvents) {
+    if(err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -95,22 +84,19 @@ exports.list = function (req, res) {
     }
   });
 };
-
 /**
  * CtfEvent middleware
  */
-exports.ctfEventByID = function (req, res, next, id) {
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+exports.ctfEventByID = function(req, res, next, id) {
+  if(!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
       message: 'CtfEvent is invalid'
     });
   }
-
-  CtfEvent.findById(id).exec(function (err, ctfEvent) {
-    if (err) {
+  CtfEvent.findById(id).exec(function(err, ctfEvent) {
+    if(err) {
       return next(err);
-    } else if (!ctfEvent) {
+    } else if(!ctfEvent) {
       return res.status(404).send({
         message: 'No ctfEvent with that identifier has been found'
       });

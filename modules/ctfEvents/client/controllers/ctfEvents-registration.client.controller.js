@@ -13,7 +13,6 @@ angular.module('ctfEvents').controller('EventRegistrationController', ['$scope',
         $scope.eventUsers = $filter('selected')($scope.users, $scope.ctfEvent.users);
         $scope.roles = $scope.authentication.user.roles;
         $scope.authentication = Authentication.user;
-        console.log($scope.authentication)
         $scope.users = Users;
         // Setup the socket if it doesn't exist
         if(!Socket.socket) {

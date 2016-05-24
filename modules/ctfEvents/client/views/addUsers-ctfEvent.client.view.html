@@ -1,0 +1,14 @@
+<section ng-controller="EventRegistrationController" ng-init="findAvailableUsers()">
+  <div class="page-header">
+    <h1>Add Users to your Team</h1>
+  </div>
+  <div>
+    <div class="input-group-lg">
+        <input type="search" class="form-control" ng-model="search.username" placeholder="Search...">
+    </div>
+    <div class="list-group">
+	    <a class="list-group-item" ng-repeat="user in users | filter:search" ng-bind="user.username" ng-click="addUser(user, $this)" style="cursor: pointer" ng-if="shouldAdd(user)"></a>
+      <p class="alert alert-warning text-center" ng-if="users.$resolved && !count">There are currently no available users to add :(</p>
+    </div>
+  </div>
+</section>

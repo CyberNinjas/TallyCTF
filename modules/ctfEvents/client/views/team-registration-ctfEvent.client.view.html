@@ -1,27 +1,13 @@
-<section ng-controller="EventRegistrationController">
-    <div class="page-header">
-        <h1>{{ctfEvent.title}}</h1>
-    </div>
-<div ng-show="roles.indexOf('teamCaptain') <= -1">
-    <h2>Teams</h2>
-    <div class="list-group">
-        <a ng-repeat="team in eventTeams" ui-sref="ctfEvents.edit({ctfEventId: ctfEvent._id})" class="list-group-item">
-            <div class="pull-right">
-                <button class="btn btn-success btn-xs">Join</button>
-            </div>
-            <h4 class="list-group-item-heading" ng-bind="team.teamName"></h4>
-        </a>
-    </div>
-</div>
-<div ng-show="roles.indexOf('teamCaptain') > -1">
-    <h2>Unclaimed Users</h2>
-    <div class="list-group">
-        <a ng-repeat="user in eventUsers" ui-sref="ctfEvents.edit({ctfEventId: ctfEvent._id})"class="list-group-item">
-            <div class="pull-right">
-                <button class="btn btn-success btn-xs">Add</button>
-            </div>
-            <h4 class="list-group-item-heading" ng-bind="user.displayName"></h4>
-        </a>
-    </div>
-</div>
+<section ng-controller="EventRegistrationController" ng-init="find()">
+  <div class="page-header">
+    <h1>Event Teams</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="team in teams" ui-sref="ctfEvents.registration-team-view({teamId: team._id})" class="list-group-item">
+      <div class="pull-right" ng-if="shouldRender(['user', 'teamCaptain']) && shouldReq(team)">
+        <button ng-click='requestsToJoin(team)'>Join</button>
+      </div>
+      <h4 class="list-group-item-heading" ng-bind="team.teamName"></h4>
+    </a>
+  </div>
 </section>
