@@ -47,16 +47,6 @@ exports.removeMember = function (req, res) {
     });
   });
 };
-exports.addTeamToUser = function (user, team) {
-  if(user.roles.indexOf('teamMember') === -1) {
-    user.roles.push('teamMember');
-  }
-  user.team.push(team._id)
-  user.save(function (err) {
-    if(err) return false;
-  });
-  return true;
-};
 /**
  * Find Team names from requestToJoin field and askToJoin field
  */

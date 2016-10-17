@@ -12,17 +12,23 @@ var path = require('path'),
   User = mongoose.model('User'),
   ScoreBoard = mongoose.model('ScoreBoard'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
+exports.addTeamToUser = function (user, team) {
+  if(user.roles.indexOf('teamMember') === -1) {
+    user.roles.push('teamMember');
+  }
+  user.team.push(team._id)
+  user.save(function (err) {
+    if(err) return false;
+  });
+  return true;
+};
 exports.accept = function (req, res) {
   var team = req.team;
   var user = req.model;
   var capt = (req.user.roles.indexOf('teamCaptain') !== -1 && team.teamCaptain._id.toString() === req.user._id.toString());
-  // Used in the for loop below
   var reqLen = team.requestToJoin.length;
   var askLen = team.askToJoin.length;
   var max = ((reqLen > askLen) ? reqLen : askLen);
-  // This works by finding the max size and iterating over the max, skipping the smaller
-  // array once the index is over the smaller array's max
-  // Check if the requested user is in either array
   for(var i = 0; i < max; ++i) {
     if(i < reqLen && team.requestToJoin[i]._id.toString() === user._id.toString() && capt) {
       team.requestToJoin.splice(i, 1);
@@ -34,12 +40,10 @@ exports.accept = function (req, res) {
       team.members.push(user._id);
       break;
     }
-    // If it didn't find a user, fail
     if(i === max - 1) return res.status(400).send({
       message: 'Invalid User to add'
     });
   }
-  // Try to add the user, error if alreay on a team
   if(!exports.addTeamToUser(user, team)) return res.status(400).send({
     message: 'User is already a member of a team!'
   });
