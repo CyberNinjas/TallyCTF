@@ -21,22 +21,15 @@ var TeamSchema = new Schema({
     ref: 'User',
     required: 'You must have a team captain'
   },
-  scoreBoard: {
-    type: Schema.Types.ObjectId,
-    ref: 'ScoreBoard',
-    required: 'each team needs a scoreboard'
-  },
   members: [{
     type: Schema.Types.ObjectId,
     ref: 'User'
   }],
-  //list of Users who request to join the team
-  requestToJoin: [{
+  joinRequestsFromUsers: [{
     type: Schema.Types.ObjectId,
     ref: 'User'
   }],
-  //list of Users who the teamCaptain asked to join the team
-  askToJoin:[{
+  joinRequestsToUsers: [{
     type: Schema.Types.ObjectId,
     ref: 'User'
   }],

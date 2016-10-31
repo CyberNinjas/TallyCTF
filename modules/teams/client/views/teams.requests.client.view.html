@@ -1,0 +1,19 @@
+<section ng-controller="AddUsersTeamsController">
+  <div class="page-header">
+    <div class="pull-right">
+      <a class="btn btn-success" ui-sref="teams.view({teamId: team._id})">
+        <i class="glyphicon glyphicon-hand-left"></i>
+      </a>
+    </div>
+    <h1>Add Users to your Team</h1>
+  </div>
+  <div>
+    <div class="input-group-lg">
+        <input type="search" class="form-control" ng-model="search.username" placeholder="Search...">
+    </div>
+    <div class="list-group" ng-if='team' >
+	    <a class="list-group-item" ng-repeat="user in users | availableUsers:team | filter:search" ng-bind="user.username" ng-click="addUserToTeam(user)" style="cursor: pointer"></a>
+      <p class="alert alert-warning text-center" ng-if="!users.length">There are currently no available users.</p>
+    </div>
+  </div>
+</section>

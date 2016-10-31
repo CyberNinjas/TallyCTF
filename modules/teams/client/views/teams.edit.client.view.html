@@ -1,5 +1,10 @@
-<section ng-controller="EditTeamsController" ng-init="findOne()">
+<section ng-controller="EditTeamsController">
     <div class="page-header">
+      <div class="pull-right">
+        <a class="btn btn-success" ui-sref="teams.view({teamId: team._id})">
+          <i class="glyphicon glyphicon-hand-left"></i>
+        </a>
+      </div>
         <h1>Edit Teams</h1>
     </div>
     <div class="col-md-12">
@@ -16,8 +21,8 @@
                 <div class="form-group">
                     <label for="members">Team Members</label>
                     <div class="list-group">
-                        <div class="list-group-item" ng-repeat="member in team.members">
-                            <div class="pull-right" ng-show="team.teamCaptain._id !== member._id">
+                        <div class="list-group-item" ng-repeat="member in users | members:team">
+                            <div class="pull-right" ng-show="team.teamCaptain !== member._id">
                                 <a class="btn btn-xs btn-danger" ng-click="removeMember(member, $index)">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </a>
@@ -27,7 +32,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Update" class="btn btn-default">
+                    <input type="submit" value="Update" class="btn btn-success">
                 </div>
                 <div ng-show="error" class="text-danger">
                     <strong ng-bind="error"></strong>

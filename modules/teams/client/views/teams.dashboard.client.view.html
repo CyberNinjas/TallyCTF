@@ -1,0 +1,45 @@
+<section ng-controller="TeamsDashboardController" ng-init="findTeam()">
+  <div  class="page-header">
+    <h1> Your Teams </h1>
+    <div ng-if='teams' ng-repeat='team in myTeams = (teams | myTeams:authentication)'>
+    <div class="list-group">
+      <a ui-sref="teams.view({teamId: team._id})" class="list-group-item">
+        <h4 ng-bind="team.teamName" class="list-group-item-heading"></h4>
+      </a>
+      <div ng-repeat="member in users | members:team" class="list-group-item">
+        <h6 ng-bind="member.username" class="list-group-item-heading"></h6>
+      </div>
+      <p class="alert alert-warning text-center" ng-if="!myTeams.length">No Teams!</p>
+    </div>
+  </div>
+    <div>
+      <div class="row">
+        <h2>Team Requests</h2>
+        <div class="list-group">
+          <a ng-if='teams' ng-repeat="request in requests = (teams | dashboardRequests:authentication)" class="list-group-item">
+            <small class="list-group-item-text">
+              <div class="pull-right">
+                <button ng-click='decline($index, request)'>Decline</button>
+              </div>
+              <div class="pull-right">
+                <button ng-click='accept(request)'>Accept</button>
+              </div>
+            </small>
+            <h4 ng-bind="request.teamName" class="list-group-item-heading"></h4>
+            <!-- <h4 class="list-group-item-heading" ng-bind="current.teamName"></h4> -->
+          </a>
+          <p class="alert alert-warning text-center" ng-if="!requests.length">No one wants you (yet)</p>
+        </div>
+      </div>
+      <div class="row">
+        <h2>Teams You've Requested</h2>
+        <div class="list-group">
+          <a ng-repeat="ask in asks = (teams | dashboardAsks:authentication)" class="list-group-item">
+            <span ng-bind="ask.teamName"></span>
+          </a>
+          <p class="alert alert-warning text-center" ng-if="!asks.length">No requests!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

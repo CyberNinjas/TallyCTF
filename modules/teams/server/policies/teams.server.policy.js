@@ -1,96 +1,59 @@
 'use strict';
-/**
- * Module dependencies.
- */
+
 var acl = require('acl');
-// Using the memory backend
 acl = new acl(new acl.memoryBackend());
-/**
- * Invoke Teams Permissions
- */
+
 exports.invokeRolesPolicies = function () {
   acl.allow([{
-    roles: ['admin'], //admin permissions
+    roles: ['admin'],
     allows: [{
       resources: '/api/teams',
       permissions: '*'
     }, {
-      resources: '/api/teams/:teamId.:userId/join',
-      permissions: '*'
-    }, {
       resources: '/api/teams/:teamId',
-      permissions: '*'
-    }, {
-      resources: '/api/teams/:teamIdRaw/raw',
-      permissions: '*'
-    }, {
-      resources: '/api/teams/:teamId.:userId/ctl',
       permissions: '*'
     }]
   }, {
-    roles: ['teamCaptain'], //teamCaptain permissions
-    allows: [{
-      resources: '/api/teams/:teamId',
-      permissions: ['delete']
-    }, {
-      resources: '/api/teams/:teamIdRaw/raw',
-      permissions: ['get']
-    }, {
-      resources: '/api/teams/:teamId.:userId/join',
-      permissions: '*'
-    }, {
-      resources: '/api/teams/:teamId.:userId/ctl',
-      permissions: '*'
-    }]
-  }, {
-    roles: ['user'], //user permissions
+    roles: ['teamCaptain'],
     allows: [{
       resources: '/api/teams',
-      permissions: ['get', 'post']
-    }, {
-      resources: '/api/teams/requests',
-      permissions: ['get']
-    }, {
-      resources: '/api/teams/asks',
-      permissions: ['get']
+      permissions: '*'
     }, {
       resources: '/api/teams/:teamId',
-      permissions: ['get', 'put']
-    }, {
-      resources: '/api/teams/:teamId.:userId/join',
-      permissions: ['patch']
-    }, {
-      resources: '/api/teams/:teamId.:userId/ctl',
-      permissions: ['put', 'post']
+      permissions: '*'
     }]
   }, {
-    roles: ['guest'], //guest permissions
+    roles: ['user'],
+    allows: [{
+      resources: '/api/teams',
+      permissions: '*'
+    }, {
+      resources: '/api/teams/:teamId',
+      permissions: ['get']
+    }]
+  }, {
+    roles: ['guest'],
     allows: [{
       resources: '/api/teams',
       permissions: ['get']
     }, {
       resources: '/api/teams/:teamId',
-      permissions: ['get']
-    }, {
-      resources: '/api/teams/:teamIdRaw/raw',
       permissions: ['get']
     }]
   }]);
 };
+
 exports.isAllowed = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
-  // If a team is being processed and the current user created it then allow any manipulation
-  if(req.team && req.user && req.user.team === '') {
+  if (req.team && req.user && req.user.team === '') {
     return next();
   }
-  // Check for user roles
-  acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(), function (err, isAllowed) {
-    if(err) {
-      // An authorization error occurred.
+  acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(),
+  function (err, isAllowed) {
+    if (err) {
       return res.status(500).send('Unexpected authorization error');
     } else {
-      if(isAllowed) {
-        // Access granted! Invoke next middleware
+      if (isAllowed) {
         return next();
       } else {
         return res.status(403).json({
@@ -100,20 +63,15 @@ exports.isAllowed = function (req, res, next) {
     }
   });
 };
+
 exports.isAllowedToAccept = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
-  // If a team is being processed and the current user created it then allow any manipulation
-  //if (req.body.team && req.user === req.body.team.teamCaptain) {
-  //return next();
-  //}
-  // Check for user roles
-  acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(), function (err, isAllowed) {
-    if(err) {
-      // An authorization error occurred.
+  acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(),
+  function (err, isAllowed) {
+    if (err) {
       return res.status(500).send('Unexpected authorization error');
     } else {
-      if(isAllowed) {
-        // Access granted! Invoke next middleware
+      if (isAllowed) {
         return next();
       } else {
         return res.status(403).json({

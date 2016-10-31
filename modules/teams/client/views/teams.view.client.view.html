@@ -1,6 +1,6 @@
-<section ng-controller="TeamsViewController" ng-init="findCurrentTeam()">
+<section ng-controller="TeamsViewController">
   <div class="page-header">
-    <div class="pull-right" ng-if="shouldRender('admin') || isCaptain()">
+    <div class="pull-right" ng-if='isCaptain()'>
       <a class="btn btn-primary" ui-sref="teams.edit({teamId: team._id})">
         <i class="glyphicon glyphicon-edit"></i>
       </a>
@@ -10,15 +10,16 @@
     </div>
     <h1 ng-bind="team.teamName"></h1>
   </div>
-    <div class="pull-right" ng-if="shouldRender('admin') || isCaptain()">
+    <div class="pull-right" ng-if='isCaptain()'>
     <a class="btn btn-success" ui-sref="teams.add({teamId: team._id})">
       <i class="glyphicon glyphicon-plus"></i>
     </a>
   </div>
+
   <h2>Team Members</h2>
   <div class="list-group">
-    <div class="list-group-item" ng-repeat="member in team.members">
-      <div ng-show="team.teamCaptain._id === member._id" class="pull-right">
+    <div ng-if="team" ng-repeat="member in users | members:team" class="list-group-item">
+      <div ng-show="team.teamCaptain === user._id" class="pull-right">
         <small>
           <p>Team Captain</p>
         </small>
@@ -26,9 +27,11 @@
       <span ng-bind="member.username"></span>
     </div>
   </div>
-  <div ng-if="isCaptain(true)" class="list-group">
+
+  <div class="well" ng-if='isCaptain()'>
     <h3>Pending Requests</h3>
-    <a ng-repeat="request in team.requestToJoin" class="list-group-item">
+  <div class="list-group" ng-if='isCaptain()'>
+    <a ng-if="users" ng-repeat="request in requests = (users | asks:team)" class="list-group-item">
       <small class="list-group-item-text">
         <div class="pull-right">
           <button ng-click='decline(request, $index)'>Decline</button>
@@ -39,12 +42,15 @@
       </small>
       <h4 ng-bind="request.username" class="list-group-item-heading"></h4>
     </a>
-    <p class="alert alert-warning text-center" ng-if="team.$resolved && !team.requestToJoin.length">No pending requests!</p>
+    <p class="alert alert-warning text-center" ng-if="!requests.length">No pending requests!</p>
+  </div>
 
     <h3>Pending Invitations</h3>
-    <a ng-repeat="request in team.askToJoin" class="list-group-item">
-      <h4 ng-bind="request.username" class="list-group-item-heading"></h4>
+  <div class="list-group" ng-if='isCaptain()'>
+    <a ng-if='users' ng-repeat="invite in invitations = (users | requests:team)" class="list-group-item">
+      <h4 ng-bind="invite.username" class="list-group-item-heading"></h5>
     </a>
-    <p class="alert alert-warning text-center" ng-if="team.$resolved && !team.askToJoin.length">No pending invites!</p>
+    <p class="alert alert-warning text-center" ng-if="!invitations.length">No pending invites!</p
   </div>
+</div>
 </section>
