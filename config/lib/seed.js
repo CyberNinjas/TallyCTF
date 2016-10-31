@@ -11,14 +11,13 @@ function removeUser(user) {
   return new Promise(function (resolve, reject) {
     var User = mongoose.model('User');
     User.find({
-        username: user.username
-      })
-      .remove(function (err) {
-        if (err) {
-          reject(new Error('Failed to remove local ' + user.username));
-        }
-        resolve();
-      });
+      username: user.username
+    }).remove(function (err) {
+      if (err) {
+        reject(new Error('Failed to remove local ' + user.username));
+      }
+      resolve();
+    });
   });
 }
 
