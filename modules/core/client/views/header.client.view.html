@@ -41,7 +41,7 @@
             <a ui-sref="settings.profile">Edit Profile</a>
           </li>
           <li ui-sref-active="active">
-            <a ui-sref="teams.current">My Team</a>
+            <a ui-sref="teams.dashboard">My Team</a>
           </li>
           <li ui-sref-active="active">
             <a ui-sref="settings.picture">Change Profile Picture</a>
@@ -58,7 +58,7 @@
     </ul>
     <ul class="nav navbar-nav navbar-right" ng-show="authentication.user.type === 'user'">
       <li ui-sref-active="active">
-        <a ui-sref="teams.current">My Team<span class="badge pull-right" ng-bind="authentication.user.notifications" ng-show="authentication.user.notifications>0" ng-click="removeNotifications()"></span> </a>
+        <a ui-sref="teams.dashboard">My Team<span class="badge pull-right" ng-bind="authentication.user.notifications" ng-show="authentication.user.notifications>0" ng-click="removeNotifications()"></span> </a>
       </li>
     </ul>
 

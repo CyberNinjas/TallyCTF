@@ -5,15 +5,23 @@ body{
     height: 100%;
 }
 
-.sideNav{
-    margin-top: 50px;
+.progress {
+    position: relative;
+    height: 25px;
 }
-
-.margin-bottom {
-    margin-bottom:15px;
+.progress > .progress-type {
+    position: absolute;
+    left: 0px;
+    font-weight: 800;
+    padding: 3px 30px 2px 10px;
+    color: rgb(255, 255, 255);
+    background-color: rgba(25, 25, 25, 0.2);
 }
-.margin-right{
-    margin-right:15px;
+.progress > .progress-completed {
+    position: absolute;
+    right: 0px;
+    font-weight: 800;
+    padding: 3px 10px 2px;
 }
 
 .list-arrows {
@@ -115,86 +123,4 @@ body{
 
 .count_bottom i {
     width: 12px;
-}
-.row {
-    margin-right: 0;
-    margin-left: 0;
-}
-.side-menu {
-    position: fixed;
-    width: 300px;
-    height: 100%;
-    background-color: #f8f8f8;
-    border-right: 1px solid #e7e7e7;
-}
-.side-menu .navbar {
-    border: none;
-}
-.side-menu .navbar-header {
-    width: 100%;
-    border-bottom: 1px solid #e7e7e7;
-}
-.side-menu .navbar-nav .active a {
-    background-color: transparent;
-    margin-right: -1px;
-    border-right: 5px solid #e7e7e7;
-}
-.side-menu .navbar-nav li {
-    display: block;
-    width: 100%;
-    border-bottom: 1px solid #e7e7e7;
-}
-.side-menu .navbar-nav li a {
-    padding: 15px;
-}
-.side-menu .navbar-nav li a .glyphicon {
-    padding-right: 10px;
-}
-.side-menu .dropdown {
-    border: 0;
-    margin-bottom: 0;
-    border-radius: 0;
-    background-color: transparent;
-    box-shadow: none;
-}
-.side-menu .dropdown .caret {
-    float: right;
-    margin: 9px 5px 0;
-}
-.side-menu .dropdown .indicator {
-    float: right;
-}
-.side-menu .dropdown > a {
-    border-bottom: 1px solid #e7e7e7;
-}
-.side-menu .dropdown .panel-body {
-    padding: 0;
-    background-color: #f3f3f3;
-}
-.side-menu .dropdown .panel-body .navbar-nav {
-    width: 100%;
-}
-.side-menu .dropdown .panel-body .navbar-nav li {
-    padding-left: 15px;
-    border-bottom: 1px solid #e7e7e7;
-}
-.side-menu .dropdown .panel-body .navbar-nav li:last-child {
-    border-bottom: none;
-}
-.side-menu .dropdown .panel-body .panel > a {
-    margin-left: -20px;
-    padding-left: 35px;
-}
-.side-menu .dropdown .panel-body .panel-body {
-    margin-left: -15px;
-}
-.side-menu .dropdown .panel-body .panel-body li {
-    padding-left: 30px;
-}
-.side-menu .dropdown .panel-body .panel-body li:last-child {
-    border-bottom: 1px solid #e7e7e7;
-}
-/* Main body section */
-.side-body {
-    margin-left: 310px;
 }

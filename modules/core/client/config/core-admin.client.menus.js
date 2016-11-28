@@ -9,5 +9,10 @@ angular.module('core.admin').run(['Menus',
       roles: ['admin'],
       position: 4
     });
+
+    Menus.addSubMenuItem('topbar', 'admin', {
+      title: 'Create Challenges',
+      state: 'challenges.create'
+    })
   }
 ]);

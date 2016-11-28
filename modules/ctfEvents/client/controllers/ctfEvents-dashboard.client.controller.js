@@ -1,58 +1,62 @@
 'use strict';
-angular.module('ctfEvents').controller('DashboardController', ['$scope', '$filter', '$stateParams', '$location', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users', function($scope, $filter, $stateParams, $location, Authentication, CtfEvents, Challenges, Teams, Users) {
+angular.module('ctfEvents').controller('DashboardController', ['$scope','$state', '$filter', '$stateParams', '$location', '$q', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users', function($scope, $state, $filter, $stateParams, $location, $q, Authentication, CtfEvents, Challenges, Teams, Users) {
   $scope.authentication = Authentication;
-  // Each query is nested in the previous one's promise to make sure
-  // everything resolves before we set each of the select's options
-  $scope.ctfEvent = CtfEvents.get({
-    ctfEventId: $stateParams.ctfEventId
-  })
-  $scope.ctfEvent.$promise.then(function(data) {
-    $scope.challenges = Challenges.query();
-    $scope.challenges.$promise.then(function(data) {
-      $scope.teams = Teams.query();
-      $scope.teams.$promise.then(function(data) {
-        //$scope.scoreBoard= scoreBoard.get();
-        //$scope.scoreBoard.$promise.then(function(data) {
-        $scope.eventTeams = $filter('selected')($scope.teams, $scope.ctfEvent.teams);
-        $scope.eventChallenges = $filter('selected')($scope.challenges, $scope.ctfEvent.challenges);
-        $scope.eventId = $stateParams.ctfEventId
-        $scope.ongoing = $scope.isOngoing()
-        $scope.getRemainingTime()
-        $scope.remainingTime = $scope.ongoing === false ? '00:00:00' : $scope.hours + ':' + $scope.minutes
-        $scope.tile_stats = [{
-          title: 'Your Position',
-          value: $scope.ongoing === false ? 'N/A' : '1st',
-          change: $scope.ongoing === false ? null : 0,
-          icon: 'fa fa-sort-numeric-asc'
-        }, {
-          title: 'Points Available:',
-          value: $scope.ongoing === false ? 0 : $scope.getPointTotal(),
-          change: null,
-          icon: 'fa fa-diamond'
-        }, {
-          title: 'Your Point Total ',
-          value: $scope.ongoing === false ? 0 : 0,
-          change: $scope.ongoing === false ? null : 0,
-          icon: 'fa fa-bullseye'
-        }, {
-          title: 'Points Behind 1st',
-          value: $scope.ongoing === false ? 0 : 0,
-          change: $scope.ongoing === false ? null : 0,
-          icon: 'fa fa-thumbs-o-down'
-        }]
-      });
-    });
+
+  $q.all([
+    Users.query().$promise,
+    Challenges.query().$promise,
+    Teams.query().$promise,
+    CtfEvents.get({ ctfEventId: $stateParams.ctfEventId }).$promise
+  ]).then(function(data) {
+    $scope.users = data[0];
+    $scope.challenges = data[1];
+    $scope.teams = data[2];
+    $scope.ctfEvent = data[3];
+    return
+  }).then(function() {
+    $scope.eventId = $stateParams.ctfEventId
+    $scope.eventTeams = $filter('memberTeams')($scope.teams, $scope.ctfEvent.teams);
+    $scope.eventChallenges = $filter('filter')($scope.challenges, $scope.ctfEvent.challenges);
+    console.log($scope.ctfEvent)
+    $scope.ongoing = $scope.isOngoing()
+    $scope.getRemainingTime()
+    $scope.remainingTime = $scope.ongoing === false ? '00:00:00' : $scope.hours + ':' + $scope.minutes
+
+    $scope.tile_stats = [{
+      title: 'Your Position',
+      value: $scope.ongoing === false ? 'N/A' : '1st',
+      change: $scope.ongoing === false ? null : 0,
+      icon: 'fa fa-sort-numeric-asc'
+    }, {
+      title: 'Points Available:',
+      value: $scope.ongoing === false ? 0 : $scope.getPointTotal(),
+      change: null,
+      icon: 'fa fa-diamond'
+    }, {
+      title: 'Your Point Total ',
+      value: $scope.ongoing === false ? 0 : 0,
+      change: $scope.ongoing === false ? null : 0,
+      icon: 'fa fa-bullseye'
+    }, {
+      title: 'Points Behind 1st',
+      value: $scope.ongoing === false ? 0 : 0,
+      change: $scope.ongoing === false ? null : 0,
+      icon: 'fa fa-thumbs-o-down'
+    }]
   });
+
   $scope.getPointTotal = function() {
     var pointTotal = $scope.eventChallenges.reduce(function(total, challenge) {
       return total + challenge.points;
     }, 0);
     return pointTotal
   }
+
   $scope.isOngoing = function() {
     var hasStarted = $scope.ctfEvent.start < moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') && moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') < $scope.ctfEvent.end
     return hasStarted
   }
+
   $scope.getRemainingTime = function() {
     var duration = moment.duration(moment($scope.ctfEvent.end).diff(moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')))
     var milliseconds = duration._milliseconds;
@@ -63,9 +67,12 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$filte
     milliseconds = Math.floor(milliseconds / 60);
     $scope.hours = milliseconds;
   }
+
   $scope.getUserName = function(id) {
-    var user = Users.get({
-      userId: id
-    });
+    return $filter('filter')($scope.users, { _id: id })[0].displayName;
+  }
+
+  $scope.getTeam = function(team) {
+    return $filter('filter')($scope.teams, { _id: team.id })[0];
   }
 }]);
