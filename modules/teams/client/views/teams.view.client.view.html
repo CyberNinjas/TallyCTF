@@ -1,5 +1,10 @@
 <section ng-controller="TeamsViewController">
   <div class="page-header">
+    <div class="pull-right" ng-if='!isCaptain() && team.members.indexOf(authentication._id) > -1'>
+      <a class="btn btn-warning" ng-click="leaveTeam()">
+          <i class="glyphicon glyphicon-log-out"></i>
+        </a>
+    </div>
     <div class="pull-right" ng-if='isCaptain()'>
       <a class="btn btn-primary" ui-sref="teams.edit({teamId: team._id})">
         <i class="glyphicon glyphicon-edit"></i>

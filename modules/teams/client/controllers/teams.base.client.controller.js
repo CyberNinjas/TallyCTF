@@ -4,6 +4,7 @@ angular.module('teams')
     function ($scope, Teams, Authentication, Users, Socket) {
 
       $scope.authentication = Authentication.user;
+      console.log($scope.authentication)
       $scope.users = Users.query();
       $scope.teams = Teams.query();
       $scope.socket = Socket
@@ -31,7 +32,7 @@ angular.module('teams')
             team.joinRequestsFromUsers.push(message._id);
             angular.forEach($scope.users, function(user){
               if (user._id === message._id) {
-                user.requestToJoin.push(team._id)
+                user.requestedToJoin.push(team._id)
               }
             })
           }
@@ -57,7 +58,7 @@ angular.module('teams')
             team.joinRequestsFromUsers.splice(team.joinRequestsFromUsers.indexOf(message.user._id))
             angular.forEach($scope.users, function(user){
               if (user._id === message.user._id) {
-                user.requestToJoin.splice(user.requestToJoin.indexOf(message.data))
+                user.requestedToJoin.splice(user.requestedToJoin.indexOf(message.data))
               }
             })
           }

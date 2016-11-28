@@ -102,7 +102,7 @@ var UserSchema = new Schema({
   resetPasswordExpires: {
     type: Date
   },
-  team: [{
+  teams: [{
     type: Schema.Types.ObjectId,
     ref: 'Team'
   }],
@@ -111,12 +111,12 @@ var UserSchema = new Schema({
     default: ''
   },
   //List of Teams that asked the current user to join their team
-  askToJoin: [{
+  wasAskedToJoin: [{
     type: Schema.Types.ObjectId,
     ref: 'Team'
   }],
   //List of Teams that the User requested to join
-  requestToJoin: [{
+  requestedToJoin: [{
     type: Schema.Types.ObjectId,
     ref: 'Team'
   }],

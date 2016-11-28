@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-var acl = require('acl');
-acl = new acl(new acl.memoryBackend());
+var Acl = require('acl')
+var acl = new Acl(new Acl.memoryBackend())
 
 exports.invokeRolesPolicies = function () {
   acl.allow([{
@@ -40,44 +40,44 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/teams/:teamId',
       permissions: ['get']
     }]
-  }]);
-};
+  }])
+}
 
 exports.isAllowed = function (req, res, next) {
-  var roles = (req.user) ? req.user.roles : ['guest'];
+  var roles = (req.user) ? req.user.roles : ['guest']
   if (req.team && req.user && req.user.team === '') {
-    return next();
+    return next()
   }
   acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(),
   function (err, isAllowed) {
     if (err) {
-      return res.status(500).send('Unexpected authorization error');
+      return res.status(500).send('Unexpected authorization error')
     } else {
       if (isAllowed) {
-        return next();
+        return next()
       } else {
         return res.status(403).json({
           message: 'User is not authorized'
-        });
+        })
       }
     }
-  });
-};
+  })
+}
 
 exports.isAllowedToAccept = function (req, res, next) {
-  var roles = (req.user) ? req.user.roles : ['guest'];
+  var roles = (req.user) ? req.user.roles : ['guest']
   acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(),
   function (err, isAllowed) {
     if (err) {
-      return res.status(500).send('Unexpected authorization error');
+      return res.status(500).send('Unexpected authorization error')
     } else {
       if (isAllowed) {
-        return next();
+        return next()
       } else {
         return res.status(403).json({
           message: 'User is not authorized'
-        });
+        })
       }
     }
-  });
-};
+  })
+}

@@ -40,7 +40,7 @@ angular.module('teams')
       };
 
       $scope.removeMember = function (user, index) {
-        user.team.splice(user.team.indexOf($scope.team._id), 1)
+        user.teams.splice(user.team.indexOf($scope.team._id), 1)
         Users.update(user, function () {},
         function (errorResponse) {
           $scope.error = errorResponse.data.message;

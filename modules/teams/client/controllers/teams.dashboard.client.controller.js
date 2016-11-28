@@ -18,8 +18,9 @@ angular.module('teams')
           $scope.error = errorResponse.data.message;
         });
 
-        user.askToJoin.splice(user.askToJoin.indexOf(team._id))
-        Users.update(user, function () {}, function (errorResponse) {
+        $scope.authentication.wasAskedToJoin.splice($scope.authentication.wasAskedToJoin.indexOf(team._id))
+        $scope.authentication.team.push(team._id)
+        Users.update($scope.authentication, function () {}, function (errorResponse) {
           $scope.error = errorResponse.data.message;
         });
 
@@ -38,7 +39,7 @@ angular.module('teams')
           $scope.error = errorResponse.data.message;
         });
 
-        user.requestToJoin.splice(user.requestToJoin.indexOf(team._id))
+        user.requestedToJoin.splice(user.requestedToJoin.indexOf(team._id))
         Users.update(user, function () {}, function (errorResponse) {
           $scope.error = errorResponse.data.message;
         });
@@ -46,7 +47,7 @@ angular.module('teams')
         $scope.socket.emit('userUpdate', {
           recipients: [user._id],
           op: 'remove',
-          field: 'askToJoin',
+          field: 'wasAskedToJoin',
           scopeField: 'requestTeams',
           data: team._id
         });

@@ -13,7 +13,7 @@ var TeamSchema = new Schema({
   teamName: {
     type: String,
     trim: false,
-    unique: 'Team Name already exists',
+    //unique: 'Team Name already exists',
     default: ''
   },
   teamCaptain: {
@@ -43,4 +43,5 @@ var TeamSchema = new Schema({
   //}
 });
 
+module.exports = TeamSchema
 mongoose.model('Team', TeamSchema);

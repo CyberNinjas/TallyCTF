@@ -26,7 +26,7 @@ exports.create = function (req, res) {
   var team = new Team(req.body);
   team.save(function (err) {
     if (!err) {
-      addUserToTeam(req.user, team);
+      //addUserToTeam(req.user, team);
       res.json(req.user);
     } else {
       return res.status(422)

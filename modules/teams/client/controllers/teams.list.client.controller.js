@@ -31,14 +31,14 @@ angular.module('teams')
 
       $scope.askToJoin = function (team) {
         var user = $scope.authentication;
-        team.joinRequestsFromUsers.push(user._id)
 
+        team.joinRequestsFromUsers.push(user._id)
         Teams.update(team, function () {
         }, function (errorResponse) {
           $scope.error = errorResponse.data.message;
         });
 
-        user.requestToJoin.push(team._id)
+        user.requestedToJoin.push(team._id)
         Users.update(user, function () {
         }, function (errorResponse) {
           $scope.error = errorResponse.data.message;

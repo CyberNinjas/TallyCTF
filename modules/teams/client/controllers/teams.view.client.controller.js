@@ -13,28 +13,47 @@ angular.module('teams')
         $scope.team = $filter('filter')($scope.teams, { _id: $stateParams.teamId })[0];
       });
 
+
       $scope.isCaptain = function () {
         if ($scope.authentication && $scope.team) {
           if ($scope.authentication.roles.indexOf('admin') === -1) {
             return ($scope.team.teamCaptain === $scope.authentication
               ._id);
-            return false;
           }
+          return false;
         }
       };
+
+      $scope.leaveTeam = function () {
+        var currentUser = $filter('filter')($scope.users, { _id: $scope.authentication._id })[0];
+        currentUser.team.splice(currentUser.team.indexOf($scope.team._id))
+        Users.update(currentUser, function () {
+        }, function (errorResponse) {
+          $scope.error = errorResponse.data.message;
+        });
+
+        var userId = $scope.team.members.indexOf(user._id)
+        $scope.team.members.splice(userId, 1);
+        Teams.update($scope.team, function () {
+        }, function (errorResponse) {
+          $scope.error = errorResponse.data.message;
+        });
+        console.log($scope.team)
+      }
 
       $scope.accept = function (user, index) {
         $scope.team.members.push(user);
         var userId = $scope.team.joinRequestsFromUsers.indexOf(user._id)
-
         $scope.team.joinRequestsFromUsers.splice(userId, 1);
         Teams.update($scope.team, function () {
         }, function (errorResponse) {
           $scope.error = errorResponse.data.message;
         });
 
-        user.requestToJoin.splice(user.requestToJoin.indexOf($scope.team._id))
-        Users.update(user, function () {
+        var currentUser = $filter('filter')($scope.users, { _id: user._id })[0];
+        // currentUser.requestedToJoin.splice(currentUser.requestedToJoin.indexOf($scope.team._id))
+        currentUser.teams.push($scope.team._id)
+        Users.update(currentUser, function () {
         }, function (errorResponse) {
           $scope.error = errorResponse.data.message;
         });
@@ -54,7 +73,7 @@ angular.module('teams')
           $scope.error = errorResponse.data.message;
         });
 
-        user.requestToJoin.splice(user.requestToJoin.indexOf($scope.team._id))
+        user.requestedToJoin.splice(user.requestedToJoin.indexOf($scope.team._id))
         Users.update(user, function () {
         }, function (errorResponse) {
           $scope.error = errorResponse.data.message;

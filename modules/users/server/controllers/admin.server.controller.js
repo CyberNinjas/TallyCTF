@@ -22,6 +22,7 @@ exports.update = function (req, res) {
   var user = req.model;
 
   //For security purposes only merge these parameters
+  console.log(req)
   user.firstName = req.body.firstName;
   user.lastName = req.body.lastName;
   user.displayName = user.firstName + ' ' + user.lastName;
