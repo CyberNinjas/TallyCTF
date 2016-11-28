@@ -1,41 +1,39 @@
-angular.module('ctfEvents').controller('CreateEventsController', ['$scope','$stateParams', '$location', 'Authentication',
-  'CtfEvents', 'Challenges', 'Teams', 'Users', function ($scope, $stateParams, $location, Authentication, CtfEvents, Challenges, Teams, Users) {
+angular.module('ctfEvents').controller('CreateEventsController', ['$scope','$stateParams', '$location', '$q', 'Authentication',
+  'CtfEvents', 'Challenges', 'Teams', 'Users', function ($scope, $stateParams, $location, $q, Authentication, CtfEvents, Challenges, Teams, Users) {
 
-    // Find selected CtfEvent
-    // Each query is nested in the previous one's promise to make sure
-    // everything resolves before we set each of the select's options
-    $scope.users = Users.query();
-    $scope.users.$promise.then(function(data) {
-      $scope.challenges = Challenges.query();
-      $scope.challenges.$promise.then(function(data) {
-        $scope.teams = Teams.query();
-        $scope.teams.$promise.then(function(data) {
+    /*
+      Collect all users, challenges, and teams asynchronously and pass them
+      into the group of objects the event creator is allowed to choose from
+    */
 
-          //dual select options
-          $scope.userOptions = {
-            title: 'Users',
-            items: $scope.users,
-            selectedItems: [],
-            display: 'firstName'
-          };
-          $scope.teamOptions= {
-            title: 'Teams',
-            items: $scope.teams,
-            selectedItems: [],
-            display: 'teamName'
-          };
-          $scope.challengeOptions = {
-            title: 'Challenges',
-            items: $scope.challenges,
-            selectedItems: [],
-            display: 'name'
-          };
-
-        });
-      });
+    $q.all([
+      Users.query().$promise,
+      Challenges.query().$promise,
+      Teams.query().$promise,
+    ]).then(function(data) {
+      $scope.users = data[0];
+      $scope.challenges = data[1];
+      $scope.teams = data[2];
+      $scope.userOptions = {
+        title: 'Users',
+        items: $scope.users,
+        selectedItems: [],
+        display: 'firstName'
+      };
+      $scope.teamOptions= {
+        title: 'Teams',
+        items: $scope.teams,
+        selectedItems: [],
+        display: 'teamName'
+      };
+      $scope.challengeOptions = {
+        title: 'Challenges',
+        items: $scope.challenges,
+        selectedItems: [],
+        display: 'name'
+      };
     });
 
-    // Create new CtfEvent
     $scope.create = function (isValid) {
       $scope.error = null;
 
@@ -45,35 +43,39 @@ angular.module('ctfEvents').controller('CreateEventsController', ['$scope','$sta
       }
 
       var eventTeams = [];
+      var eventUsers = [];
+      var eventChallenges = [];
+
+      angular.forEach($scope.challengeOptions.selectedItems, function(challenge) {
+        var currentChallenge = challenge.toJSON()
+        delete currentChallenge._id
+        delete currentChallenge.__v
+        this.push(currentChallenge)
+      }, eventChallenges)
 
       angular.forEach($scope.teamOptions.selectedItems, function(team) {
-        var team = { teamId: team._id, users: [] }
-        eventTeams.push(team)
-      })
+        this.push({ 'team': team._id, 'members': [] });
+      }, eventTeams)
 
-      // Create new CtfEvent object
+      angular.forEach($scope.userOptions.selectedItems, function(user) {
+        this.push(user._id)
+      }, eventUsers)
+
       var ctfEvent = new CtfEvents({
-        //set value of new object to field's values
         created: this.created,
         title: this.title,
         description: this.description,
         start: this.start,
         end: this.end,
-        registraionStart: this.registraionStart,
-        registraionEnd: this.registraionEnd,
-        challenges: $scope.challengeOptions.selectedItems,
+        registrationStart: this.registrationStart,
+        registrationEnd: this.registrationEnd,
+        challenges: eventChallenges,
         teams: eventTeams,
-        users: $scope.userOptions.selectedItems
+        users: eventUsers
       });
 
-      // Redirect after save
-      ctfEvent.$save(function (response) {
+      CtfEvents.save(ctfEvent, function (response) {
         $location.path('ctfEvents/' + response._id);
-        // Clear form fields
-        $scope.created = '';
-        $scope.title = '';
-        $scope.start = '';
-        $scope.end = '';
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });

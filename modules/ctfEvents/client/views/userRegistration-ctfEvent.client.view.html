@@ -28,7 +28,7 @@
   </div>
   <div ng-if="shouldRender('teamCaptain') && isCaptain(true)" class="list-group">
     <h3>Pending Requests</h3>
-    <a ng-repeat="request in team.requestToJoin" class="list-group-item">
+    <a ng-repeat="request in team.joinRequestsFromUsers" class="list-group-item">
       <small class="list-group-item-text">
         <div class="pull-right">
           <button ng-click='decline(request, $index)'>Decline</button>
@@ -39,10 +39,10 @@
       </small>
       <h4 ng-bind="request.username" class="list-group-item-heading"></h4>
     </a>
-    <p class="alert alert-warning text-center" ng-if="team.$resolved && !team.requestToJoin.length">No pending requests!</p>
+    <p class="alert alert-warning text-center" ng-if="team.$resolved && !team.joinRequestsFromUsers.length">No pending requests!</p>
 
     <h3>Pending Invitations</h3>
-    <a ng-repeat="request in team.askToJoin" class="list-group-item">
+    <a ng-repeat="request in team.joinRequestsToUsers" class="list-group-item">
       <h4 ng-bind="request.username" class="list-group-item-heading"></h4>
     </a>
     <p class="alert alert-warning text-center" ng-if="team.$resolved && !team.askToJoin.length">No pending invites!</p>

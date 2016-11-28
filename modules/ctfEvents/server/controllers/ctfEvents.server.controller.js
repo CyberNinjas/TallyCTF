@@ -8,15 +8,10 @@ var path = require('path'),
   Challenge = mongoose.model('Challenge'),
   Team = mongoose.model('Team'),
   User = mongoose.model('User'),
-  ScoreBoard = mongoose.model('ScoreBoard'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
-/**
- * Create a ctfEvent
- */
+
 exports.create = function(req, res) {
-  //create new Mongoose object out of request body
   var ctfEvent = new CtfEvent(req.body);
-  //commit to db
   ctfEvent.save(function(err) {
     if(err) {
       return res.status(400).send({
@@ -27,24 +22,20 @@ exports.create = function(req, res) {
     }
   });
 };
-/**
- * Show a ctfEvent
- */
+
 exports.read = function(req, res) {
   res.json(req.ctfEvent);
 };
-/**
- * Update a ctfEvent
- */
+
 exports.update = function(req, res) {
   var ctfEvent = req.ctfEvent;
-  //allow updating of Title, startTime and endTime
   ctfEvent.title = req.body.title;
   ctfEvent.start = req.body.start;
   ctfEvent.end = req.body.end;
   ctfEvent.teams = req.body.teams;
   ctfEvent.challenges = req.body.challenges;
   ctfEvent.users = req.body.users;
+  console.log(ctfEvent)
   ctfEvent.save(function(err) {
     if(err) {
       return res.status(400).send({
@@ -55,9 +46,7 @@ exports.update = function(req, res) {
     }
   });
 };
-/*
- * Delete an ctfEvent
- */
+
 exports.delete = function(req, res) {
   var ctfEvent = req.ctfEvent;
   ctfEvent.remove(function(err) {
@@ -70,9 +59,7 @@ exports.delete = function(req, res) {
     }
   });
 };
-/**
- * List of CtfEvents
- */
+
 exports.list = function(req, res) {
   CtfEvent.find().sort('-created').exec(function(err, ctfEvents) {
     if(err) {
@@ -84,9 +71,7 @@ exports.list = function(req, res) {
     }
   });
 };
-/**
- * CtfEvent middleware
- */
+
 exports.ctfEventByID = function(req, res, next, id) {
   if(!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({

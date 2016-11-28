@@ -1,4 +1,4 @@
-angular.module('ctfEvents').service('captainsTeamsService', function () {
+angular.module('ctfEvents').service('usersTeamsService', function () {
   var teamsList = [{
     teamName: 'None'
   }];

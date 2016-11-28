@@ -1,9 +1,9 @@
-angular.module('ctfEvents').controller('ModalController', ['$scope', 'captainsTeamsService', 'close',
-  function($scope, captainsTeamsService, close) {
-    $scope.captainsTeams = captainsTeamsService.getTeams()
-    $scope.selectedTeam = $scope.captainsTeams[0]
+angular.module('ctfEvents').controller('ModalController', ['$scope', 'usersTeamsService', 'close',
+  function($scope, usersTeamsService, close) {
+    $scope.usersTeams = usersTeamsService.getTeams()
+    $scope.selectedTeam = $scope.usersTeams[0]
     $scope.close = function() {
-      close($scope.selectedTeam, 500); // close, but give 500ms for bootstrap to animate
+      close($scope.selectedTeam, 500);
     };
   }
 ]);

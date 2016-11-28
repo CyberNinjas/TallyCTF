@@ -50,6 +50,12 @@ angular.module('ctfEvents').config(['$stateProvider',
       data: {
         roles: ['admin']
       }
+    }).state('ctfEvents.board', {
+      url: '/board/:ctfEventId',
+      templateUrl: 'modules/ctfEvents/client/views/scoreboard-ctfEvents.client.view.html',
+      data: {
+        roles: ['user']
+      }
     }).state('ctfEvents.edit', {
       url: '/:ctfEventId',
       templateUrl: 'modules/ctfEvents/client/views/edit-ctfEvent.client.view.html',

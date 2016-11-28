@@ -1,66 +1,16 @@
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-<div id="page-wrapper" ng-controller="DashboardController">
-    <div class="col-lg-12">
-        <div class="col-lg-12">
-            <h1 class="page-header">{{ctfEvent.title}} Dashboard</h1>
-        </div>
-        <div class="row col-md-12">
-            <div class="row col-md-9 tile_count">
-                <div ng-repeat="stat in tile_stats" class="col-md-3 col-sm-3 col-xs-3 tile_stats_count">
-                    <div class="left"></div>
-                    <div class="right">
-                        <span class="count_top"><i ng-class="stat.icon"></i> {{stat.title}}</span>
-                        <div class="count">
-                            {{stat.value}}
-                        </div>
-                        <span ng-hide='stat.change === null' class="count_bottom"><i ng-class="stat.change >= 0 ? 'fa fa-sort-asc' : 'fa fa-sort-desc'"></i><i>{{stat.change}}</i> in the last hour</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-4 col-xs-4 tile_count">
-                <div class="tile_stats_count text-center">
-                    <div class="right">
-                        <span class="count_top"><i class="fa fa-clock-o"></i> Remaining Time</span>
-                        <div class="count">
-                            {{remainingTime}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-8">
-            <div id="challenge-box" class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-question fa-fw"></i> Challenges
-                </div>
-                <div class="panel-body">
-                    <div ng-show='ongoing' class="list-group">
-                        <a ng-repeat="challenge in eventChallenges" ui-sref="challenges.edit({challengeId: challenge._id})" ng-class="challenge.solved  ?'list-group-item disabled' : 'list-group-item list-group-item-success'">
-                            {{challenge.name + ' (' + challenge.category + ")"}}
-                            <span class="pull-right">Points: {{challenge.points}}</span>
-                        </a>
-                    </div>
-                    <div ng-hide='ongoing' class="list-group">
-                        <a class="list-group-item list-group-item-warning">This Event Has Not Started</a>
-                    </div>
+<div id="page-wrapper" ng-controller="ScoreController">
+    <div class="col-lg-12 content">
+        <div class="container">
+            <div class="jumbotron text-right">
+                <h1>Current Score! <small>{{ctfEvent.title}}</h1>
 
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div id="team-box" class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-terminal fa-fw"></i> Teams
-                </div>
-                <div class="panel-body">
-                    <div ng-repeat="team in eventTeams">
-                         <div class="collapse-group form-group margin-bottom">
-                            <button class='btn btn-secondary btn-block' bcollapse>{{team.teamName}}<span class="badge pull-right">//todo</span></button>
-                            <div class="list-group collapse">
-                                <a ng-repeat="member in team.members track by $index" class="list-group-item">{{getUserName(member)}}<span class="badge pull-right">//todo</span></a>
-                            </div>
-                        </div>
+                <div ng-repeat="team in eventTeams" class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                        <span class="sr-only">0% Complete</span>
                     </div>
+                    <span class="progress-type">{{getTeamName(team)}}</span>
+                    <span class="progress-completed">0%</span>
                 </div>
             </div>
         </div>

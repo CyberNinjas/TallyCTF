@@ -6,6 +6,16 @@ angular.module('ctfEvents').filter('unselected', function() {
       }
     });
   };
+}).filter('memberTeams', function() {
+  return function(list, obj) {
+    return list.filter(function(item) {
+      for(var y = 0;y<obj.length;y++){
+        if (obj[y]._id === item._id) {
+          return true;
+        }
+      }
+    });
+  };
 }).filter('selected', function() {
   return function(list, obj) {
     return list.filter(function(item) {

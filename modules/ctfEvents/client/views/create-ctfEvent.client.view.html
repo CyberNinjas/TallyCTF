@@ -55,25 +55,25 @@
                     </div>
                 </div>
 
-                <div class="form-group collapse-group">
+                <div class="form-group collapse-group" ng-if="challengeOptions.items.length > 0 || challengeOptions.selectedItems.length > 0">
                     <button class="btn btn-secondary btn-block" bcollapse>Challenges</button>
                     <div class="collapse well well-lg">
-                        <div class="well list-group">
+                        <div>
                             <dual-multi options="challengeOptions"></dual-multi>
                         </div>
                     </div>
                 </div>
 
-                <div class="form-group collapse-group">
-                    <button class="btn btn-secondary btn-block" bcollapse>Teams</button>
-                    <div class="collapse well well-lg">
-                        <div>
-                            <dual-multi options="teamOptions"></dual-multi>
-                        </div>
-                    </div>
-                </div>
+                <!--<div class="form-group collapse-group">-->
+                    <!--<button class="btn btn-secondary btn-block" bcollapse>Teams</button>-->
+                    <!--<div class="collapse well well-lg">-->
+                        <!--<div>-->
+                            <!--<dual-multi options="teamOptions"></dual-multi>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
 
-                <div class="form-group collapse-group">
+                <div class="form-group collapse-group"ng-if=" userOptions.items.length > 0 || userOptions.selectedItems.length > 0">
                     <button class="btn btn-secondary btn-block" bcollapse>Users</button>
                     <div class="collapse well well-lg">
                         <div>

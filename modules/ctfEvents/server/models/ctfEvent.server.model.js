@@ -4,11 +4,9 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+  Schema = mongoose.Schema,
+  challengeSchema = require('../../../challenges/server/models/challenge.server.model.js');
 
-/**
- * CtfEvent Schema
- */
 var CtfEventSchema = new Schema({
   created: {
     type: Date,
@@ -54,24 +52,21 @@ var CtfEventSchema = new Schema({
       default: []
     }]
   },
-  challenges: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Challenge',
-    default: []
-  }],
-  teams: [{
-    teamId: String,
-    users: Array,
-  }],
+  challenges: [challengeSchema],
   users: [{
     type: Schema.Types.ObjectId,
-    ref: 'User',
-    default: []
+    ref: 'User'
+  }],
+  teams: [{
+    team: {
+      type: Schema.Types.ObjectId,
+      ref: 'Team'
+    },
+    members: [{
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }]
   }]
-  //scoreboard: {
-  //  type: Scema.Types.ObjectId,
-  //  ref: scoreBoard
-  //},
 });
 
 mongoose.model('CtfEvent', CtfEventSchema);
