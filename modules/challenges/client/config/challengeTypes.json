@@ -1,0 +1,22 @@
+[{
+  "displayName": "Multiple Choice",
+  "name": "multipleChoice",
+  "formats": [{
+    "name": "select",
+    "inputType": "radio"
+  },{
+    "name": "true-false",
+    "inputType": "checkbox"
+  }]
+}, {
+  "displayName": "Text",
+  "name": "text",
+  "formats": [
+    { "name":"short-answer",
+      "inputType": "text"
+    },
+    { "name": "long-answer",
+      "inputType": "text"
+    }
+  ]
+}]

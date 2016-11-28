@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = {
   client: {
@@ -59,4 +59,4 @@ module.exports = {
     policies: 'modules/*/server/policies/*.js',
     views: 'modules/*/server/views/*.html'
   }
-};
+}

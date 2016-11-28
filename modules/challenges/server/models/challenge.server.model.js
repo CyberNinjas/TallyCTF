@@ -1,14 +1,8 @@
-'use strict';
+'use strict'
 
-/**
- * Module dependencies.
- */
-var mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+var mongoose = require('mongoose')
+var Schema = mongoose.Schema
 
-/**
- * Challenge Schema
- */
 var ChallengeSchema = new Schema({
   created: {
     type: Date,
@@ -21,6 +15,9 @@ var ChallengeSchema = new Schema({
   lastModifiedBy: {
     type: String,
     required: 'Challenge must have last modified by user specified'
+  },
+  lastModifiedByIP: {
+    type: String
   },
   lastModified: {
     type: Date,
@@ -36,11 +33,11 @@ var ChallengeSchema = new Schema({
     required: 'Challenge must have a question',
     trim: true
   },
-  category: [{
+  category: {
     type: String,
     required: 'Challenge must belong to a category',
     trim: true
-  }],
+  },
   points: {
     type: Number,
     min: 0,
@@ -50,31 +47,47 @@ var ChallengeSchema = new Schema({
     type: String,
     trim: true
   }],
-  challenge_type: {
+  currentEvent: {
     type: String,
-    required: 'Each challege must be of the list of available challenge formats.',
+    trim: true
+  },
+  submissions: [{
+    team: String,
+    users: [{
+      name: String,
+      percentage: Number
+    }],
+    answer: String
+  }],
+  challengeType: {
+    type: String,
+    required: 'Each challenge must be of the list of available challenge formats.',
     enum: ['choice', 'text']
   },
-  challenge_format: {
+  challengeFormat: {
     type: String,
     required: 'Each answer must have a format.',
-    enum: ['true-false', 'select', 'multi-select', 'short-answer', 'long-answer'],
+    enum: ['true-false', 'select', 'multi-select', 'short-answer', 'long-answer']
+  },
+  numberOfSubmissionsAllowed:{
+    type: Number
   },
   answers: [{
     value: {
       type: String,
       required: 'Challenge answer must have a value.',
-      trim: true,
+      trim: true
     },
     isRegex: {
       type: Boolean,
-      default: false,
+      default: false
     },
     isCorrect: {
       type: Boolean,
-      default: false,
+      default: false
     }
-  }],
-});
+  }]
+})
 
-mongoose.model('Challenge', ChallengeSchema);
+module.exports = ChallengeSchema
+mongoose.model('Challenge', ChallengeSchema)

@@ -1,14 +1,6 @@
-'use strict';
+'use strict'
 
-/**
- * Module dependencies
- */
-var path = require('path'),
-  config = require(path.resolve('./config/config'));
+var path = require('path')
+var config = require(path.resolve('./config/config'))
 
-/**
- * Module init function.
- */
-module.exports = function (app, db) {
-
-};
+module.exports = function (app, db) {}
