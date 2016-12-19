@@ -1,5 +1,8 @@
 'use strict';
-angular.module('ctfEvents').controller('ScoreController', ['$scope','$state', '$filter', '$stateParams', '$location', '$q', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users', function($scope, $state, $filter, $stateParams, $location, $q, Authentication, CtfEvents, Challenges, Teams, Users) {
+angular.module('ctfEvents').controller('ScoreController', ['$scope', '$filter',
+  '$stateParams', '$q', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users',
+  function($scope, $filter, $stateParams, $q, Authentication, CtfEvents, Challenges, Teams, Users) {
+
   $scope.authentication = Authentication;
   $q.all([
     Users.query().$promise,
@@ -16,9 +19,7 @@ angular.module('ctfEvents').controller('ScoreController', ['$scope','$state', '$
     $scope.eventId = $stateParams.ctfEventId
     $scope.eventTeams = $filter('memberTeams')($scope.teams, $scope.ctfEvent.teams);
     $scope.eventChallenges = $filter('filter')($scope.challenges, $scope.ctfEvent.challenges);
+    console.log($scope.ctfEvent)
   });
 
-  $scope.getTeamName = function(team) {
-    return $filter('filter')($scope.teams, { _id: team.id })[0].teamName;
-  }
 }]);

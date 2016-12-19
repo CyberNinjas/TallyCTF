@@ -16,8 +16,6 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope','$state'
   }).then(function() {
     $scope.eventId = $stateParams.ctfEventId
     $scope.eventTeams = $filter('memberTeams')($scope.teams, $scope.ctfEvent.teams);
-    $scope.eventChallenges = $filter('filter')($scope.challenges, $scope.ctfEvent.challenges);
-    console.log($scope.ctfEvent)
     $scope.ongoing = $scope.isOngoing()
     $scope.getRemainingTime()
     $scope.remainingTime = $scope.ongoing === false ? '00:00:00' : $scope.hours + ':' + $scope.minutes
@@ -46,7 +44,7 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope','$state'
   });
 
   $scope.getPointTotal = function() {
-    var pointTotal = $scope.eventChallenges.reduce(function(total, challenge) {
+    var pointTotal = $scope.ctfEvent.challenges.reduce(function(total, challenge) {
       return total + challenge.points;
     }, 0);
     return pointTotal

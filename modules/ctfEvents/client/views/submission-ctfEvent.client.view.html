@@ -1,0 +1,19 @@
+<div class='col-lg-12 margin-top' ng-controller="SubmissionController">
+  <div class="col-lg-12">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{currentChallenge.name}} <b> {{currentChallenge.category}} ({{currentChallenge.points}}) points</b></h3>
+      </div>
+      <div class="panel-body">
+        {{currentChallenge.description}}
+      </div>
+     </div>
+    </div>
+    <form novalidate class='col-lg-12'>
+      <formly-form model="model" fields="fields" form="form">
+        <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Submit</button>
+        <button id="cancelBtn" name="cancelBtn" class="btn btn-inverse">Cancel</button>
+      </formly-form>
+    </form>
+  </div>
+</div>

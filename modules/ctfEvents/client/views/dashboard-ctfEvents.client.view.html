@@ -35,7 +35,7 @@
                 </div>
                 <div class="panel-body">
                     <div ng-show='ongoing' class="list-group">
-                        <a ng-repeat="challenge in eventChallenges" ui-sref="challenges.edit({challengeId: challenge._id})" ng-class="challenge.solved  ?'list-group-item disabled' : 'list-group-item list-group-item-success'">
+                        <a ng-repeat="challenge in ctfEvent.challenges" ui-sref="ctfEvents.submission({ctfEventId: ctfEvent._id, challengeId: challenge._id})" ng-class="challenge.solved  ?'list-group-item disabled' : 'list-group-item list-group-item-success'">
                             {{challenge.name + ' (' + challenge.category + ")"}}
                             <span class="pull-right">Points: {{challenge.points}}</span>
                         </a>
@@ -43,7 +43,6 @@
                     <div ng-hide='ongoing' class="list-group">
                         <a class="list-group-item list-group-item-warning">This Event Has Not Started</a>
                     </div>
-
                 </div>
             </div>
         </div>
