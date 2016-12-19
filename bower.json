@@ -20,7 +20,8 @@
     "angular-formly": "^8.4.0",
     "angular-formly-templates-bootstrap": "^6.3.2",
     "api-check": "^7.5.5",
-    "angularjs-slider": "^5.9.0"
+    "angularjs-slider": "^5.9.0",
+    "angular-ui-select": "^0.19.6"
   },
   "resolutions": {
     "angular": "~1.3"

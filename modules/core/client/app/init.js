@@ -49,13 +49,49 @@ angular.module(ApplicationConfiguration.applicationModuleName).run(function ($ro
     wrapper: ['bootstrapLabel', 'bootstrapHasError']
   });
 
-  //range slider type
   formlyConfig.setType({
-    name: 'range-slider',
-    template: ['<rzslider rz-slider-model="model[options.key].low"' +
-    'rz-slider-high="model[options.key].high" ' +
-    'rz-slider-options="to.sliderOptions"></rzslider>'].join(' '),
-    wrapper: ['bootstrapLabel', 'bootstrapHasError']
+    name: 'multiselect',
+    extends: 'select',
+    defaultOptions: {
+      ngModelAttrs: {
+        'true': {
+          value: 'multiple'
+        }
+      }
+    }
+  })
+
+  var unique = 1;
+  formlyConfig.setType({
+    name: 'repeatSection',
+    templateUrl: 'repeatSection.html',
+    controller: function($scope) {
+      $scope.formOptions = {formState: $scope.formState};
+      $scope.copyFields = copyFields;
+      function addRandomIds(fields) {
+        unique++;
+        angular.forEach(fields, function(field, index) {
+          if (field.fieldGroup) {
+            addRandomIds(field.fieldGroup);
+            return;
+          }
+          if (field.templateOptions && field.templateOptions.fields) {
+            addRandomIds(field.templateOptions.fields);
+          }
+          field.id = field.id || (field.key + '_' + index + '_' + unique + getRandomInt(0, 9999));
+        });
+      }
+
+      function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+      }
+
+      function copyFields(fields, ceiling) {
+        fields = angular.copy(fields);
+        addRandomIds(fields);
+        return fields;
+      }
+    }
   });
 });
 
