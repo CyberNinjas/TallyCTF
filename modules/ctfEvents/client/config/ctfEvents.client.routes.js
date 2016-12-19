@@ -32,18 +32,6 @@ angular.module('ctfEvents').config(['$stateProvider',
       data: {
         roles: ['user']
       }
-    }).state('ctfEvents.registration-team-view', {
-      url: '/register/:ctfEventId',
-      templateUrl: 'modules/ctfEvents/client/views/captainRegistration-ctfEvent.client.view.html',
-      data: {
-        roles: ['user']
-      }
-    }).state('ctfEvents.registration-users-add-view', {
-      url: '/register/:ctfEventId',
-      templateUrl: 'modules/ctfEvents/client/views/captainRegistration-ctfEvent.client.view.html',
-      data: {
-        roles: ['user']
-      }
     }).state('ctfEvents.create', {
       url: '/create',
       templateUrl: 'modules/ctfEvents/client/views/create-ctfEvent.client.view.html',
@@ -53,6 +41,12 @@ angular.module('ctfEvents').config(['$stateProvider',
     }).state('ctfEvents.board', {
       url: '/board/:ctfEventId',
       templateUrl: 'modules/ctfEvents/client/views/scoreboard-ctfEvents.client.view.html',
+      data: {
+        roles: ['user']
+      }
+    }).state('ctfEvents.submission', {
+      url: '/submit/:ctfEventId/:challengeId',
+      templateUrl: 'modules/ctfEvents/client/views/submission-ctfEvent.client.view.html',
       data: {
         roles: ['user']
       }

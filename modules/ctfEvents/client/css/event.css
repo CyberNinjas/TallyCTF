@@ -5,6 +5,10 @@ body{
     height: 100%;
 }
 
+.push-right{
+    margin-right: 5px;
+}
+
 .progress {
     position: relative;
     height: 25px;
