@@ -38,6 +38,10 @@
 </head>
 
 <body class="ng-cloak">
+
+<!--We don't have access to the far left of the page within modules.-->
+<!--Adding a sidebar was only possible in the server layout view.-->
+
 <div class="col-md-12 full-height no-pad">
     <header ng-include="'/modules/core/client/views/header.client.view.html'"
             class="col-md-12 navbar navbar-fixed-top navbar-inverse"></header>
@@ -58,7 +62,6 @@
 
                 <div class="side-menu-container">
                     <ul class="nav navbar-nav" ng-click="">
-                        <li><a href="#"><span class="glyphicon glyphicon-send"></span> My Team</a></li>
                         <li><a ui-sref="ctfEvents.registration({ctfEventId: $state.params.ctfEventId})"><span class="glyphicon glyphicon-send"></span>Registration</a></li>
                         <li><a ui-sref="ctfEvents.board({ctfEventId: $state.params.ctfEventId})"><span class="glyphicon glyphicon-signal"></span>Scoreboard</a></li>
                         <li><a href="#"><span class="glyphicon glyphicon-plane"></span> Chat</a></li>
