@@ -40,7 +40,25 @@ angular.module(ApplicationConfiguration.applicationModuleName).run(function ($ro
       };
     }
   });
+}).run(function(formlyConfig) {
+  // single slider type
+  formlyConfig.setType({
+    name: 'slider',
+    template: ['<rzslider rz-slider-model="model[options.key]"' +
+    ' rz-slider-options="to.sliderOptions"></rzslider>'].join(' '),
+    wrapper: ['bootstrapLabel', 'bootstrapHasError']
+  });
+
+  //range slider type
+  formlyConfig.setType({
+    name: 'range-slider',
+    template: ['<rzslider rz-slider-model="model[options.key].low"' +
+    'rz-slider-high="model[options.key].high" ' +
+    'rz-slider-options="to.sliderOptions"></rzslider>'].join(' '),
+    wrapper: ['bootstrapLabel', 'bootstrapHasError']
+  });
 });
+
 //Then define the init function for starting up the application
 angular.element(document).ready(function () {
   //Fixing facebook bug with redirect

@@ -8,7 +8,7 @@ var path = require('path'),
     './modules/core/server/controllers/errors.server.controller'));
 
 var addUserToTeam = function (user, team) {
-  user.team.push(team._id);
+  user.teams.push(team._id);
   if (user.roles.indexOf('teamCaptain') === -1) {
     user.roles.push('teamCaptain');
   }
@@ -24,9 +24,10 @@ var addUserToTeam = function (user, team) {
 
 exports.create = function (req, res) {
   var team = new Team(req.body);
+  console.log(req.body)
   team.save(function (err) {
     if (!err) {
-      //addUserToTeam(req.user, team);
+      addUserToTeam(req.user, team);
       res.json(req.user);
     } else {
       return res.status(422)

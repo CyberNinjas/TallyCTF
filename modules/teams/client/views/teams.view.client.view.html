@@ -1,6 +1,6 @@
 <section ng-controller="TeamsViewController">
   <div class="page-header">
-    <div class="pull-right" ng-if='!isCaptain() && team.members.indexOf(authentication._id) > -1'>
+    <div class="pull-right" ng-if='!isCaptain() && team.members && team.members.indexOf(authentication._id) > -1'>
       <a class="btn btn-warning" ng-click="leaveTeam()">
           <i class="glyphicon glyphicon-log-out"></i>
         </a>
@@ -23,7 +23,7 @@
 
   <h2>Team Members</h2>
   <div class="list-group">
-    <div ng-if="team" ng-repeat="member in users | members:team" class="list-group-item">
+    <div ng-if="team.members" ng-repeat="member in users | members:team" class="list-group-item">
       <div ng-show="team.teamCaptain === user._id" class="pull-right">
         <small>
           <p>Team Captain</p>

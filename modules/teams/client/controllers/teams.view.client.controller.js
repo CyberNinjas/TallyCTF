@@ -38,7 +38,6 @@ angular.module('teams')
         }, function (errorResponse) {
           $scope.error = errorResponse.data.message;
         });
-        console.log($scope.team)
       }
 
       $scope.accept = function (user, index) {
@@ -51,7 +50,7 @@ angular.module('teams')
         });
 
         var currentUser = $filter('filter')($scope.users, { _id: user._id })[0];
-        // currentUser.requestedToJoin.splice(currentUser.requestedToJoin.indexOf($scope.team._id))
+        currentUser.requestedToJoin.splice(currentUser.requestedToJoin.indexOf($scope.team._id))
         currentUser.teams.push($scope.team._id)
         Users.update(currentUser, function () {
         }, function (errorResponse) {

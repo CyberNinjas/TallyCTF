@@ -1,8 +1,8 @@
 'use strict'
 angular.module('teams')
-  .controller('CreateTeamsController', ['$scope', '$state', '$controller',
-    'Teams',
-    function ($scope, $state, $controller, Teams) {
+  .controller('CreateTeamsController', ['$scope', '$state','$filter', '$controller',
+    'Teams', 'Users', 'Authentication',
+    function ($scope, $state, $filter, $controller, Teams, Users, Authentication) {
 
       $controller('BaseTeamsController', {
         $scope: $scope
@@ -33,7 +33,6 @@ angular.module('teams')
           $scope.error = errorResponse.data.message;
         }).$promise.then(function(){
           if(!$scope.error){
-            $scope.authentication.roles.push('teamCaptain');
             $state.go('teams.add', {
               teamId: team._id
             });
