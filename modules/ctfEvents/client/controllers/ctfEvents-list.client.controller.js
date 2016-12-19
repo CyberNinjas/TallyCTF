@@ -2,9 +2,8 @@
 angular.module('ctfEvents').controller('ListEventsController', ['$state', '$scope', '$stateParams',
   '$location', '$filter', '$q', 'Teams', 'Authentication', 'CtfEvents', 'usersTeamsService', 'ModalService',
   function($state, $scope, $stateParams, $location, $filter, $q, Teams, Authentication, CtfEvents, usersTeamsService, ModalService) {
-    $scope.userId = Authentication.user._id
 
-    console.log(Authentication.user)
+    $scope.userId = Authentication.user._id
     $scope.ctfEvents = CtfEvents.query();
 
     $scope.isRegistered = function(ctfEvent) {
@@ -57,7 +56,7 @@ angular.module('ctfEvents').controller('ListEventsController', ['$state', '$scop
             usersTeamsService.resetTeams()
             if(result.teamName !== 'None') {
               ctfEvent.teams.push({
-                _id: result._id,
+                team: result._id,
                 members: [Authentication.user._id]
               })
             }

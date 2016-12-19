@@ -1,29 +1,25 @@
 'use strict';
-angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$filter', '$stateParams', '$location', '$q', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users', function ($scope, $filter, $stateParams, $location, $q, Authentication, CtfEvents, Challenges, Teams, Users) {
+angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$filter', '$state', '$stateParams', '$location', '$q', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users', function ($scope, $filter, $state, $stateParams, $location, $q, Authentication, CtfEvents, Challenges, Teams, Users) {
   $q.all([
     Users.query().$promise,
     Challenges.query().$promise,
-    Teams.query().$promise,
-    CtfEvents.get({ ctfEventId: $stateParams.ctfEventId }),
+    CtfEvents.get({ ctfEventId: $stateParams.ctfEventId }).$promise,
   ]).then(function (data) {
     $scope.users = data[0];
     $scope.challenges = data[1];
-    $scope.teams = data[2];
-    $scope.ctfEvent = data[3];
+    $scope.ctfEvent = data[2];
     return
   }).then(function () {
-    $scope.teamOptions = {
-      title: 'Teams',
-      display: 'teamName',
-      items: $filter('unselectedTeam')($scope.teams, $scope.ctfEvent.teams),
-      selectedItems: $filter('selectedTeam')($scope.teams, $scope.ctfEvent.teams)
-    };
+
     $scope.challengeOptions = {
       title: 'Challenges',
       display: 'name',
-      items: $filter('unselected')($scope.challenges, $scope.ctfEvent.challenges),
-      selectedItems: $filter('selected')($scope.challenges, $scope.ctfEvent.challenges)
+      items: $filter('unselectedObject')($scope.challenges, $scope.ctfEvent.challenges),
+      selectedItems: $filter('selectedObject')($scope.challenges, $scope.ctfEvent.challenges)
     };
+    console.log($scope.ctfEvent.challenges)
+    console.log($scope.challenges)
+
     $scope.userOptions = {
       title: 'Users',
       display: 'firstName',
@@ -34,18 +30,9 @@ angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$fi
 
   $scope.remove = function (ctfEvent) {
     if (!confirm('Are you sure that you want to delete this event?')) return;
-    if (ctfEvent) {
-      CtfEvents.remove(ctfEvent, function (response) {})
-      for (var i in $scope.ctfEvents) {
-        if ($scope.ctfEvents[i] === ctfEvent) {
-          $scope.ctfEvents.splice(i, 1);
-        }
-      }
-    } else {
-      CtfEvents.remove(ctfEvent, function (response) {
-        $location.path('ctfEvents');
-      });
-    }
+    CtfEvents.remove({ ctfEventId: $scope.ctfEvent._id }, function (response) {
+      $location.path('ctfEvents');
+    });
   };
 
   $scope.update = function (isValid) {
@@ -54,42 +41,18 @@ angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$fi
       $scope.$broadcast('show-errors-check-validity', 'ctfEventForm');
       return false;
     }
-    var ctfEvent = $scope.ctfEvent;
-    ctfEvent.challenges = $scope.challengeOptions.selectedItems.map(function (obj) {
-      return obj._id
+    $scope.ctfEvent.challenges = []
+    $scope.challengeOptions.selectedItems.forEach(function (obj) {
+      $scope.ctfEvent.challenges.push(obj);
     })
-    ctfEvent.users = $scope.userOptions.selectedItems.map(function (obj) {
-      return obj._id
+    $scope.ctfEvent.users = []
+    $scope.userOptions.selectedItems.forEach(function (obj) {
+      $scope.ctfEvent.users.push(obj._id);
     })
-    ctfEvent.teams = []
-    var teams = $scope.teamOptions.selectedItems.map(function (obj) {
-      var team_listing = Teams.get({
-        teamId: String(obj._id)
-      });
-      team_listing.$promise.then(function (data) {
-        var existingUsers = []
-        var members = team_listing.members.map(function (member) {
-          return member._id
-        })
-        for (var user = 0; user < ctfEvent.users.length; user++) {
-          if (members.indexOf(ctfEvent.users[user]) > -1) {
-            existingUsers.push(ctfEvent.users[user])
-          }
-        }
-        var team = {
-          teamId: team_listing._id,
-          users: existingUsers
-        }
-        ctfEvent.teams.push(team)
-        return team
-      })
-      team_listing.$promise.finally(function (data) {
-        CtfEvents.update(ctfEvent, function () {
-          $location.path('ctfEvents');
-        }, function (errorResponse) {
-          $scope.error = errorResponse.data.message;
-        });
-      })
-    })
-  };
+    CtfEvents.update($scope.ctfEvent, function () {
+      $state.reload()
+    }, function (errorResponse) {
+      $scope.error = errorResponse.data.message;
+    });
+  }
 }])

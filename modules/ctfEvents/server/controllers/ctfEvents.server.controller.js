@@ -35,7 +35,6 @@ exports.update = function(req, res) {
   ctfEvent.teams = req.body.teams;
   ctfEvent.challenges = req.body.challenges;
   ctfEvent.users = req.body.users;
-  console.log(ctfEvent)
   ctfEvent.save(function(err) {
     if(err) {
       return res.status(400).send({

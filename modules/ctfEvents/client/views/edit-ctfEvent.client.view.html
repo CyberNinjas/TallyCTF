@@ -4,8 +4,7 @@
             <button type='button' class="btn btn-success dropdown-toggle" ng-click="update(ctfEventForm.$valid)">
                 Update
             </button>
-        </div>
-        <div class="btn-group pull-right">
+        <div class="btn-group">
             <button type="button" class="btn btn-default dropdown-toggle margin-right" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                 Options <span class="caret"></span>
@@ -13,6 +12,7 @@
             <ul class="dropdown-menu">
                 <li><a style="cursor: pointer" ng-click="remove()">Delete Event</a></li>
             </ul>
+        </div>
         </div>
         <h1 ng-bind="ctfEvent.title"></h1>
     </div>
