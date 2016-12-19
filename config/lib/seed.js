@@ -123,6 +123,7 @@ module.exports.start = function start(options) {
   if (_.has(options, 'seedAdmin')) {
     seedOptions.seedAdmin = options.seedAdmin;
   }
+  console.log(seedOptions.seedAdmin)
   var User = mongoose.model('User');
   return new Promise(function (resolve, reject) {
     var adminAccount = new User(seedOptions.seedAdmin);

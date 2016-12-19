@@ -7,12 +7,17 @@ module.exports = {
         'public/lib/bootstrap/dist/css/bootstrap.css',
         'public/lib/bootstrap/dist/css/bootstrap-theme.css',
         'public/lib/angular-bootstrap/ui-bootstrap-csp.js',
+        'public/lib/angularjs-slider/dist/rzslider.css',
         'public/lib/sweetalert/dist/sweetalert.css',
         'public/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'
       ],
       js: [
-        'public/lib/jquery/dist/jquery.min.js',
+        'public/lib/api-check/dist/api-check.js',
         'public/lib/angular/angular.js',
+        'public/lib/angular-formly/dist/formly.js',
+        'public/lib/angular-formly-templates-bootstrap/dist/angular-formly-templates-bootstrap.js',
+        'public/lib/angularjs-slider/dist/rzslider.js',
+        'public/lib/jquery/dist/jquery.min.js',
         'public/lib/angular-resource/angular-resource.js',
         'public/lib/angular-animate/angular-animate.js',
         'public/lib/angular-messages/angular-messages.js',
