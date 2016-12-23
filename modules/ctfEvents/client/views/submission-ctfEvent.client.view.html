@@ -1,4 +1,12 @@
 <div class='col-lg-12 margin-top' ng-controller="SubmissionController">
+  <div class="page-header">
+    <div class="pull-right">
+      <a class="btn btn-success" ui-sref="ctfEvents.dashboard({ctfEventId: ctfEvent._id})">
+        <i class="glyphicon glyphicon-hand-left"></i>
+      </a>
+    </div>
+    <h1>{{ctfEvent.title}}</h1>
+  </div>
   <div class="col-lg-12">
     <div class="panel panel-success">
       <div class="panel-heading">
