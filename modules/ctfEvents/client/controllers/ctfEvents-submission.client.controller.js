@@ -19,7 +19,6 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
     angular.forEach($scope.challenges, function (challenge) {
       if(challenge._id === $stateParams.challengeId){
         $scope.currentChallenge = challenge;
-        console.log($scope.currentChallenge)
       }
     })
     angular.forEach($scope.ctfEvent.teams, function (team) {
@@ -29,16 +28,17 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
         $scope.availableUsers = $scope.currentTeam.members.map(function (user) { return {"name": $scope.getUserName(user), "value": $scope.getUserName(user)} })
       }
     })
+
     $scope.model = {
       contributingUsers: [],
-      selectedUsers: $scope.availableUsers,
+      selectedUsers: [],
       selects: [],
       texts: $scope.currentChallenge.answers
     };
 
     $scope.fields = [
       {
-        key: 'nested.story',
+        key: 'answer',
         type: 'textarea',
         templateOptions: {
           label: 'Your answer',
@@ -48,7 +48,7 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
         hideExpression: "model.texts.length < 1",
       },
       {
-        key: "selectedUsers",
+        key: "answer",
         type: "multiCheckbox",
         className: 'multi-check',
         templateOptions: {
@@ -63,15 +63,19 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
         className: 'multi-check',
         templateOptions: {
           label: "Contributing Users",
-          options: $scope.model.selectedUsers,
+          options: $scope.availableUsers,
           onClick: function($modelValue, $viewValue, scope, event) {
             var numberOfUsers = $scope.model.selectedUsers.length;
             var users = $scope.model.selectedUsers.map(function (user) {
               var portion = 100 / numberOfUsers;
-              return {"name": user, "value": portion, "newVal": portion}
+              return {"name": user, "value": portion, "ceiling": portion}
             })
             $scope.model.contributingUsers = users;
           }
+        },
+        controller: function($scope) {
+          $scope.model.selectedUsers.push(Authentication.user.displayName)
+          $scope.model.contributingUsers.push({"name": Authentication.user.displayName, "value": 100, "ceiling": 100})
         }
       },
       {
@@ -88,9 +92,6 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
                     sliderOptions: {
                       label: "userName",
                       floor: 0,
-                      onClick: function($modelValue, $viewValue, scope, event) {
-                        console.log($viewValue)
-                      },
                       translate: function(value) {
                         return value + '%';
                       },
@@ -99,12 +100,22 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
                         angular.forEach($scope.model.contributingUsers,function (user) {
                           total += user.value;
                         })
+
+                        angular.forEach($scope.model.contributingUsers, function (user) {
+                          user.value = (100 - (total - user.value))
+                        })
                       },
                     },
-                    expressionProperties: {
-                      'to.ceil': 44,
-                    },
-                  }
+                  },
+                  expressionProperties: {
+                    'templateOptions.sliderOptions.ceil': function($viewValue, $modelValue, scope) {
+                      angular.forEach($scope.model.contributingUsers, function (user) {
+                        if(user.value === $viewValue){
+                          return user.ceiling
+                        }
+                      })
+                    }
+                  },
                 },
               ]
             },
@@ -112,15 +123,18 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
         }
       },
     ];
-
   })
 
-    $scope.getUserName = function(id) {
-      return $filter('filter')($scope.users, { _id: id })[0].displayName;
-    }
-    $scope.changeContributors = function($viewValue, $modelValue, $scope) {
-        console.log($viewValue)
-        console.log($modelValue)
-    }
-  $scope.submit = function(answer){ }
-  }])
+  $scope.getUserName = function(id) {
+    return $filter('filter')($scope.users, { _id: id })[0].displayName;
+  }
+  $scope.changeContributors = function($viewValue, $modelValue, $scope) {}
+  $scope.submit = function(answer){
+    angular.forEach($scope.ctfEvent.challenges, function (challenge, index) {
+      if($scope.currentChallenge._id === challenge._id){
+        $scope.ctfEvent.challenges[index].submissions.push($scope.model.answer);
+      }
+    })
+    console.log($scope.ctfEvent)
+  }
+ }])
