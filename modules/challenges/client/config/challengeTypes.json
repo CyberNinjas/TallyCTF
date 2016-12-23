@@ -1,22 +1,22 @@
 [{
-  "displayName": "Multiple Choice",
-  "name": "multipleChoice",
+  "name": "Multiple Choice",
+  "value": "multipleChoice",
   "formats": [{
-    "name": "select",
-    "inputType": "radio"
+    "name": "Select",
+    "value": "radio"
   },{
-    "name": "true-false",
-    "inputType": "checkbox"
+    "name": "True-False",
+    "value": "checkbox"
   }]
 }, {
-  "displayName": "Text",
-  "name": "text",
+  "name": "Text",
+  "value": "text",
   "formats": [
-    { "name":"short-answer",
-      "inputType": "text"
+    { "name":"Short-Answer",
+      "value": "text"
     },
-    { "name": "long-answer",
-      "inputType": "text"
+    { "name": "Long-Answer",
+      "value": "text"
     }
   ]
 }]

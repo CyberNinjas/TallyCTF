@@ -10,17 +10,118 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
       }
     )
 
+    $scope.model = {answers: []};
     $scope.challenge = Challenges.get({ challengeId: $scope.id })
     $scope.challenge.$promise.then(function () {
-      $scope.challenge.type = $scope.challengeTypes.filter(function (obj) {
-        return obj.name === $scope.challenge.challengeType
-      })[0]
-      $scope.updateType()
-      $scope.challenge.format = $scope.challenge.formats.filter(function (obj) {
-        return obj.name === $scope.challenge.challengeFormat
-      })[0]
-      $scope.updateFormat()
+    $scope.model.type = $scope.challenge.challengeType
+    //Placeholder to be populated with user data
+    $scope.machines = ['AWS', 'Azure', 'Heroku', 'Local'].map(function (machine) {
+      return {name: machine, value: machine}
     })
+
+
+    $scope.fields = [
+      {
+        className: 'row',
+        fieldGroup: [
+          {
+            className: 'col-xs-4',
+            type: 'input',
+            key: 'name',
+            templateOptions: {
+              label: 'Name'
+            }
+          },
+          {
+            className: 'col-xs-4',
+            type: 'input',
+            key: 'points',
+            templateOptions: {
+              label: 'Points'
+            }
+          },
+          {
+            className: 'col-xs-4',
+            type: 'input',
+            key: 'category',
+            templateOptions: {
+              label: 'Category'
+            },
+          }
+        ]
+      },
+      {
+        className: 'row',
+        fieldGroup: [
+          {
+            className: 'col-xs-12',
+            type: 'textarea',
+            key: 'description',
+            templateOptions: {
+              label: 'Description'
+            }
+          }
+        ]
+      },
+       {
+        className: 'row',
+        fieldGroup: [
+          {
+            className: 'col-xs-4',
+            type: 'select',
+            key: 'machine',
+            templateOptions: {
+              label: 'Affected Machine',
+              options: $scope.machines
+            }
+          },
+          {
+            className: 'col-xs-4',
+            type: 'select',
+            key: 'type',
+            templateOptions: {
+              label: 'Challenge Type',
+              options: $scope.challengeTypes
+            }
+          },
+          {
+            className: 'col-xs-4',
+            type: 'select',
+            key: 'format',
+            templateOptions: {
+              label: 'Challenge Format',
+            },
+            expressionProperties: {
+              'templateOptions.options': function () {
+                return $scope.challengeTypes.filter(function (type) {
+                  return type.value === $scope.model.type;
+                })[0].formats
+              }
+            }
+          }
+        ]
+      },
+      {
+        className: 'row',
+        fieldGroup: [
+          {
+            className: 'col-xs-12',
+            key: 'answers',
+            type: 'multiInput',
+            templateOptions: {
+              label: 'Answers',
+              inputOptions: {
+                type: 'input'
+              }
+            },
+            expressionProperties: {
+              'templateOptions.disabled': 'model.format === checkbox'
+            }
+          }
+        ]
+      }
+    ];
+   })
 
     $scope.updateOrCreate = function (isValid) {
       $scope.error = ''
@@ -40,72 +141,11 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
       })
     }
 
-    $scope.updateType = function () {
-      if ($scope.challenge.type.name === 'text') {
-        angular.forEach($scope.challenge.answers, function (answer) {
-          answer.isCorrect = true
-        })
-      }
-      $scope.challenge.formats = $scope.challengeTypes.filter(function (obj) {
-        return obj.name === $scope.challenge.type.name
-      })[0].formats
-      var format = $scope.challenge.formats[Object.keys($scope.challenge.formats)[0]]
-
-      $scope.challenge.format = $scope.challenge.formats.filter(function (obj) {
-        return obj.name === format.name
-      })[0]
-    }
-
-    $scope.updateFormat = function () {
-      if ($scope.challenge.format && $scope.challenge.format.requiredAnswers && $scope.challenge.format.requiredAnswers.length > 0) {
-        $scope.challenge.answers = angular.copy($scope.challenge.format.requiredAnswers)
-        $scope.allowAddAnswers = false
-      } else {
-        $scope.allowAddAnswers = true
-      }
-    }
-
-    $scope.existsCorrectAnswer = function () {
-      if (!$scope.challenge || !$scope.challenge.answers || $scope.challenge.answers.length < 1) {
-        return false
-      }
-      var correctAnswers = filterFilter($scope.challenge.answers, { isCorrect: true })
-      return (correctAnswers.length > 0)
-    }
-
     $scope.removeChallenge = function () {
       if (confirm('Are you sure you want to delete the challenge?')) {
         $scope.challenge.$remove(function () {
           $location.path('challenges')
         })
       }
-    }
-
-    $scope.addAnswer = function () {
-      if (!$scope.answerValue) {
-        return
-      }
-      if (!$scope.challenge.answers) {
-        $scope.challenge.answers = []
-      }
-      $scope.challenge.answers.push({
-        value: $scope.answerValue,
-        isRegex: false,
-        isCorrect: ($scope.challenge.type.name === 'text')
-      })
-      $scope.answerValue = ''
-    }
-
-    $scope.removeAnswer = function (index) {
-      if (typeof index !== 'undefined') {
-        $scope.challenge.answers.splice(index, 1)
-      }
-    }
-
-    $scope.toggleAnswerRegEx = function (index) {
-      if (!$scope.challenge || !$scope.challenge.answers || !$scope.challenge.answers[index]) {
-        return
-      }
-      $scope.challenge.answers[index].isRegex = !$scope.challenge.answers[index].isRegex
     }
   }])

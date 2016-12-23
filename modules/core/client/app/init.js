@@ -41,7 +41,6 @@ angular.module(ApplicationConfiguration.applicationModuleName).run(function ($ro
     }
   });
 }).run(function(formlyConfig) {
-  // single slider type
   formlyConfig.setType({
     name: 'slider',
     template: ['<rzslider rz-slider-model="model[options.key]"' +
@@ -60,6 +59,27 @@ angular.module(ApplicationConfiguration.applicationModuleName).run(function ($ro
       }
     }
   })
+
+  formlyConfig.setType({
+    name: 'multiInput',
+    templateUrl: 'multiInput.html',
+    defaultOptions: {
+      noFormControl: true,
+      wrapper: ['bootstrapLabel', 'bootstrapHasError'],
+      templateOptions: {
+        inputOptions: {
+          wrapper: null
+        }
+      }
+    },
+    controller: function($scope) {
+      $scope.copyItemOptions = copyItemOptions;
+
+      function copyItemOptions() {
+        return angular.copy($scope.to.inputOptions);
+      }
+    }
+  });
 
   var unique = 1;
   formlyConfig.setType({
