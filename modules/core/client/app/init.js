@@ -59,10 +59,9 @@ angular.module(ApplicationConfiguration.applicationModuleName).run(function ($ro
       }
     }
   })
-
   formlyConfig.setType({
     name: 'multiInput',
-    templateUrl: 'multiInput.html',
+    templateUrl: 'modules/challenges/client/views/answers.template.html',
     defaultOptions: {
       noFormControl: true,
       wrapper: ['bootstrapLabel', 'bootstrapHasError'],
