@@ -1,12 +1,12 @@
 <section ng-controller="ChallengeUpdateController">
     <div class="page-header">
-        <div class="pull-right" ng-if="id!='new'">
-            <a class="btn btn-primary" ng-click="removeChallenge()">
+        <div class="pull-right">
+            <button class="btn btn-primary"  ng-click="updateOrCreate()">Update</button>
+            <a class="btn btn-danger" ng-click="removeChallenge()" ng-if="id!='new'">
                 <i class="glyphicon glyphicon-trash"></i>
             </a>
         </div>
-        <h1>Challenge Detail
-        <button  class="btn btn-primary pull-right">Update</button></h1>
+        <h1>Challenge Detail</h1>
     </div>
     <div class="col-md-12">
         <form ng-submit="submit()" novalidate>
@@ -14,34 +14,3 @@
         </form>
     </div>
 </section>
-
-<script type="text/ng-template" id="multiInput.html">
-    <div>
-        <div class="clearfix">
-            <div class="row"
-                 style="margin-bottom:14px"
-                 ng-repeat="item in model[options.key] track by $index"
-                 ng-init="itemOptions = copyItemOptions()">
-                <formly-field class="no-padding col-xs-10"
-                              options="itemOptions"
-                              model="model[options.key]"
-                              form="form"
-                              index="$index">
-                </formly-field>
-                <div class="col-xs-2" style="margin-top:6px">
-                  <button type="button" class="btn btn-warning btn-xs" ng-click="model[options.key].splice($index, 1)">Remove</button>
-                  <input ng-if="model.format == 'radio'" type="radio" name="answers" ng-model="challenge.answers[$index].isCorrect" ng-value="true" ng-checked="answer.isCorrect" required/>
-                  <input ng-if="model.format == 'checkbox'" type="checkbox" name="answers" ng-model="challenge.answers[$index].isCorrect" ng-value="true" ng-checked="answer.isCorrect"/>
-                  <button class="btn btn-xs btn-info"
-                          ng-class="{'btn-success': answer.isRegex, 'btn-default' : !answer.isRegex}"
-                          ng-if="model.format == 'text' || model.format == 'textarea'">
-                          RegEx
-                  </button>
-                </div>
-            </div>
-        </div>
-        <div>
-            <button type="button" class="btn btn-success btn-xs" ng-click="model[options.key].push('')">Add</button>
-        </div>
-    </div>
-</script>
