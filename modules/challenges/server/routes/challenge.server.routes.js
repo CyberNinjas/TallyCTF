@@ -13,11 +13,11 @@ module.exports = function (app) {
   app.route('/api/challenges/new')
   //.all(challengesPolicy.isAllowed)
   .get(challenges.default)
-  .post(challenges.updateOrCreate)
+  .put(challenges.updateOrCreate)
 
   app.route('/api/challenges/:challengeId').all(challengesPolicy.isAllowed)
   .get(challenges.read)
-  .post(challenges.updateOrCreate)
+  .put(challenges.updateOrCreate)
   .delete(challenges.delete)
 
   app.param('challengeId', challenges.challengeByID)
