@@ -16,6 +16,7 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
     return
   }).then(function() {
     $scope.eventId = $stateParams.ctfEventId
+
     angular.forEach($scope.challenges, function (challenge) {
       if(challenge._id === $stateParams.challengeId){
         $scope.currentChallenge = challenge;
@@ -130,11 +131,15 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
   }
   $scope.changeContributors = function($viewValue, $modelValue, $scope) {}
   $scope.submit = function(answer){
+    var submission = {}
+    submission.team = $scope.currentTeam
+    submission.contributors = $scope.model.contributingUsers
+    submission.answer = $scope.model.answer
     angular.forEach($scope.ctfEvent.challenges, function (challenge, index) {
       if($scope.currentChallenge._id === challenge._id){
-        $scope.ctfEvent.challenges[index].submissions.push($scope.model.answer);
+        $scope.ctfEvent.challenges[index].submissions.push(submission);
       }
     })
-    console.log($scope.ctfEvent)
+    // Save the submission here
   }
  }])

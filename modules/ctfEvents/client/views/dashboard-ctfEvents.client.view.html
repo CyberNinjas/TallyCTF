@@ -48,13 +48,24 @@
                     </div>
                     <i class="fa fa-question fa-fw"></i> Challenges
                 </div>
-                <div class="panel-body">
-                    <div ng-show='ongoing' class="list-group">
-                        <a ng-repeat="challenge in ctfEvent.challenges" ui-sref="ctfEvents.submission({ctfEventId: ctfEvent._id, challengeId: challenge._id})" ng-class="challenge.solved  ?'list-group-item disabled' : 'list-group-item list-group-item-success'">
-                            {{challenge.name + ' (' + challenge.category + ")"}}
-                            <span class="pull-right">Points: {{challenge.points}}</span>
-                        </a>
-                    </div>
+                <div class="panel-body" id="challenges">
+                    <a ng-show='ongoing' class="list-group">
+
+                     <div ng-repeat="challenge in ctfEvent.challenges">
+                        <div uib-accordion-group class="list-group-item list-group-item-success">
+                          {{challenge.name + ' (' + challenge.category + ")   "}}
+                            <span class="pull-right">Points: {{challenge.points}}
+                              <a class="btn btn-xs" ui-sref="ctfEvents.submission({ctfEventId: ctfEvent._id, challengeId: challenge._id})">
+                                  <span class="glyphicon glyphicon-book"></span>
+                              </a>
+                             <a ng-click="challenge.isCollapsed = !challenge.isCollapsed" class="glyphicon glyphicon-eye-open"></a>
+                            </span>
+                        </div>
+                        <div uib-collapse="challenge.isCollapsed" ng-show="challenge.isCollapsed">
+                          <div class="well well-lg">{{challenge.description}}</div>
+                        </div>
+                     </div>
+
                     <div ng-hide='ongoing' class="list-group">
                         <a class="list-group-item list-group-item-warning">This Event Has Not Started</a>
                     </div>

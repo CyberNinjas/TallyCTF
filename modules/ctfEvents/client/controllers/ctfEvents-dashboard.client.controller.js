@@ -10,6 +10,11 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope','$state'
   ]).then(function(data) {
     $scope.users = data[0];
     $scope.challenges = data[1];
+    $scope.challenges.map(function (challenge) {
+      challenge.isCollapsed = true
+      return challenge
+    })
+    console.log($scope.challenges)
     $scope.teams = data[2];
     $scope.ctfEvent = data[3];
     return
