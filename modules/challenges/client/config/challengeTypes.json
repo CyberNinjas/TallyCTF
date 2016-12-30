@@ -1,6 +1,7 @@
 [{
   "name": "multiple choice",
   "value": "multipleChoice",
+  "submissions": 2,
   "formats": [{
     "name": "select",
     "value": "radio"
@@ -11,6 +12,7 @@
 }, {
   "name": "text",
   "value": "text",
+  "submissions": 3,
   "formats": [
     { "name":"short-answer",
      "value":"short-answer",

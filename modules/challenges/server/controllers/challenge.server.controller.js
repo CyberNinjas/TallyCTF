@@ -1,8 +1,5 @@
 'use strict'
 
-/**
- * Module dependencies.
- */
 var path = require('path')
 var mongoose = require('mongoose')
 var Challenge = mongoose.model('Challenge')
@@ -29,7 +26,6 @@ exports.updateOrCreate = function (req, res) {
   if (isCreate) {
     challenge.createdBy = req.user._id
   }
-  console.log(req.body)
   challenge.lastModifiedBy = req.user._id
   challenge.lastModified = Date.now()
   challenge.name = req.body.name
@@ -40,6 +36,7 @@ exports.updateOrCreate = function (req, res) {
   challenge.challengeType = req.body.challengeType
   challenge.challengeFormat = req.body.challengeFormat
   challenge.affectedMachine = req.body.affectedMachine
+  challenge.numberOfSubmissions = req.body.numberOfSubmissions
   // challenge.files = req.body.challenge.files
 
   challenge.save(function (err) {

@@ -14,6 +14,10 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
     $scope.challenge = Challenges.get({ challengeId: $scope.id })
     $scope.challenge.$promise.then(function () {
       $scope.model.type = $scope.challenge.challengeType
+      $scope.model.submissions = $scope.challenge.numberOfSubmissions || $scope.challengeTypes.filter(function (type) {
+        return $scope.model.type === type.value
+      })[0].submissions
+
       $scope.model.category = $scope.challenge.category
       $scope.model.description = $scope.challenge.description
       $scope.model.name = $scope.challenge.name
@@ -27,11 +31,20 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
       $scope.machines = ['AWS', 'Azure', 'Heroku', 'Local'].map(function (machine) {
         return {name: machine, value: machine}
       })
-      $scope.fields = ChallengeForm.createForm($scope.model, $scope.challenge, $scope.challengeTypes, $scope.machines)
+
+      var formats = $scope.challengeTypes.filter(function (type) {
+        return type.value === $scope.model.type;
+      })[0].formats
+
+      $scope.model.formats = formats
+
+      $scope.fields = ChallengeForm.createForm($scope, $scope.challenge, $scope.challengeTypes, $scope.machines)
+
       $scope.model.format = $scope.challenge.challengeFormat
    })
 
     $scope.updateOrCreate = function (isValid) {
+      console.log($scope.model)
       $scope.challenge.name = $scope.model.name
       $scope.challenge.description = $scope.model.description
       $scope.challenge.challengeType = $scope.model.type
@@ -39,6 +52,7 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
       $scope.challenge.challengeFormat = $scope.model.format
       $scope.challenge.category = $scope.model.category
       $scope.challenge.affectedMachine = $scope.model.machine
+      $scope.challenge.numberOfSubmissions = $scope.model.submissions
       $scope.challenge._id = $scope.id
       Challenges.update($scope.challenge, function (response) {
         $location.path('challenges')

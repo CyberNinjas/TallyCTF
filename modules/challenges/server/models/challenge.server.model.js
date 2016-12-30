@@ -76,6 +76,10 @@ var ChallengeSchema = new Schema({
     type: String,
     trim: true
   },
+  numberOfSubmissions: {
+    type: Number,
+    min: 1,
+  },
   answers: [{
     value: {
       type: String,

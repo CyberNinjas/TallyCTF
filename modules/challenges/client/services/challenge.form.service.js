@@ -5,10 +5,7 @@ angular.module('challenges').factory('ChallengeForm', ['$http',
 
 
         return {
-          createForm: function(model, challenge, types, machines) {
-            var formats = types.filter(function (type) {
-              return type.value === model.type;
-            })[0].formats
+          createForm: function($scope, challenge, types, machines) {
 
               var fields = [
                 {
@@ -59,7 +56,7 @@ angular.module('challenges').factory('ChallengeForm', ['$http',
                   className: 'row',
                   fieldGroup: [
                     {
-                      className: 'col-xs-4',
+                      className: 'col-xs-3',
                       type: 'select',
                       key: 'machine',
                       templateOptions: {
@@ -68,23 +65,50 @@ angular.module('challenges').factory('ChallengeForm', ['$http',
                       }
                     },
                     {
-                      className: 'col-xs-4',
+                      className: 'col-xs-3',
                       type: 'select',
                       key: 'type',
                       templateOptions: {
+                        onChange: function($viewValue, $modelValue, $scope) {
+                          $scope.model.answers = []
+
+                          var formats = types.filter(function (type) {
+                            return type.value === $viewValue;
+                          })[0].formats
+
+                          $scope.model.format = formats[0]
+                          $scope.model.formats = formats
+                        },
                         label: 'Challenge Type',
                         options: types
                       }
                     },
                     {
-                      className: 'col-xs-4',
+                      className: 'col-xs-3',
                       type: 'select',
                       key: 'format',
                       templateOptions: {
+                        onChange: function($viewValue, $modelValue, $scope) {
+                          $scope.model.answers = []
+                        },
                         label: 'Challenge Format',
-                        options: formats,
+                        // options: [],
                       },
-                    }
+                      expressionProperties: {
+                        'templateOptions.options': function($viewValue, $modelValue, scope) {
+                          return scope.model.formats;
+                        }
+                      }
+                    },
+                    {
+                      className: 'col-xs-3',
+                      type: 'input',
+                      key: 'submissions',
+                      templateOptions: {
+                        label: 'Number Of Submissions',
+                        type: 'number'
+                      },
+                   }
                   ]
                 },
                 {
