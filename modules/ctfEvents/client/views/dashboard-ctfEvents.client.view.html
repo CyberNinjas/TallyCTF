@@ -33,15 +33,17 @@
                 <div class="panel-heading">
                     <div class="pull-right">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-success btn-xs btn-filter">Easy</button>
-                            <button type="button" class="btn btn-warning btn-xs btn-filter">Medium</button>
-                            <button type="button" class="btn btn-danger btn-xs btn-filter">Hard</button>
+                            <button type="button" class="btn btn-primary btn-xs btn-filter" ng-click="sortChallenge = ''">All</button>
+                            <button type="button" class="btn btn-success btn-xs btn-filter" ng-click="sortChallenge = 'easy'">Easy</button>
+                            <button type="button" class="btn btn-warning btn-xs btn-filter" ng-click="sortChallenge = 'medium'">Medium</button>
+                            <button type="button" class="btn btn-danger btn-xs btn-filter" ng-click="sortChallenge = 'hard'">Hard</button>
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                 Sorts <span class="glyphicon glyphicon-cog" style="margin-right: 0px;"></span>
                             </button>
                             <ul class="dropdown-menu slidedown">
-                                <li><a><span class="glyphicon glyphicon-book"></span> Alphabetical</a></li>
-                                <li><a><span class="glyphicon glyphicon-king"></span> Points</a></li>
+                                <li ng-click="sortType = ''"><a><span class="glyphicon glyphicon-eye-close"></span> None</a></li>
+                                <li ng-click="sortType = 'name'"><a><span class="glyphicon glyphicon-book"></span> Alphabetical</a></li>
+                                <li ng-click="sortType = 'points'"><a><span class="glyphicon glyphicon-king"></span> Points</a></li>
                                 <li><a><span class="glyphicon glyphicon-eye-open"></span> Available</a></li>
                             </ul>
                         </div>
@@ -51,8 +53,8 @@
                 <div class="panel-body" id="challenges">
                     <a ng-show='ongoing' class="list-group">
 
-                     <div ng-repeat="challenge in ctfEvent.challenges">
-                        <div uib-accordion-group class="list-group-item list-group-item-success">
+                     <div ng-repeat="challenge in ctfEvent.challenges | orderByFilter:sortType | difficultyFilter:sortChallenge">
+                        <div uib-accordion-group ng-class="howHard(challenge.points)">
                           {{challenge.name + ' (' + challenge.category + ")   "}}
                             <span class="pull-right">Points: {{challenge.points}}
                               <a class="btn btn-xs" ui-sref="ctfEvents.submission({ctfEventId: ctfEvent._id, challengeId: challenge._id})">

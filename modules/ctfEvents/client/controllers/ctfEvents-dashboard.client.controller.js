@@ -2,6 +2,25 @@
 angular.module('ctfEvents').controller('DashboardController', ['$scope','$state', '$filter', '$stateParams', '$location', '$q', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users', function($scope, $state, $filter, $stateParams, $location, $q, Authentication, CtfEvents, Challenges, Teams, Users) {
   $scope.authentication = Authentication;
 
+  $scope.easy = 10;
+  $scope.medium = 100;
+  $scope.hard = 1000;
+  $scope.sortType = "";
+  $scope.challengeSearch = "";
+
+
+  $scope.howHard = function (points) {
+    if (points <= $scope.easy) {
+      return "list-group-item list-group-item-success"
+    } else if( points <= $scope.medium){
+      return "list-group-item list-group-item-warning"
+    } else if ( points <= $scope.hard) {
+      return "list-group-item list-group-item-danger"
+    } else {
+      return "list-group-item list-group-item-primary"
+    }
+  }
+
   $q.all([
     Users.query().$promise,
     Challenges.query().$promise,

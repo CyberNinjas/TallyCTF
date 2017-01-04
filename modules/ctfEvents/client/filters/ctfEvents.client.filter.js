@@ -66,4 +66,41 @@ angular.module('ctfEvents').filter('unselected', function() {
       }
     });
   };
+}).filter('difficultyFilter', function() {
+  return function (list, difficulty) {
+    if(!difficulty){
+      return list;
+    }
+    if(difficulty === "easy"){
+      return list.filter(function (element, index, array) {
+        if(element.points > 0){
+         return element.points <= 10
+        }
+      })
+    }else if(difficulty === "medium"){
+      return list.filter(function (element, index, array) {
+        if (element.points > 10) {
+          return element.points <= 100
+        }
+      })
+    }else if(difficulty === "hard"){
+      return list.filter(function (element, index, array) {
+      if(element.points > 100){
+        return element.points <= 1000
+      }
+      })
+    }
+   }
+}).filter('orderByFilter', function() {
+    return function(items, field, reverse) {
+      var filtered = [];
+      angular.forEach(items, function(item) {
+        filtered.push(item);
+      });
+      filtered.sort(function (a, b) {
+        return (a[field] > b[field] ? 1 : -1);
+      });
+      if(reverse) filtered.reverse();
+      return filtered;
+    };
 });
