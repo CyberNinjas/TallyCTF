@@ -17,8 +17,6 @@ angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$fi
       items: $filter('unselectedObject')($scope.challenges, $scope.ctfEvent.challenges),
       selectedItems: $filter('selectedObject')($scope.challenges, $scope.ctfEvent.challenges)
     };
-    console.log($scope.ctfEvent.challenges)
-    console.log($scope.challenges)
 
     $scope.userOptions = {
       title: 'Users',

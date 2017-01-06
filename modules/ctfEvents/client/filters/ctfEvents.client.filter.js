@@ -103,4 +103,15 @@ angular.module('ctfEvents').filter('unselected', function() {
       if(reverse) filtered.reverse();
       return filtered;
     };
+}).filter('submissionFilter', function() {
+  return function(items, team) {
+    if(!team){
+      return []
+    }
+    return items.filter(function(item) {
+      if (item.team === team._id) {
+        return item
+      }
+    })
+  };
 });

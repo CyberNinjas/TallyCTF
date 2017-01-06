@@ -54,10 +54,11 @@
                     <a ng-show='ongoing' class="list-group">
 
                      <div ng-repeat="challenge in ctfEvent.challenges | orderByFilter:sortType | difficultyFilter:sortChallenge">
-                        <div uib-accordion-group ng-class="howHard(challenge.points)">
+                        <div uib-accordion-group ng-class="howHard(challenge)">
                           {{challenge.name + ' (' + challenge.category + ")   "}}
                             <span class="pull-right">Points: {{challenge.points}}
-                              <a class="btn btn-xs" ui-sref="ctfEvents.submission({ctfEventId: ctfEvent._id, challengeId: challenge._id})">
+                              <!--<a class="btn btn-xs" ng-click="goToChallenge(challenge.unavailable, ctfEvent._id, challenge._id)">-->
+                              <a class="btn btn-xs" ng-hide="challenge.unavailable" ui-sref="ctfEvents.submission({ctfEventId: ctfEvent._id, challengeId: challenge._id})">
                                   <span class="glyphicon glyphicon-book"></span>
                               </a>
                              <a ng-click="challenge.isCollapsed = !challenge.isCollapsed" class="glyphicon glyphicon-eye-open"></a>

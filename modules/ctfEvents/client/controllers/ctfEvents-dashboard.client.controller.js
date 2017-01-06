@@ -7,19 +7,24 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope','$state'
   $scope.hard = 1000;
   $scope.sortType = "";
   $scope.challengeSearch = "";
+  $scope.showUnavailable = "";
 
-
-  $scope.howHard = function (points) {
-    if (points <= $scope.easy) {
+  $scope.howHard = function (challenge) {
+    if(challenge.teamSubmissions >= challenge.numberOfSubmissions){
+      challenge.unavailable = true
+      return "list-group-item disabled"
+    }
+    if (challenge.points <= $scope.easy) {
       return "list-group-item list-group-item-success"
-    } else if( points <= $scope.medium){
+    } else if( challenge.points <= $scope.medium){
       return "list-group-item list-group-item-warning"
-    } else if ( points <= $scope.hard) {
+    } else if ( challenge.points <= $scope.hard) {
       return "list-group-item list-group-item-danger"
     } else {
       return "list-group-item list-group-item-primary"
     }
   }
+
 
   $q.all([
     Users.query().$promise,
@@ -33,9 +38,17 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope','$state'
       challenge.isCollapsed = true
       return challenge
     })
-    console.log($scope.challenges)
     $scope.teams = data[2];
     $scope.ctfEvent = data[3];
+    angular.forEach($scope.ctfEvent.teams, function (team) {
+      if(team.members.indexOf(Authentication.user._id) > -1){
+        $scope.currentTeam = team;
+      }
+    })
+    $scope.ctfEvent.challenges.map(function (challenge) {
+      challenge.teamSubmissions = $filter('submissionFilter')(challenge.submissions, $scope.currentTeam).length;
+    })
+
     return
   }).then(function() {
     $scope.eventId = $stateParams.ctfEventId
@@ -92,6 +105,12 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope','$state'
 
   $scope.getUserName = function(id) {
     return $filter('filter')($scope.users, { _id: id })[0].displayName;
+  }
+
+  $scope.goToChallenge = function(unavailable, eventId, id){
+    if(!unavailable){
+      $state.go(ctfEvents.submission, {'ctfEventId': eventId, 'challengeId': id})
+    }
   }
 
   $scope.getTeam = function(team) {

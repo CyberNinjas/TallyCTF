@@ -1,7 +1,6 @@
 'use strict';
 angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filter', '$stateParams', '$state', '$location', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users', 'Socket', '$q',
   function ($scope, $filter, $stateParams, $state, $location, Authentication, CtfEvents, Challenges, Teams, Users, Socket, $q) {
-
   $scope.authentication = Authentication;
   $q.all([
     Users.query().$promise,
@@ -140,6 +139,11 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
         $scope.ctfEvent.challenges[index].submissions.push(submission);
       }
     })
-    // Save the submission here
+    console.log($scope.ctfEvent)
+    CtfEvents.update($scope.ctfEvent, function () {
+      $location.path('ctfEvents/dash/' + $scope.ctfEvent._id);
+    }, function (errorResponse) {
+      $scope.error = errorResponse.data.message;
+    });
   }
  }])
