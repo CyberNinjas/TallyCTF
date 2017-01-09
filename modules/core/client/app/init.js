@@ -85,7 +85,7 @@ angular.module(ApplicationConfiguration.applicationModuleName).run(function ($ro
     name: 'repeatSection',
     templateUrl: 'repeatSection.html',
     controller: function($scope) {
-      $scope.formOptions = {formState: $scope.formState};
+      $scope.formOptions = { formState: $scope.formState };
       $scope.copyFields = copyFields;
       function addRandomIds(fields) {
         unique++;

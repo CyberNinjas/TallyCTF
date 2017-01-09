@@ -6,7 +6,7 @@ angular.module('ctfEvents').controller('EventRegistrationController', ['$scope',
     Users.query().$promise,
     Challenges.query().$promise,
     Teams.query().$promise,
-    CtfEvents.get({ctfEventId: $stateParams.ctfEventId}).$promise,
+    CtfEvents.get({ ctfEventId: $stateParams.ctfEventId }).$promise,
   ]).then(function (data) {
     $scope.users = data[0];
     $scope.challenges = data[1];
@@ -22,14 +22,14 @@ angular.module('ctfEvents').controller('EventRegistrationController', ['$scope',
   });
 
   $scope.leaveTeam = function (id) {
-    var currentUser = $filter('filter')($scope.users, {_id: Authentication.user._id})[0]
+    var currentUser = $filter('filter')($scope.users, { _id: Authentication.user._id })[0]
     currentUser.teams.splice(currentUser.teams.indexOf(id))
     Users.update(currentUser, function () {
     }, function (errorResponse) {
       $scope.error = errorResponse.data.message;
     });
 
-    var currentTeam = $filter('filter')($scope.teams, {_id: id})[0];
+    var currentTeam = $filter('filter')($scope.teams, { _id: id })[0];
     var userId = currentTeam.members.indexOf(user._id)
     currentTeam.members.splice(userId, 1);
     Teams.update(currentTeam, function () {
@@ -50,11 +50,11 @@ angular.module('ctfEvents').controller('EventRegistrationController', ['$scope',
     });
   };
 
-  $scope.notOnEventTeam = function(currentTeam){
+  $scope.notOnEventTeam = function (currentTeam) {
     var notOnTeam = false;
     angular.forEach($scope.ctfEvent.teams, function (team) {
       if (team.team === currentTeam._id) {
-        if (team.members.indexOf(Authentication.user._id) < 0){
+        if (team.members.indexOf(Authentication.user._id) < 0) {
           notOnTeam = true;
         }
       }
@@ -66,7 +66,7 @@ angular.module('ctfEvents').controller('EventRegistrationController', ['$scope',
     var strippedTeams = []
     angular.forEach($scope.ctfEvent.teams, function (team) {
       var userId = team.members.indexOf(Authentication.user._id)
-      if (userId > -1){
+      if (userId > -1) {
         team.members.splice(userId, 1);
       }
       if (team.team === currentTeam._id) {

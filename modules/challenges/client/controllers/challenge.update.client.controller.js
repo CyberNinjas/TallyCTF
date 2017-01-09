@@ -10,7 +10,7 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
       }
     )
 
-    $scope.model = {answers: []};
+    $scope.model = { answers: [] };
     $scope.challenge = Challenges.get({ challengeId: $scope.id })
     $scope.challenge.$promise.then(function () {
       $scope.model.type = $scope.challenge.challengeType
@@ -29,7 +29,7 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
 
       //Placeholder to be populated with user data
       $scope.machines = ['AWS', 'Azure', 'Heroku', 'Local'].map(function (machine) {
-        return {name: machine, value: machine}
+        return { name: machine, value: machine }
       })
 
       var formats = $scope.challengeTypes.filter(function (type) {
@@ -37,14 +37,11 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
       })[0].formats
 
       $scope.model.formats = formats
-
       $scope.fields = ChallengeForm.createForm($scope, $scope.challenge, $scope.challengeTypes, $scope.machines)
-
       $scope.model.format = $scope.challenge.challengeFormat
-   })
+    })
 
     $scope.updateOrCreate = function (isValid) {
-      console.log($scope.model)
       $scope.challenge.name = $scope.model.name
       $scope.challenge.description = $scope.model.description
       $scope.challenge.challengeType = $scope.model.type
