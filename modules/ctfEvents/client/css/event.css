@@ -15,15 +15,16 @@ body{
 }
 .progress > .progress-type {
     position: absolute;
-    left: 0px;
+    left: 0;
     font-weight: 800;
     padding: 3px 30px 2px 10px;
     color: rgb(255, 255, 255);
+    background-color: rgb(25, 25, 25);
     background-color: rgba(25, 25, 25, 0.2);
 }
 .progress > .progress-completed {
     position: absolute;
-    right: 0px;
+    right: 0;
     font-weight: 800;
     padding: 3px 10px 2px;
 }
