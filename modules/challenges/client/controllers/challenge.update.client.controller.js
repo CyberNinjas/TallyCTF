@@ -13,6 +13,7 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
     $scope.model = { answers: [] };
     $scope.challenge = Challenges.get({ challengeId: $scope.id })
     $scope.challenge.$promise.then(function () {
+      console.log($scope.challenge)
       $scope.model.type = $scope.challenge.challengeType
       $scope.model.submissions = $scope.challenge.numberOfSubmissions || $scope.challengeTypes.filter(function (type) {
         return $scope.model.type === type.value
@@ -28,7 +29,7 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
       })
 
       //Placeholder to be populated with user data
-      $scope.machines = ['AWS', 'Azure', 'Heroku', 'Local'].map(function (machine) {
+      $scope.machines = ['AWS', 'Azure', 'Heroku', 'Local', 'None'].map(function (machine) {
         return { name: machine, value: machine }
       })
 
@@ -37,25 +38,28 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
       })[0].formats
 
       $scope.model.formats = formats
-      $scope.fields = ChallengeForm.createForm($scope, $scope.challenge, $scope.challengeTypes, $scope.machines)
       $scope.model.format = $scope.challenge.challengeFormat
+      console.log($scope.model.format)
+      formats.indexOf($scope.model.format)
+      $scope.fields = ChallengeForm.createForm($scope, $scope.challenge, $scope.challengeTypes, $scope.machines)
     })
 
-    $scope.updateOrCreate = function (isValid) {
-      $scope.challenge.name = $scope.model.name
-      $scope.challenge.description = $scope.model.description
-      $scope.challenge.challengeType = $scope.model.type
-      $scope.challenge.points = $scope.model.points
-      $scope.challenge.challengeFormat = $scope.model.format
-      $scope.challenge.category = $scope.model.category
-      $scope.challenge.affectedMachine = $scope.model.machine
-      $scope.challenge.numberOfSubmissions = $scope.model.submissions
-      $scope.challenge._id = $scope.id
-      Challenges.update($scope.challenge, function (response) {
-        $location.path('challenges')
-      }, function (errorResponse) {
-        $scope.error = errorResponse.data.message
-      })
+    $scope.updateOrCreate = function () {
+      console.log($scope.model)
+      // $scope.challenge.name = $scope.model.name
+      // $scope.challenge.description = $scope.model.description
+      // $scope.challenge.challengeType = $scope.model.type
+      // $scope.challenge.points = $scope.model.points
+      // $scope.challenge.challengeFormat = $scope.model.format
+      // $scope.challenge.category = $scope.model.category
+      // $scope.challenge.affectedMachine = $scope.model.machine
+      // $scope.challenge.numberOfSubmissions = $scope.model.submissions
+      // $scope.challenge._id = $scope.id
+      // Challenges.update($scope.challenge, function (response) {
+      //   $location.path('challenges')
+      // }, function (errorResponse) {
+      //   $scope.error = errorResponse.data.message
+      // })
     }
 
     $scope.removeChallenge = function () {

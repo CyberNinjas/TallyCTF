@@ -4,10 +4,20 @@
   "submissions": 2,
   "formats": [{
     "name": "select",
-    "value": "radio"
+    "value": "select"
   },{
     "name": "true-false",
-    "value": "checkbox"
+    "value": "radio",
+    "answers": [
+      {
+        "name": "True",
+        "value": true
+      },
+      {
+        "name": "False",
+        "value": false
+      }
+    ]
   }]
 }, {
   "name": "text",
