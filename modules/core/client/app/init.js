@@ -112,7 +112,9 @@ angular.module(ApplicationConfiguration.applicationModuleName).run(function ($ro
       }
     }
   });
-});
+}).config(function (CacheFactoryProvider) {
+  angular.extend(CacheFactoryProvider.defaults, { maxAge: 15 * 60 * 1000 });
+})
 
 //Then define the init function for starting up the application
 angular.element(document).ready(function () {

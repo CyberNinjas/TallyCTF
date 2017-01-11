@@ -19,6 +19,5 @@ angular.module('ctfEvents').controller('ScoreController', ['$scope', '$filter',
       $scope.eventId = $stateParams.ctfEventId
       $scope.eventTeams = $filter('memberTeams')($scope.teams, $scope.ctfEvent.teams);
       $scope.eventChallenges = $filter('filter')($scope.challenges, $scope.ctfEvent.challenges);
-      console.log($scope.ctfEvent)
     });
   }]);

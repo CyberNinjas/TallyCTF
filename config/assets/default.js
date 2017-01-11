@@ -24,6 +24,8 @@ module.exports = {
         'public/lib/angular-ui-router/release/angular-ui-router.js',
         'public/lib/angular-ui-utils/ui-utils.js',
         'public/lib/angular-file-upload/angular-file-upload.js',
+        'public/lib/angular-cache/dist/angular-cache.js',
+        'public/lib/q/q.js',
         'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
         'public/lib/bootstrap/dist/js/bootstrap.min.js',
         'public/lib/angular-bootstrap/ui-bootstrap.min.js',

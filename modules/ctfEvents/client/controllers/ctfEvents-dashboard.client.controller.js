@@ -1,5 +1,5 @@
 'use strict';
-angular.module('ctfEvents').controller('DashboardController', ['$scope', '$state', '$filter', '$stateParams', '$location', '$q', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users', function ($scope, $state, $filter, $stateParams, $location, $q, Authentication, CtfEvents, Challenges, Teams, Users) {
+angular.module('ctfEvents').controller('DashboardController', ['$scope', '$state', '$filter', '$stateParams', '$location', '$q', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users', 'Cache', 'CacheFactory', function ($scope, $state, $filter, $stateParams, $location, $q, Authentication, CtfEvents, Challenges, Teams, Users, Cache, CacheFactory) {
   $scope.authentication = Authentication;
 
   $scope.easy = 10;
@@ -25,13 +25,21 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$state
     }
   }
 
-
-  $q.all([
+  var resources = [
     Users.query().$promise,
     Challenges.query().$promise,
     Teams.query().$promise,
-    CtfEvents.get({ ctfEventId: $stateParams.ctfEventId }).$promise
-  ]).then(function (data) {
+  ]
+
+  var eventCache = CacheFactory.get('eventCache');
+  $scope.ctfEvent = eventCache.get('api/ctfEvents/' + $stateParams.ctfEventId)
+  if(!$scope.ctfEvent){
+    resources.push(CtfEvents.get({ ctfEventId: $stateParams.ctfEventId }).$promise)
+  } else {
+    $scope.ctfEvent = angular.fromJson($scope.ctfEvent[1]);
+  }
+
+  $q.all(resources).then(function (data) {
     $scope.users = data[0];
     $scope.challenges = data[1];
     $scope.challenges.map(function (challenge) {
@@ -39,7 +47,9 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$state
       return challenge
     })
     $scope.teams = data[2];
-    $scope.ctfEvent = data[3];
+    if(resources.length > 3){
+      $scope.ctfEvent = data[3];
+    }
     angular.forEach($scope.ctfEvent.teams, function (team) {
       if (team.members.indexOf(Authentication.user._id) > -1) {
         $scope.currentTeam = team;
@@ -51,6 +61,9 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$state
 
     return
   }).then(function () {
+    console.log($scope.ctfEvent)
+    console.log(eventCache.keys())
+    resources.push(CtfEvents.get({ ctfEventId: $stateParams.ctfEventId }).$promise)
     $scope.eventId = $stateParams.ctfEventId
     $scope.eventTeams = $filter('memberTeams')($scope.teams, $scope.ctfEvent.teams);
     $scope.ongoing = $scope.isOngoing()
@@ -115,5 +128,9 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$state
 
   $scope.getTeam = function (team) {
     return $filter('filter')($scope.teams, { _id: team.id })[0];
+  }
+
+  $scope.clear = function () {
+    Cache.invalidate('api/ctfEvents/' + $scope.ctfEvent._id);
   }
 }]);

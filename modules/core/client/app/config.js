@@ -5,7 +5,7 @@ var ApplicationConfiguration = (function() {
   var applicationModuleName = 'mean';
   var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ngMessages', 'ui.router', 'ui.bootstrap',
                                              'ui.utils', 'angularFileUpload', 'oitozero.ngSweetAlert', 'formly',
-                                             'formlyBootstrap', 'rzModule'];
+                                             'formlyBootstrap', 'rzModule', 'angular-cache'];
 
   var registerModule = function(moduleName, dependencies) {
     // Create angular module

@@ -1,0 +1,26 @@
+[{
+  "name": "multiple choice",
+  "value": "multipleChoice",
+  "submissions": 2,
+  "formats": [{
+    "name": "select",
+    "value": "radio"
+  },{
+    "name": "true-false",
+    "value": "checkbox"
+  }]
+}, {
+  "name": "text",
+  "value": "text",
+  "submissions": 3,
+  "formats": [
+    { "name":"short-answer",
+     "value":"short-answer",
+      "type": "text"
+    },
+    { "name": "long-answer",
+      "value": "long-answer",
+      "type": "text"
+    }
+  ]
+}]
