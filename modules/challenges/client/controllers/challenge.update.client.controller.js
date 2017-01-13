@@ -13,7 +13,6 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
     $scope.model = { answers: [] };
     $scope.challenge = Challenges.get({ challengeId: $scope.id })
     $scope.challenge.$promise.then(function () {
-      console.log($scope.challenge)
       $scope.model.type = $scope.challenge.challengeType
       $scope.model.submissions = $scope.challenge.numberOfSubmissions || $scope.challengeTypes.filter(function (type) {
         return $scope.model.type === type.value
@@ -39,7 +38,6 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
 
       $scope.model.formats = formats
       $scope.model.format = $scope.challenge.challengeFormat
-      console.log($scope.model.format)
       formats.indexOf($scope.model.format)
       $scope.fields = ChallengeForm.createForm($scope, $scope.challenge, $scope.challengeTypes, $scope.machines)
     })
@@ -60,6 +58,10 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
       // }, function (errorResponse) {
       //   $scope.error = errorResponse.data.message
       // })
+    }
+
+    $scope.hello = function () {
+      console.log('trying')
     }
 
     $scope.removeChallenge = function () {
