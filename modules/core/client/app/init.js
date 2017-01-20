@@ -75,13 +75,15 @@ angular.module(ApplicationConfiguration.applicationModuleName).run(function ($ro
       $scope.copyItemOptions = copyItemOptions;
       $scope.correctAnswer = {}
 
+      $scope.toggleCorrect = function(correctAnswer) {
+        correctAnswer.correct = !correctAnswer.correct
+      }
+
       $scope.setCorrect = function(correctAnswer) {
         angular.forEach($scope.model.answers, function (answer) {
           answer.correct = false;
         })
         correctAnswer.correct = true;
-        console.log(correctAnswer)
-        console.log($scope.model.answers)
       }
 
       function copyItemOptions() {

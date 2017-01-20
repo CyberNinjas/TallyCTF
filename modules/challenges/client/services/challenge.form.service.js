@@ -74,7 +74,7 @@ angular.module('challenges').factory('ChallengeForm', ['$http',
                       return type.value === $viewValue;
                     })[0].formats
 
-                    $scope.model.format = formats[0]
+                    $scope.model.format = formats[0].value
                     $scope.model.formats = formats
                   },
                   label: 'Challenge Type',
@@ -90,7 +90,6 @@ angular.module('challenges').factory('ChallengeForm', ['$http',
                     $scope.model.answers = []
                   },
                   label: 'Challenge Format',
-                  // options: [],
                 },
                 expressionProperties: {
                   'templateOptions.options': function ($viewValue, $modelValue, scope) {

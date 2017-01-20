@@ -67,7 +67,7 @@ var ChallengeSchema = new Schema({
   challengeFormat: {
     type: String,
     required: 'Each answer must have a format.',
-    enum: ['true-false', 'select', 'multi-select', 'short-answer', 'long-answer']
+    enum: ['true-false', 'radio', 'multi-select', 'short-answer', 'long-answer']
   },
   numberOfSubmissionsAllowed:{
     type: Number
@@ -86,11 +86,11 @@ var ChallengeSchema = new Schema({
       required: 'Challenge answer must have a value.',
       trim: true
     },
-    isRegex: {
+    regex: {
       type: Boolean,
       default: false
     },
-    isCorrect: {
+    correct: {
       type: Boolean,
       default: false
     }

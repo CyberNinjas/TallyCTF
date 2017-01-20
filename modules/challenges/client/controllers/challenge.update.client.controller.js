@@ -23,9 +23,7 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
       $scope.model.name = $scope.challenge.name
       $scope.model.points = $scope.challenge.points
       $scope.model.machine = $scope.challenge.affectedMachine
-      $scope.model.answers = $scope.challenge.answers.map(function (answer) {
-        return answer.value
-      })
+      $scope.model.answers = $scope.challenge.answers
 
       //Placeholder to be populated with user data
       $scope.machines = ['AWS', 'Azure', 'Heroku', 'Local', 'None'].map(function (machine) {
@@ -38,30 +36,25 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
 
       $scope.model.formats = formats
       $scope.model.format = $scope.challenge.challengeFormat
-      formats.indexOf($scope.model.format)
       $scope.fields = ChallengeForm.createForm($scope, $scope.challenge, $scope.challengeTypes, $scope.machines)
     })
 
     $scope.updateOrCreate = function () {
-      console.log($scope.model)
-      // $scope.challenge.name = $scope.model.name
-      // $scope.challenge.description = $scope.model.description
-      // $scope.challenge.challengeType = $scope.model.type
-      // $scope.challenge.points = $scope.model.points
-      // $scope.challenge.challengeFormat = $scope.model.format
-      // $scope.challenge.category = $scope.model.category
-      // $scope.challenge.affectedMachine = $scope.model.machine
-      // $scope.challenge.numberOfSubmissions = $scope.model.submissions
-      // $scope.challenge._id = $scope.id
-      // Challenges.update($scope.challenge, function (response) {
-      //   $location.path('challenges')
-      // }, function (errorResponse) {
-      //   $scope.error = errorResponse.data.message
-      // })
-    }
-
-    $scope.hello = function () {
-      console.log('trying')
+      $scope.challenge.name = $scope.model.name
+      $scope.challenge.description = $scope.model.description
+      $scope.challenge.challengeType = $scope.model.type
+      $scope.challenge.points = $scope.model.points
+      $scope.challenge.challengeFormat = $scope.model.format
+      $scope.challenge.category = $scope.model.category
+      $scope.challenge.affectedMachine = $scope.model.machine
+      $scope.challenge.numberOfSubmissions = $scope.model.submissions
+      $scope.challenge.answers = $scope.model.answers
+      $scope.challenge._id = $scope.id
+      Challenges.update($scope.challenge, function (response) {
+        $location.path('challenges')
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message
+      })
     }
 
     $scope.removeChallenge = function () {

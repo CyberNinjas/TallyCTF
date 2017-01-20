@@ -1,10 +1,10 @@
 [{
   "name": "multiple choice",
-  "value": "multipleChoice",
+  "value": "choice",
   "submissions": 2,
   "formats": [{
     "name": "select",
-    "value": "select"
+    "value": "multi-select"
   },{
     "name": "true-false",
     "value": "radio",
@@ -25,12 +25,10 @@
   "submissions": 3,
   "formats": [
     { "name":"short-answer",
-     "value":"short-answer",
-      "type": "text"
+     "value":"short-answer"
     },
     { "name": "long-answer",
-      "value": "long-answer",
-      "type": "text"
+      "value": "long-answer"
     }
   ]
 }]
