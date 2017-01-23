@@ -10,14 +10,12 @@ angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$fi
     $scope.ctfEvent = data[2];
     return
   }).then(function () {
-
     $scope.challengeOptions = {
       title: 'Challenges',
       display: 'name',
       items: $filter('unselectedObject')($scope.challenges, $scope.ctfEvent.challenges),
       selectedItems: $filter('selectedObject')($scope.challenges, $scope.ctfEvent.challenges)
     };
-
     $scope.userOptions = {
       title: 'Users',
       display: 'firstName',
@@ -47,8 +45,8 @@ angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$fi
     $scope.userOptions.selectedItems.forEach(function (obj) {
       $scope.ctfEvent.users.push(obj._id);
     })
-    CtfEvents.update($scope.ctfEvent, function () {
-      $state.reload()
+    CtfEvents.update($scope.ctfEvent, function (res) {
+      $location.path('ctfEvents');
     }, function (errorResponse) {
       $scope.error = errorResponse.data.message;
     });

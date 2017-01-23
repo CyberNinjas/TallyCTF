@@ -14,6 +14,7 @@ exports.create = function(req, res) {
   var ctfEvent = new CtfEvent(req.body);
   ctfEvent.save(function(err) {
     if(err) {
+      console.log(err)
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -24,6 +25,9 @@ exports.create = function(req, res) {
 };
 
 exports.read = function(req, res) {
+  for (var index = 0; index < req.ctfEvent.challenges.length; ++index) {
+    delete req.ctfEvent.challenges[index].answers
+  }
   res.json(req.ctfEvent);
 };
 
@@ -37,10 +41,12 @@ exports.update = function(req, res) {
   ctfEvent.users = req.body.users;
   ctfEvent.save(function(err) {
     if(err) {
+      console.log(err)
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
+      console.log(ctfEvent.challenges)
       res.json(ctfEvent);
     }
   });

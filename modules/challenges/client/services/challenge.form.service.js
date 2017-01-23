@@ -88,6 +88,12 @@ angular.module('challenges').factory('ChallengeForm', ['$http',
                 templateOptions: {
                   onChange: function ($viewValue, $modelValue, $scope) {
                     $scope.model.answers = []
+                    if($scope.model.format == 'radio'){
+                      $scope.model.answers = [
+                        { value: 'true', correct: true, regex: false },
+                        { value: 'false', correct: false, regex: false }
+                      ]
+                    }
                   },
                   label: 'Challenge Format',
                 },

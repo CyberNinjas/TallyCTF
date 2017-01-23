@@ -9,16 +9,16 @@
                           options="itemOptions"
                           model="model[options.key][$index]"
                           form="form"
-                          index="$index">
+                          index="'value'">
             </formly-field>
 
             <div class="col-xs-2" style="margin-top:6px">
-                <input type="checkbox" ng-if="model.format === 'select'" ng-checked="false"/>
-                <input type="radio" ng-if="model.format === 'radio'" ng-model="correctAnswer" ng-click="setCorrect(model[options.key][$index])" />
-                <button type="button" ng-click="model[options.key][$index].correct = !model[options.key][$index].correct" ng-if="model.type === 'text'" class="btn btn-primary btn-xs">
+                <input type="checkbox" ng-if="model.format === 'multi-select'" ng-checked="model[options.key][$index].correct" ng-click="toggleCorrect(model[options.key][$index])"/>
+                <input type="radio" ng-if="model.format === 'radio'"  ng-checked="model[options.key][$index].correct" ng-model="correctAnswer" ng-click="setCorrect(model[options.key][$index])" />
+                <button type="button" ng-click="model[options.key][$index].correct = !model[options.key][$index].correct" ng-if="model.type === 'text'" ng-class="model[options.key][$index].correct === false ? 'btn btn-primary btn-xs' : 'btn btn-primary btn-xs active'">
                     Correct
                 </button>
-                <button type="button" ng-if="model.type === 'text'" ng-click="model[options.key][$index].regex = !model[options.key][$index].regex" class="btn btn-warning btn-xs">
+                <button type="button" ng-if="model.type === 'text'" ng-click="model[options.key][$index].regex = !model[options.key][$index].regex" ng-class="model[options.key][$index].regex === false ? 'btn btn-warning btn-xs' : 'btn btn-warning btn-xs active'">
                     Regex
                 </button>
                 <button type="button" class="btn btn-danger btn-xs" ng-click="model[options.key].splice($index, 1)">
@@ -29,6 +29,6 @@
         </div>
     </div>
     <div>
-        <button type="button" class="btn btn-success btn-xs" ng-click="model.type === 'text' ? model[options.key].push({correct: false, regex: false}) : model[options.key].push({correct: false})">Add</button>
+        <button type="button" class="btn btn-success btn-xs" ng-click="model[options.key].push({correct: false, regex: false, value: ''})">Add</button>
     </div>
 </div>

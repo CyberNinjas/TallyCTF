@@ -1,6 +1,6 @@
 'use strict';
-angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filter', '$stateParams', '$state', '$location', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users', 'Socket', '$q',
-  function ($scope, $filter, $stateParams, $state, $location, Authentication, CtfEvents, Challenges, Teams, Users, Socket, $q) {
+angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filter', '$stateParams', '$state', '$location', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users', 'Socket', '$q', 'Cache',
+  function ($scope, $filter, $stateParams, $state, $location, Authentication, CtfEvents, Challenges, Teams, Users, Socket, $q, Cache) {
     $scope.authentication = Authentication;
     $q.all([
       Users.query().$promise,
@@ -15,8 +15,7 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
       return
     }).then(function () {
       $scope.eventId = $stateParams.ctfEventId
-
-      angular.forEach($scope.challenges, function (challenge) {
+      angular.forEach($scope.ctfEvent.challenges, function (challenge) {
         if (challenge._id === $stateParams.challengeId) {
           $scope.currentChallenge = challenge;
         }
@@ -36,8 +35,8 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
       $scope.model = {
         contributingUsers: [],
         selectedUsers: [],
-        selects: [],
-        texts: $scope.currentChallenge.answers
+        type: $scope.currentChallenge.challengeType,
+        answers: $scope.currentChallenge.answers
       };
 
       $scope.fields = [
@@ -49,7 +48,7 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
             placeholder: ':-)',
             description: '',
           },
-          hideExpression: 'model.texts.length < 1',
+          hideExpression: 'model.type == "choice"',
         },
         {
           key: 'answer',
@@ -57,9 +56,14 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
           className: 'multi-check',
           templateOptions: {
             label: 'Your answer',
-            options: $scope.model.answers,
           },
-          hideExpression: 'model.selects.length < 1',
+          hideExpression: 'model.type == "text"',
+          expressionProperties: {
+            'templateOptions.options': function() { return $scope.model.answers.map(function (answer) {
+              answer.name = answer.value;
+              return answer
+            })}
+          }
         },
         {
           key: 'selectedUsers',
@@ -132,8 +136,8 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
     $scope.getUserName = function (id) {
       return $filter('filter')($scope.users, { _id: id })[0].displayName;
     }
-    $scope.changeContributors = function ($viewValue, $modelValue, $scope) {
-    }
+    $scope.changeContributors = function ($viewValue, $modelValue, $scope) { }
+
     $scope.submit = function (answer) {
       var submission = {}
       submission.team = $scope.currentTeam
@@ -142,10 +146,11 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
       angular.forEach($scope.ctfEvent.challenges, function (challenge, index) {
         if ($scope.currentChallenge._id === challenge._id) {
           $scope.ctfEvent.challenges[index].submissions.push(submission);
+          console.log($scope.ctfEvent.challenges[index].submissions)
         }
       })
-      console.log($scope.ctfEvent)
       CtfEvents.update($scope.ctfEvent, function () {
+        Cache.invalidate('api/ctfEvents/' + $scope.ctfEvent._id);
         $location.path('ctfEvents/dash/' + $scope.ctfEvent._id);
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
