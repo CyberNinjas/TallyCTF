@@ -10,10 +10,10 @@ var path = require('path'),
   User = mongoose.model('User'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
-exports.create = function(req, res) {
+exports.create = function (req, res) {
   var ctfEvent = new CtfEvent(req.body);
-  ctfEvent.save(function(err) {
-    if(err) {
+  ctfEvent.save(function (err) {
+    if (err) {
       console.log(err)
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -24,14 +24,85 @@ exports.create = function(req, res) {
   });
 };
 
-exports.read = function(req, res) {
-  for (var index = 0; index < req.ctfEvent.challenges.length; ++index) {
-    delete req.ctfEvent.challenges[index].answers
+/**
+ * Gets the requested event object and passes back only the white-listed elements
+ * Most notably we remove the answers entirely from text based questions and
+ * we remove their designation of correctness from multiple-choice questions.
+ */
+exports.read = function (req, res) {
+  var teams = []
+  for (var team = 0; team < req.ctfEvent.teams.length; ++team) {
+    teams.push({team: req.ctfEvent.teams[team].team, _id: req.ctfEvent.teams[team]._id, score: 0})
   }
-  res.json(req.ctfEvent);
+
+  for (var challenge = 0; challenge < req.ctfEvent.challenges.length; ++challenge) {
+    var currentChallenge = req.ctfEvent.challenges[challenge]
+    var scorers = []
+    for (var submission = 0; submission < currentChallenge.submissions.length; ++submission) {
+      var currentSubmission = currentChallenge.submissions[submission];
+      if (currentChallenge.challengeType === 'choice') {
+        for (var answer = 0; answer < currentChallenge.answers.length; ++answer) {
+          var same = currentChallenge.answers[answer].regex ?
+            RegExp(currentChallenge.answers[answer].value).test(currentSubmission.answer) :
+            currentChallenge.answers[answer].value === currentSubmission.answer
+          if (same && currentChallenge.answers[answer].correct
+            && scorers.indexOf(currentSubmission.team) < 0) {
+            scorers.push(currentSubmission.team)
+          }
+        }
+      }
+    }
+  }
+
+  for (var teamIndex = 0; teamIndex < teams.length; ++teamIndex) {
+    if (scorers.indexOf(String(teams[teamIndex]._id)) > -1) {
+      teams[teamIndex].score += currentChallenge.points
+    }
+  }
+
+  for (var index = 0; index < req.ctfEvent.challenges.length; ++index) {
+    var challenge = req.ctfEvent.challenges[index]
+    var answerValues = undefined
+    if (challenge.challengeType === 'choice') {
+      var answerValues = []
+      var answers = challenge.answers
+      for (var idx = 0; idx < answers.length; ++idx) {
+        answerValues.push({value: answers[idx].value})
+      }
+    }
+
+    req.ctfEvent.challenges[index] = {
+      _id: challenge._id,
+      category: challenge.category,
+      points: challenge.points,
+      name: challenge.name,
+      description: challenge.description,
+      submissions: challenge.submissions,
+      numberOfSubmissions: challenge.numberOfSubmissions,
+      teamSubmissions: challenge.teamSubmissions,
+      answers: answerValues,
+    }
+
+    var event = {
+      _id: req.ctfEvent._id,
+      challenges: req.ctfEvent.challenges,
+      created: req.ctfEvent.created,
+      description: req.ctfEvent.description,
+      start: req.ctfEvent.start,
+      end: req.ctfEvent.end,
+      registrationStart: req.ctfEvent.registrationStart,
+      registrationEnd: req.ctfEvent.registrationEnd,
+      score: teams,
+      settings: req.ctfEvent.settings,
+      teams: req.ctfEvent.teams,
+      title: req.ctfEvent.title,
+      users: req.ctfEvent.users
+    }
+  }
+  res.json(event);
 };
 
-exports.update = function(req, res) {
+exports.update = function (req, res) {
   var ctfEvent = req.ctfEvent;
   ctfEvent.title = req.body.title;
   ctfEvent.start = req.body.start;
@@ -39,23 +110,22 @@ exports.update = function(req, res) {
   ctfEvent.teams = req.body.teams;
   ctfEvent.challenges = req.body.challenges;
   ctfEvent.users = req.body.users;
-  ctfEvent.save(function(err) {
-    if(err) {
+  ctfEvent.save(function (err) {
+    if (err) {
       console.log(err)
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      console.log(ctfEvent.challenges)
       res.json(ctfEvent);
     }
   });
 };
 
-exports.delete = function(req, res) {
+exports.delete = function (req, res) {
   var ctfEvent = req.ctfEvent;
-  ctfEvent.remove(function(err) {
-    if(err) {
+  ctfEvent.remove(function (err) {
+    if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -65,9 +135,9 @@ exports.delete = function(req, res) {
   });
 };
 
-exports.list = function(req, res) {
-  CtfEvent.find().sort('-created').exec(function(err, ctfEvents) {
-    if(err) {
+exports.list = function (req, res) {
+  CtfEvent.find().sort('-created').exec(function (err, ctfEvents) {
+    if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -77,16 +147,16 @@ exports.list = function(req, res) {
   });
 };
 
-exports.ctfEventByID = function(req, res, next, id) {
-  if(!mongoose.Types.ObjectId.isValid(id)) {
+exports.ctfEventByID = function (req, res, next, id) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
       message: 'CtfEvent is invalid'
     });
   }
-  CtfEvent.findById(id).exec(function(err, ctfEvent) {
-    if(err) {
+  CtfEvent.findById(id).exec(function (err, ctfEvent) {
+    if (err) {
       return next(err);
-    } else if(!ctfEvent) {
+    } else if (!ctfEvent) {
       return res.status(404).send({
         message: 'No ctfEvent with that identifier has been found'
       });

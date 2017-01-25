@@ -33,6 +33,7 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$state
 
   var eventCache = CacheFactory.get('eventCache');
   $scope.ctfEvent = eventCache.get('api/ctfEvents/' + $stateParams.ctfEventId)
+  console.log($scope.ctfEvent)
   if(!$scope.ctfEvent){
     resources.push(CtfEvents.get({ ctfEventId: $stateParams.ctfEventId }).$promise)
   } else {

@@ -1,7 +1,9 @@
 'use strict';
 angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filter', '$stateParams', '$state', '$location', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users', 'Socket', '$q', 'Cache',
   function ($scope, $filter, $stateParams, $state, $location, Authentication, CtfEvents, Challenges, Teams, Users, Socket, $q, Cache) {
+
     $scope.authentication = Authentication;
+
     $q.all([
       Users.query().$promise,
       Teams.query().$promise,
@@ -15,11 +17,13 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
       return
     }).then(function () {
       $scope.eventId = $stateParams.ctfEventId
+
       angular.forEach($scope.ctfEvent.challenges, function (challenge) {
         if (challenge._id === $stateParams.challengeId) {
           $scope.currentChallenge = challenge;
         }
       })
+
       angular.forEach($scope.ctfEvent.teams, function (team) {
         if (team.members.indexOf(Authentication.user._id) > -1) {
           $scope.currentTeam = team;
@@ -136,6 +140,7 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
     $scope.getUserName = function (id) {
       return $filter('filter')($scope.users, { _id: id })[0].displayName;
     }
+
     $scope.changeContributors = function ($viewValue, $modelValue, $scope) { }
 
     $scope.submit = function (answer) {
