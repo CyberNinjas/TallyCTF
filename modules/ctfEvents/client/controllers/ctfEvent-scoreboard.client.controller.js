@@ -19,5 +19,12 @@ angular.module('ctfEvents').controller('ScoreController', ['$scope', '$filter',
       $scope.eventId = $stateParams.ctfEventId
       $scope.eventTeams = $filter('memberTeams')($scope.teams, $scope.ctfEvent.teams);
       $scope.eventChallenges = $filter('filter')($scope.challenges, $scope.ctfEvent.challenges);
+      angular.forEach($scope.eventTeams, function (team) {
+        angular.forEach($scope.ctfEvent.score, function (eventTeam) {
+          if(eventTeam.team === team._id){
+            team.points = eventTeam.score
+          }
+        })
+      })
     });
   }]);
