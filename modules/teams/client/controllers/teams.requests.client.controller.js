@@ -12,6 +12,14 @@ angular.module('teams')
       $scope.teams.$promise.then(function(){
         $scope.team = $filter('filter')($scope.teams, { _id: $stateParams.teamId })[0];
       })
+
+      /**
+       * When a captain selects a user that they'd like to request to join their
+       * team the user's id is added to the team's sent requests and the team is
+       * added to the list of teams that have requested the user.
+       *
+       * @param user - the user being requested
+       */
       $scope.addUserToTeam = function (user) {
         $scope.team.joinRequestsToUsers.push(user)
         Teams.update($scope.team, function () {
@@ -19,7 +27,7 @@ angular.module('teams')
           $scope.error = errorResponse.data.message;
         });
 
-        user.askToJoin.push($scope.team._id)
+        user.wasAskedToJoin.push($scope.team._id)
         Users.update(user, function () {
         }, function (errorResponse) {
           $scope.error = errorResponse.data.message;

@@ -24,7 +24,6 @@ var addUserToTeam = function (user, team) {
 
 exports.create = function (req, res) {
   var team = new Team(req.body);
-  console.log(req.body)
   team.save(function (err) {
     if (!err) {
       addUserToTeam(req.user, team);
@@ -90,10 +89,10 @@ exports.update = function (req, res) {
 };
 
 exports.delete = function (req, res) {
-  var team = Team.findOne({
+  Team.findOne({
     '_id': req.params.teamId
   }).exec(function (err, team) {
-    var members = User.find({
+    User.find({
       '_id': {
         $in: team.members
       }
@@ -109,9 +108,9 @@ exports.delete = function (req, res) {
       }
     });
 
-    var requests = User.find({
+    User.find({
       '_id': {
-        $in: team.requestToJoin
+        $in: team.joinRequestsToUsers
       }
     }, function (err, users) {
       if (err) {
@@ -125,9 +124,9 @@ exports.delete = function (req, res) {
       }
     });
 
-    var asks = User.find({
+    User.find({
       '_id': {
-        $in: team.askToJoin
+        $in: team.joinRequestsFromUsers
       }
     }, function (err, users) {
       if (err) {
@@ -154,17 +153,13 @@ exports.delete = function (req, res) {
 };
 
 var adjustRoles = function (user, team) {
-  var index = user.team.indexOf(team._id);
-  user.team.splice(index, 1);
-
-  if (user.team.length === 0) {
+  var index = user.teams.indexOf(team._id);
+  user.teams.splice(index, 1);
+  if (user.teams.length === 0) {
     user.roles.splice(user.roles.indexOf('teamMember'), 1);
   }
-
-  var asks = Team.find({
-    '_id': {
-      $in: user.team
-    }
+  Team.find({
+    '_id': { $in: user.teams }
   }, function (err, teams) {
     var captain = false;
     for (var index = 0, len = teams.length; index < len; ++index) {
@@ -172,7 +167,7 @@ var adjustRoles = function (user, team) {
         captain = true;
       }
     }
-    if (captain === true) {
+    if (!captain && user.roles.indexOf('teamCaptain') > 0) {
       user.roles.splice(user.roles.indexOf('teamCaptain'), 1);
     }
     user.save();
@@ -180,17 +175,17 @@ var adjustRoles = function (user, team) {
 }
 
 var removeUserRequests = function (user, team) {
-  var index = user.requestToJoin.indexOf(team._id);
+  var index = user.requestedToJoin.indexOf(team._id);
   if (index > -1) {
-    user.requestToJoin.splice(index, 1);
+    user.requestedToJoin.splice(index, 1);
   }
   user.save();
 }
 
 var removeCaptainRequests = function (user, team) {
-  var index = user.askToJoin.indexOf(team._id);
+  var index = user.wasAskedToJoin.indexOf(team._id);
   if (index > -1) {
-    user.requestToJoin.splice(index, 1);
+    user.wasAskedToJoin.splice(index, 1);
   }
   user.save();
 }

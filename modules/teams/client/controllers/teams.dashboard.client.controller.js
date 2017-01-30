@@ -9,6 +9,15 @@ angular.module('teams')
         $scope: $scope
       });
 
+      /**
+       * If a user accepts a team's request their id is removed from the list of
+       * requests made by the team. Then the team is removed from the users list
+       * of outstanding requests and added to their teams.
+       *
+       * A socket message is emitted to notify other users of the new membership
+       *
+       * @param team - the team being added
+       */
       $scope.accept = function (team) {
         var userId = team.joinRequestsToUsers.indexOf($scope.authentication._id)
         team.joinRequestsToUsers.splice(userId, 1);
@@ -24,14 +33,21 @@ angular.module('teams')
           $scope.error = errorResponse.data.message;
         });
 
-        $scope.socket.emit('userUpdate', {
-          recipients: [user._id],
-          op: 'insertTeam',
-          scopeField: 'team.askToJoin',
-          data: team._id
+        $scope.socket.emit('acceptUser', {
+          user: user,
+          data: $scope.team._id
         });
       };
 
+      /**
+       * When a user declines a team's request the id of the team being declined
+       * is removed from both the list of reqests made by the team and the outstanding
+       * requests of the user
+       *
+       * A socket message is emitted to notify other users of the new membership
+       *
+       * @param team - the team being declined
+       */
       $scope.decline = function (index, team) {
         var userId = team.joinRequestsToUsers.indexOf($scope.authentication._id)
         team.joinRequestsToUsers.splice(userId, 1);
@@ -44,12 +60,9 @@ angular.module('teams')
           $scope.error = errorResponse.data.message;
         });
 
-        $scope.socket.emit('userUpdate', {
-          recipients: [user._id],
-          op: 'remove',
-          field: 'wasAskedToJoin',
-          scopeField: 'requestTeams',
-          data: team._id
+        $scope.socket.emit('declineUser', {
+          user: user,
+          data: $scope.team._id
         });
       };
     }

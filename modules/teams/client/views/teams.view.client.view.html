@@ -39,10 +39,10 @@
     <a ng-if="users" ng-repeat="request in requests = (users | asks:team)" class="list-group-item">
       <small class="list-group-item-text">
         <div class="pull-right">
-          <button ng-click='decline(request, $index)'>Decline</button>
+          <button ng-click='decline(request)'>Decline</button>
         </div>
         <div class="pull-right">
-          <button ng-click='accept(request, $index)'>Accept</button>
+          <button ng-click='accept(request)'>Accept</button>
         </div>
       </small>
       <h4 ng-bind="request.username" class="list-group-item-heading"></h4>

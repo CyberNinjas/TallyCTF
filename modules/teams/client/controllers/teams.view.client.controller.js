@@ -13,7 +13,12 @@ angular.module('teams')
         $scope.team = $filter('filter')($scope.teams, { _id: $stateParams.teamId })[0];
       });
 
-
+      /**
+       * Determines whether or not the current user is the captain of the team that they're
+       * currently viewing.
+       *
+       * @returns {boolean} - Whether or not the user is the captain.
+       */
       $scope.isCaptain = function () {
         if ($scope.authentication && $scope.team) {
           if ($scope.authentication.roles.indexOf('admin') === -1) {
@@ -24,6 +29,10 @@ angular.module('teams')
         }
       };
 
+      /**
+       * Gathers the User object of the current user. Removes the team that they've requested
+       * to leave from their teams object. Then removes their id from the team's member array.
+       */
       $scope.leaveTeam = function () {
         var currentUser = $filter('filter')($scope.users, { _id: $scope.authentication._id })[0];
         currentUser.team.splice(currentUser.team.indexOf($scope.team._id))
@@ -32,7 +41,7 @@ angular.module('teams')
           $scope.error = errorResponse.data.message;
         });
 
-        var userId = $scope.team.members.indexOf(user._id)
+        var userId = $scope.team.members.indexOf(currentUser._id)
         $scope.team.members.splice(userId, 1);
         Teams.update($scope.team, function () {
         }, function (errorResponse) {
@@ -40,7 +49,19 @@ angular.module('teams')
         });
       }
 
-      $scope.accept = function (user, index) {
+      /**
+       * When a user is accepted to a team their id is first added to the team's member array.
+       * then they're removed from the team's request object because that request is no longer
+       * valid.
+       *
+       * Then the team is added to the user's team object and removed from their outstanding requests
+       * as well.
+       *
+       * A socket emit is called to notify all users of the change.
+       *
+       * @param user - the user being accepted
+       */
+      $scope.accept = function (user) {
         $scope.team.members.push(user);
         var userId = $scope.team.joinRequestsFromUsers.indexOf(user._id)
         $scope.team.joinRequestsFromUsers.splice(userId, 1);
@@ -63,7 +84,15 @@ angular.module('teams')
         });
       };
 
-      $scope.decline = function (user, index) {
+      /**
+       * When a user's request is declined their id is removed from the team's requests
+       * from users and the teams id is removed from the user's requests.
+       *
+       * A socket emit is called to notify all users of the change.
+       *
+       * @param user - the user being declined
+       */
+      $scope.decline = function (user) {
         var userId = $scope.team.joinRequestsFromUsers.indexOf(user._id)
         $scope.team.joinRequestsFromUsers.splice(userId, 1);
 
@@ -84,6 +113,9 @@ angular.module('teams')
         });
       };
 
+      /**
+       * Triggers a modal used to confirm the team's deletion.
+       */
       $scope.confirmDelete = function () {
         SweetAlert.swal({
           title: 'Are you sure?',
@@ -101,6 +133,9 @@ angular.module('teams')
         });
       };
 
+      /**
+       * Deletes the current team from the database.
+       */
       $scope.remove = function () {
         Teams.remove({ teamId: $scope.team._id }, function (response) {
           $scope.socket.emit('deleteTeam', {
