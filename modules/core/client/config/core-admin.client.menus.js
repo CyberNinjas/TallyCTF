@@ -10,6 +10,10 @@ angular.module('core.admin').run(['Menus',
       position: 4
     });
 
+    /**
+     * The challenge module was being initialized prior to Admin drop down
+     * so this configuration had to be added here to circumvent ordering issues
+    **/
     Menus.addSubMenuItem('topbar', 'admin', {
       title: 'Create Challenges',
       state: 'challenges.create'

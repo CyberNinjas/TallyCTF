@@ -2,34 +2,22 @@
 
 angular.module('challenges').controller('ChallengeListController', ['$scope', '$stateParams', '$location', 'Authentication', 'Challenges',
   function ($scope, $stateParams, $location, Authentication, Challenges) {
+
     $scope.authentication = Authentication
-
-    $scope.challengeTypes = {
-      'multiple-choice': 'Multiple-Choice',
-      'true-false': 'True/False',
-      'short-answer': 'Short Answer',
-      'long-answer': 'Long Answer'
-    }
-
     $scope.challenges = Challenges.query()
-    $scope.challenges.$promise.then(function () {
-      console.log($scope.challenges)
-    })
 
     $scope.sortType = 'name'
     $scope.reverseSort = false
 
-    $scope.sort = function (p) {
-      if ($scope.sortType === p) {
-        $scope.reverseSort = !$scope.reverseSort
-      } else {
-        $scope.sortType = p
+    /**
+     * Identifies whether or not the sortType has changed
+     * Sets the sort type and negates reverseSort if no change has occurred
+     * @param type - The selected table header to be sorted on
+     */
 
-        if ($scope.sortType === 'points') {
-          $scope.reverseSort = true
-        } else {
-          $scope.reverseSort = false
-        }
-      }
+    $scope.sort = function (type) {
+      var changed = $scope.sortType !== type;
+      $scope.sortType = type;
+      $scope.reverseSort = changed ? $scope.reverseSort : !$scope.reverseSort;
     }
   }])
