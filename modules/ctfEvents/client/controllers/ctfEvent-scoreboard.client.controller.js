@@ -4,6 +4,13 @@ angular.module('ctfEvents').controller('ScoreController', ['$scope', '$filter',
   function ($scope, $filter, $stateParams, $q, Authentication, CtfEvents, Challenges, Teams, Users) {
 
     $scope.authentication = Authentication;
+
+    /**
+     * Once the teams object is filtered so that it only includes the teams that are
+     * registered in the event we add the score element that's generated server side
+     * to the remaining team objects so that we have both the team name and scoring
+     * information in a single object
+     */
     $q.all([
       Users.query().$promise,
       Challenges.query().$promise,

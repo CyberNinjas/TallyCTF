@@ -137,13 +137,22 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
       ];
     })
 
+    /**
+     * Gets a user name from a given user id
+     * @param id
+     */
     $scope.getUserName = function (id) {
       return $filter('filter')($scope.users, { _id: id })[0].displayName;
     }
 
-    $scope.changeContributors = function ($viewValue, $modelValue, $scope) { }
-
-    $scope.submit = function (answer) {
+    /**
+     * Adds the submission object to the current challenges submissions and
+     * updates the ctfEvent
+     *
+     * On submission the cache is invalidated, so that the scoring reflects
+     * the new submission
+     */
+    $scope.submit = function () {
       var submission = {}
       submission.team = $scope.currentTeam
       submission.contributors = $scope.model.contributingUsers
@@ -151,7 +160,6 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$filt
       angular.forEach($scope.ctfEvent.challenges, function (challenge, index) {
         if ($scope.currentChallenge._id === challenge._id) {
           $scope.ctfEvent.challenges[index].submissions.push(submission);
-          console.log($scope.ctfEvent.challenges[index].submissions)
         }
       })
       CtfEvents.update($scope.ctfEvent, function () {

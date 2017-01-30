@@ -21,6 +21,15 @@ angular.module('ctfEvents').controller('EventRegistrationController', ['$scope',
     $scope.eventUsers = $filter('selected')($scope.users, $scope.ctfEvent.users);
   });
 
+  /**
+   * Allows a user to leave an event's team
+   *
+   * The team's id is removed from the current user's teams.
+   * The user is removed from the selected team's members
+   * The event's teams object is updated to reflect the changes.
+   *
+   * @param id - the user's id
+   */
   $scope.leaveTeam = function (id) {
     var currentUser = $filter('filter')($scope.users, { _id: Authentication.user._id })[0]
     currentUser.teams.splice(currentUser.teams.indexOf(id))
@@ -50,6 +59,11 @@ angular.module('ctfEvents').controller('EventRegistrationController', ['$scope',
     });
   };
 
+  /**
+   * Determines whether or not the user is a member of any given event team
+   * @param currentTeam - the team that the user's membership of is being checked
+   * @returns {boolean}
+   */
   $scope.notOnEventTeam = function (currentTeam) {
     var notOnTeam = false;
     angular.forEach($scope.ctfEvent.teams, function (team) {
@@ -62,6 +76,14 @@ angular.module('ctfEvents').controller('EventRegistrationController', ['$scope',
     return notOnTeam;
   }
 
+  /**
+   * Moves the user to the selected team in the current event's team object
+   *
+   * Multiple teams that a user is a member of can take part in an event. This
+   * allows the user to choose which team they'd like to compete for.
+   *
+   * @param currentTeam - the newly selected team
+   */
   $scope.selectTeam = function (currentTeam) {
     var strippedTeams = []
     angular.forEach($scope.ctfEvent.teams, function (team) {
@@ -82,6 +104,11 @@ angular.module('ctfEvents').controller('EventRegistrationController', ['$scope',
     });
   };
 
+  /**
+   * Determines whether the current user is the captain of the current team
+   * @param hideFromAdmin
+   * @returns {boolean}
+   */
   $scope.isCaptain = function (hideFromAdmin) {
     var team = $scope.team;
     hideFromAdmin = (hideFromAdmin ? hideFromAdmin : false);

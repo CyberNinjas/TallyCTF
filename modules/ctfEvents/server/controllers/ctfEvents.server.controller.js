@@ -32,7 +32,7 @@ exports.create = function (req, res) {
 exports.read = function (req, res) {
   var teams = []
   for (var team = 0; team < req.ctfEvent.teams.length; ++team) {
-    teams.push({team: req.ctfEvent.teams[team].team, _id: req.ctfEvent.teams[team]._id, score: 0})
+    teams.push({ team: req.ctfEvent.teams[team].team, _id: req.ctfEvent.teams[team]._id, score: 0 })
   }
 
   for (var challenge = 0; challenge < req.ctfEvent.challenges.length; ++challenge) {
@@ -67,7 +67,7 @@ exports.read = function (req, res) {
       var answerValues = []
       var answers = challenge.answers
       for (var idx = 0; idx < answers.length; ++idx) {
-        answerValues.push({value: answers[idx].value})
+        answerValues.push({ value: answers[idx].value })
       }
     }
 

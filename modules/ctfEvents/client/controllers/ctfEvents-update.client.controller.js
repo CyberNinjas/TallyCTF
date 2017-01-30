@@ -24,13 +24,22 @@ angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$fi
     };
   });
 
-  $scope.remove = function (ctfEvent) {
+  /**
+   * Removes the Event object once the user confirms the action
+   */
+  $scope.remove = function () {
     if (!confirm('Are you sure that you want to delete this event?')) return;
-    CtfEvents.remove({ ctfEventId: $scope.ctfEvent._id }, function (response) {
+    CtfEvents.remove({ ctfEventId: $scope.ctfEvent._id }, function () {
       $location.path('ctfEvents');
     });
   };
 
+  /**
+   * Updates an event with the newly selected options including the challenges
+   * and users in the dual multi-selects
+   *
+   * @param isValid - whether or not the form is valid
+   */
   $scope.update = function (isValid) {
     $scope.error = null;
     if (!isValid) {

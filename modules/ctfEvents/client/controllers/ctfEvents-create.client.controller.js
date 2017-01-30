@@ -1,30 +1,22 @@
 angular.module('ctfEvents').controller('CreateEventsController', ['$scope','$stateParams', '$location', '$q', 'Authentication',
   'CtfEvents', 'Challenges', 'Teams', 'Users', function ($scope, $stateParams, $location, $q, Authentication, CtfEvents, Challenges, Teams, Users) {
 
-    /*
-      Collect all users, challenges, and teams asynchronously and pass them
-      into the group of objects the event creator is allowed to choose from
+    /**
+     * Collects all users and challenges asynchronously and passes them
+     * into the group of objects that the event creator is allowed to choose from
     */
 
     $q.all([
       Users.query().$promise,
       Challenges.query().$promise,
-      Teams.query().$promise,
     ]).then(function(data) {
       $scope.users = data[0];
       $scope.challenges = data[1];
-      $scope.teams = data[2];
       $scope.userOptions = {
         title: 'Users',
         items: $scope.users,
         selectedItems: [],
         display: 'firstName'
-      };
-      $scope.teamOptions= {
-        title: 'Teams',
-        items: $scope.teams,
-        selectedItems: [],
-        display: 'teamName'
       };
       $scope.challengeOptions = {
         title: 'Challenges',
@@ -34,6 +26,12 @@ angular.module('ctfEvents').controller('CreateEventsController', ['$scope','$sta
       };
     });
 
+    /**
+     * Gathers all of the selected options including only the users and challenges
+     * selected in the dual multi-selects and creates a new event object.
+     *
+     * @param isValid - Whether or not the Event creation form is valid
+     */
     $scope.create = function (isValid) {
       $scope.error = null;
 
@@ -52,10 +50,6 @@ angular.module('ctfEvents').controller('CreateEventsController', ['$scope','$sta
         delete currentChallenge.__v
         this.push(currentChallenge)
       }, eventChallenges)
-
-      angular.forEach($scope.teamOptions.selectedItems, function(team) {
-        this.push({ 'team': team._id, 'members': [] });
-      }, eventTeams)
 
       angular.forEach($scope.userOptions.selectedItems, function(user) {
         this.push(user._id)

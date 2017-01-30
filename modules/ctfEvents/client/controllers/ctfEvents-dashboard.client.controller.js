@@ -33,7 +33,6 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$state
 
   var eventCache = CacheFactory.get('eventCache');
   $scope.ctfEvent = eventCache.get('api/ctfEvents/' + $stateParams.ctfEventId)
-  console.log($scope.ctfEvent)
   if(!$scope.ctfEvent){
     resources.push(CtfEvents.get({ ctfEventId: $stateParams.ctfEventId }).$promise)
   } else {
@@ -62,7 +61,6 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$state
 
     return
   }).then(function () {
-    console.log($scope.ctfEvent)
     $scope.eventId = $stateParams.ctfEventId
     $scope.eventTeams = $filter('memberTeams')($scope.teams, $scope.ctfEvent.teams);
     $scope.ongoing = $scope.isOngoing()
