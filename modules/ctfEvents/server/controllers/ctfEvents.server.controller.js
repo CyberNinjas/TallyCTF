@@ -54,9 +54,11 @@ exports.read = function (req, res) {
     }
   }
 
-  for (var teamIndex = 0; teamIndex < teams.length; ++teamIndex) {
-    if (scorers.indexOf(String(teams[teamIndex]._id)) > -1) {
-      teams[teamIndex].score += currentChallenge.points
+  if(scorers.length > 0){
+    for (var teamIndex = 0; teamIndex < teams.length; ++teamIndex) {
+      if (scorers.indexOf(String(teams[teamIndex]._id)) > -1) {
+        teams[teamIndex].score += currentChallenge.points
+      }
     }
   }
 

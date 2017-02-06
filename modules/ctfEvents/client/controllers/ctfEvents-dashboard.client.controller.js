@@ -33,27 +33,16 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
       $scope: $scope
     });
 
-    var event = false;
-    var eventCache = CacheFactory.get('eventCache');
-    $scope.ctfEvent = eventCache.get('api/ctfEvents/' + $stateParams.ctfEventId)
-    if (!$scope.ctfEvent) {
-      event = CtfEvents.get({ ctfEventId: $stateParams.ctfEventId }).$promise
-      event.then(function (data) {
-        $scope.ctfEvent = data;
-        angular.forEach($scope.ctfEvent.teams, function (team) {
-          if (team.members.indexOf(Authentication.user._id) > -1) {
-            $scope.currentTeam = team;
-          }
-        })
-        $scope.ctfEvent.challenges.map(function (challenge) {
-          challenge.teamSubmissions = $filter('submissionFilter')(challenge.submissions, $scope.currentTeam).length;
-        })
-      })
-    } else {
-      $scope.ctfEvent = JSON.parse($scope.ctfEvent[1]);
-    }
 
     $scope.all.then(function () {
+      angular.forEach($scope.ctfEvent.teams, function (team) {
+        if (team.members.indexOf(Authentication.user._id) > -1) {
+          $scope.currentTeam = team;
+        }
+      })
+      $scope.ctfEvent.challenges.map(function (challenge) {
+        challenge.teamSubmissions = $filter('submissionFilter')(challenge.submissions, $scope.currentTeam).length;
+      })
       $scope.challenges.map(function (challenge) {
         challenge.isCollapsed = true
         return challenge

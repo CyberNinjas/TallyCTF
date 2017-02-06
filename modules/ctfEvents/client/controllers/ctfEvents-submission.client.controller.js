@@ -1,6 +1,6 @@
 'use strict';
-angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$controller', '$filter', '$stateParams', '$state', '$location', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users', 'Socket', '$q', 'Cache',
-  function ($scope, $controller, $filter, $stateParams, $state, $location, Authentication, CtfEvents, Challenges, Teams, Users, Socket, $q, Cache) {
+angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$controller', '$filter', '$stateParams', '$state', '$location', 'Authentication', 'CtfEvents', 'Users', 'Socket',
+  function ($scope, $controller, $filter, $stateParams, $state, $location, Authentication, CtfEvents, Users, Socket) {
 
     $controller('BaseEventsController', {
       $scope: $scope

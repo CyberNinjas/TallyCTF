@@ -1,7 +1,7 @@
 'use strict';
 angular.module('ctfEvents').controller('ListEventsController', ['$state', '$scope', '$stateParams',
-  '$location', '$filter', '$q', 'Teams', 'Authentication', 'CtfEvents', 'usersTeamsService', 'ModalService', '$controller',
-  function ($state, $scope, $stateParams, $location, $filter, $q, Teams, Authentication, CtfEvents, usersTeamsService, ModalService, $controller) {
+  '$location', '$filter', '$q', 'Teams', 'Authentication', 'CtfEvents', 'usersTeamsService', 'ModalService', '$controller', 'Cache',
+  function ($state, $scope, $stateParams, $location, $filter, $q, Teams, Authentication, CtfEvents, usersTeamsService, ModalService, $controller, Cache) {
 
     $controller('BaseEventsController', {
       $scope: $scope
@@ -88,6 +88,7 @@ angular.module('ctfEvents').controller('ListEventsController', ['$state', '$scop
                 })
               }
               CtfEvents.update(ctfEvent, function () {
+                $scope.socket.emit('invalidateAll')
                 $location.path('ctfEvents/dash/' + ctfEvent._id);
               }, function (errorResponse) {
                 $scope.error = errorResponse.data.message;
