@@ -1,10 +1,11 @@
 'use strict';
 angular.module('ctfEvents').controller('ListEventsController', ['$state', '$scope', '$stateParams',
-  '$location', '$filter', '$q', 'Teams', 'Authentication', 'CtfEvents', 'usersTeamsService', 'ModalService',
-  function($state, $scope, $stateParams, $location, $filter, $q, Teams, Authentication, CtfEvents, usersTeamsService, ModalService) {
+  '$location', '$filter', '$q', 'Teams', 'Authentication', 'CtfEvents', 'usersTeamsService', 'ModalService', '$controller',
+  function ($state, $scope, $stateParams, $location, $filter, $q, Teams, Authentication, CtfEvents, usersTeamsService, ModalService, $controller) {
 
-    $scope.userId = Authentication.user._id
-    $scope.ctfEvents = CtfEvents.query();
+    $controller('BaseEventsController', {
+      $scope: $scope
+    });
 
     /**
      * Determines whether or not a user is registered for an event
@@ -12,7 +13,7 @@ angular.module('ctfEvents').controller('ListEventsController', ['$state', '$scop
      * @param ctfEvent - the event being checked for registration
      * @returns {string} - the string representing the ui-sref of the event in question
      */
-    $scope.isRegistered = function(ctfEvent) {
+    $scope.isRegistered = function (ctfEvent) {
       return ctfEvent.users.indexOf(Authentication.user._id) > -1 ? 'ctfEvents.dashboard({ ctfEventId : ctfEvent._id })' : '-'
     }
 
@@ -22,21 +23,23 @@ angular.module('ctfEvents').controller('ListEventsController', ['$state', '$scop
      *
      * @param eventId
      */
-    $scope.registerForEvent = function(eventId) {
-      var ctfEvent = CtfEvents.get({ ctfEventId: eventId })
-      ctfEvent.$promise.then(function(data) {
-        ctfEvent.users.push($scope.userId)
-        if(Authentication.user.roles.indexOf('teamCaptain') > -1) {
-          $scope.show('captain', ctfEvent)
-        } else if(Authentication.user.teams.length > 0) {
-          $scope.show('user', ctfEvent)
+    $scope.registerForEvent = function (eventId) {
+      var ctfEvent = CtfEvents.get({ ctfEventId: eventId }).$promise
+      ctfEvent.then(function (data) {
+        data.users.push($scope.userId)
+        if (Authentication.user.roles.indexOf('teamCaptain') > -1) {
+          $scope.show('captain', data)
+        } else if (Authentication.user.teams.length > 0) {
+          $scope.show('user', data)
         } else {
-          CtfEvents.update(ctfEvent, function() {
-            $location.path('ctfEvents/dash/' + ctfEvent._id);
-          }, function(errorResponse) {
+          CtfEvents.update(data, function () {
+            $scope.socket.emit('invalidate', { 'id': data._id })
+            $location.path('ctfEvents/dash/' + data._id);
+          }, function (errorResponse) {
             $scope.error = errorResponse.data.message;
           })
-        };
+        }
+        ;
       })
     }
 
@@ -52,19 +55,19 @@ angular.module('ctfEvents').controller('ListEventsController', ['$state', '$scop
      * @param userType - either captain or user
      * @param ctfEvent - the event being registered for
      */
-    $scope.show = function(userType, ctfEvent) {
+    $scope.show = function (userType, ctfEvent) {
       $scope.teams = Teams.query();
-      $scope.teams.$promise.then(function(data) {
-        if(userType === 'captain'){
+      $scope.teams.$promise.then(function (data) {
+        if (userType === 'captain') {
           angular.forEach($scope.teams, function (team) {
-            if(team.teamCaptain === $scope.userId) {
+            if (team.teamCaptain === $scope.userId) {
               usersTeamsService.addTeam(team)
             }
           })
           var templateUrl = 'captain.modal.html'
-        } else if(userType === 'user'){
+        } else if (userType === 'user') {
           angular.forEach($scope.teams, function (team) {
-            if(team.members.indexOf($scope.userId) > 0) {
+            if (team.members.indexOf($scope.userId) > 0) {
               usersTeamsService.addTeam(team)
             }
           })
@@ -74,23 +77,23 @@ angular.module('ctfEvents').controller('ListEventsController', ['$state', '$scop
           templateUrl: templateUrl,
           controller: 'ModalController'
         })
-        .then(function(modal) {
-          modal.element.modal();
-          modal.close.then(function(result) {
-            usersTeamsService.resetTeams()
-            if(result.teamName !== 'None') {
-              ctfEvent.teams.push({
-                team: result._id,
-                members: [Authentication.user._id]
-              })
-            }
-            CtfEvents.update(ctfEvent, function() {
-              $location.path('ctfEvents/dash/' + ctfEvent._id);
-            }, function(errorResponse) {
-              $scope.error = errorResponse.data.message;
+          .then(function (modal) {
+            modal.element.modal();
+            modal.close.then(function (result) {
+              usersTeamsService.resetTeams()
+              if (result.teamName !== 'None') {
+                ctfEvent.teams.push({
+                  team: result._id,
+                  members: [Authentication.user._id]
+                })
+              }
+              CtfEvents.update(ctfEvent, function () {
+                $location.path('ctfEvents/dash/' + ctfEvent._id);
+              }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+              });
             });
           });
-        });
       })
     };
   }

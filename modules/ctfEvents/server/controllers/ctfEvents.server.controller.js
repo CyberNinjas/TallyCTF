@@ -82,22 +82,21 @@ exports.read = function (req, res) {
       teamSubmissions: challenge.teamSubmissions,
       answers: answerValues,
     }
-
-    var event = {
-      _id: req.ctfEvent._id,
-      challenges: req.ctfEvent.challenges,
-      created: req.ctfEvent.created,
-      description: req.ctfEvent.description,
-      start: req.ctfEvent.start,
-      end: req.ctfEvent.end,
-      registrationStart: req.ctfEvent.registrationStart,
-      registrationEnd: req.ctfEvent.registrationEnd,
-      score: teams,
-      settings: req.ctfEvent.settings,
-      teams: req.ctfEvent.teams,
-      title: req.ctfEvent.title,
-      users: req.ctfEvent.users
-    }
+  }
+  var event = {
+    _id: req.ctfEvent._id,
+    challenges: req.ctfEvent.challenges || [],
+    created: req.ctfEvent.created,
+    description: req.ctfEvent.description,
+    start: req.ctfEvent.start,
+    end: req.ctfEvent.end,
+    registrationStart: req.ctfEvent.registrationStart,
+    registrationEnd: req.ctfEvent.registrationEnd,
+    score: teams,
+    settings: req.ctfEvent.settings,
+    teams: req.ctfEvent.teams,
+    title: req.ctfEvent.title,
+    users: req.ctfEvent.users
   }
   res.json(event);
 };

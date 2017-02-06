@@ -1,8 +1,7 @@
 'use strict'
 
 angular.module('teams')
-  .controller('TeamsListController', ['$scope', '$controller', 'Teams',
-    'Users',
+  .controller('TeamsListController', ['$scope', '$controller', 'Teams', 'Users',
     function ($scope, $controller, Teams, Users) {
 
       $controller('BaseTeamsController', {

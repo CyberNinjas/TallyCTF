@@ -1,28 +1,27 @@
 'use strict';
-angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$filter', '$state', '$stateParams', '$location', '$q', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users', function ($scope, $filter, $state, $stateParams, $location, $q, Authentication, CtfEvents, Challenges, Teams, Users) {
-  $q.all([
-    Users.query().$promise,
-    Challenges.query().$promise,
-    CtfEvents.get({ ctfEventId: $stateParams.ctfEventId }).$promise,
-  ]).then(function (data) {
-    $scope.users = data[0];
-    $scope.challenges = data[1];
-    $scope.ctfEvent = data[2];
-    return
-  }).then(function () {
-    $scope.challengeOptions = {
-      title: 'Challenges',
-      display: 'name',
-      items: $filter('unselectedObject')($scope.challenges, $scope.ctfEvent.challenges),
-      selectedItems: $filter('selectedObject')($scope.challenges, $scope.ctfEvent.challenges)
-    };
-    $scope.userOptions = {
-      title: 'Users',
-      display: 'firstName',
-      items: $filter('unselected')($scope.users, $scope.ctfEvent.users),
-      selectedItems: $filter('selected')($scope.users, $scope.ctfEvent.users)
-    };
+angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$controller', '$filter', '$state', '$stateParams', '$location', '$q', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users', 'Cache', function ($scope, $controller, $filter, $state, $stateParams, $location, $q, Authentication, CtfEvents, Challenges, Teams, Users, Cache) {
+
+  $controller('BaseEventsController', {
+    $scope: $scope
   });
+
+  $scope.all.then(function () {
+    CtfEvents.get({ ctfEventId: $stateParams.ctfEventId }).$promise.then(function (data) {
+      $scope.ctfEvent = data
+      $scope.challengeOptions = {
+        title: 'Challenges',
+        display: 'name',
+        items: $filter('unselectedObject')($scope.challenges, $scope.ctfEvent.challenges),
+        selectedItems: $filter('selectedObject')($scope.challenges, $scope.ctfEvent.challenges)
+      };
+      $scope.userOptions = {
+        title: 'Users',
+        display: 'firstName',
+        items: $filter('unselected')($scope.users, $scope.ctfEvent.users),
+        selectedItems: $filter('selected')($scope.users, $scope.ctfEvent.users)
+      };
+    })
+  })
 
   /**
    * Removes the Event object once the user confirms the action
@@ -30,6 +29,7 @@ angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$fi
   $scope.remove = function () {
     if (!confirm('Are you sure that you want to delete this event?')) return;
     CtfEvents.remove({ ctfEventId: $scope.ctfEvent._id }, function () {
+      $scope.socket.emit('invalidateAll')
       $location.path('ctfEvents');
     });
   };
@@ -55,6 +55,7 @@ angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$fi
       $scope.ctfEvent.users.push(obj._id);
     })
     CtfEvents.update($scope.ctfEvent, function (res) {
+      $scope.socket.emit('invalidateAll')
       $location.path('ctfEvents');
     }, function (errorResponse) {
       $scope.error = errorResponse.data.message;

@@ -1,7 +1,7 @@
 angular.module('ctfEvents').filter('unselected', function () {
   return function (list, obj) {
     return list.filter(function (item) {
-      if (obj.indexOf(item._id) < 0) {
+      if (obj && list && obj.indexOf(item._id) < 0) {
         return true;
       }
     });
@@ -27,7 +27,7 @@ angular.module('ctfEvents').filter('unselected', function () {
 }).filter('selected', function () {
   return function (list, obj) {
     return list.filter(function (item) {
-      if (obj.indexOf(item._id) >= 0) {
+      if (obj && list && obj.indexOf(item._id) >= 0) {
         return true;
       }
     });
@@ -35,24 +35,27 @@ angular.module('ctfEvents').filter('unselected', function () {
 }).filter('unselectedObject', function () {
   return function (list, obj) {
     return list.filter(function (item) {
-      var seen = false
-      for (var x = 0; x < obj.length; x++) {
-        if ((obj[x]._id) === (item._id)) {
-          seen = true
+      if (obj && list) {
+        var seen = false
+        for (var x = 0; x < obj.length; x++) {
+          if ((obj[x]._id) === (item._id)) {
+            seen = true
+          }
         }
-      }
-      ;
-      if (!seen) {
-        return true;
+        if (!seen) {
+          return true;
+        }
       }
     })
   };
 }).filter('selectedObject', function () {
   return function (list, obj) {
     return list.filter(function (item) {
-      for (var y = 0; y < obj.length; y++) {
-        if (obj[y]._id === item._id) {
-          return true;
+      if (obj && list) {
+        for (var y = 0; y < obj.length; y++) {
+          if (obj[y]._id === item._id) {
+            return true;
+          }
         }
       }
     });

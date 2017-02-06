@@ -1,17 +1,17 @@
-angular.module('ctfEvents').controller('CreateEventsController', ['$scope','$stateParams', '$location', '$q', 'Authentication',
-  'CtfEvents', 'Challenges', 'Teams', 'Users', function ($scope, $stateParams, $location, $q, Authentication, CtfEvents, Challenges, Teams, Users) {
+angular.module('ctfEvents').controller('CreateEventsController', ['$scope', '$controller', '$stateParams', '$location', '$q', 'Authentication',
+  'CtfEvents', 'Challenges', 'Teams', 'Users', 'Cache',
+  function ($scope, $controller, $stateParams, $location, $q, Authentication, CtfEvents, Challenges, Teams, Users, Cache) {
+
+    $controller('BaseEventsController', {
+      $scope: $scope
+    });
 
     /**
      * Collects all users and challenges asynchronously and passes them
      * into the group of objects that the event creator is allowed to choose from
-    */
+     */
 
-    $q.all([
-      Users.query().$promise,
-      Challenges.query().$promise,
-    ]).then(function(data) {
-      $scope.users = data[0];
-      $scope.challenges = data[1];
+    $scope.all.then(function () {
       $scope.userOptions = {
         title: 'Users',
         items: $scope.users,
@@ -24,7 +24,7 @@ angular.module('ctfEvents').controller('CreateEventsController', ['$scope','$sta
         selectedItems: [],
         display: 'name'
       };
-    });
+    })
 
     /**
      * Gathers all of the selected options including only the users and challenges
@@ -35,7 +35,7 @@ angular.module('ctfEvents').controller('CreateEventsController', ['$scope','$sta
     $scope.create = function (isValid) {
       $scope.error = null;
 
-      if (!isValid){
+      if (!isValid) {
         $scope.$broadcast('show-errors-check-validity', 'ctfEventForm');
         return false;
       }
@@ -44,14 +44,14 @@ angular.module('ctfEvents').controller('CreateEventsController', ['$scope','$sta
       var eventUsers = [];
       var eventChallenges = [];
 
-      angular.forEach($scope.challengeOptions.selectedItems, function(challenge) {
+      angular.forEach($scope.challengeOptions.selectedItems, function (challenge) {
         var currentChallenge = challenge.toJSON()
         delete currentChallenge._id
         delete currentChallenge.__v
         this.push(currentChallenge)
       }, eventChallenges)
 
-      angular.forEach($scope.userOptions.selectedItems, function(user) {
+      angular.forEach($scope.userOptions.selectedItems, function (user) {
         this.push(user._id)
       }, eventUsers)
 
@@ -69,6 +69,7 @@ angular.module('ctfEvents').controller('CreateEventsController', ['$scope','$sta
       });
 
       CtfEvents.save(ctfEvent, function (response) {
+        $scope.socket.emit('invalidateAll')
         $location.path('ctfEvents/' + response._id);
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;

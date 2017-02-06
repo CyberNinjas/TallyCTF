@@ -51,13 +51,10 @@
                     <i class="fa fa-question fa-fw"></i> Challenges
                 </div>
                 <div class="panel-body" id="challenges">
-                    <a ng-show='ongoing' class="list-group">
-
-                     <div ng-repeat="challenge in ctfEvent.challenges | orderByFilter:sortType | difficultyFilter:sortChallenge">
+                     <div ng-show='ongoing' ng-repeat="challenge in ctfEvent.challenges | orderByFilter:sortType | difficultyFilter:sortChallenge">
                         <div uib-accordion-group ng-class="howHard(challenge)">
                           {{challenge.name + ' (' + challenge.category + ")   "}}
                             <span class="pull-right">Points: {{challenge.points}}
-                              <!--<a class="btn btn-xs" ng-click="goToChallenge(challenge.unavailable, ctfEvent._id, challenge._id)">-->
                               <a class="btn btn-xs" ng-hide="challenge.unavailable" ui-sref="ctfEvents.submission({ctfEventId: ctfEvent._id, challengeId: challenge._id})">
                                   <span class="glyphicon glyphicon-book"></span>
                               </a>
@@ -68,7 +65,6 @@
                           <div class="well well-lg">{{challenge.description}}</div>
                         </div>
                      </div>
-
                     <div ng-hide='ongoing' class="list-group">
                         <a class="list-group-item list-group-item-warning">This Event Has Not Started</a>
                     </div>

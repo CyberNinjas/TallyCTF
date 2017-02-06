@@ -10,7 +10,7 @@
 - [License](#license)
 
 ## Install
-After installing Node through the most recent installer released for your operating system install Bower and Gulp globally.
+Install Node using the most recently released installer then install Bower and Gulp globally.
 ```
 npm install -g bower
 npm install -g gulp

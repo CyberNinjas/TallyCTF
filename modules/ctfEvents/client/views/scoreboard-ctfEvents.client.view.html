@@ -3,7 +3,7 @@
     <div class="col-lg-12 content">
         <div class="container">
             <div class="jumbotron text-right">
-                <h1>Current Score! <small>{{ctfEvent.title}}</h1>
+                <h1>Current Score! <small>{{ctfEvent.title}}</small></h1>
                 <div ng-repeat="team in eventTeams" class="progress">
                     <div class="progress-bar" role="progressbar" aria-valuenow="{{team.points}}" aria-valuemin="0" aria-valuemax="100" style="width: {{team.points}}%;">
                         <span class="sr-only">{{team.points}}</span>
