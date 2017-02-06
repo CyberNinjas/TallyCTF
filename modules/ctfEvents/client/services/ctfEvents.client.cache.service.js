@@ -6,6 +6,9 @@ angular.module('ctfEvents').factory('Cache', function (CacheFactory) {
     invalidate: function (key) {
       $httpDefaultCache.remove(key);
     },
+    keys: function () {
+      console.log($httpDefaultCache.keys());
+    },
     invalidateAll: function () {
       $httpDefaultCache.remove('api/ctfEvent');
       $httpDefaultCache.removeAll();

@@ -22,7 +22,13 @@ module.exports = function (io, socket) {
   socket.on('acceptUser', function (message) {
     io.emit('acceptUser', message);
   });
-  socket.on('teamUpdate', function (message) {
-    io.emit('teamUpdate', message);
+  socket.on('invalidate', function (message) {
+    io.emit('invalidate', message);
+  });
+  socket.on('invalidateList', function (message) {
+    io.emit('invalidate', message);
+  });
+  socket.on('invalidateAll', function (message) {
+    io.emit('invalidateAll', message);
   });
 };
