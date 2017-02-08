@@ -1,7 +1,7 @@
 'use strict'
 
-angular.module('challenges').controller('ChallengeUpdateController', ['$scope', '$stateParams', '$location', 'Authentication', '$http', 'filterFilter', 'Challenges', 'ChallengeForm',
-  function ($scope, $stateParams, $location, Authentication, $http, filterFilter, Challenges, ChallengeForm) {
+angular.module('challenges').controller('ChallengeUpdateController', ['$scope', '$stateParams', '$location', 'Authentication', '$http', 'Challenges', 'ChallengeForm',
+  function ($scope, $stateParams, $location, Authentication, $http, Challenges, ChallengeForm) {
 
     $scope.authentication = Authentication
     $scope.id = $stateParams.challengeId || 'new'
