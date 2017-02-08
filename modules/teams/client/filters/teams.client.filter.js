@@ -1,18 +1,20 @@
 angular.module('teams').filter('members', function() {
   return function(collection, team) {
     var members = [];
-    collection.forEach(function(user) {
-      if (team.members.indexOf(user._id) !== -1){
-        members.push(user);
-      }
-    })
+    if(team) {
+      collection.forEach(function (user) {
+        if (team.members && team.members.indexOf(user._id) !== -1) {
+          members.push(user);
+        }
+      })
+    }
     return members;
   };
 }).filter('availableUsers', function() {
   return function(collection, team) {
     var members = [];
     collection.forEach(function(user) {
-      if (user.roles.indexOf('admin') < 0 && team.members.indexOf(user._id) < 0 && team.joinRequestsToUsers.indexOf(user._id) < 0 && team.joinRequestsFromUsers.indexOf(user._id) < 0 && team.teamCaptain !== user._id){
+      if (user.roles.indexOf('admin') < 0 && user.wasAskedToJoin.indexOf(team._id) < 0 && team.members.indexOf(user._id) < 0 && team.joinRequestsToUsers.indexOf(user._id) < 0 && team.joinRequestsFromUsers.indexOf(user._id) < 0 && team.teamCaptain !== user._id){
         members.push(user);
       }
     })

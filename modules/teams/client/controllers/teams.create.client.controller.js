@@ -27,14 +27,11 @@ angular.module('teams')
         $scope.socket.emit('newTeam', { 'newTeam': team })
         Teams.save(team, function (response) {
           $scope.teamName = '';
+          $state.go('teams.view', {
+            teamId: response._id
+          });
         }, function (errorResponse) {
           $scope.error = errorResponse.data.message;
-        }).$promise.then(function(){
-          if(!$scope.error){
-            $state.go('teams.add', {
-              teamId: team._id
-            });
-          }
         })
       }
     }
