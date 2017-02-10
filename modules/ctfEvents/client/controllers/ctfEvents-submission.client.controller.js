@@ -14,6 +14,12 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$cont
         angular.forEach($scope.ctfEvent.challenges, function (challenge) {
           if (challenge._id === $stateParams.challengeId) {
             $scope.currentChallenge = challenge;
+            $scope.model = {
+              contributingUsers: [],
+              selectedUsers: [],
+              type: $scope.currentChallenge.challengeType,
+              answers: $scope.currentChallenge.answers
+            };
           }
         })
 
@@ -29,12 +35,7 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$cont
           }
         })
 
-        $scope.model = {
-          contributingUsers: [],
-          selectedUsers: [],
-          type: $scope.currentChallenge.challengeType,
-          answers: $scope.currentChallenge.answers
-        };
+        $scope.availableUsers = $scope.availableUsers ? $scope.availableUsers : [{ name: 'all', value: 'all' }]
 
         $scope.fields = [
           {
@@ -51,18 +52,20 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$cont
             key: 'answer',
             type: 'multiCheckbox',
             className: 'multi-check',
-            templateOptions: {
-              label: 'Your answer',
-            },
             hideExpression: 'model.type == "text"',
             expressionProperties: {
               'templateOptions.options': function () {
-                return $scope.model.answers.map(function (answer) {
-                  answer.name = answer.value;
-                  return answer
-                })
+                if($scope.model.type !== 'text'){
+                  return $scope.model.answers.map(function (answer) {
+                    answer.name = answer.value;
+                    return answer
+                  })
+                }
               }
-            }
+            },
+            templateOptions: {
+              label: 'Your answer',
+            },
           },
           {
             key: 'selectedUsers',
@@ -71,7 +74,7 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$cont
             templateOptions: {
               label: 'Contributing Users',
               options: $scope.availableUsers,
-              onClick: function ($modelValue, $viewValue, scope, event) {
+              onClick: function () {
                 var numberOfUsers = $scope.model.selectedUsers.length;
                 var users = $scope.model.selectedUsers.map(function (user) {
                   var portion = 100 / numberOfUsers;
@@ -111,7 +114,6 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$cont
                             angular.forEach($scope.model.contributingUsers, function (user) {
                               total += user.value;
                             })
-
                             angular.forEach($scope.model.contributingUsers, function (user) {
                               user.value = (100 - (total - user.value))
                             })
@@ -164,6 +166,8 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$cont
       })
       CtfEvents.update($scope.ctfEvent, function () {
         $scope.socket.emit('invalidate', { 'id': $scope.ctfEvent._id })
+        $scope.socket.emit('invalidateAll')
+        // Should add an alert for feedback on correct vs incorrect and stay or go depending
         $location.path('ctfEvents/dash/' + $scope.ctfEvent._id);
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;

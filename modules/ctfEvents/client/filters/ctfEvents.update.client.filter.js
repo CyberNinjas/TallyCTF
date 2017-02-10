@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 angular.module('ctfEvents').filter('unselected', function () {
   return function (list, obj) {

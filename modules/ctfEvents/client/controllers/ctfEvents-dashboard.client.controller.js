@@ -86,7 +86,13 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
 
     $scope.isOngoing = function () {
       var hasStarted = $scope.ctfEvent.start < moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') && moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') < $scope.ctfEvent.end
-      return hasStarted
+      var onTeam = false;
+      angular.forEach($scope.ctfEvent.teams, function (team) {
+        if(team.members.indexOf(Authentication.user._id) > -1){
+          onTeam = true;
+        }
+      })
+      return (hasStarted && onTeam)
     }
 
     $scope.getRemainingTime = function () {

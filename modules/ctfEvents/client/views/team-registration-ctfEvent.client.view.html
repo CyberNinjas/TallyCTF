@@ -16,6 +16,7 @@
                      ng-click="selectTeam(team)"> Select<i class="glyphicon glyphicon-log-in"></i> </button>
             <h4 class="list-group-item-heading" ng-bind="team.teamName"></h4>
           </a>
+          <p class="alert alert-warning text-center" ng-if="!userTeams.length">You have no teams.</p>
         </div>
 
       <div ng-controller="TeamsListController">
@@ -28,6 +29,7 @@
               <h4 class="list-group-item-heading" ng-bind="team.teamName"></h4>
             </a>
           </div>
+          <p class="alert alert-warning text-center" ng-if="!eventTeams.length">The event has no teams.</p>
       </div>
 
   </div>

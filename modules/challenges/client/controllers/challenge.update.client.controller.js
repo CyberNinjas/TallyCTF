@@ -59,7 +59,7 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
       $scope.challenge.numberOfSubmissions = $scope.model.submissions
       $scope.challenge.answers = $scope.model.answers
       $scope.challenge._id = $scope.id
-      Challenges.update($scope.challenge, function () {
+      Challenges.update($scope.challenge, function (res) {
         $location.path('challenges')
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message
