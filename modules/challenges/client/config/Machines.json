@@ -1,0 +1,7 @@
+[
+  {"name": "Amazon", "value": "Amazon"},
+  {"name": "AWS", "value": "AWS"},
+  {"name": "Heroku", "value": "Heroku"},
+  {"name": "Local", "value": "Local"},
+  {"name": "None", "value": "None"}
+]

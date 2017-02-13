@@ -6,7 +6,7 @@ var Challenge = mongoose.model('Challenge')
 var Q = require('q')
 var errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'))
 
-exports.read = function (req, res, next) {
+exports.read = function (req, res) {
   res.json(req.challenge)
 }
 
@@ -21,9 +21,8 @@ exports.default = function (req, res, next) {
 }
 
 exports.updateOrCreate = function (req, res) {
-  var isCreate = (req.challenge) ? false : true
-  var challenge = req.challenge || new Challenge({})
-  if (isCreate) {
+  var challenge = req.challenge ? req.challenge : new Challenge({})
+  if (!req.challenge) {
     challenge.createdBy = req.user._id
   }
   challenge.lastModifiedBy = req.user._id

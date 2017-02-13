@@ -7,9 +7,19 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
     $scope.id = $stateParams.challengeId || 'new'
     $scope.model = { answers: [] };
     $scope.challenge = Challenges.get({ challengeId: $scope.id })
-    $http.get('/modules/challenges/client/config/challengeTypes.json').then(
+    $http.get('/modules/challenges/client/config/ChallengeTypes.json').then(
       function (res) {
         $scope.challengeTypes = res.data
+      }
+    )
+    $http.get('/modules/challenges/client/config/NiceFramework.json').then(
+      function (res) {
+        $scope.niceFramework= res.data
+      }
+    )
+    $http.get('/modules/challenges/client/config/Machines.json').then(
+      function (res) {
+        $scope.machines = res.data
       }
     )
 
@@ -30,18 +40,14 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
       $scope.model.machine = $scope.challenge.affectedMachine
       $scope.model.answers = $scope.challenge.answers
 
-      //Placeholder to be populated with user data
-      $scope.machines = ['AWS', 'Azure', 'Heroku', 'Local', 'None'].map(function (machine) {
-        return { name: machine, value: machine }
-      })
-
       var formats = $scope.challengeTypes.filter(function (type) {
         return type.value === $scope.model.type;
       })[0].formats
 
+      console.log($scope.machines)
       $scope.model.formats = formats
       $scope.model.format = $scope.challenge.challengeFormat
-      $scope.fields = ChallengeForm.createForm($scope, $scope.challenge, $scope.challengeTypes, $scope.machines)
+      $scope.fields = ChallengeForm.createForm($scope, $scope.challenge, $scope.challengeTypes, $scope.machines, $scope.niceFramework)
     })
 
     /**

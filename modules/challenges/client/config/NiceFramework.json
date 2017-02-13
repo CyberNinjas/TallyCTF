@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Python",
+    "group": "Programming"
+  },
+  {
+    "name": "Node",
+    "group": "Programming"
+  },
+  {
+    "name": "Reflected",
+    "group": "XSS"
+  },
+  {
+    "name": "Stored",
+    "group": "XSS"
+  },
+  {
+    "name": "DOM Based",
+    "group": "XSS"
+  },
+  {
+    "name": "Injection",
+    "group": "SQL"
+  },
+  {
+    "name": "Blind SQL Injection",
+    "group": "SQL"
+  }
+]

@@ -4,7 +4,7 @@ angular.module('challenges').factory('ChallengeForm', ['$http',
   function ($http) {
 
     return {
-      createForm: function ($scope, challenge, types, machines) {
+      createForm: function ($scope, challenge, types, machines, nice) {
         var fields = [
           {
             className: 'row',
@@ -45,7 +45,7 @@ angular.module('challenges').factory('ChallengeForm', ['$http',
                 key: 'description',
                 templateOptions: {
                   label: 'Description',
-                  rows: 15
+                  rows: 10
                 }
               }
             ]
@@ -111,6 +111,21 @@ angular.module('challenges').factory('ChallengeForm', ['$http',
                   label: 'Number Of Submissions',
                   type: 'number'
                 },
+              }
+            ]
+          },
+          {
+            className: 'row',
+            fieldGroup: [
+              {
+                className: 'col-xs-12',
+                type: 'multiselect',
+                key: 'nice',
+                templateOptions: {
+                  "label": "Nice",
+                  "valueProp": "name",
+                  "options": nice,
+                }
               }
             ]
           },
