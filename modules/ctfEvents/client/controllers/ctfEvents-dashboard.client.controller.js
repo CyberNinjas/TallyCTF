@@ -53,7 +53,7 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
       $scope.ongoing = $scope.isOngoing()
       $scope.getRemainingTime()
       $scope.remainingTime = $scope.ongoing === false ? '00:00:00' : $scope.hours + ':' + $scope.minutes
-
+      $scope.teamsPoints = $scope.getTeamsPoints()
       $scope.tile_stats = [{
         title: 'Your Position',
         value: $scope.ongoing === false ? 'N/A' : '1st',
@@ -61,12 +61,12 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
         icon: 'fa fa-sort-numeric-asc'
       }, {
         title: 'Points Available:',
-        value: $scope.ongoing === false ? 0 : $scope.getPointTotal(),
+        value: $scope.ongoing === false ? 0 : ($scope.getPointTotal() - $scope.teamsPoints),
         change: null,
         icon: 'fa fa-diamond'
       }, {
         title: 'Your Point Total ',
-        value: $scope.ongoing === false ? 0 : 0,
+        value: $scope.ongoing === false ? 0 : $scope.teamsPoints,
         change: $scope.ongoing === false ? null : 0,
         icon: 'fa fa-bullseye'
       }, {
@@ -118,6 +118,29 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
 
     $scope.getTeam = function (team) {
       return $filter('filter')($scope.teams, { _id: team.id })[0];
+    }
+
+    $scope.getTeamsPoints = function(){
+      var score = 0;
+      angular.forEach($scope.ctfEvent.teams, function (team) {
+        if(team.members.indexOf($scope.userId) > -1){
+          angular.forEach($scope.ctfEvent.score, function (scorer) {
+            if(scorer.team === team.team){
+              score = scorer.score
+            }
+          })
+        }
+      })
+      return score;
+    }
+    $scope.getScore = function(id){
+      var score = 0;
+      angular.forEach($scope.ctfEvent.score, function (scorer) {
+        if(scorer.team === id){
+          score = scorer.score
+        }
+      })
+      return score;
     }
   }])
 

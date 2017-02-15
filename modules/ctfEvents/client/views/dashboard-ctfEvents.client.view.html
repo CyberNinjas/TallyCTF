@@ -79,7 +79,7 @@
                 <div class="panel-body">
                     <div ng-repeat="team in eventTeams">
                          <div class="collapse-group form-group margin-bottom">
-                            <button class='btn btn-secondary btn-block' bcollapse>{{team.teamName}}<span class="badge pull-right">//todo</span></button>
+                            <button class='btn btn-secondary btn-block' bcollapse>{{team.teamName}}<span class="badge pull-right">{{getScore(team._id)}}</span></button>
                             <div class="list-group collapse">
                                 <a ng-repeat="member in team.members track by $index" class="list-group-item">{{getUserName(member)}}<span class="badge pull-right">//todo</span></a>
                             </div>
