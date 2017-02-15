@@ -31,60 +31,34 @@ exports.create = function (req, res) {
  */
 exports.read = function (req, res) {
   var teams = []
+  // Construct a new object for the current scores in the event
   for (var team = 0; team < req.ctfEvent.teams.length; ++team) {
     teams.push({ team: req.ctfEvent.teams[team].team, _id: req.ctfEvent.teams[team]._id, score: 0 })
   }
+
   for (var challenge = 0; challenge < req.ctfEvent.challenges.length; ++challenge) {
     var currentChallenge = req.ctfEvent.challenges[challenge]
     var scorers = []
+
     for (var submission = 0; submission < currentChallenge.submissions.length; ++submission) {
       var currentSubmission = currentChallenge.submissions[submission];
       if (currentChallenge.challengeType === 'text') {
-        for (var answer = 0; answer < currentChallenge.answers.length; ++answer) {
-          var same = currentChallenge.answers[answer].regex ?
-            RegExp(currentChallenge.answers[answer].value).test(currentSubmission.answer) :
-            currentChallenge.answers[answer].value === currentSubmission.answer
-          if (same && currentChallenge.answers[answer].correct
-            && scorers.indexOf(currentSubmission.team) < 0) {
-            scorers.push(currentSubmission.team)
-          }
-        }
+        scorers = scoreText(currentChallenge, currentSubmission, scorers)
+
       } else if(currentChallenge.challengeType === 'choice'){
-        if(currentChallenge.challengeFormat === 'radio'){
-          for (var answer = 0; answer < currentChallenge.answers.length; ++answer) {
-            var same = currentChallenge.answers[answer].value == currentSubmission.answer
-            if (same && currentChallenge.answers[answer].correct
-              && scorers.indexOf(currentSubmission.team) < 0) {
-              scorers.push(currentSubmission.team)
-            }
-          }
-        } else if(currentChallenge.challengeFormat === 'multi-select'){
-          var numberCorrect = currentChallenge.answers.reduce(function(n, answer) {
-            return n + (answer.correct);
-          }, 0);
-          var foundCorrect = 0;
-          for (var answer = 0; answer < currentChallenge.answers.length; ++answer) {
-            var same = currentChallenge.answers[answer].value === currentSubmission.answer
-            if (same && currentChallenge.answers[answer].correct){
-              foundCorrect += 1;
-            }
-          }
-          if (foundCorrect === numberCorrect && scorers.indexOf(currentSubmission.team) < 0){
-            scorers.push(currentSubmission.team)
-          }
+        scorers = scoreChoice(currentChallenge, currentSubmission, scorers)
+      }
+    }
+
+    if(scorers.length > 0){
+      for (var teamIndex = 0; teamIndex < teams.length; ++teamIndex) {
+        if (scorers.indexOf(String(teams[teamIndex]._id)) > -1) {
+          teams[teamIndex].score += currentChallenge.points
         }
       }
     }
-  }
 
-  if(scorers.length > 0){
-    for (var teamIndex = 0; teamIndex < teams.length; ++teamIndex) {
-      if (scorers.indexOf(String(teams[teamIndex]._id)) > -1) {
-        teams[teamIndex].score += currentChallenge.points
-      }
-    }
   }
-
   for (var index = 0; index < req.ctfEvent.challenges.length; ++index) {
     var challenge = req.ctfEvent.challenges[index]
     var answerValues = undefined
@@ -127,6 +101,46 @@ exports.read = function (req, res) {
   }
   res.json(event);
 };
+
+var scoreChoice = function(currentChallenge, currentSubmission, scorers){
+  if(currentChallenge.challengeFormat === 'radio'){
+    for (var answer = 0; answer < currentChallenge.answers.length; ++answer) {
+      var same = currentChallenge.answers[answer].value == currentSubmission.answer
+      if (same && currentChallenge.answers[answer].correct
+        && scorers.indexOf(currentSubmission.team) < 0) {
+        scorers.push(currentSubmission.team)
+      }
+    }
+  } else if(currentChallenge.challengeFormat === 'multi-select'){
+    var numberCorrect = currentChallenge.answers.reduce(function(n, answer) {
+      return n + (answer.correct);
+    }, 0);
+    var foundCorrect = 0;
+    for (var answer = 0; answer < currentChallenge.answers.length; ++answer) {
+      var same = currentChallenge.answers[answer].value === currentSubmission.answer
+      if (same && currentChallenge.answers[answer].correct){
+        foundCorrect += 1;
+      }
+    }
+    if (foundCorrect === numberCorrect && scorers.indexOf(currentSubmission.team) < 0){
+      scorers.push(currentSubmission.team)
+    }
+  }
+  return scorers
+}
+
+var scoreText = function(currentChallenge, currentSubmission, scorers){
+  for (var answer = 0; answer < currentChallenge.answers.length; ++answer) {
+    var same = currentChallenge.answers[answer].regex ?
+      RegExp(currentChallenge.answers[answer].value).test(currentSubmission.answer) :
+      currentChallenge.answers[answer].value === currentSubmission.answer
+    if (same && currentChallenge.answers[answer].correct
+      && scorers.indexOf(currentSubmission.team) < 0) {
+      scorers.push(currentSubmission.team)
+    }
+  }
+  return scorers
+}
 
 exports.update = function (req, res) {
   var ctfEvent = req.ctfEvent;
