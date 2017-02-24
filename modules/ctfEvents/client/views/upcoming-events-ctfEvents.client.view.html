@@ -1,6 +1,12 @@
 <section ng-controller="ListEventsController">
     <div class="page-header">
-        <h1>Upcoming Events</h1>
+      <h1>Upcoming Events
+      <div class="pull-right">
+        <a class="btn btn-success" ng-if="authentication.roles.indexOf('admin') > 0" id="addTeams1" ui-sref="ctfEvents.create">
+          <i class="glyphicon glyphicon-plus"></i>
+        </a>
+      </div>
+      </h1>
     </div>
     <div class="list-group">
         <a ng-repeat="ctfEvent in ctfEvents" ui-sref="{{isRegistered(ctfEvent)}}"
@@ -10,11 +16,12 @@
                 <span ng-bind="ctfEvent.created | date:'mediumDate'"></span>
             </small>
             <div class="pull-right">
-                <button class='btn btn-success' ng-show="isRegistered(ctfEvent) === '-'" ng-click="registerForEvent(ctfEvent._id)">
+                <button class='btn btn-success' ng-show="isRegistered(ctfEvent) === '-' && canRegister(ctfEvent)" ng-click="registerForEvent(ctfEvent._id)">
                     <i class="fa fa-pencil-square-o"></i>register</button>
             </div>
             <h4 class="list-group-item-heading" ng-bind="ctfEvent.title"></h4>
         </a>
+      <div class="alert alert-warning text-center" ng-if="ctfEvents.$resolved && !ctfEvents.length"> No events yet!</div>
     </div>
 
     <script type="text/ng-template" id="captain.modal.html">

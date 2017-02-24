@@ -29,13 +29,18 @@ angular.module('teams')
         }
       };
 
+      $scope.isCaptainOrAdmin = function () {
+        if ($scope.authentication && $scope.team) {
+          return ($scope.team.teamCaptain === $scope.authentication._id || ($scope.authentication.roles.indexOf('admin') > -1));
+        }
+      };
       /**
        * Gathers the User object of the current user. Removes the team that they've requested
        * to leave from their teams object. Then removes their id from the team's member array.
        */
       $scope.leaveTeam = function () {
         var currentUser = $filter('filter')($scope.users, { _id: $scope.authentication._id })[0];
-        currentUser.team.splice(currentUser.team.indexOf($scope.team._id))
+        currentUser.teams.splice(currentUser.teams.indexOf($scope.team._id))
         Users.update(currentUser, function () {
         }, function (errorResponse) {
           $scope.error = errorResponse.data.message;

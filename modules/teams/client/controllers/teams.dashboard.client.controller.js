@@ -21,7 +21,7 @@ angular.module('teams')
       $scope.accept = function (team) {
         var userId = team.joinRequestsToUsers.indexOf($scope.authentication._id)
         team.joinRequestsToUsers.splice(userId, 1);
-        team.members.push($scope.authentication);
+        team.members.push($scope.authentication._id);
 
         Teams.update(team, function () {}, function (errorResponse) {
           $scope.error = errorResponse.data.message;
@@ -41,7 +41,7 @@ angular.module('teams')
 
       /**
        * When a user declines a team's request the id of the team being declined
-       * is removed from both the list of reqests made by the team and the outstanding
+       * is removed from both the list of requests made by the team and the outstanding
        * requests of the user
        *
        * A socket message is emitted to notify other users of the new membership
@@ -55,14 +55,14 @@ angular.module('teams')
           $scope.error = errorResponse.data.message;
         });
 
-        user.requestedToJoin.splice(user.requestedToJoin.indexOf(team._id))
+        $scope.authentication.requestedToJoin.splice(user.requestedToJoin.indexOf(team._id))
         Users.update(user, function () {}, function (errorResponse) {
           $scope.error = errorResponse.data.message;
         });
 
         $scope.socket.emit('declineUser', {
           user: user,
-          data: $scope.team._id
+          data: team._id
         });
       };
     }

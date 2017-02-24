@@ -1,50 +1,56 @@
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">-->
 <section ng-controller="ChallengeListController">
-    <div class="page-header">
-        <h1>Challenges</h1>
-    </div>
-    </div>
-    <div>Category Filter:
-        <select id="cat-filter" class="filter" ng-model="challengeFilter"
-                ng-options="challenge as challenge.category for challenge in challenges | unique: 'category' | orderBy: 'category'">
-            <option value="">All</option>
-        </select>
-        <br>
-        <br>
-    </div>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th ng-click="sort('name')">Name
-                <span ng-show="sortType == 'name' && reverseSort" class="fa fa-caret-down"></span>
-                <span ng-show="sortType == 'name' && !reverseSort" class="fa fa-caret-up"></span></th>
-            <th ng-click="sort('category')">Category
-                <span ng-show="sortType == 'category' && reverseSort" class="fa fa-caret-down"></span>
-                <span ng-show="sortType == 'category' && !reverseSort" class="fa fa-caret-up"></span></th>
-            <th ng-click="sort('points')">Points
-                <span ng-show="sortType == 'points' && !reverseSort" class="fa fa-caret-down"></span>
-                <span ng-show="sortType == 'points' && reverseSort" class="fa fa-caret-up"></span></th>
-            <th ng-click="sort('created')">Created
-                <span ng-show="sortType == 'created' && reverseSort" class="fa fa-caret-down"></span>
-                <span ng-show="sortType == 'created' && !reverseSort" class="fa fa-caret-up"></span></th>
-            <th>Edit</th>
-        </tr>
-        </thead>
-        <tr ng-repeat="challenge in challenges | filter:{category: challengeFilter.category}:true | orderBy:sortType:reverseSort"
-            ng-click="active = !active">
-            <td>{{challenge.name}}</td>
-            <td>{{challenge.category}}</td>
-            <td>{{challenge.points}}</td>
-            <td>{{challenge.created | date:"MM/dd/yy 'at' h:mma"}}</td>
-            <td>
+  <div class="page-header">
+    <h1>Challenges
+      <div class="pull-right">
+        <button class="btn btn-success" ng-if="user.roles.indexOf('admin') > 0" ui-sref="challenges.create">
+          <i class="glyphicon glyphicon-plus"></i>
+        </button>
+      </div>
+    </h1>
+  </div>
+  <div>Category Filter:
+    <select id="cat-filter" class="filter" ng-model="challengeFilter"
+            ng-options="challenge as challenge.category for challenge in challenges | unique: 'category' | orderBy: 'category'">
+      <option value="">All</option>
+    </select>
+    <br>
+    <br>
+  </div>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th ng-click="sort('name')">Name
+        <span ng-show="sortType == 'name' && reverseSort" class="fa fa-caret-down"></span>
+        <span ng-show="sortType == 'name' && !reverseSort" class="fa fa-caret-up"></span></th>
+      <th ng-click="sort('category')">Category
+        <span ng-show="sortType == 'category' && reverseSort" class="fa fa-caret-down"></span>
+        <span ng-show="sortType == 'category' && !reverseSort" class="fa fa-caret-up"></span></th>
+      <th ng-click="sort('points')">Points
+        <span ng-show="sortType == 'points' && !reverseSort" class="fa fa-caret-down"></span>
+        <span ng-show="sortType == 'points' && reverseSort" class="fa fa-caret-up"></span></th>
+      <th ng-click="sort('created')">Created
+        <span ng-show="sortType == 'created' && reverseSort" class="fa fa-caret-down"></span>
+        <span ng-show="sortType == 'created' && !reverseSort" class="fa fa-caret-up"></span></th>
+      <th>Edit</th>
+    </tr>
+    </thead>
+    <tr
+      ng-repeat="challenge in challenges | filter:{category: challengeFilter.category}:true | orderBy:sortType:reverseSort"
+      ng-click="active = !active">
+      <td>{{challenge.name}}</td>
+      <td>{{challenge.category}}</td>
+      <td>{{challenge.points}}</td>
+      <td>{{challenge.created | date:"MM/dd/yy 'at' h:mma"}}</td>
+      <td>
                 <span class="pull-left btn btn-xs btn-primary" ui-sref="challenges.edit({challengeId: challenge._id})">
                       <span class="glyphicon glyphicon-edit"></span>
                 </span>
-            </td>
-        </tr>
-    </table>
-    <div class="alert alert-warning text-center"
-         ng-if="challenges.$resolved && !challenges.length">
-        No challenges yet, why don't you <a ui-sref="challenges.create">create one</a>?
-    </div>
+      </td>
+    </tr>
+  </table>
+  <div class="alert alert-warning text-center"
+       ng-if="challenges.$resolved && !challenges.length">
+    No challenges yet, why don't you <a ui-sref="challenges.create">create one</a>?
+  </div>
 </section>

@@ -1,17 +1,19 @@
 <section ng-controller="ListEventsController">
-    <div class="page-header">
-        <h1>CtfEvents
-            <button type=button class="btn btn-success pull-right" ui-sref="ctfEvents.create">Create Event</button>
-        </h1>
-    </div>
-    <div class="list-group">
-        <a ng-repeat="ctfEvent in ctfEvents" ui-sref="ctfEvents.edit({ctfEventId: ctfEvent._id})"
-           class="list-group-item">
-            <small class="list-group-item-text">
-                Created on
-                <span ng-bind="ctfEvent.created | date:'mediumDate'"></span>
-            </small>
-            <h4 class="list-group-item-heading" ng-bind="ctfEvent.title"></h4>
-        </a>
-    </div>
+  <div class="page-header">
+    <h1>CtfEvents
+      <button type=button class="btn btn-success pull-right" ui-sref="ctfEvents.create">
+        <i class="glyphicon glyphicon-plus"></i></button>
+    </h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="ctfEvent in ctfEvents" ui-sref="ctfEvents.edit({ctfEventId: ctfEvent._id})"
+       class="list-group-item">
+      <small class="list-group-item-text">
+        Created on
+        <span ng-bind="ctfEvent.created | date:'mediumDate'"></span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="ctfEvent.title"></h4>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="ctfEvents.$resolved && !ctfEvents.length"> No events yet!</div>
 </section>

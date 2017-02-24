@@ -17,6 +17,10 @@ angular.module('ctfEvents').controller('ListEventsController', ['$state', '$scop
       return ctfEvent.users.indexOf(Authentication.user._id) > -1 ? 'ctfEvents.dashboard({ ctfEventId : ctfEvent._id })' : '-'
     }
 
+    $scope.canRegister = function (ctfEvent) {
+      return ctfEvent.registrationStart < moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') && moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') < ctfEvent.registrationEnd
+    }
+
     /**
      *  Gets the event object for the event that he user is attempting to register for
      *  and shows the user a modal for team selection based on their user roles

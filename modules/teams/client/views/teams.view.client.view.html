@@ -1,21 +1,23 @@
 <section ng-controller="TeamsViewController">
   <div class="page-header">
-    <div class="pull-right" ng-if='!isCaptain() && team.members && team.members.indexOf(authentication._id) > -1'>
-      <a class="btn btn-warning" ng-click="leaveTeam()">
-          <i class="glyphicon glyphicon-log-out"></i>
-        </a>
-    </div>
-    <div class="pull-right" ng-if='isCaptain()'>
-      <a class="btn btn-primary" ui-sref="teams.edit({teamId: team._id})">
+    <div class="pull-right">
+      <a class="btn btn-warning" ng-click="leaveTeam()"
+         ng-if='!isCaptain() && team.members && team.members.indexOf(authentication._id) > -1'>
+        <i class="glyphicon glyphicon-log-out"></i>
+      </a>
+      <a ng-if='isCaptain()' class="btn btn-primary" ui-sref="teams.edit({teamId: team._id})">
         <i class="glyphicon glyphicon-edit"></i>
       </a>
-      <a class="btn btn-primary" ng-click="confirmDelete()">
+      <a  ng-if='isCaptainOrAdmin()' class="btn btn-primary" ng-click="confirmDelete()">
         <i class="glyphicon glyphicon-trash"></i>
+      </a>
+      <a class="btn btn-success" ui-sref="teams.list">
+        <i class="glyphicon glyphicon-hand-left"></i>
       </a>
     </div>
     <h1 ng-bind="team.teamName"></h1>
   </div>
-    <div class="pull-right" ng-if='isCaptain()'>
+  <div class="pull-right" ng-if='isCaptain()'>
     <a class="btn btn-success" ui-sref="teams.add({teamId: team._id})">
       <i class="glyphicon glyphicon-plus"></i>
     </a>
@@ -35,27 +37,27 @@
 
   <div class="well" ng-if='isCaptain()'>
     <h3>Pending Requests</h3>
-  <div class="list-group" ng-if='isCaptain()'>
-    <a ng-if="users" ng-repeat="request in requests = (users | asks:team)" class="list-group-item">
-      <small class="list-group-item-text">
-        <div class="pull-right">
-          <button ng-click='decline(request)'>Decline</button>
-        </div>
-        <div class="pull-right">
-          <button ng-click='accept(request)'>Accept</button>
-        </div>
-      </small>
-      <h4 ng-bind="request.username" class="list-group-item-heading"></h4>
-    </a>
-    <p class="alert alert-warning text-center" ng-if="!requests.length">No pending requests!</p>
-  </div>
+    <div class="list-group" ng-if='isCaptain()'>
+      <a ng-if="users" ng-repeat="request in requests = (users | asks:team)" class="list-group-item">
+        <small class="list-group-item-text">
+          <div class="pull-right">
+            <button ng-click='decline(request)'>Decline</button>
+          </div>
+          <div class="pull-right">
+            <button ng-click='accept(request)'>Accept</button>
+          </div>
+        </small>
+        <h4 ng-bind="request.username" class="list-group-item-heading"></h4>
+      </a>
+      <p class="alert alert-warning text-center" ng-if="!requests.length">No pending requests!</p>
+    </div>
 
     <h3>Pending Invitations</h3>
-  <div class="list-group" ng-if='isCaptain()'>
-    <a ng-if='users' ng-repeat="invite in invitations = (users | requests:team)" class="list-group-item">
-      <h4 ng-bind="invite.username" class="list-group-item-heading"></h5>
-    </a>
-    <p class="alert alert-warning text-center" ng-if="!invitations.length">No pending invites!</p
+    <div class="list-group" ng-if='isCaptain()'>
+      <a ng-if='users' ng-repeat="invite in invitations = (users | requests:team)" class="list-group-item">
+        <h5 ng-bind="invite.username" class="list-group-item-heading"></h5>
+      </a>
+      <p class="alert alert-warning text-center" ng-if="!invitations.length">No pending invites!</p>
+    </div>
   </div>
-</div>
 </section>

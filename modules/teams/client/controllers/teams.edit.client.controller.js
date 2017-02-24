@@ -49,7 +49,7 @@ angular.module('teams')
        * @param index - the user's index in the team's user array
        */
       $scope.removeMember = function (user, index) {
-        user.teams.splice(user.team.indexOf($scope.team._id), 1)
+        user.teams.splice(user.teams.indexOf($scope.team._id), 1)
         Users.update(user, function () {},
           function (errorResponse) {
             $scope.error = errorResponse.data.message;

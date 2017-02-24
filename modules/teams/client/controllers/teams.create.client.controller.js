@@ -25,6 +25,7 @@ angular.module('teams')
           teamCaptain: $scope.authentication._id
         };
         $scope.socket.emit('newTeam', { 'newTeam': team })
+        $scope.socket.emit('invalidateAll')
         Teams.save(team, function (response) {
           $scope.teamName = '';
           $state.go('teams.view', {

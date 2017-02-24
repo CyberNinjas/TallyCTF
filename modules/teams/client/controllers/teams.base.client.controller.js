@@ -1,13 +1,14 @@
 'use strict'
 angular.module('teams')
-  .controller('BaseTeamsController', ['$scope', 'Teams', 'Authentication', 'Users', 'Socket',
-    function ($scope, Teams, Authentication, Users, Socket) {
+  .controller('BaseTeamsController', ['$scope', 'Teams', 'Authentication', 'Users', 'Socket', 'Cache', 'CacheFactory',
+    function ($scope, Teams, Authentication, Users, Socket, Cache, CacheFactory) {
 
       $scope.authentication = Authentication.user;
       $scope.users = Users.query();
       $scope.teams = Teams.query();
       $scope.socket = Socket
       $scope.socket.connect()
+      var eventCache = CacheFactory.get('eventCache');
 
       /**
        * Pushes an object for a new team to users that haven't made a resource call since
@@ -93,12 +94,22 @@ angular.module('teams')
         })
       });
 
+      $scope.socket.on('invalidate', function (id) {
+        Cache.invalidate('api/ctfEvents/' + id);
+      });
+
+      $scope.socket.on('invalidateAll', function () {
+        Cache.invalidateAll()
+      });
+
       $scope.$on('$destroy', function () {
         $scope.socket.removeListener('newTeam');
         $scope.socket.removeListener('deleteTeam');
         $scope.socket.removeListener('acceptUser');
         $scope.socket.removeListener('declineUser');
         $scope.socket.removeListener('insertRequest');
+        $scope.socket.removeListener('invalidate');
+        $scope.socket.removeListener('invalidateAll');
       });
     }
   ]);
