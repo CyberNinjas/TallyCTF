@@ -82,6 +82,7 @@ exports.read = function (req, res) {
       numberOfSubmissions: challenge.numberOfSubmissions,
       teamSubmissions: challenge.teamSubmissions,
       answers: answerValues,
+      scorers: scorers
     }
   }
   var event = {

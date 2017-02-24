@@ -14,7 +14,7 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
     $scope.showUnavailable = '';
 
     $scope.howHard = function (challenge) {
-      if (challenge.teamSubmissions >= challenge.numberOfSubmissions) {
+      if (challenge.teamSubmissions >= challenge.numberOfSubmissions || challenge.scorers.indexOf($scope.currentTeam._id) > -1) {
         challenge.unavailable = true
         return 'list-group-item disabled'
       }
