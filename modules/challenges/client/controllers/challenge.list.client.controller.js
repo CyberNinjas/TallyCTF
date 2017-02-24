@@ -4,6 +4,7 @@ angular.module('challenges').controller('ChallengeListController', ['$scope', '$
   function ($scope, $stateParams, $location, Authentication, Challenges) {
 
     $scope.authentication = Authentication
+    $scope.user = Authentication.user
     $scope.challenges = Challenges.query()
 
     $scope.sortType = 'name'

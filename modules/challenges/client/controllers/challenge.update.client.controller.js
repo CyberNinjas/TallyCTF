@@ -1,7 +1,7 @@
 'use strict'
 
-angular.module('challenges').controller('ChallengeUpdateController', ['$scope', '$stateParams', '$location', 'Authentication', '$http', 'Challenges', 'ChallengeForm',
-  function ($scope, $stateParams, $location, Authentication, $http, Challenges, ChallengeForm) {
+angular.module('challenges').controller('ChallengeUpdateController', ['$scope', '$stateParams', '$location', 'Authentication', '$http', 'Challenges', 'ChallengeForm', 'SweetAlert',
+  function ($scope, $stateParams, $location, Authentication, $http, Challenges, ChallengeForm, SweetAlert) {
 
     $scope.authentication = Authentication
     $scope.id = $stateParams.challengeId || 'new'
@@ -72,11 +72,28 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
       })
     }
 
-    $scope.removeChallenge = function () {
-      if (confirm('Are you sure you want to delete the challenge?')) {
+    /**
+     * Triggers a modal used to confirm the challenges's deletion.
+     */
+    $scope.confirmDelete = function () {
+      SweetAlert.swal({
+        title: 'Are you sure?',
+        text: 'You will not be able to recover this challenge!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#DD6B55',
+        confirmButtonText: 'Yes, delete it!',
+        closeOnConfirm: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+          $scope.remove();
+        }
+      });
+    };
+
+    $scope.remove = function () {
         $scope.challenge.$remove(function () {
           $location.path('challenges')
         })
-      }
     }
   }])

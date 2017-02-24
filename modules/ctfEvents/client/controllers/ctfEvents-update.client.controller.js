@@ -1,5 +1,5 @@
 'use strict';
-angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$controller', '$filter', '$state', '$stateParams', '$location', '$q', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users', 'Cache', function ($scope, $controller, $filter, $state, $stateParams, $location, $q, Authentication, CtfEvents, Challenges, Teams, Users, Cache) {
+angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$controller', '$filter', '$state', '$stateParams', '$location', '$q', 'SweetAlert', 'Authentication', 'CtfEvents', 'Challenges', 'Teams', 'Users', 'Cache', function ($scope, $controller, $filter, $state, $stateParams, $location, $q, SweetAlert, Authentication, CtfEvents, Challenges, Teams, Users, Cache) {
 
   $controller('BaseEventsController', {
     $scope: $scope
@@ -24,10 +24,28 @@ angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$co
   })
 
   /**
+   * Triggers a modal used to confirm the event's deletion.
+   */
+  $scope.confirmDelete = function () {
+    SweetAlert.swal({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this event!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#DD6B55',
+      confirmButtonText: 'Yes, delete it!',
+      closeOnConfirm: true
+    }, function (isConfirm) {
+      if (isConfirm) {
+        $scope.remove();
+      }
+    });
+  };
+
+  /**
    * Removes the Event object once the user confirms the action
    */
   $scope.remove = function () {
-    if (!confirm('Are you sure that you want to delete this event?')) return;
     CtfEvents.remove({ ctfEventId: $scope.ctfEvent._id }, function () {
       $scope.socket.emit('invalidateAll')
       $location.path('ctfEvents');
