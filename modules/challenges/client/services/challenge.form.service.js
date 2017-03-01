@@ -31,7 +31,7 @@ angular.module('challenges').factory('ChallengeForm', ['$http',
                 type: 'input',
                 key: 'category',
                 templateOptions: {
-                  label: 'Category'
+                  label: 'Display Category'
                 },
               }
             ]
@@ -122,7 +122,7 @@ angular.module('challenges').factory('ChallengeForm', ['$http',
                 type: 'multiselect',
                 key: 'nice',
                 templateOptions: {
-                  "label": "Nice",
+                  "label": "NICE Framework",
                   "valueProp": "name",
                   "options": nice,
                 }
@@ -138,6 +138,7 @@ angular.module('challenges').factory('ChallengeForm', ['$http',
                 type: 'multiInput',
                 templateOptions: {
                   label: 'Answers',
+                  type: 'password',
                   inputOptions: {
                     type: 'input'
                   }

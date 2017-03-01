@@ -1,93 +1,118 @@
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 <div id="page-wrapper" ng-controller="DashboardController">
-    <div class="col-lg-12">
-        <div class="col-lg-12">
-            <h1 class="page-header">{{ctfEvent.title}} Dashboard</h1>
+  <div class="col-lg-12">
+    <div class="page-header">
+      <div class="pull-right">
+        <div class="btn-group" ng-show="isAdmin()">
+          <button type="button"  ng-click="export(False)" class="btn btn-success">Download Results <span
+            class="glyphicon glyphicon-download"></span></button>
+          <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a>JSON <span class="glyphicon glyphicon-pencil"></span></a></li>
+            <li><a>NICE <span class="glyphicon glyphicon-equalizer"></span></a></li>
+          </ul>
         </div>
-        <div class="row col-md-12">
-            <div class="row col-md-9 tile_count">
-                <div ng-repeat="stat in tile_stats" class="col-md-3 col-sm-3 col-xs-3 tile_stats_count">
-                    <div class="left"></div>
-                    <div class="right">
-                        <span class="count_top"><i ng-class="stat.icon"></i> {{stat.title}}</span>
-                        <div class="count">
-                            {{stat.value}}
-                        </div>
-                        <span ng-hide='stat.change === null' class="count_bottom"><i ng-class="stat.change >= 0 ? 'fa fa-sort-asc' : 'fa fa-sort-desc'"></i><i>{{stat.change}}</i> in the last hour</span>
-                    </div>
-                </div>
+      </div>
+      <h1>{{ctfEvent.title}} Dashboard</h1>
+    </div>
+    <div class="row col-md-12">
+      <div class="row col-md-9 tile_count">
+        <div ng-repeat="stat in tile_stats" class="col-md-3 col-sm-3 col-xs-3 tile_stats_count">
+          <div class="left"></div>
+          <div class="right">
+            <span class="count_top"><i ng-class="stat.icon"></i> {{stat.title}}</span>
+            <div class="count">
+              {{stat.value}}
             </div>
-            <div class="col-md-3 col-sm-4 col-xs-4 tile_count">
-                <div class="tile_stats_count text-center">
-                    <div class="right">
-                        <span class="count_top"><i class="fa fa-clock-o"></i> Remaining Time</span>
-                        <div class="count">
-                            {{remainingTime}}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <span ng-hide='stat.change === null' class="count_bottom"><i
+              ng-class="stat.change >= 0 ? 'fa fa-sort-asc' : 'fa fa-sort-desc'"></i><i>{{stat.change}}</i> in the last hour</span>
+          </div>
         </div>
-        <div class="col-lg-8">
-            <div id="challenge-box" class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="pull-right">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary btn-xs btn-filter" ng-click="sortChallenge = ''">All</button>
-                            <button type="button" class="btn btn-success btn-xs btn-filter" ng-click="sortChallenge = 'easy'">Easy</button>
-                            <button type="button" class="btn btn-warning btn-xs btn-filter" ng-click="sortChallenge = 'medium'">Medium</button>
-                            <button type="button" class="btn btn-danger btn-xs btn-filter" ng-click="sortChallenge = 'hard'">Hard</button>
-                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                Sorts <span class="glyphicon glyphicon-cog" style="margin-right: 0px;"></span>
-                            </button>
-                            <ul class="dropdown-menu slidedown">
-                                <li ng-click="sortType = ''"><a><span class="glyphicon glyphicon-eye-close"></span> None</a></li>
-                                <li ng-click="sortType = 'name'"><a><span class="glyphicon glyphicon-book"></span> Alphabetical</a></li>
-                                <li ng-click="sortType = 'points'"><a><span class="glyphicon glyphicon-king"></span> Points</a></li>
-                                <li><a><span class="glyphicon glyphicon-eye-open"></span> Available</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <i class="fa fa-question fa-fw"></i> Challenges
-                </div>
-                <div class="panel-body" id="challenges">
-                     <div ng-show='ongoing' ng-repeat="challenge in ctfEvent.challenges | orderByFilter:sortType | difficultyFilter:sortChallenge">
-                        <div uib-accordion-group ng-class="howHard(challenge)">
-                          {{challenge.name + ' (' + challenge.category + ")   "}}
-                            <span class="pull-right">Points: {{challenge.points}}
-                              <a class="btn btn-xs" ng-hide="challenge.unavailable" ui-sref="ctfEvents.submission({ctfEventId: ctfEvent._id, challengeId: challenge._id})">
+      </div>
+      <div class="col-md-3 col-sm-4 col-xs-4 tile_count">
+        <div class="tile_stats_count text-center">
+          <div class="right">
+            <span class="count_top"><i class="fa fa-clock-o"></i> Remaining Time</span>
+            <div class="count">
+              {{remainingTime}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div id="challenge-box" class="panel panel-default">
+        <div class="panel-heading">
+          <div class="pull-right">
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary btn-xs btn-filter" ng-click="sortChallenge = ''">All</button>
+              <button type="button" class="btn btn-success btn-xs btn-filter" ng-click="sortChallenge = 'easy'">Easy
+              </button>
+              <button type="button" class="btn btn-warning btn-xs btn-filter" ng-click="sortChallenge = 'medium'">
+                Medium
+              </button>
+              <button type="button" class="btn btn-danger btn-xs btn-filter" ng-click="sortChallenge = 'hard'">Hard
+              </button>
+              <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                Sorts <span class="glyphicon glyphicon-cog" style="margin-right: 0px;"></span>
+              </button>
+              <ul class="dropdown-menu slidedown">
+                <li ng-click="sortType = ''"><a><span class="glyphicon glyphicon-eye-close"></span> None</a></li>
+                <li ng-click="sortType = 'name'"><a><span class="glyphicon glyphicon-book"></span> Alphabetical</a></li>
+                <li ng-click="sortType = 'points'"><a><span class="glyphicon glyphicon-king"></span> Points</a></li>
+                <li><a><span class="glyphicon glyphicon-eye-open"></span> Available</a></li>
+              </ul>
+            </div>
+          </div>
+          <i class="fa fa-question fa-fw"></i> Challenges
+        </div>
+        <div class="panel-body" id="challenges">
+          <div ng-show='ongoing'
+               ng-repeat="challenge in ctfEvent.challenges | orderByFilter:sortType | difficultyFilter:sortChallenge">
+            <div uib-accordion-group ng-class="howHard(challenge)">
+              {{challenge.name + ' (' + challenge.category + ") "}}
+              <span class="pull-right">Points: {{challenge.points}}
+                              <a class="btn btn-xs" ng-hide="challenge.unavailable"
+                                 ui-sref="ctfEvents.submission({ctfEventId: ctfEvent._id, challengeId: challenge._id})">
                                   <span class="glyphicon glyphicon-book"></span>
                               </a>
-                             <a ng-click="challenge.isCollapsed = !challenge.isCollapsed" class="glyphicon glyphicon-eye-open"></a>
+                             <a ng-click="challenge.isCollapsed = !challenge.isCollapsed"
+                                class="glyphicon glyphicon-eye-open"></a>
                             </span>
-                        </div>
-                        <div uib-collapse="challenge.isCollapsed" ng-show="challenge.isCollapsed">
-                          <div class="well well-lg">{{challenge.description}}</div>
-                        </div>
-                     </div>
-                    <div ng-hide='ongoing' class="list-group">
-                        <a class="list-group-item list-group-item-warning">This Event Has Not Started</a>
-                    </div>
-                </div>
             </div>
-        </div>
-        <div class="col-lg-4">
-            <div id="team-box" class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-terminal fa-fw"></i> Teams
-                </div>
-                <div class="panel-body">
-                    <div ng-repeat="team in eventTeams">
-                         <div class="collapse-group form-group margin-bottom">
-                            <button class='btn btn-secondary btn-block' bcollapse>{{team.teamName}}<span class="badge pull-right">{{getScore(team._id)}}</span></button>
-                            <div class="list-group collapse">
-                                <a ng-repeat="member in team.members track by $index" class="list-group-item">{{getUserName(member)}}<span class="badge pull-right">//todo</span></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div uib-collapse="challenge.isCollapsed" ng-show="challenge.isCollapsed">
+              <div class="well well-lg">{{challenge.description}}</div>
             </div>
+          </div>
+          <div ng-hide='ongoing' class="list-group">
+            <a class="list-group-item list-group-item-warning">This Event Has Not Started</a>
+          </div>
         </div>
+      </div>
     </div>
+    <div class="col-lg-4">
+      <div id="team-box" class="panel panel-default">
+        <div class="panel-heading">
+          <i class="fa fa-terminal fa-fw"></i> Teams
+        </div>
+        <div class="panel-body">
+          <div ng-repeat="team in eventTeams">
+            <div class="collapse-group form-group margin-bottom">
+              <button class='btn btn-secondary btn-block' bcollapse>{{team.teamName}}<span class="badge pull-right">{{getScore(team._id)}}</span>
+              </button>
+              <div class="list-group collapse">
+                <a ng-repeat="member in team.members track by $index"
+                   class="list-group-item">{{getUserName(member)}}<span class="badge pull-right">//todo</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 

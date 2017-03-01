@@ -1,9 +1,9 @@
 'use strict'
 angular.module('teams')
   .controller('TeamsViewController', ['$scope', '$stateParams', '$location',
-    'Teams', '$controller', '$filter', 'SweetAlert', 'Users',
+    'Teams', '$controller', '$filter', 'SweetAlert', 'Users', 'Cache', 'CtfEvents',
     function ($scope, $stateParams, $location, Teams, $controller, $filter,
-      SweetAlert, Users) {
+      SweetAlert, Users, Cache, CtfEvents) {
 
       $controller('BaseTeamsController', {
         $scope: $scope
@@ -141,11 +141,13 @@ angular.module('teams')
       /**
        * Deletes the current team from the database.
        */
+
       $scope.remove = function () {
         Teams.remove({ teamId: $scope.team._id }, function (response) {
           $scope.socket.emit('deleteTeam', {
             team: $scope.team
           });
+          $scope.socket.emit('invalidateAll')
           $location.path('teams');
         });
       }

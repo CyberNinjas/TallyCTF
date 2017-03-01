@@ -1,14 +1,13 @@
 'use strict'
 angular.module('teams')
-  .controller('BaseTeamsController', ['$scope', 'Teams', 'Authentication', 'Users', 'Socket', 'Cache', 'CacheFactory',
-    function ($scope, Teams, Authentication, Users, Socket, Cache, CacheFactory) {
+  .controller('BaseTeamsController', ['$scope', 'Teams', 'Authentication', 'Users', 'Socket', 'Cache', 'CacheFactory', 'CtfEvents',
+    function ($scope, Teams, Authentication, Users, Socket, Cache, CacheFactory, CtfEvents) {
 
       $scope.authentication = Authentication.user;
       $scope.users = Users.query();
       $scope.teams = Teams.query();
       $scope.socket = Socket
       $scope.socket.connect()
-      var eventCache = CacheFactory.get('eventCache');
 
       /**
        * Pushes an object for a new team to users that haven't made a resource call since
@@ -96,10 +95,16 @@ angular.module('teams')
 
       $scope.socket.on('invalidate', function (id) {
         Cache.invalidate('api/ctfEvents/' + id);
+        CtfEvents.query().$promise.then(function (data) {
+          $scope.ctfEvents = data;
+        })
       });
 
       $scope.socket.on('invalidateAll', function () {
         Cache.invalidateAll()
+        CtfEvents.query().$promise.then(function (data) {
+          $scope.ctfEvents = data;
+        })
       });
 
       $scope.$on('$destroy', function () {

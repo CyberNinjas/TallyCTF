@@ -4,15 +4,10 @@
             <button type='button' class="btn btn-success dropdown-toggle" ng-click="update(ctfEventForm.$valid)">
                 Update
             </button>
-        <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle margin-right" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                Options <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a style="cursor: pointer" ng-click="confirmDelete()">Delete Event</a></li>
-            </ul>
-        </div>
+
+          <button  class="btn btn-primary" ng-click="confirmDelete()">
+            <i class="glyphicon glyphicon-trash"></i>
+          </button>
         </div>
         <h1 ng-bind="ctfEvent.title"></h1>
     </div>
