@@ -6,6 +6,23 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
       $scope: $scope
     });
 
+    $scope.isAdmin = function () {
+      return $scope.authentication.roles.indexOf('admin') > -1
+    }
+
+    $scope.export = function (nice) {
+      CtfEvents.export({ id: $scope.id }).$promise.then(function (data) {
+        var event = data;
+        var url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)]));
+        var a = document.createElement('a');
+        a.href = url;
+        var filePath = nice ? '.nice.' : '.'
+        a.download = $scope.ctfEvent.title + filePath + 'json';
+        a.target = '_blank';
+        a.click();
+      })
+    }
+
     $scope.easy = 10;
     $scope.medium = 100;
     $scope.hard = 1000;
@@ -14,6 +31,9 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
     $scope.showUnavailable = '';
 
     $scope.howHard = function (challenge) {
+      if (!$scope.currentTeam) {
+        return
+      }
       if (challenge.teamSubmissions >= challenge.numberOfSubmissions || challenge.scorers.indexOf($scope.currentTeam._id) > -1) {
         challenge.unavailable = true
         return 'list-group-item disabled'
@@ -88,7 +108,7 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
       var hasStarted = $scope.ctfEvent.start < moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') && moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') < $scope.ctfEvent.end
       var onTeam = false;
       angular.forEach($scope.ctfEvent.teams, function (team) {
-        if(team.members.indexOf(Authentication.user._id) > -1){
+        if (team.members.indexOf(Authentication.user._id) > -1) {
           onTeam = true;
         }
       })
@@ -120,12 +140,12 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
       return $filter('filter')($scope.teams, { _id: team.id })[0];
     }
 
-    $scope.getTeamsPoints = function(){
+    $scope.getTeamsPoints = function () {
       var score = 0;
       angular.forEach($scope.ctfEvent.teams, function (team) {
-        if(team.members.indexOf($scope.userId) > -1){
+        if (team.members.indexOf($scope.userId) > -1) {
           angular.forEach($scope.ctfEvent.score, function (scorer) {
-            if(scorer.team === team.team){
+            if (scorer.team === team.team) {
               score = scorer.score
             }
           })
@@ -133,10 +153,10 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
       })
       return score;
     }
-    $scope.getScore = function(id){
+    $scope.getScore = function (id) {
       var score = 0;
       angular.forEach($scope.ctfEvent.score, function (scorer) {
-        if(scorer.team === id){
+        if (scorer.team === id) {
           score = scorer.score
         }
       })

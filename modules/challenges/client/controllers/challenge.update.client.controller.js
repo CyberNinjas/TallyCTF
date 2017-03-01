@@ -44,7 +44,6 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
         return type.value === $scope.model.type;
       })[0].formats
 
-      console.log($scope.machines)
       $scope.model.formats = formats
       $scope.model.format = $scope.challenge.challengeFormat
       $scope.fields = ChallengeForm.createForm($scope, $scope.challenge, $scope.challengeTypes, $scope.machines, $scope.niceFramework)
