@@ -14,11 +14,11 @@ angular.module('ctfEvents').controller('BaseEventsController', ['$scope', '$q', 
 
     var eventCache = CacheFactory.get('eventCache');
     $scope.ctfEvent = eventCache.get('api/ctfEvents/' + $stateParams.ctfEventId)
-    if($stateParams.ctfEventId && !$scope.ctfEvent){
+    if ($stateParams.ctfEventId && !$scope.ctfEvent) {
       resources.push(CtfEvents.get({ ctfEventId: $stateParams.ctfEventId }).$promise)
-    } else if($stateParams.ctfEventId && $scope.ctfEvent.hasOwnProperty('$$state') > 0) {
+    } else if ($stateParams.ctfEventId && $scope.ctfEvent.hasOwnProperty('$$state') > 0) {
       resources.push(CtfEvents.get({ ctfEventId: $stateParams.ctfEventId }).$promise)
-    } else if($stateParams.ctfEventId) {
+    } else if ($stateParams.ctfEventId) {
       $scope.ctfEvent = JSON.parse($scope.ctfEvent[1])
     }
 
@@ -27,7 +27,7 @@ angular.module('ctfEvents').controller('BaseEventsController', ['$scope', '$q', 
       $scope.challenges = data[1];
       $scope.teams = data[2];
       $scope.ctfEvents = data[3];
-      if(data.length == 5){
+      if (data.length == 5) {
         $scope.ctfEvent = data[4]
       }
     })
@@ -36,21 +36,37 @@ angular.module('ctfEvents').controller('BaseEventsController', ['$scope', '$q', 
     $scope.socket.connect();
 
     $scope.socket.on('invalidate', function (id) {
-      Cache.invalidate('api/ctfEvents/' + id);
+      Cache.invalidate('api/ctfEvents/' + id)
+      CtfEvents.query().$promise.then(function (data) {
+        $scope.ctfEvents = data;
+      })
     });
 
     $scope.socket.on('invalidateAll', function () {
       Cache.invalidateAll()
+      CtfEvents.query().$promise.then(function (data) {
+        $scope.ctfEvents = data;
+      })
     });
 
     $scope.socket.on('invalidateList', function () {
       Cache.invalidate('api/ctfEvents');
     });
 
+    $scope.socket.on('deleteEvent', function (message) {
+      $scope.ctfEvents = $scope.ctfEvents.filter(function (event) {
+        if (event._id !== message.id) {
+          return event
+        }
+      })
+    });
+
     $scope.$on('$destroy', function () {
       $scope.socket.removeListener('invalidate');
       $scope.socket.removeListener('invalidateAll');
       $scope.socket.removeListener('invalidateList');
+      $scope.socket.removeListener('invalidateList');
+      $scope.socket.removeListener('deleteEvent');
     })
   }
 ]);

@@ -42,11 +42,12 @@ angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$co
     });
   };
 
-  /**
-   * Removes the Event object once the user confirms the action
-   */
   $scope.remove = function () {
     CtfEvents.remove({ ctfEventId: $scope.ctfEvent._id }, function () {
+      $scope.socket.emit('deleteEvent', {
+        id: $scope.ctfEvent._id
+      });
+      Cache.invalidateAll()
       $scope.socket.emit('invalidateAll')
       $location.path('ctfEvents');
     });

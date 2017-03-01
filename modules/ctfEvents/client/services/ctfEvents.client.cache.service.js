@@ -1,17 +1,24 @@
 'use strict';
 
 angular.module('ctfEvents').factory('Cache', function (CacheFactory) {
-  var $httpDefaultCache = CacheFactory.get('eventCache');
+  var eventCache = CacheFactory.get('eventCache');
+
   return {
     invalidate: function (key) {
-      $httpDefaultCache.remove(key);
+      if (!eventCache) {
+        return
+      }
+      eventCache.remove(key);
     },
     keys: function () {
-      console.log($httpDefaultCache.keys());
+      console.log(eventCache.keys());
     },
     invalidateAll: function () {
-      $httpDefaultCache.remove('api/ctfEvent');
-      $httpDefaultCache.removeAll();
+      if (!eventCache) {
+        return
+      }
+      eventCache.remove('api/ctfEvent');
+      eventCache.removeAll();
     }
   }
 });
