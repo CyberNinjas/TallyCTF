@@ -14,10 +14,12 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$cont
         angular.forEach($scope.ctfEvent.challenges, function (challenge) {
           if (challenge._id === $stateParams.challengeId) {
             $scope.currentChallenge = challenge;
+            console.log(challenge)
             $scope.model = {
               contributingUsers: [],
               selectedUsers: [],
               type: $scope.currentChallenge.challengeType,
+              format: $scope.currentChallenge.challengeFormat,
               answers: $scope.currentChallenge.answers
             };
           }
@@ -52,7 +54,25 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$cont
             key: 'answer',
             type: 'multiCheckbox',
             className: 'multi-check',
-            hideExpression: 'model.type == "text"',
+            hideExpression: 'model.type == "text" || model.format == "radio"',
+            expressionProperties: {
+              'templateOptions.options': function () {
+                if($scope.model.type !== 'text'){
+                  return $scope.model.answers.map(function (answer) {
+                    answer.name = answer.value;
+                    return answer
+                  })
+                }
+              }
+            },
+            templateOptions: {
+              label: 'Your answer',
+            },
+          },
+          {
+            key: 'answer',
+            type: 'radio',
+            hideExpression: 'model.type == "text" || model.format == "multi-select"',
             expressionProperties: {
               'templateOptions.options': function () {
                 if($scope.model.type !== 'text'){
