@@ -11,7 +11,6 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
     }
 
     $scope.export = function (nice) {
-      console.log(nice)
       CtfEvents.export({ id: $scope.id }).$promise.then(function (data) {
         var event = data;
         if(nice){
