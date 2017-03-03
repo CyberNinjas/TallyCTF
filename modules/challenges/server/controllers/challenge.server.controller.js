@@ -36,7 +36,7 @@ exports.updateOrCreate = function (req, res) {
   challenge.challengeFormat = req.body.challengeFormat
   challenge.affectedMachine = req.body.affectedMachine
   challenge.numberOfSubmissions = req.body.numberOfSubmissions
-  // challenge.files = req.body.challenge.files
+  challenge.niceCategories = req.body.niceCategories
 
   challenge.save(function (err) {
     if (err) {

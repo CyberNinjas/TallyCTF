@@ -94,6 +94,9 @@ var ChallengeSchema = new Schema({
       type: Boolean,
       default: false
     }
+  }],
+  niceCategories: [{
+    type: String,
   }]
 })
 

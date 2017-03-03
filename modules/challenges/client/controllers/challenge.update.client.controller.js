@@ -39,6 +39,7 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
       $scope.model.points = $scope.challenge.points
       $scope.model.machine = $scope.challenge.affectedMachine
       $scope.model.answers = $scope.challenge.answers
+      $scope.model.niceCategories = $scope.challenge.niceCategories
 
       var formats = $scope.challengeTypes.filter(function (type) {
         return type.value === $scope.model.type;
@@ -64,6 +65,7 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
       $scope.challenge.numberOfSubmissions = $scope.model.submissions
       $scope.challenge.answers = $scope.model.answers
       $scope.challenge._id = $scope.id
+      $scope.challenge.niceCategories = $scope.model.niceCategories
       Challenges.update($scope.challenge, function (res) {
         $location.path('challenges')
       }, function (errorResponse) {
