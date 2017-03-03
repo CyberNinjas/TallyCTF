@@ -4,7 +4,7 @@
     <div class="page-header">
       <div class="pull-right">
         <div class="btn-group" ng-show="isAdmin()">
-          <button type="button"  ng-click="export(False)" class="btn btn-success">Download Results <span
+          <button type="button"  ng-click="export(false)" class="btn btn-success">Download Results <span
             class="glyphicon glyphicon-download"></span></button>
           <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                   aria-expanded="false">
@@ -13,7 +13,7 @@
           </button>
           <ul class="dropdown-menu">
             <li><a>JSON <span class="glyphicon glyphicon-pencil"></span></a></li>
-            <li><a>NICE <span class="glyphicon glyphicon-equalizer"></span></a></li>
+            <li><a ng-click="export(true)">NICE <span class="glyphicon glyphicon-equalizer"></span></a></li>
           </ul>
         </div>
       </div>

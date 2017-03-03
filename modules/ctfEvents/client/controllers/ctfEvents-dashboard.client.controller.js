@@ -11,9 +11,20 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
     }
 
     $scope.export = function (nice) {
+      console.log(nice)
       CtfEvents.export({ id: $scope.id }).$promise.then(function (data) {
         var event = data;
-        var url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)]));
+        if(nice){
+          event = {}
+          angular.forEach($scope.ctfEvent.challenges, function (challenge) {
+            if(challenge.scorers.length > 0){
+              angular.forEach(challenge.niceCategories, function (category) {
+                event[category] = challenge.scorers
+              })
+            }
+          })
+        }
+        var url = URL.createObjectURL(new Blob([JSON.stringify(event, null, 2)]));
         var a = document.createElement('a');
         a.href = url;
         var filePath = nice ? '.nice.' : '.'
