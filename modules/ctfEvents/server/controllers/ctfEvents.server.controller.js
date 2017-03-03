@@ -31,7 +31,7 @@ exports.create = function (req, res) {
  */
 exports.read = function (req, res) {
   var teams = []
-  // Construct a new object for the current scores in the event
+
   for (var team = 0; team < req.ctfEvent.teams.length; ++team) {
     teams.push({ team: req.ctfEvent.teams[team].team, _id: req.ctfEvent.teams[team]._id, score: 0 })
   }
@@ -57,8 +57,9 @@ exports.read = function (req, res) {
         }
       }
     }
-
+    currentChallenge.scorers = scorers
   }
+
   for (var index = 0; index < req.ctfEvent.challenges.length; ++index) {
     var challenge = req.ctfEvent.challenges[index]
     var answerValues = undefined
@@ -67,6 +68,12 @@ exports.read = function (req, res) {
       var answers = challenge.answers
       for (var idx = 0; idx < answers.length; ++idx) {
         answerValues.push({ value: answers[idx].value })
+      }
+    }
+
+    if(req.ctfEvent.submissions){
+      for (var index = 0; index < req.ctfEvent.challenges.submissions.length; ++index) {
+        req.ctfEvent.challenges.submissions[index].answer = ''
       }
     }
 
@@ -82,7 +89,7 @@ exports.read = function (req, res) {
       numberOfSubmissions: challenge.numberOfSubmissions,
       teamSubmissions: challenge.teamSubmissions,
       answers: answerValues,
-      scorers: scorers
+      scorers: challenge.scorers
     }
   }
   var event = {
@@ -162,6 +169,10 @@ exports.update = function (req, res) {
     }
   });
 };
+
+exports._read = function (req, res){
+  res.json(req.ctfEvent);
+}
 
 exports.delete = function (req, res) {
   var ctfEvent = req.ctfEvent;

@@ -70,6 +70,7 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
     }).then(function () {
       $scope.eventId = $stateParams.ctfEventId
       $scope.eventTeams = $filter('memberTeams')($scope.teams, $scope.ctfEvent.teams);
+      console.log($scope.eventTeams)
       $scope.ongoing = $scope.isOngoing()
       $scope.getRemainingTime()
       $scope.remainingTime = $scope.ongoing === false ? '00:00:00' : $scope.hours + ':' + $scope.minutes
