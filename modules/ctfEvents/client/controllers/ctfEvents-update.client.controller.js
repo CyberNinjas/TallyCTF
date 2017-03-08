@@ -56,8 +56,6 @@ angular.module('ctfEvents').controller('UpdateEventsController', ['$scope', '$co
   /**
    * Updates an event with the newly selected options including the challenges
    * and users in the dual multi-selects
-   *
-   * @param isValid - whether or not the form is valid
    */
   $scope.update = function (isValid) {
     $scope.error = null;

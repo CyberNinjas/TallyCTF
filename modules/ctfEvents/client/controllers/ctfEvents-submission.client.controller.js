@@ -14,7 +14,6 @@ angular.module('ctfEvents').controller('SubmissionController', ['$scope', '$cont
         angular.forEach($scope.ctfEvent.challenges, function (challenge) {
           if (challenge._id === $stateParams.challengeId) {
             $scope.currentChallenge = challenge;
-            console.log(challenge)
             $scope.model = {
               contributingUsers: [],
               selectedUsers: [],

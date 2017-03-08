@@ -4,19 +4,31 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
   function ($scope, $stateParams, $location, Authentication, $http, Challenges, ChallengeForm, SweetAlert) {
 
     $scope.authentication = Authentication
+
+    /*
+     * Grabs either the id of the challenge object that we'd like to update or tells the server side
+     * to create a fresh new challenge to be modified.
+     */
     $scope.id = $stateParams.challengeId || 'new'
     $scope.model = { answers: [] };
     $scope.challenge = Challenges.get({ challengeId: $scope.id })
+
+    /*
+     * Challenge type configuration, NICE category mappings, and a list of machines (Though this is to be modified)
+     * all exist in JSON files in the config directory, so we grab the data and store it in the scope.
+     */
     $http.get('/modules/challenges/client/config/ChallengeTypes.json').then(
       function (res) {
         $scope.challengeTypes = res.data
       }
     )
+
     $http.get('/modules/challenges/client/config/NiceFramework.json').then(
       function (res) {
-        $scope.niceFramework= res.data
+        $scope.niceFramework = res.data
       }
     )
+
     $http.get('/modules/challenges/client/config/Machines.json').then(
       function (res) {
         $scope.machines = res.data
@@ -31,8 +43,8 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
     $scope.challenge.$promise.then(function () {
       $scope.model.type = $scope.challenge.challengeType
       $scope.model.submissions = $scope.challenge.numberOfSubmissions || $scope.challengeTypes.filter(function (type) {
-        return $scope.model.type === type.value
-      })[0].submissions
+          return $scope.model.type === type.value
+        })[0].submissions
       $scope.model.category = $scope.challenge.category
       $scope.model.description = $scope.challenge.description
       $scope.model.name = $scope.challenge.name
@@ -75,6 +87,7 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
 
     /**
      * Triggers a modal used to confirm the challenges's deletion.
+     * If the user confirms the modal then the appropriate challenge is deleted.
      */
     $scope.confirmDelete = function () {
       SweetAlert.swal({
@@ -93,8 +106,8 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
     };
 
     $scope.remove = function () {
-        $scope.challenge.$remove(function () {
-          $location.path('challenges')
-        })
+      $scope.challenge.$remove(function () {
+        $location.path('challenges')
+      })
     }
   }])

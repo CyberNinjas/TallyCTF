@@ -6,10 +6,20 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
       $scope: $scope
     });
 
+    /*
+     * Determines whether or not 'admin' exists within the users roles
+     */
     $scope.isAdmin = function () {
       return $scope.authentication.roles.indexOf('admin') > -1
     }
 
+    /*
+     * gathers the unedited database object of the current event. If the users selects the nice option then
+     * we do some manipulation to output a list of scorers per relevant category.
+     *
+     * We then create a temporary url for the data to be downloaded, dynamically create a filename, and
+     * initiate the download for the user
+     */
     $scope.export = function (nice) {
       CtfEvents.export({ id: $scope.id }).$promise.then(function (data) {
         var event = data;
@@ -40,6 +50,10 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
     $scope.challengeSearch = '';
     $scope.showUnavailable = '';
 
+    /*
+     *  Defines both the color of the list-group-item for each of the displayed challenges and whether or not it's actively
+     *  allowed to be clicked ( too many submission or already correct )
+     */
     $scope.howHard = function (challenge) {
       if (!$scope.currentTeam) {
         return
@@ -80,7 +94,6 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
     }).then(function () {
       $scope.eventId = $stateParams.ctfEventId
       $scope.eventTeams = $filter('memberTeams')($scope.teams, $scope.ctfEvent.teams);
-      console.log($scope.eventTeams)
       $scope.ongoing = $scope.isOngoing()
       $scope.getRemainingTime()
       $scope.remainingTime = $scope.ongoing === false ? '00:00:00' : $scope.hours + ':' + $scope.minutes
@@ -108,6 +121,10 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
       }]
     });
 
+    /*
+     * Grab the total number of points available in the event by iterating through each challenge and keeping
+     * a sum of their values
+     */
     $scope.getPointTotal = function () {
       var pointTotal = $scope.ctfEvent.challenges.reduce(function (total, challenge) {
         return total + challenge.points;
@@ -115,6 +132,11 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
       return pointTotal
     }
 
+    /*
+     * Determines whether a user has access to view the current events questions based on determining whether the current user
+     * is actually a member of a team that's registered for the event and wheter the current time is between the event's start and
+     * end
+     */
     $scope.isOngoing = function () {
       var hasStarted = $scope.ctfEvent.start < moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') && moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') < $scope.ctfEvent.end
       var onTeam = false;
@@ -126,6 +148,9 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
       return (hasStarted && onTeam)
     }
 
+    /*
+     * Get a human readable version of the remaining time to display on the dashboard
+     */
     $scope.getRemainingTime = function () {
       var duration = moment.duration(moment($scope.ctfEvent.end).diff(moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')))
       var milliseconds = duration._milliseconds;
@@ -137,20 +162,32 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
       $scope.hours = milliseconds;
     }
 
+    /*
+     * users in the team object are stored as IDs and we want their names
+     */
     $scope.getUserName = function (id) {
       return $filter('filter')($scope.users, { _id: id })[0].displayName;
     }
 
+    /*
+     * If the challenge is available for the current user then we move to the submission view
+     */
     $scope.goToChallenge = function (unavailable, eventId, id) {
       if (!unavailable) {
         $state.go(ctfEvents.submission, { 'ctfEventId': eventId, 'challengeId': id })
       }
     }
 
+    /*
+     * filters the teams object to get the current team object
+     */
     $scope.getTeam = function (team) {
       return $filter('filter')($scope.teams, { _id: team.id })[0];
     }
 
+    /*
+     * filters the score object to get the current teams overall score
+     */
     $scope.getTeamsPoints = function () {
       var score = 0;
       angular.forEach($scope.ctfEvent.teams, function (team) {
@@ -164,6 +201,7 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
       })
       return score;
     }
+
     $scope.getScore = function (id) {
       var score = 0;
       angular.forEach($scope.ctfEvent.score, function (scorer) {

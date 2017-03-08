@@ -2,9 +2,14 @@
 angular.module('ctfEvents').controller('BaseEventsController', ['$scope', '$q', 'Teams',
   'Authentication', 'Users', 'Socket', 'Challenges', 'CtfEvents', 'Cache', '$stateParams', 'CacheFactory',
   function ($scope, $q, Teams, Authentication, Users, Socket, Challenges, CtfEvents, Cache, $stateParams, CacheFactory) {
+
     $scope.authentication = Authentication.user;
     $scope.userId = Authentication.user._id
 
+    /*
+     * Defines a list of resources needed in the Events module
+     * Each of these resources will be gathered asynchronously
+     */
     var resources = [
       Users.query().$promise,
       Challenges.query().$promise,
@@ -12,6 +17,12 @@ angular.module('ctfEvents').controller('BaseEventsController', ['$scope', '$q', 
       CtfEvents.query().$promise,
     ]
 
+    /*
+     * This block defines the cache we use to store event objects on the client side.
+     * We try to gather the event we're currently trying view and store it in the scope
+     * If we don't have it stored then we add the object to the resources list so we can get
+     * a new version from the server.
+     */
     var eventCache = CacheFactory.get('eventCache');
     $scope.ctfEvent = eventCache.get('api/ctfEvents/' + $stateParams.ctfEventId)
     if ($stateParams.ctfEventId && !$scope.ctfEvent) {
@@ -22,6 +33,10 @@ angular.module('ctfEvents').controller('BaseEventsController', ['$scope', '$q', 
       $scope.ctfEvent = JSON.parse($scope.ctfEvent[1])
     }
 
+    /*
+     * defines scope objects for each of the resources previously defined accommodating for the possibility
+     * of an undefined cache
+     */
     $scope.all = $q.all(resources).then(function (data) {
       $scope.users = data[0];
       $scope.challenges = data[1];
