@@ -6,20 +6,20 @@ angular.module('ctfEvents').controller('DashboardController', ['$scope', '$contr
       $scope: $scope
     });
 
-    /*
-     * Determines whether or not 'admin' exists within the users roles
-     */
+   /*
+    * Determines whether or not 'admin' exists within the users roles
+    */
     $scope.isAdmin = function () {
       return $scope.authentication.roles.indexOf('admin') > -1
     }
 
-    /*
-     * gathers the unedited database object of the current event. If the users selects the nice option then
-     * we do some manipulation to output a list of scorers per relevant category.
-     *
-     * We then create a temporary url for the data to be downloaded, dynamically create a filename, and
-     * initiate the download for the user
-     */
+   /*
+    * gathers the unedited database object of the current event. If the users selects the nice option then
+    * we do some manipulation to output a list of scorers per relevant category.
+    *
+    * We then create a temporary url for the data to be downloaded, dynamically create a filename, and
+    * initiate the download for the user
+    */
     $scope.export = function (nice) {
       CtfEvents.export({ id: $scope.id }).$promise.then(function (data) {
         var event = data;
