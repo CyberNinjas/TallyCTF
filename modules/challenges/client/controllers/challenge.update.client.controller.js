@@ -43,8 +43,8 @@ angular.module('challenges').controller('ChallengeUpdateController', ['$scope', 
     $scope.challenge.$promise.then(function () {
       $scope.model.type = $scope.challenge.challengeType
       $scope.model.submissions = $scope.challenge.numberOfSubmissions || $scope.challengeTypes.filter(function (type) {
-          return $scope.model.type === type.value
-        })[0].submissions
+        return $scope.model.type === type.value
+      })[0].submissions
       $scope.model.category = $scope.challenge.category
       $scope.model.description = $scope.challenge.description
       $scope.model.name = $scope.challenge.name

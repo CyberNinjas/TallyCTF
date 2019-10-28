@@ -32,6 +32,17 @@
     <link href="{{url}}{{favicon}}" rel="shortcut icon" type="image/x-icon">
 
     <!-- Application CSS Files -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha256-8uHMIn1ru0GS5KO+zf7Zccf8Uw12IA5DrdEcmMuWLFM=" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/7.0.0/rzslider.min.css" integrity="sha256-gJdF8Y1vlsXPnH/pVEngNDhmf6z+r5qOKg/Sv1SoIf4=" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css" integrity="sha256-zuyRv+YsWwh1XR5tsrZ7VCfGqUmmPmqBjIvJgQWoSDo=" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" integrity="sha256-yMjaV542P+q1RnH6XByCPDfUFhmOafWbeLPmqKh11zo=" crossorigin="anonymous" />
+
     {% for cssFile in cssFiles %}
     <link rel="stylesheet" href="{{cssFile}}">
     {% endfor %}
@@ -87,6 +98,52 @@
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 
 <!--Application JavaScript Files-->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/api-check/7.5.5/api-check.min.js" integrity="sha256-OHJ6IaESrDcJymbXxNaeH7zeO4kKVc6G0REiGPAzj7E=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.20/angular.min.js" integrity="sha256-riiE+wIXkbxnkTDMpOtoNKipXuZ+5uGK1sRfVveiBL8=" crossorigin="anonymous"></script>-->
+<script type="text/javascript" src="lib/angular.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-formly/8.4.1/formly.min.js" integrity="sha256-g3B1djKL96gzTzsjPAs0TA2nvSO7V790ZowNMlJPYe8=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-formly-templates-bootstrap/6.5.1/angular-formly-templates-bootstrap.min.js" integrity="sha256-vIAdvXGq/Mq2G6PGqSLvC2NkdFC6EP4v4sB14VFx2E0=" crossorigin="anonymous"></script>
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/7.0.0/rzslider.min.js" integrity="sha256-gl58D1B9kkbvc+xxgu6mnITa7nofc4ZUmngdZJNoQsA=" crossorigin="anonymous"></script>-->
+<script type="text/javascript" src="lib/rzslider.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.20/angular-resource.min.js" integrity="sha256-uPieOYa75gqAYaKx7EOogxmdpN5QbYe5h3yj+b0um9Y=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.20/angular-animate.min.js" integrity="sha256-LqQ2Do24ppcMC0n5qtdUhcnAJBRLVKMLLBbMY5MVl5o=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-cache/4.6.0/angular-cache.min.js" integrity="sha256-UddglcXzkrNeF74XhWbajnR2U4yaXP8+dqKF33XXoUc=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.20/angular-messages.min.js" integrity="sha256-I8E8p9ek5/0+ZjRctovf7lV9sfaDu9tNbBTjarxDFG4=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.23/angular-ui-router.min.js" integrity="sha256-/yKD0h/FA30RNWqZE+kFCIsm5m8uvL6pq8yCu63rFy0=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-utils/0.1.1/angular-ui-utils.min.js" integrity="sha256-loUUX8ZpF0JTbjSaKVOCioT9cpAS808Aywm4om9xO28=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-file-upload/2.5.0/angular-file-upload.min.js" integrity="sha256-q2NwSnlRnwmBWxaTqnvAIhI02QSctA9asRD9MiHK7Ek=" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="lib/owasp-password-strength-test.js"></script>
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap.min.js" integrity="sha256-6vbKDGwy9JmzGKxxeypGzCjyOmACDtgheaOQT6ZVafA=" crossorigin="anonymous"></script>-->
+<script type="text/javascript" src="lib/ui-bootstrap.min.js"></script>
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js" integrity="sha256-tyfWW2LtJQNI+l3F0h6xDV/ij6Mfn8lwSKHWOsmEgXM=" crossorigin="anonymous"></script>-->
+<script type="text/javascript" src="lib/ui-bootstrap-tpls.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js" integrity="sha256-JirYRqbf+qzfqVtEE4GETyHlAbiCpC005yBTa4rj6xg=" crossorigin="anonymous"></script>-->
+<script type="text/javascript" src="lib/sweetalert.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js" integrity="sha256-5YmaxAwMjIpMrVlK84Y/+NjCpKnFYa8bWWBbUHSBGfU=" crossorigin="anonymous"></script>
+
 {% for jsFile in jsFiles %}
 <script type="text/javascript" src="{{jsFile}}"></script>
 {% endfor %}

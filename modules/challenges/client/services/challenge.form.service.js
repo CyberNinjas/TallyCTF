@@ -122,9 +122,9 @@ angular.module('challenges').factory('ChallengeForm', ['$http',
                 type: 'multiselect',
                 key: 'niceCategories',
                 templateOptions: {
-                  "label": "NICE Framework",
-                  "valueProp": "name",
-                  "options": nice,
+                  label: 'NICE Framework',
+                  valueProp: 'name',
+                  options: nice,
                 }
               }
             ]
