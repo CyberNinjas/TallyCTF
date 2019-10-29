@@ -60,11 +60,7 @@ gulp.task('watch', function () {
 });
 // CSS linting task
 gulp.task('csslint', function (done) {
-  return gulp.src(defaultAssets.client.css).pipe(plugins.csslint('.csslintrc')).pipe(plugins.csslint.reporter()).pipe(plugins.csslint.reporter(function (file) {
-    if(!file.csslint.errorCount) {
-      done();
-    }
-  }));
+  return gulp.src(defaultAssets.client.css).pipe(plugins.csslint('.csslintrc')).pipe(plugins.csslint.formatter()).pipe(plugins.csslint.formatter());
 });
 // ESLint JS linting task
 gulp.task('eslint', function () {
