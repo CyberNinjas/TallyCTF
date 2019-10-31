@@ -43,7 +43,7 @@
     "express-session": "1.13.0",
     "file-stream-rotator": "0.0.6",
     "forever": "0.14.2",
-    "generate-password": "1.1.1",
+    "generate-password": "1.4.2",
     "glob": "5.0.15",
     "helmet": "0.9.1",
     "jasmine-core": "2.4.1",
