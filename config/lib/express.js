@@ -7,7 +7,6 @@ var config = require('../config'),
   express = require('express'),
   morgan = require('morgan'),
   logger = require('./logger'),
-  bodyParser = require('body-parser'),
   session = require('express-session'),
   MongoStore = require('connect-mongo')(session),
   favicon = require('serve-favicon'),
@@ -83,11 +82,6 @@ module.exports.initMiddleware = function (app) {
     app.locals.cache = 'memory';
   }
 
-  // Request body parsing middleware should be above methodOverride
-  app.use(bodyParser.urlencoded({
-    extended: true
-  }));
-  app.use(bodyParser.json());
   app.use(methodOverride());
 
   // Add the cookie parser and flash middleware
