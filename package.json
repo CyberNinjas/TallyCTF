@@ -2,8 +2,7 @@
   "name": "TallyCTF",
   "description": "CTF Scoreboard & Event Management Tool.",
   "author": "Cyber Ninjas",
-  "version": "0.4.2",
-  "meanjs-version": "0.4.2",
+  "version": "0.4.3",
   "private": false,
   "license": "GPL-3.0",
   "repository": {
