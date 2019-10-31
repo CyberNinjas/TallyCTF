@@ -65,7 +65,7 @@ gulp.task('csslint', function (done) {
 // ESLint JS linting task
 gulp.task('eslint', function () {
   var assets = _.union(defaultAssets.server.gulpConfig, defaultAssets.server.allJS, defaultAssets.client.js, testAssets.tests.server, testAssets.tests.client, testAssets.tests.e2e);
-  return gulp.src(assets).pipe(plugins.eslint()).pipe(plugins.eslint.format());
+  return gulp.src(assets).pipe(plugins.eslint({fix:true})).pipe(plugins.eslint.format());
 });
 // JS minifying task
 gulp.task('uglify', function () {
