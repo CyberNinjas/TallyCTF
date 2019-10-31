@@ -7,7 +7,7 @@ var fs = require('fs');
 // abstract writing screen shot to a file
 function writeScreenShot(data, filename) {
   var stream = fs.createWriteStream(filename);
-  stream.write(new Buffer(data, 'base64'));
+  stream.write(Buffer.from(data, 'base64'));
   stream.end();
 }
 
