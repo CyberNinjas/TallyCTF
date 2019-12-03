@@ -68,7 +68,7 @@
     "helmet": "0.9.1",
     "jasmine-core": "2.4.1",
     "lodash": "3.10.1",
-    "method-override": "2.3.5",
+    "method-override": "3.0.0",
     "mocha": "1.20.1",
     "mongoose": "4.2.10",
     "morgan": "1.6.1",
