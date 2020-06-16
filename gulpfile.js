@@ -31,11 +31,11 @@ gulp.task('env:dev', function () {
 gulp.task('env:prod', function () {
   process.env.NODE_ENV = 'production';
 });
-// Nodemon task
+// Nodemon task -- updated --debug arg to --inspect (deprecated)
 gulp.task('nodemon', function () {
   return plugins.nodemon({
     script: 'server.js',
-    nodeArgs: ['--debug'],
+    nodeArgs: ['--inspect'],
     ext: 'js,html',
     watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS, defaultAssets.server.config)
   });

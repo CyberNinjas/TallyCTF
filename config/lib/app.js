@@ -1,4 +1,5 @@
 'use strict';
+
 /**
  * Module dependencies.
  */
@@ -24,17 +25,17 @@ module.exports.loadModels = function loadModels() {
 module.exports.init = function init(callback) {
   mongoose.connect(function (db) {
     // Initialize express
-    var app = express.init(db);
+    let app = express.init(db);
     if (callback) callback(app, db, config);
   });
 };
 
 module.exports.start = function start(callback) {
-  var _this = this;
+  let _this = this;
   _this.init(function (app, db, config) {
     // Start the app by listening on <port>
     app.listen(config.port, config.bindIp, function () {
-        // Logging initialization
+      // Logging initialization
       console.log('--');
       console.log(chalk.green(config.app.title));
       console.log(chalk.green('Environment:\t\t\t' + process.env.NODE_ENV));

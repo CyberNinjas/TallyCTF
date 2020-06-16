@@ -8,12 +8,12 @@
   "license": "GPL-3.0",
   "repository": "https://github.com/CyberNinjas/TallyCTF.git",
   "engines": {
-    "node": ">=8.16.0",
-    "npm": "3.5.1",
-    "yarn": ">= 1.0.0"
+    "node": ">=11.15.0",
+    "npm": "6.7.0",
+    "yarn": ">=1.0.0"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "nodemon server.js",
     "build": "gulp build",
     "postinstall": "node -e \"try { require('fs').symlinkSync(require('path').resolve('node_modules/@bower_components'), 'public/lib', 'junction') } catch (e) { }\"",
     "test": "grunt test"
@@ -85,7 +85,7 @@
     "gulp-angular-templatecache": "3.0.0",
     "gulp-autoprefixer": "7.0.1",
     "gulp-concat": "2.6.0",
-    "gulp-csslint": "1.0.0",
+    "gulp-csslint": "0.3.1",
     "gulp-cssmin": "0.2.0",
     "gulp-eslint": "6.0.0",
     "gulp-jshint": "2.1.0",
