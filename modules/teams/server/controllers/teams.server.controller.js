@@ -7,10 +7,10 @@ var path = require('path'),
   errorHandler = require(path.resolve(
     './modules/core/server/controllers/errors.server.controller'));
 
-var addUserToTeam = function (user, team) {
-  user.teams.push(team._id);
+var addUserToTeam = function (user, team, res) {
+  user.teams = user.teams.concat([team._id]);
   if (user.roles.indexOf('teamCaptain') === -1) {
-    user.roles.push('teamCaptain');
+    user.roles = user.roles.concat(['teamCaptain']);
   }
   user.save(function (err) {
     if (err) {
@@ -26,8 +26,8 @@ exports.create = function (req, res) {
   var team = new Team(req.body);
   team.save(function (err) {
     if (!err) {
-      addUserToTeam(req.user, team);
-      res.json(req.team);
+      addUserToTeam(req.user, team, res);
+      res.json(team);
     } else {
       return res.status(422)
         .send({

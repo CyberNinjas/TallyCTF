@@ -69,10 +69,10 @@ angular.module('ctfEvents').controller('CreateEventsController', ['$scope', '$co
       });
 
       CtfEvents.save(ctfEvent, function (response) {
-        $scope.socket.emit('invalidate', { id: response._id })
+        $scope.socket.emit('invalidate', { id: response.data._id })
         $scope.socket.emit('invalidateAll')
-        CtfEvents.get({ ctfEventId: response._id }).$promise.then(function (data) { console.info('grabbed ' + data) })
-        $location.path('ctfEvents/' + response._id);
+        CtfEvents.get({ ctfEventId: response.data._id }).$promise.then(function (data) { console.info('grabbed ' + data) })
+        $location.path('/ctfEvents/dash/' + response.data._id);
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });

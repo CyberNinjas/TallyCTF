@@ -2,13 +2,57 @@
 
 angular.module('users').controller('ChangeProfilePictureController', ['$scope', '$timeout', '$window', 'Authentication', 'FileUploader',
   function ($scope, $timeout, $window, Authentication, FileUploader) {
+
     $scope.user = Authentication.user;
     $scope.imageURL = $scope.user.profileImageURL;
 
     // Create file uploader instance
     $scope.uploader = new FileUploader({
-      url: 'api/users/picture'
+      url: '/api/users/picture',
+      disableMultipart: true
     });
+
+    const form = document.getElementById( "image_form" );
+    form.addEventListener( "submit", function ( event ) {
+      event.preventDefault();
+
+      sendData();
+    } );
+
+    function sendData() {
+      const XHR = new XMLHttpRequest();
+
+      // Bind the FormData object and the form element
+      const FD = new FormData( form );
+
+      // Define what happens on successful data submission
+      XHR.addEventListener( "load", function(response) {
+        // Populate user object
+        $scope.user = Authentication.user = JSON.parse(response.target.response);
+
+        // Clear upload buttons
+        $scope.cancelUpload(true);
+        //Janky hack to successfully show the error/success text
+        $("#change_profile_pic").trigger("click");
+      } );
+
+      // Define what happens in case of error
+      XHR.addEventListener( "error", function(response) {
+        // Clear upload buttons
+        $scope.cancelUpload(false);
+
+        // Show error message
+        $scope.error = response.target.response;
+        //Janky hack to successfully show the error/success text
+        $("#change_profile_pic").trigger("click");
+      } );
+
+      // Set up our request
+      XHR.open( "POST", "/api/users/picture" );
+
+      // The data sent is what the user provided in the form
+      XHR.send( FD );
+    }
 
     // Set file uploader image filter
     $scope.uploader.filters.push({
@@ -57,14 +101,14 @@ angular.module('users').controller('ChangeProfilePictureController', ['$scope', 
     // Change user profile picture
     $scope.uploadProfilePicture = function () {
       // Clear messages
-      $scope.success = $scope.error = null;
-
-      // Start upload
-      $scope.uploader.uploadAll();
+      //$scope.success = $scope.error = null;
+      //$scope.uploader.uploadAll();
     };
 
     // Cancel the upload process
-    $scope.cancelUpload = function () {
+    $scope.cancelUpload = function (success) {
+      // Show success message
+      $scope.success = success;
       $scope.uploader.clearQueue();
       $scope.imageURL = $scope.user.profileImageURL;
     };

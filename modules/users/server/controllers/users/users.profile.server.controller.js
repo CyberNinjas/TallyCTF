@@ -54,30 +54,22 @@ exports.update = function (req, res) {
  */
 exports.changeProfilePicture = function (req, res) {
   var user = req.user;
-  var message = null;
 
   if (user) {
-    fs.writeFile('./modules/users/client/img/profile/uploads/' + req.files.file.name, req.files.file.buffer, function (uploadError) {
-      if (uploadError) {
+    //Removed fs.writeFile call - could not handle binary write for image uploads
+    user.profileImageURL = 'modules/users/client/img/profile/uploads/' + req.file.filename;
+
+    user.save(function (saveError) {
+      if (saveError) {
         return res.status(400).send({
-          message: 'Error occurred while uploading profile picture'
+          message: errorHandler.getErrorMessage(saveError)
         });
       } else {
-        user.profileImageURL = 'modules/users/client/img/profile/uploads/' + req.files.file.name;
-
-        user.save(function (saveError) {
-          if (saveError) {
-            return res.status(400).send({
-              message: errorHandler.getErrorMessage(saveError)
-            });
+        req.login(user, function (err) {
+          if (err) {
+            res.status(400).send(err);
           } else {
-            req.login(user, function (err) {
-              if (err) {
-                res.status(400).send(err);
-              } else {
-                res.json(user);
-              }
-            });
+            res.json(user);
           }
         });
       }
