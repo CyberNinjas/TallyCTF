@@ -49,7 +49,7 @@ angular.module('teams')
         })
         angular.forEach($scope.users, function (user) {
           if (user._id === message._id) {
-            user.joinRequestsFromUsers.push(message._id);
+            user.requestedToJoin.push(message._id);
           }
         })
       });

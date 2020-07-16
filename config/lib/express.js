@@ -83,6 +83,8 @@ module.exports.initMiddleware = function (app) {
     app.locals.cache = 'memory';
   }
 
+  app.use(express.static('./users/client/img/profile/uploads/'));
+
   // Request body parsing middleware should be above methodOverride
   app.use(bodyParser.urlencoded({
     extended: true
@@ -112,6 +114,7 @@ module.exports.initViewEngine = function (app) {
  */
 module.exports.initSession = function (app, db) {
   // Express MongoDB session storage
+  console.log(config.db.uri);
   app.use(session({
     saveUninitialized: true,
     resave: true,
@@ -233,7 +236,7 @@ module.exports.init = function (db) {
 
   // Initialize Express view engine
   this.initViewEngine(app);
-  
+
   // Initialize Helmet security headers
   this.initHelmetHeaders(app);
 

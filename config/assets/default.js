@@ -4,38 +4,38 @@ module.exports = {
   client: {
     lib: {
       css: [
-        'public/lib/bootstrap/dist/css/bootstrap.css',
-        'public/lib/bootstrap/dist/css/bootstrap-theme.css',
-        'public/lib/angular-bootstrap/ui-bootstrap-csp.js',
-        'public/lib/angularjs-slider/dist/rzslider.css',
-        'public/lib/sweetalert/dist/sweetalert.css',
-        'public/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'
+        'node_modules/@bower_components/bootstrap/dist/css/bootstrap.css',
+        'node_modules/@bower_components/bootstrap/dist/css/bootstrap-theme.css',
+        'node_modules/@bower_components/angular-bootstrap/ui-bootstrap-csp.js',
+        'node_modules/@bower_components/angularjs-slider/dist/rzslider.css',
+        'node_modules/@bower_components/sweetalert/dist/sweetalert.css',
+        'node_modules/@bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'
       ],
       js: [
-        'public/lib/api-check/dist/api-check.js',
-        'public/lib/jquery/dist/jquery.min.js',
-        'public/lib/bootstrap/dist/js/bootstrap.min.js',
-        'public/lib/angular/angular.js',
-        'public/lib/angular-formly/dist/formly.js',
-        'public/lib/angular-formly-templates-bootstrap/dist/angular-formly-templates-bootstrap.js',
-        'public/lib/angularjs-slider/dist/rzslider.js',
-        'public/lib/angular-resource/angular-resource.js',
-        'public/lib/angular-animate/angular-animate.js',
-        'public/lib/angular-messages/angular-messages.js',
-        'public/lib/angular-ui-router/release/angular-ui-router.js',
-        'public/lib/angular-ui-utils/ui-utils.js',
-        'public/lib/angular-file-upload/angular-file-upload.js',
-        'public/lib/angular-cache/dist/angular-cache.js',
-        'public/lib/q/q.js',
-        'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
-        'public/lib/angular-bootstrap/ui-bootstrap.min.js',
-        'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js',
-        'public/lib/moment/min/moment.min.js',
-        'public/lib/sweetalert/dist/sweetalert.min.js',
-        'public/lib/ngSweetAlert/SweetAlert.min.js',
-        'public/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
+        'node_modules/@bower_components/api-check/dist/api-check.js',
+        'node_modules/@bower_components/jquery/dist/jquery.min.js',
+        'node_modules/@bower_components/bootstrap/dist/js/bootstrap.min.js',
+        'node_modules/@bower_components/angular/angular.js',
+        'node_modules/@bower_components/angular-formly/dist/formly.js',
+        'node_modules/@bower_components/angular-formly-templates-bootstrap/dist/angular-formly-templates-bootstrap.js',
+        'node_modules/@bower_components/angularjs-slider/dist/rzslider.js',
+        'node_modules/@bower_components/angular-resource/angular-resource.js',
+        'node_modules/@bower_components/angular-animate/angular-animate.js',
+        'node_modules/@bower_components/angular-messages/angular-messages.js',
+        'node_modules/@bower_components/angular-ui-router/release/angular-ui-router.js',
+        'node_modules/@bower_components/angular-ui-utils/ui-utils.js',
+        'node_modules/@bower_components/angular-file-upload/dist/angular-file-upload.js',
+        'node_modules/@bower_components/angular-cache/dist/angular-cache.js',
+        'node_modules/@bower_componentsb/q/q.js',
+        'node_modules/@bower_components/owasp-password-strength-test/owasp-password-strength-test.js',
+        'node_modules/@bower_components/angular-bootstrap/ui-bootstrap.min.js',
+        'node_modules/@bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+        'node_modules/@bower_components/moment/min/moment.min.js',
+        'node_modules/@bower_components/sweetalert/dist/sweetalert.min.js',
+        'node_modules/@bower_components/ngSweetAlert/SweetAlert.min.js',
+        'node_modules/@bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
       ],
-      tests: ['public/lib/angular-mocks/angular-mocks.js']
+      tests: ['node_modules/@bower_components/angular-mocks/angular-mocks.js']
     },
     css: [
       'modules/*/client/css/*.css'

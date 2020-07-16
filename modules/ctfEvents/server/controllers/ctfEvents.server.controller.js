@@ -11,7 +11,7 @@ var path = require('path'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 exports.create = function (req, res) {
-  var ctfEvent = new CtfEvent(req.body.answers);
+  var ctfEvent = new CtfEvent(req.body);
   ctfEvent.save(function (err) {
     if (err) {
       return res.status(400).send({

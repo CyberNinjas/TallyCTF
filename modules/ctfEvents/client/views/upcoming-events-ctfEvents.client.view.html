@@ -10,13 +10,13 @@
     </div>
     <div class="list-group">
         <a ng-repeat="ctfEvent in ctfEvents" ui-sref="{{isRegistered(ctfEvent)}}"
-           ng-class="isRegistered(ctfEvent) === '-' ? 'list-group-item disabled' : 'list-group-item'">
+           ng-class="isRegistered(ctfEvent) === 'false' ? 'list-group-item disabled' : 'list-group-item'">
             <small class="list-group-item-text">
                 Created on
                 <span ng-bind="ctfEvent.created | date:'mediumDate'"></span>
             </small>
             <div class="pull-right">
-                <button class='btn btn-success' ng-show="isRegistered(ctfEvent) === '-' && canRegister(ctfEvent)" ng-click="registerForEvent(ctfEvent._id)">
+                <button class='btn btn-success' ng-show="canRegister(ctfEvent)" ng-click="registerForEvent(ctfEvent._id)">
                     <i class="fa fa-pencil-square-o"></i>register</button>
             </div>
             <h4 class="list-group-item-heading" ng-bind="ctfEvent.title"></h4>

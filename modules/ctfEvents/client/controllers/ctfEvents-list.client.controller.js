@@ -11,14 +11,20 @@ angular.module('ctfEvents').controller('ListEventsController', ['$state', '$scop
      * Determines whether or not a user is registered for an event
      */
     $scope.isRegistered = function (ctfEvent) {
-      return ctfEvent.users.indexOf(Authentication.user._id) > -1 ? 'ctfEvents.dashboard({ ctfEventId : ctfEvent._id })' : '-'
+      return ctfEvent.users.indexOf(Authentication.user._id) > -1 ? 'ctfEvents.dashboard({ ctfEventId : ctfEvent._id })' : 'false'
     }
 
     /*
      * Determines whether or not a user can register for an event
+     * --Update: stupid hack to actually get this working, wasn't before. Not sure why the HTML boolean recognition is so wack,
+     *           but it's reading the hide as show, and nothing as hide :/
      */
     $scope.canRegister = function (ctfEvent) {
-      return ctfEvent.registrationStart < moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') && moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') < ctfEvent.registrationEnd
+      if((ctfEvent.registrationStart < moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')) && ((moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') < ctfEvent.registrationEnd) || (!ctfEvent.registrationEnd)) && (ctfEvent.users.indexOf(Authentication.user._id) <= -1)) {
+        return 'ng-hide';
+      } else {
+        return '';
+      }
     }
 
     /*

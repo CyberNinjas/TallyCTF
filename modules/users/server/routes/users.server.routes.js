@@ -1,8 +1,12 @@
 'use strict';
 
+//User routes
+var users = require('../controllers/users.server.controller.js'),
+  bodyParser = require('body-parser'),
+  multer = require('multer'),
+  upload = multer({ dest: './modules/users/client/img/profile/uploads/'});
+
 module.exports = function (app) {
-  // User Routes
-  var users = require('../controllers/users.server.controller.js');
 
   // Setting up the users profile api
   app.route('/api/users/me')
@@ -15,8 +19,8 @@ module.exports = function (app) {
     .delete(users.removeOAuthProvider);
   app.route('/api/users/password')
     .post(users.changePassword);
-  app.route('/api/users/picture')
-    .post(users.changeProfilePicture);
+  //Implementing multer upload function to image folder - fs.writeFile cannot handle binary writes
+  app.post('/api/users/picture', upload.single('image_file'), users.changeProfilePicture);
 
   // Finish by binding the user middleware
   app.param('userId', users.userByID);
