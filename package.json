@@ -70,7 +70,7 @@
     "lodash": "3.10.1",
     "method-override": "2.3.5",
     "mocha": "1.20.1",
-    "mongoose": "4.2.10",
+    "mongoose": "4.13.21",
     "morgan": "1.6.1",
     "multer": "1.0.6",
     "nodemailer": "1.11.0",
